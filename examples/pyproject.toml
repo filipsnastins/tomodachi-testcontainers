@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "src"
+version = "0.0.0"
+description = ""
+authors = ["Filips Nastins <nastinsfilips@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.0.2"
+structlog = "^23.1.0"
+tomodachi = "^0.25.0"
+types-aiobotocore = {extras = ["dynamodb", "s3", "sns", "sqs"], version = "^2.5.2"}
+types-aiobotocore-dynamodb = "2.5.2"
+asyncssh = "^2.13.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
