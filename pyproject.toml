@@ -1,11 +1,14 @@
 [tool.poetry]
 name = "tomodachi-testcontainers"
-version = "0.0.6"
-description = ""
+version = "0.0.1"
+description = "Collection of Testcontainers, pytest fixtures and test clients for end-to-end/integration testing for Python Tomodachi framework. A great starting point to learn more about Testcontainers and necessity of integration testing."
 authors = ["Filips Nastins <nastinsfilips@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+requires-python = ">=3.8"
 
+[project.urls]
+homepage = "https://github.com/filipsnastins/tomodachi-testcontainers"
 repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
 [tool.poetry.dependencies]
