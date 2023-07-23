@@ -5,9 +5,7 @@ description = "Collection of Testcontainers, pytest fixtures and test clients fo
 authors = ["Filips Nastins <nastinsfilips@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.8"
 
-[project.urls]
 homepage = "https://github.com/filipsnastins/tomodachi-testcontainers"
 repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
