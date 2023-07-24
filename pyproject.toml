@@ -14,6 +14,7 @@ python = "^3.8.1"
 aiobotocore = "^2.5.2"
 asyncssh = { version = "^2.13.2", optional = true }
 pytest = "^7.1.2"
+pytest-asyncio = "^0.21.1"
 testcontainers = "^3.7.1"
 types-aiobotocore = { extras = ["dynamodb", "s3", "sns", "sqs", "ssm"], version = "^2.5.2" }
 
@@ -45,7 +46,6 @@ mypy = "^1.4.1"
 pre-commit = ">=3.3.3"
 pydantic = "^2.0.2"
 pylint = "^2.17.4"
-pytest-asyncio = "^0.21.1"
 pytest-cov = "^4.1.0"
 pytest-env = "^0.8.2"
 ruff = "^0.0.277"
@@ -67,8 +67,6 @@ hooks = "dev:hooks"
 format = "dev:format"
 lint = "dev:lint"
 test = "dev:test"
-test-cov-term = "dev:test_cov_term"
-test-cov-html = "dev:test_cov_html"
 test-ci = "dev:test_ci"
 
 [tool.black]
