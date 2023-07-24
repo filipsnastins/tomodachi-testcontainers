@@ -67,8 +67,6 @@ hooks = "dev:hooks"
 format = "dev:format"
 lint = "dev:lint"
 test = "dev:test"
-test-cov-term = "dev:test_cov_term"
-test-cov-html = "dev:test_cov_html"
 test-ci = "dev:test_ci"
 
 [tool.black]
