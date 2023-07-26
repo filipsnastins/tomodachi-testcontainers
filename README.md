@@ -27,7 +27,7 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [Testing Tomodachi service with external dependencies](#testing-tomodachi-service-with-external-dependencies)
   - [Benefits and dangers of end-to-end tests](#benefits-and-dangers-of-end-to-end-tests)
     - [Building confidence of releasability](#building-confidence-of-releasability)
-    - [⚠️ Mind the Test Pyramid - not overdue end-to-end tests](#️-mind-the-test-pyramid---not-overdue-end-to-end-tests)
+    - [⚠️ Mind the Test Pyramid - not overdo end-to-end tests](#️-mind-the-test-pyramid---not-overdo-end-to-end-tests)
   - [Running Testcontainers in CI pipeline](#running-testcontainers-in-ci-pipeline)
   - [Supported Testcontainers](#supported-testcontainers)
     - [Tomodachi](#tomodachi)
@@ -363,7 +363,7 @@ Testcontainers make it easy to spin up real dependencies in Docker containers, a
 when the tests are finished. They work in thw same way locally and in the CI pipeline, so you need to
 setup test suite only once._
 
-### ⚠️ Mind the Test Pyramid - not overdue end-to-end tests
+### ⚠️ Mind the Test Pyramid - not overdo end-to-end tests
 
 Despite many benefits of end-to-end tests, they are the most expensive kind 💸 -
 they're slow, sometimes [flaky](https://martinfowler.com/articles/nonDeterminism.html),
