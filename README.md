@@ -19,7 +19,7 @@ It facilitates the use of Docker containers for functional, integration, and end
 
 - [tomodachi-testcontainers](#tomodachi-testcontainers)
   - [Installation](#installation)
-  - [Quickstart and Examples](#quickstart-and-examples)
+  - [Quickstart and examples](#quickstart-and-examples)
   - [Getting started](#getting-started)
     - [Testing standalone Tomodachi service](#testing-standalone-tomodachi-service)
     - [Changing Dockerfile location](#changing-dockerfile-location)
@@ -27,13 +27,15 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [Testing Tomodachi service with external dependencies](#testing-tomodachi-service-with-external-dependencies)
   - [Benefits and dangers of end-to-end tests](#benefits-and-dangers-of-end-to-end-tests)
     - [Building confidence of releasability](#building-confidence-of-releasability)
-    - [⚠️ Mind the Test Pyramid - not overdo end-to-end tests](#️-mind-the-test-pyramid---not-overdo-end-to-end-tests)
+    - [⚠️ Mind the Test Pyramid - don't overdo end-to-end tests](#️-mind-the-test-pyramid---dont-overdo-end-to-end-tests)
   - [Running Testcontainers in CI pipeline](#running-testcontainers-in-ci-pipeline)
   - [Supported Testcontainers](#supported-testcontainers)
     - [Tomodachi](#tomodachi)
     - [Moto](#moto)
     - [LocalStack](#localstack)
     - [SFTP](#sftp)
+  - [Configuration with environment variables](#configuration-with-environment-variables)
+  - [Changing default Docker network](#changing-default-docker-network)
   - [Resources and acknowledgements](#resources-and-acknowledgements)
   - [Development](#development)
 
@@ -46,7 +48,7 @@ pip install tomodachi-testcontainers
 pip install tomodachi-testcontainers[sftp]
 ```
 
-## Quickstart and Examples
+## Quickstart and examples
 
 Tomodachi service examples are in [examples/](examples/) folder. Their end-to-end tests are in [tests/test_services](tests/test_services).
 
@@ -154,10 +156,6 @@ Examples:
 
 - `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/` - specify just a directory, Dockerfile is inferred automatically
 - `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile.testing` - explicitly specify the Dockerfile name
-
-⚠️ Make sure that the environment variable is set before running `pytest` -
-e.g. with [pytest-env](https://pypi.org/project/pytest-env/) plugin or
-by setting it in the shell before running `pytest`.
 
 ### Running Tomodachi container from pre-built image
 
@@ -363,7 +361,7 @@ Testcontainers make it easy to spin up real dependencies in Docker containers, a
 when the tests are finished. They work in thw same way locally and in the CI pipeline, so you need to
 setup test suite only once._
 
-### ⚠️ Mind the Test Pyramid - not overdo end-to-end tests
+### ⚠️ Mind the Test Pyramid - don't overdo end-to-end tests
 
 Despite many benefits of end-to-end tests, they are the most expensive kind 💸 -
 they're slow, sometimes [flaky](https://martinfowler.com/articles/nonDeterminism.html),
@@ -478,6 +476,29 @@ DockerHub: <https://hub.docker.com/r/atmoz/sftp>
 - Available as an extra dependency `sftp` - install with
   `pip install tomodachi-testcontainers[sftp]` or `poetry install -E sftp`
 
+## Configuration with environment variables
+
+⚠️ Make sure that environment variables are set before running `pytest` -
+e.g. with [pytest-env](https://pypi.org/project/pytest-env/) plugin or
+by setting it in the shell before running `pytest`.
+
+| Environment Variable                      | Description                                                                                                                   |
+| :---------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
+| `TESTCONTAINER_DOCKER_NETWORK`            | Launch testcontainers in specified Docker network. Defaults to 'bridge'. Network must be created beforehand                   |
+| `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` | Override path to Dockerfile for building Tomodachi service image. Defaults to '.'                                             |
+| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID` | Override any supported Testcontainer Image ID. Defaults to `None`, `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` takes precedence |
+
+## Changing default Docker network
+
+By default, testcontainers are started in the default `bridge` Docker network.
+Sometimes it's useful to start containers in a different network, e.g. a network
+specifically dedicated for running automated tests.
+
+Specify a new network name with the `TOMODACHI_TESTCONTAINER_NETWORK` environment variable.
+The Docker network is not created automatically, so make sure that it exists before running tests.
+
+⚠️ Make sure that the environment variable is set before running `pytest`.
+
 ## Resources and acknowledgements
 
 - [testcontainers.com](https://testcontainers.com/) - home of Testcontainers.
@@ -517,6 +538,8 @@ pre-commit install
 - Run tests
 
 ```bash
+docker network create tomodachi-testcontainers
+
 pytest
 poetry run test-ci
 ```

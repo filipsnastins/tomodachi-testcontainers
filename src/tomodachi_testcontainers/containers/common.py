@@ -1,9 +1,21 @@
+import os
 import pathlib
 from typing import Any, Dict, Iterator, Optional, Tuple, cast
 
+import testcontainers.core.container
 from docker.errors import ImageNotFound
 from docker.models.images import Image as DockerImage
 from testcontainers.core.docker_client import DockerClient
+
+
+class DockerContainer(testcontainers.core.container.DockerContainer):
+    def __init__(self, *args: Any, network: Optional[str] = None, **kwargs: Any) -> None:
+        self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK", "bridge")
+        super().__init__(*args, **kwargs, network=self.network)
+
+    def get_container_internal_ip(self) -> str:
+        container = self.get_docker_client().get_container(self.get_wrapped_container().id)
+        return container["NetworkSettings"]["Networks"][self.network]["IPAddress"]
 
 
 class EphemeralDockerImage:
