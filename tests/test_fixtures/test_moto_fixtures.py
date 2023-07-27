@@ -15,10 +15,7 @@ def test_moto_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
             """\
             import os
 
-            from testcontainers.core.docker_client import DockerClient
 
-
-            DockerClient().client.images.pull("motoserver/moto:4.1.0")
             os.environ["MOTO_TESTCONTAINER_IMAGE_ID"] = "motoserver/moto:4.1.0"
             """
         )

@@ -15,10 +15,7 @@ def test_sftp_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
             """\
             import os
 
-            from testcontainers.core.docker_client import DockerClient
 
-
-            DockerClient().client.images.pull("atmoz/sftp:alpine-3.4")
             os.environ["SFTP_TESTCONTAINER_IMAGE_ID"] = "atmoz/sftp:alpine-3.4"
             """
         )

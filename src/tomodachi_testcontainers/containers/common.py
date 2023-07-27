@@ -58,4 +58,4 @@ def get_docker_image(image_id: str, docker_client_kw: Optional[Dict] = None) -> 
     try:
         return cast(DockerImage, client.client.images.get(image_id))
     except ImageNotFound:
-        return None
+        return cast(DockerImage, client.client.images.pull(image_id))
