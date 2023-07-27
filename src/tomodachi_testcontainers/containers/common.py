@@ -6,6 +6,7 @@ import testcontainers.core.container
 from docker.errors import ImageNotFound
 from docker.models.images import Image as DockerImage
 from testcontainers.core.docker_client import DockerClient
+from testcontainers.core.utils import inside_container
 
 
 class DockerContainer(testcontainers.core.container.DockerContainer):
@@ -13,9 +14,25 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
         self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK", "bridge")
         super().__init__(*args, **kwargs, network=self.network)
 
+    def get_container_host_ip(self) -> str:
+        host = self.get_docker_client().host()
+        if not host:
+            return "localhost"
+
+        if inside_container() and not os.getenv("DOCKER_HOST"):
+            gateway_ip = self.get_container_gateway_ip()
+            if gateway_ip == host:
+                return self.get_container_internal_ip()
+            return gateway_ip
+        return host
+
     def get_container_internal_ip(self) -> str:
         container = self.get_docker_client().get_container(self.get_wrapped_container().id)
         return container["NetworkSettings"]["Networks"][self.network]["IPAddress"]
+
+    def get_container_gateway_ip(self) -> str:
+        container = self.get_docker_client().get_container(self.get_wrapped_container().id)
+        return container["NetworkSettings"]["Networks"][self.network]["Gateway"]
 
 
 class EphemeralDockerImage:
