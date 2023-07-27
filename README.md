@@ -27,13 +27,14 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [Testing Tomodachi service with external dependencies](#testing-tomodachi-service-with-external-dependencies)
   - [Benefits and dangers of end-to-end tests](#benefits-and-dangers-of-end-to-end-tests)
     - [Building confidence of releasability](#building-confidence-of-releasability)
-    - [⚠️ Mind the Test Pyramid - not overdo end-to-end tests](#️-mind-the-test-pyramid---not-overdo-end-to-end-tests)
+    - [⚠️ Mind the Test Pyramid - don't overdo end-to-end tests](#️-mind-the-test-pyramid---dont-overdo-end-to-end-tests)
   - [Running Testcontainers in CI pipeline](#running-testcontainers-in-ci-pipeline)
   - [Supported Testcontainers](#supported-testcontainers)
     - [Tomodachi](#tomodachi)
     - [Moto](#moto)
     - [LocalStack](#localstack)
     - [SFTP](#sftp)
+  - [Configuration with environment variables](#configuration-with-environment-variables)
   - [Resources and acknowledgements](#resources-and-acknowledgements)
   - [Development](#development)
 
@@ -363,7 +364,7 @@ Testcontainers make it easy to spin up real dependencies in Docker containers, a
 when the tests are finished. They work in thw same way locally and in the CI pipeline, so you need to
 setup test suite only once._
 
-### ⚠️ Mind the Test Pyramid - not overdo end-to-end tests
+### ⚠️ Mind the Test Pyramid - don't overdo end-to-end tests
 
 Despite many benefits of end-to-end tests, they are the most expensive kind 💸 -
 they're slow, sometimes [flaky](https://martinfowler.com/articles/nonDeterminism.html),
@@ -478,6 +479,14 @@ DockerHub: <https://hub.docker.com/r/atmoz/sftp>
 - Available as an extra dependency `sftp` - install with
   `pip install tomodachi-testcontainers[sftp]` or `poetry install -E sftp`
 
+## Configuration with environment variables
+
+| Environment Variable                      | Description                                                                                                                   |
+| :---------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
+| `TESTCONTAINER_DOCKER_NETWORK`            | Launch testcontainers in specified Docker network. Defaults to 'bridge'. Network must be created beforehand                   |
+| `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` | Override path to Dockerfile for building Tomodachi service image. Defaults to '.'                                             |
+| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID` | Override any supported Testcontainer Image ID. Defaults to `None`, `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` takes precedence |
+
 ## Resources and acknowledgements
 
 - [testcontainers.com](https://testcontainers.com/) - home of Testcontainers.
@@ -517,6 +526,8 @@ pre-commit install
 - Run tests
 
 ```bash
+docker network create tomodachi-testcontainers
+
 pytest
 poetry run test-ci
 ```

@@ -1,8 +1,9 @@
 from typing import Any, NamedTuple
 
 import asyncssh
-from testcontainers.core.container import DockerContainer
 from testcontainers.core.waiting_utils import wait_for_logs
+
+from tomodachi_testcontainers.containers.common import DockerContainer
 
 ConnectionDetails = NamedTuple("ConnectionDetails", [("host", str), ("port", int)])
 
@@ -26,7 +27,7 @@ class SFTPContainer(DockerContainer):
         self.authorized_public_key = self.authorized_private_key.export_public_key().decode()
 
     def get_internal_conn_details(self) -> ConnectionDetails:
-        host = self.get_docker_client().bridge_ip(self.get_wrapped_container().id)
+        host = self.get_container_internal_ip()
         return ConnectionDetails(host=host, port=self.internal_port)
 
     def get_external_conn_details(self) -> ConnectionDetails:

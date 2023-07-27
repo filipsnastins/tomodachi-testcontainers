@@ -1,9 +1,9 @@
 import os
 from typing import Any, Optional
 
-from testcontainers.core.container import DockerContainer
 from testcontainers.core.waiting_utils import wait_for_logs
 
+from tomodachi_testcontainers.containers.common import DockerContainer
 from tomodachi_testcontainers.utils import AWSClientConfig
 
 
@@ -30,8 +30,8 @@ class MotoContainer(DockerContainer):
         self.with_env("AWS_SECRET_ACCESS_KEY", self.aws_secret_access_key)
 
     def get_internal_url(self) -> str:
-        bridge_ip = self.get_docker_client().bridge_ip(self.get_wrapped_container().id)
-        return f"http://{bridge_ip}:{self.internal_port}"
+        ip = self.get_container_internal_ip()
+        return f"http://{ip}:{self.internal_port}"
 
     def get_external_url(self) -> str:
         host = self.get_container_host_ip()
