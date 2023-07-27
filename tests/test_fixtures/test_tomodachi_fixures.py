@@ -9,10 +9,7 @@ def test_tomodachi_image_id_set_from_envvar(pytester: pytest.Pytester) -> None:
             """\
             import os
 
-            from testcontainers.core.docker_client import DockerClient
 
-
-            DockerClient().client.images.pull("alpine:3.18.2")
             os.environ["TOMODACHI_TESTCONTAINER_IMAGE_ID"] = "alpine:3.18.2"
             """
         )

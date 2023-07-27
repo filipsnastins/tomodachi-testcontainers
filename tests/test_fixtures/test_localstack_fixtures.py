@@ -15,10 +15,7 @@ def test_localstack_image_name_set_from_envvar(pytester: pytest.Pytester) -> Non
             """\
             import os
 
-            from testcontainers.core.docker_client import DockerClient
 
-
-            DockerClient().client.images.pull("localstack/localstack:2.0")
             os.environ["LOCALSTACK_TESTCONTAINER_IMAGE_ID"] = "localstack/localstack:2.0"
             """
         )
