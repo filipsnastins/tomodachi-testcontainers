@@ -43,9 +43,12 @@ async def receive(
     queue_url = get_queue_url_response["QueueUrl"]
 
     received_messages_response = await sqs_client.receive_message(QueueUrl=queue_url, MaxNumberOfMessages=max_messages)
+    received_messages = received_messages_response.get("Messages")
+    if not received_messages:
+        return []
 
     parsed_messages: List[MessageType] = []
-    for message in received_messages_response["Messages"]:
+    for message in received_messages:
         parsed_message = await envelope.parse_message(json.loads(message["Body"])["Message"])
         parsed_messages.append(parsed_message[0]["data"])
     return parsed_messages
