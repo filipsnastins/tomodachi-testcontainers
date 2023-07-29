@@ -37,7 +37,6 @@ async def receive(
     queue_name: str,
     envelope: TomodachiSNSSQSEnvelope,
     message_type: Type[MessageType],
-    proto_class: Optional[Type[MessageType]] = None,
     max_messages: int = 10,
 ) -> List[MessageType]:
     get_queue_url_response = await sqs_client.get_queue_url(QueueName=queue_name)
@@ -51,7 +50,7 @@ async def receive(
     parsed_messages: List[MessageType] = []
     for received_message in received_messages:
         payload = json.loads(received_message["Body"])["Message"]
-        parsed_message = await envelope.parse_message(payload=payload, proto_class=proto_class)
+        parsed_message = await envelope.parse_message(payload=payload, proto_class=message_type)
         parsed_messages.append(parsed_message[0]["data"])
     return parsed_messages
 

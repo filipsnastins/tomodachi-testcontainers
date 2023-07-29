@@ -48,6 +48,6 @@ async def test_publish_and_receive_protobuf_message(moto_sns_client: SNSClient, 
     await snssqs_client.subscribe_to(moto_sns_client, moto_sqs_client, topic="test-topic", queue="test-queue")
     await snssqs_client.publish(moto_sns_client, "test-topic", Person(id="123456", name="John Doe"), ProtobufBase)
 
-    messages = await snssqs_client.receive(moto_sqs_client, "test-queue", ProtobufBase, Person, proto_class=Person)
+    messages = await snssqs_client.receive(moto_sqs_client, "test-queue", ProtobufBase, Person)
 
     assert messages == [Person(id="123456", name="John Doe")]
