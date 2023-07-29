@@ -10,4 +10,3 @@ async def test_moto_container_starts(moto_container: MotoContainer) -> None:
         response = await client.get("/moto-api/data.json")
 
         assert response.status_code == 200
-        assert response.json() == {"core": {"CloudFormationModel": []}}

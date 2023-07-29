@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, List, Protocol, Type, TypeVar, Union
+from typing import Any, List, Protocol, Type, TypeVar, Union
 
 from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
@@ -43,15 +43,19 @@ async def receive(
     queue_url = get_queue_url_response["QueueUrl"]
 
     received_messages_response = await sqs_client.receive_message(QueueUrl=queue_url, MaxNumberOfMessages=max_messages)
+    received_messages = received_messages_response.get("Messages")
+    if not received_messages:
+        return []
 
     parsed_messages: List[MessageType] = []
-    for message in received_messages_response["Messages"]:
-        parsed_message = await envelope.parse_message(json.loads(message["Body"])["Message"])
+    for received_message in received_messages:
+        payload = json.loads(received_message["Body"])["Message"]
+        parsed_message = await envelope.parse_message(payload=payload, proto_class=message_type)
         parsed_messages.append(parsed_message[0]["data"])
     return parsed_messages
 
 
-async def publish(sns_client: SNSClient, topic: str, data: Dict, envelope: TomodachiSNSSQSEnvelope) -> None:
+async def publish(sns_client: SNSClient, topic: str, data: Any, envelope: TomodachiSNSSQSEnvelope) -> None:
     message = await envelope.build_message(service={}, topic=topic, data=data)
 
     create_topic_response = await sns_client.create_topic(Name=topic)

@@ -37,3 +37,8 @@
 ## Docs
 
 ...
+
+## Testing
+
+- [ ] Docker-from-Docker test
+- [ ] Forward container logs to pytest stdout, otherwise if a test fails, it's hard to debug
