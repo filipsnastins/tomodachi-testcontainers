@@ -1,5 +1,5 @@
 import json
-from typing import Any, List, Optional, Protocol, Type, TypeVar, Union
+from typing import Any, List, Protocol, Type, TypeVar, Union
 
 from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
