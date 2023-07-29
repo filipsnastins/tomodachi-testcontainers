@@ -168,4 +168,5 @@ log_cli_level = "INFO"
 env = [
     "TESTCONTAINER_DOCKER_NETWORK=tomodachi-testcontainers",
     "TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile",
+    "DOCKER_BUILDKIT=1",
 ]
