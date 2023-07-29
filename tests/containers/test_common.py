@@ -34,7 +34,11 @@ class TestEphemeralDockerImage:
             dockerfile.flush()
             yield Path(dockerfile.name)
 
-    def test_build_docker_image_and_remove_on_cleanup(self, dockerfile_hello_world: Path) -> None:
+    def test_build_docker_image_and_remove_on_cleanup(
+        self, dockerfile_hello_world: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.delenv("DOCKER_BUILDKIT", raising=False)
+
         with EphemeralDockerImage(dockerfile_hello_world) as image:
             assert get_docker_image(image_id=str(image.id))
 
@@ -47,6 +51,10 @@ class TestEphemeralDockerImage:
         with EphemeralDockerImage(dockerfile_buildkit) as image:
             assert get_docker_image(image_id=str(image.id))
 
-    def test_build_error_when_docker_buildkit_envvar_not_set(self, dockerfile_buildkit: Path) -> None:
+    def test_build_error_when_docker_buildkit_envvar_not_set(
+        self, dockerfile_buildkit: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.delenv("DOCKER_BUILDKIT", raising=False)
+
         with pytest.raises(BuildError), EphemeralDockerImage(dockerfile_buildkit):
             pass
