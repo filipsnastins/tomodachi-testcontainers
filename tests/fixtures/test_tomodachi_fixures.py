@@ -19,6 +19,7 @@ def test_tomodachi_image_id_set_from_envvar(pytester: pytest.Pytester) -> None:
         dedent(
             """\
             from docker.models.images import Image as DockerImage
+
             from tomodachi_testcontainers.containers.common import get_docker_image
 
 
