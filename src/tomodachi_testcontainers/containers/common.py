@@ -68,8 +68,8 @@ class EphemeralDockerImage:
 
         cmd = ["docker", "build", "-q", "--rm=true"]
         if filepath.is_file():
-            cmd += ["-f", str(filepath)]
-        cmd += [str(dockerfile_dir)]
+            cmd.extend(["-f", str(filepath)])
+        cmd.append(str(dockerfile_dir))
 
         result = subprocess.run(  # nosec: B603
             cmd,
@@ -93,10 +93,8 @@ class EphemeralDockerImage:
         return image
 
 
-def get_docker_image(image_id: str, docker_client_kw: Optional[Dict] = None) -> Optional[DockerImage]:
+def get_docker_image(image_id: str, docker_client_kw: Optional[Dict] = None) -> DockerImage:
     client = DockerClient(**(docker_client_kw or {}))
-    if not image_id:
-        return None
     try:
         return cast(DockerImage, client.client.images.get(image_id))
     except ImageNotFound:
