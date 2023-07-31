@@ -46,6 +46,3 @@ class LocalStackContainer(DockerContainer):
         super().start()
         wait_for_logs(self, r"Ready\.\n", timeout=timeout)
         return self
-
-    def restart(self) -> None:
-        self.get_wrapped_container().restart()

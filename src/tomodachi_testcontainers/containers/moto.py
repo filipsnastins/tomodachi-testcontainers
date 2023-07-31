@@ -50,5 +50,5 @@ class MotoContainer(DockerContainer):
         wait_for_logs(self, "Running on all addresses", timeout=timeout)
         return self
 
-    def reset(self) -> None:
+    def reset_moto(self) -> None:
         self.exec(["sh", "-c", "curl", "-X", "POST", f"http://localhost:{self.internal_port}/moto-api/reset"])

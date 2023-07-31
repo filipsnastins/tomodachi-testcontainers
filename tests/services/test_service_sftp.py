@@ -26,6 +26,7 @@ def service_sftp_container(
         .with_command("tomodachi run src/sftp.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
+    sftp_container.restart_container()
 
 
 @pytest_asyncio.fixture()

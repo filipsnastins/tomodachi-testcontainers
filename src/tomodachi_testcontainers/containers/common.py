@@ -35,6 +35,9 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
         container = self.get_docker_client().get_container(self.get_wrapped_container().id)
         return container["NetworkSettings"]["Networks"][self.network]["Gateway"]
 
+    def restart_container(self) -> None:
+        self.get_wrapped_container().restart()
+
 
 class EphemeralDockerImage:
     def __init__(self, dockerfile: Path, docker_client_kw: Optional[Dict] = None) -> None:

@@ -29,10 +29,7 @@ async def _create_topics_and_queues(moto_sns_client: SNSClient, moto_sqs_client:
 
 @pytest.fixture()
 def service_orders_container(
-    tomodachi_image: DockerImage,
-    moto_container: MotoContainer,
-    _create_topics_and_queues: None,
-    _reset_moto_container: None,
+    tomodachi_image: DockerImage, moto_container: MotoContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(image=str(tomodachi_image.id), edge_port=get_available_port())
@@ -46,6 +43,7 @@ def service_orders_container(
         .with_command("tomodachi run src/orders.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
+    moto_container.reset_moto()
 
 
 @pytest_asyncio.fixture()
