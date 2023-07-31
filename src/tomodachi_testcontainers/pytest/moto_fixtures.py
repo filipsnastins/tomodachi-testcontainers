@@ -22,9 +22,9 @@ def moto_container() -> Generator[MotoContainer, None, None]:
 
 
 @pytest.fixture()
-def _reset_moto_container(moto_container: MotoContainer) -> Generator[None, None, None]:
+def _reset_moto_container_on_teardown(moto_container: MotoContainer) -> Generator[None, None, None]:
     yield
-    moto_container.reset()
+    moto_container.reset_moto()
 
 
 @pytest_asyncio.fixture()

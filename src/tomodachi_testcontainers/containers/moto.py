@@ -20,7 +20,7 @@ class MotoContainer(DockerContainer):
         self.internal_port = internal_port
         self.edge_port = edge_port
 
-        self.region_name = region_name or os.environ.get("AWS_DEFAULT_REGION") or "eu-west-1"
+        self.region_name = region_name or os.environ.get("AWS_DEFAULT_REGION") or "us-east-1"
         self.aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID") or "testing"  # nosec: B105
         self.aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY") or "testing"  # nosec: B105
 
@@ -50,5 +50,5 @@ class MotoContainer(DockerContainer):
         wait_for_logs(self, "Running on all addresses", timeout=timeout)
         return self
 
-    def reset(self) -> None:
+    def reset_moto(self) -> None:
         self.exec(["sh", "-c", "curl", "-X", "POST", f"http://localhost:{self.internal_port}/moto-api/reset"])

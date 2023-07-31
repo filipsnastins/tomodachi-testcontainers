@@ -31,12 +31,12 @@ async def _create_topics_and_queues(localstack_sns_client: SNSClient, localstack
 def service_s3_container(
     tomodachi_image: DockerImage,
     localstack_container: LocalStackContainer,
-    _restart_localstack_container: None,
     _create_topics_and_queues: None,
+    _restart_localstack_container_on_teardown: None,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(image=str(tomodachi_image.id), edge_port=get_available_port())
-        .with_env("AWS_REGION", "eu-west-1")
+        .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")
         .with_env("AWS_SNS_ENDPOINT_URL", localstack_container.get_internal_url())

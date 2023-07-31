@@ -6,8 +6,7 @@ from types_aiobotocore_sqs import SQSClient
 
 
 def get_sns_client() -> SNSClient:
-    session = get_session()
-    return session.create_client(
+    return get_session().create_client(
         "sns",
         region_name=os.environ["AWS_REGION"],
         aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
@@ -17,8 +16,7 @@ def get_sns_client() -> SNSClient:
 
 
 def get_sqs_client() -> SQSClient:
-    session = get_session()
-    return session.create_client(
+    return get_session().create_client(
         "sqs",
         region_name=os.environ["AWS_REGION"],
         aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
