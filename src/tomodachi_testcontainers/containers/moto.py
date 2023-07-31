@@ -29,6 +29,12 @@ class MotoContainer(DockerContainer):
         self.with_env("AWS_ACCESS_KEY_ID", self.aws_access_key_id)
         self.with_env("AWS_SECRET_ACCESS_KEY", self.aws_secret_access_key)
 
+        self.with_env("MOTO_PORT", str(self.internal_port))
+
+        # Docker is needed for Lambda
+        self.with_env("MOTO_DOCKER_NETWORK_NAME", self.network)
+        self.with_volume_mapping("/var/run/docker.sock", "/var/run/docker.sock")
+
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()
         return f"http://{ip}:{self.internal_port}"
