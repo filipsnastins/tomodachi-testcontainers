@@ -29,12 +29,15 @@ async def _create_topics_and_queues(localstack_sns_client: SNSClient, localstack
 
 
 @pytest.fixture()
-def service_orders_container(
-    tomodachi_image: DockerImage, localstack_container: LocalStackContainer, _create_topics_and_queues: None
+def service_customers_container(
+    tomodachi_image: DockerImage,
+    localstack_container: LocalStackContainer,
+    _create_topics_and_queues: None,
+    _restart_localstack_container_on_teardown: None,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(image=str(tomodachi_image.id), edge_port=get_available_port())
-        .with_env("AWS_REGION", "eu-west-1")
+        .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")
         .with_env("AWS_SNS_ENDPOINT_URL", localstack_container.get_internal_url())
@@ -44,12 +47,11 @@ def service_orders_container(
         .with_command("tomodachi run src/customers.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
-    localstack_container.restart_container()
 
 
 @pytest_asyncio.fixture()
-async def http_client(service_orders_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with httpx.AsyncClient(base_url=service_orders_container.get_external_url()) as client:
+async def http_client(service_customers_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(base_url=service_customers_container.get_external_url()) as client:
         yield client
 
 

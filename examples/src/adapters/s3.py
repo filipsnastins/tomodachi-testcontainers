@@ -1,14 +1,11 @@
 import os
-from typing import cast
 
 import structlog
 from adapters.sns_sqs import get_sns_client
 from aiobotocore.session import get_session
-from structlog import get_logger
 from types_aiobotocore_s3 import S3Client
-from types_aiobotocore_s3.literals import BucketLocationConstraintType
 
-logger: structlog.stdlib.BoundLogger = get_logger()
+logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 
 
 def get_bucket_name() -> str:
@@ -37,15 +34,11 @@ def get_s3_client() -> S3Client:
 async def create_s3_bucket() -> None:
     bucket_name = get_bucket_name()
     notification_queue_name = get_s3_notification_topic_name()
-    location_constraint = cast(BucketLocationConstraintType, os.environ["AWS_REGION"])
 
     log = logger.bind(bucket_name=bucket_name)
     async with get_s3_client() as s3_client, get_sns_client() as sns_client:
         try:
-            await s3_client.create_bucket(
-                Bucket=bucket_name,
-                CreateBucketConfiguration={"LocationConstraint": location_constraint},
-            )
+            await s3_client.create_bucket(Bucket=bucket_name)
             log.info("s3_bucket_created")
 
             notification_topic = await sns_client.create_topic(Name=notification_queue_name)

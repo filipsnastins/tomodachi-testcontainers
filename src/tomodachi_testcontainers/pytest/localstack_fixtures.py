@@ -21,6 +21,12 @@ def localstack_container() -> Generator[LocalStackContainer, None, None]:
         yield container
 
 
+@pytest.fixture()
+def _restart_localstack_container_on_teardown(localstack_container: LocalStackContainer) -> Generator[None, None, None]:
+    yield
+    localstack_container.restart_container()
+
+
 @pytest_asyncio.fixture()
 async def localstack_sns_client(localstack_container: LocalStackContainer) -> AsyncGenerator[SNSClient, None]:
     async with get_session().create_client("sns", **localstack_container.get_aws_client_config()) as c:

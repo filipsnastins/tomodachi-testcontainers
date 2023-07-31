@@ -21,6 +21,12 @@ def moto_container() -> Generator[MotoContainer, None, None]:
         yield container
 
 
+@pytest.fixture()
+def _reset_moto_container_on_teardown(moto_container: MotoContainer) -> Generator[None, None, None]:
+    yield
+    moto_container.reset_moto()
+
+
 @pytest_asyncio.fixture()
 async def moto_sns_client(moto_container: MotoContainer) -> AsyncGenerator[SNSClient, None]:
     async with get_session().create_client("sns", **moto_container.get_aws_client_config()) as c:

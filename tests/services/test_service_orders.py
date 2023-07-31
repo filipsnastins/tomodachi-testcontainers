@@ -29,11 +29,14 @@ async def _create_topics_and_queues(moto_sns_client: SNSClient, moto_sqs_client:
 
 @pytest.fixture()
 def service_orders_container(
-    tomodachi_image: DockerImage, moto_container: MotoContainer, _create_topics_and_queues: None
+    tomodachi_image: DockerImage,
+    moto_container: MotoContainer,
+    _create_topics_and_queues: None,
+    _reset_moto_container_on_teardown: None,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(image=str(tomodachi_image.id), edge_port=get_available_port())
-        .with_env("AWS_REGION", "eu-west-1")
+        .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")
         .with_env("AWS_SNS_ENDPOINT_URL", moto_container.get_internal_url())
@@ -43,7 +46,6 @@ def service_orders_container(
         .with_command("tomodachi run src/orders.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
-    moto_container.reset_moto()
 
 
 @pytest_asyncio.fixture()

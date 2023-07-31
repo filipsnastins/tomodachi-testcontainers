@@ -264,7 +264,7 @@ def tomodachi_container(
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(image=str(tomodachi_image.id), edge_port=get_available_port())
-        .with_env("AWS_REGION", "eu-west-1")
+        .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")
         .with_env("AWS_S3_ENDPOINT_URL", localstack_container.get_internal_url())
@@ -289,8 +289,13 @@ following [12-factor app principle of providing app configuration in environment
 On `tomodachi_container` fixture teardown, `LocalStack` container is restarted
 to reset its state - delete all S3 buckets and files. This way we can be sure
 that each test starts with a clean state.
-We avoid flaky tests that depend on the state of the previous test or their execution order.
-As a drawback, it takes a bit more time to restart the container after every test.
+As alternative for calling `restart_container` method explicitly,
+you can use `_restart_localstack_container_on_teardown` fixture.
+We avoid flaky tests that depend on the state of the previous test or their execution order,
+and avoid leaking test data from one test to another.
+As a drawback, it takes a more time to restart a container after every test.
+To improve test execution speed, you can explicitly cleanup AWS resources, for example,
+deleting all S3 buckets and DynamoDB tables after every test.
 
 That's the setup, now on to the application test. 🧪
 
