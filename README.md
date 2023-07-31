@@ -81,9 +81,9 @@ from aiohttp import web
 class TomodachiServiceHealthcheck(tomodachi.Service):
     name = "service-healthcheck"
 
- @tomodachi.http("GET", r"/health")
- async def healthcheck(self, request: web.Request) -> web.Response:
- return web.json_response(data={"status": "ok"})
+    @tomodachi.http("GET", r"/health")
+        async def healthcheck(self, request: web.Request) -> web.Response:
+        return web.json_response(data={"status": "ok"})
 ```
 
 The following `tomodachi_container` fixture builds and runs the service as a Docker container.
@@ -261,7 +261,6 @@ from tomodachi_testcontainers.utils import get_available_port
 def tomodachi_container(
     tomodachi_image: DockerImage,
     localstack_container: LocalStackContainer,
-    _restart_localstack_container: None,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(image=str(tomodachi_image.id), edge_port=get_available_port())
@@ -272,6 +271,7 @@ def tomodachi_container(
         .with_command("tomodachi run app.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
+    localstack_container.restart_container()
 ```
 
 This time, `tomodachi_container` fixture is more involved. It uses
@@ -286,13 +286,11 @@ needs to communicate with `LocalStackContainer`, and they both run in the same D
 The LocalStack's `internal_url` is passed to `TomodachiContainer` as an environment variable `AWS_S3_ENDPOINT_URL`,
 following [12-factor app principle of providing app configuration in environment variables](https://12factor.net/config).
 
-The `tomodachi_container` fixture also uses the `_restart_localstack_container` fixture,
-that restarts the `LocalStackContainer` after every test.
-It resets the state of LocalStack after every test so that each new test starts
-from a clean and predictable state. That way, we avoid flaky tests that depend on the
-state of the previous test or their execution order.
-As a downside, it takes a bit more time to restart the container after every test,
-so it might not be necessary for every test.
+On `tomodachi_container` fixture teardown, `LocalStack` container is restarted
+to reset its state - delete all S3 buckets and files. This way we can be sure
+that each test starts with a clean state.
+We avoid flaky tests that depend on the state of the previous test or their execution order.
+As a drawback, it takes a bit more time to restart the container after every test.
 
 That's the setup, now on to the application test. 🧪
 
