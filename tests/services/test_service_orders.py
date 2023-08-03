@@ -5,7 +5,6 @@ from typing import Any, AsyncGenerator, Dict, Generator, List, cast
 import httpx
 import pytest
 import pytest_asyncio
-from busypie import wait_at_most
 from docker.models.images import Image as DockerImage
 from tomodachi.envelope.json_base import JsonBase
 from types_aiobotocore_sns import SNSClient
@@ -14,6 +13,7 @@ from types_aiobotocore_sqs import SQSClient
 from tomodachi_testcontainers.clients import snssqs_client
 from tomodachi_testcontainers.containers import MotoContainer, TomodachiContainer
 from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
+from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
 
 
@@ -113,4 +113,4 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_sqs_client: SQS
             "created_at": event["created_at"],
         }
 
-    await wait_at_most(5).until_asserted_async(_order_created_event_emitted)
+    await probe_until(_order_created_event_emitted)
