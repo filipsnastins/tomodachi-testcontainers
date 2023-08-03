@@ -57,4 +57,4 @@ class MotoContainer(DockerContainer):
         return self
 
     def reset_moto(self) -> None:
-        self.exec(["sh", "-c", "curl", "-X", "POST", f"http://localhost:{self.internal_port}/moto-api/reset"])
+        self.exec(["curl", "-X", "POST", f"http://localhost:{self.internal_port}/moto-api/reset"])
