@@ -7,7 +7,7 @@ from tenacity.wait import wait_fixed
 
 
 async def probe_until(func: Callable, probe_interval: float = 0.1, stop_after: float = 3) -> None:
-    """Run given function until it finished without exceptions or timeout is reached."""
+    """Run given function until it finishes without exceptions."""
     async for attempt in AsyncRetrying(
         wait=wait_fixed(probe_interval),
         stop=stop_after_delay(stop_after),
@@ -18,7 +18,7 @@ async def probe_until(func: Callable, probe_interval: float = 0.1, stop_after: f
 
 
 async def probe_during_interval(func: Callable, probe_interval: float = 0.1, stop_after: float = 3) -> None:
-    """Run given function until timeout is reached and assert it always finished without exceptions."""
+    """Run given function until timeout is reached and the function always finishes without exceptions."""
     with contextlib.suppress(RetryError):
         async for attempt in AsyncRetrying(
             wait=wait_fixed(probe_interval),
