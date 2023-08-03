@@ -8,14 +8,29 @@ from types_aiobotocore_sqs.literals import QueueAttributeFilterType, QueueAttrib
 MessageType = TypeVar("MessageType")
 
 
-class TomodachiSNSSQSEnvelope(Protocol):
+class TomodachiSNSSQSEnvelopeStatic(Protocol):
     @classmethod
-    async def build_message(cls: "TomodachiSNSSQSEnvelope", service: Any, topic: str, data: Any, **kwargs: Any) -> str:
+    async def build_message(
+        cls: "TomodachiSNSSQSEnvelopeStatic", service: Any, topic: str, data: Any, **kwargs: Any
+    ) -> str:
         ...
 
     @classmethod
-    async def parse_message(cls: "TomodachiSNSSQSEnvelope", payload: str, **kwargs: Any) -> Union[dict, tuple]:
+    async def parse_message(cls: "TomodachiSNSSQSEnvelopeStatic", payload: str, **kwargs: Any) -> Union[dict, tuple]:
         ...
+
+
+class TomodachiSNSSQSEnvelopeInstance(Protocol):
+    async def build_message(
+        self: "TomodachiSNSSQSEnvelopeInstance", service: Any, topic: str, data: Any, **kwargs: Any
+    ) -> str:
+        ...
+
+    async def parse_message(self: "TomodachiSNSSQSEnvelopeInstance", payload: str, **kwargs: Any) -> Union[dict, tuple]:
+        ...
+
+
+TomodachiSNSSQSEnvelope = Union[TomodachiSNSSQSEnvelopeStatic, TomodachiSNSSQSEnvelopeInstance]
 
 
 async def subscribe_to(sns_client: SNSClient, sqs_client: SQSClient, topic: str, queue: str) -> None:
@@ -37,7 +52,7 @@ async def subscribe_to(sns_client: SNSClient, sqs_client: SQSClient, topic: str,
 async def receive(
     sqs_client: SQSClient,
     queue_name: str,
-    envelope: TomodachiSNSSQSEnvelope,
+    envelope: TomodachiSNSSQSEnvelopeStatic,
     message_type: Type[MessageType],
     max_messages: int = 10,
 ) -> List[MessageType]:
@@ -59,7 +74,7 @@ async def receive(
     return parsed_messages
 
 
-async def publish(sns_client: SNSClient, topic: str, data: Any, envelope: TomodachiSNSSQSEnvelope) -> None:
+async def publish(sns_client: SNSClient, topic: str, data: Any, envelope: TomodachiSNSSQSEnvelopeStatic) -> None:
     """Publish a message to a SNS topic."""
     message = await envelope.build_message(service={}, topic=topic, data=data)
 
