@@ -29,7 +29,6 @@ types-aiobotocore = { extras = [
 autoflake = "^2.2.0"
 bandit = "^1.7.5"
 black = "^23.7.0"
-busypie = "^0.5.1"
 colorama = "^0.4.6"
 flake8 = "^6.0.0"
 flake8-annotations = "^3.0.1"

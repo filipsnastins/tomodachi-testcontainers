@@ -450,17 +450,6 @@ types-awscrt = "*"
 typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.9\""}
 
 [[package]]
-name = "busypie"
-version = "0.5.1"
-description = "Easy and expressive busy-waiting for Python"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "busypie-0.5.1-py3-none-any.whl", hash = "sha256:0f7d6a3e549357a8d59087985919af11276cd11a6be162dadd7f8d60a4718a86"},
-    {file = "busypie-0.5.1.tar.gz", hash = "sha256:5a6ec2a60973a9708a2b6aada5d9904ab73636f2432f19db2940c811af559d02"},
-]
-
-[[package]]
 name = "cchardet"
 version = "2.1.7"
 description = "cChardet is high speed universal character encoding detector."
@@ -3115,4 +3104,4 @@ sftp = ["asyncssh"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "ff016d8be175f0b20375838e7abb72f600700c6c708d45e9514113abff5ebdb1"
+content-hash = "e00c140980fe187d93dbae073bb52bd3e54e571b8e26238ce220024b34f93c98"

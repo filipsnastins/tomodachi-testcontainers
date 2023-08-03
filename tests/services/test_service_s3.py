@@ -4,7 +4,6 @@ from typing import Any, AsyncGenerator, Dict, Generator, cast
 import httpx
 import pytest
 import pytest_asyncio
-from busypie import wait_at_most
 from docker.models.images import Image as DockerImage
 from tomodachi.envelope.json_base import JsonBase
 from types_aiobotocore_s3 import S3Client
@@ -14,6 +13,7 @@ from types_aiobotocore_sqs import SQSClient
 from tomodachi_testcontainers.clients import snssqs_client
 from tomodachi_testcontainers.containers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.pytest.assertions import assert_datetime_within_range
+from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
 
 
@@ -95,7 +95,7 @@ async def test_upload_and_read_file(
             "event_time": event["event_time"],
         }
 
-    await wait_at_most(5).until_asserted_async(_file_uploaded_event_emitted)
+    await probe_until(_file_uploaded_event_emitted)
 
 
 @pytest.mark.asyncio()
