@@ -6,9 +6,9 @@ from tomodachi_testcontainers.pytest.async_probes import probe_during_interval, 
 @pytest.mark.asyncio()
 async def test_probe_until__fails_and_reraises_exception() -> None:
     def _func() -> None:
-        assert False
+        raise ValueError("Something went wrong")
 
-    with pytest.raises(AssertionError, match="assert False"):
+    with pytest.raises(ValueError, match="Something went wrong"):
         await probe_until(_func, probe_interval=0.1, stop_after=0.3)
 
 
@@ -72,7 +72,7 @@ async def test_probe_during_interval__fails_with_other_exceptions() -> None:
 
     async def _func() -> None:
         if attempts.pop(0) is False:
-            raise Exception("Something went wrong")
+            raise ValueError("Something went wrong")
 
-    with pytest.raises(Exception, match="Something went wrong"):
+    with pytest.raises(ValueError, match="Something went wrong"):
         await probe_during_interval(_func, probe_interval=0.1, stop_after=0.3)
