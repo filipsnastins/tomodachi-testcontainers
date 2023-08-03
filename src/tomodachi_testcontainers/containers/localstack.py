@@ -26,6 +26,10 @@ class LocalStackContainer(DockerContainer):
 
         self.with_bind_ports(self.internal_port, self.edge_port)
 
+        # Docker is needed for running AWS Lambda container
+        self.with_env("LAMBDA_DOCKER_NETWORK", self.network)
+        self.with_volume_mapping("/var/run/docker.sock", "/var/run/docker.sock")
+
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()
         return f"http://{ip}:{self.internal_port}"
