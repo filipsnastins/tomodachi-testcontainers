@@ -13,18 +13,18 @@ pytestmark = pytest.mark.usefixtures("_reset_moto_container_on_teardown")
 
 
 @pytest.mark.asyncio()
-async def test_publish_fails_if_topic_does_not_exist(moto_sns_client: SNSClient) -> None:
-    with pytest.raises(ValueError, match="Topic does not exist: test-topic"):
-        await snssqs_client.publish(moto_sns_client, "test-topic", {"message": "1"}, JsonBase)
-
-
-@pytest.mark.asyncio()
 async def test_no_messages_received(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> None:
     await snssqs_client.subscribe_to(moto_sns_client, moto_sqs_client, topic="test-topic", queue="test-queue")
 
     messages = await snssqs_client.receive(moto_sqs_client, "test-queue", JsonBase, Dict[str, str])
 
     assert messages == []
+
+
+@pytest.mark.asyncio()
+async def test_publish_fails_if_topic_does_not_exist(moto_sns_client: SNSClient) -> None:
+    with pytest.raises(ValueError, match="Topic does not exist: test-topic"):
+        await snssqs_client.publish(moto_sns_client, "test-topic", {"message": "1"}, JsonBase)
 
 
 @pytest.mark.asyncio()
