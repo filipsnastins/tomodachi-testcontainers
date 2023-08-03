@@ -15,6 +15,7 @@ aiobotocore = "^2.5.2"
 asyncssh = { version = "^2.13.2", optional = true }
 pytest = "^7.1.2"
 pytest-asyncio = "^0.21.1"
+tenacity = "^8.2.2"
 testcontainers = "^3.7.1"
 types-aiobotocore = { extras = [
     "dynamodb",
