@@ -36,13 +36,13 @@ async def subscribe_to(sns_client: SNSClient, sqs_client: SQSClient, topic: str,
 
 async def receive(
     sqs_client: SQSClient,
-    queue_name: str,
+    queue: str,
     envelope: TomodachiSNSSQSEnvelope,
     message_type: Type[MessageType],
     max_messages: int = 10,
 ) -> List[MessageType]:
     """Receive messages from a SQS queue."""
-    get_queue_url_response = await sqs_client.get_queue_url(QueueName=queue_name)
+    get_queue_url_response = await sqs_client.get_queue_url(QueueName=queue)
     queue_url = get_queue_url_response["QueueUrl"]
 
     received_messages_response = await sqs_client.receive_message(QueueUrl=queue_url, MaxNumberOfMessages=max_messages)
