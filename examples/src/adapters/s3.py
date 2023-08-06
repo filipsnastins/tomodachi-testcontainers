@@ -25,9 +25,9 @@ def get_s3_notification_topic_name() -> str:
 def get_s3_client() -> S3Client:
     return get_session().create_client(
         "s3",
-        aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
-        endpoint_url=os.environ.get("AWS_S3_ENDPOINT_URL"),
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+        endpoint_url=os.getenv("AWS_S3_ENDPOINT_URL"),
     )
 
 

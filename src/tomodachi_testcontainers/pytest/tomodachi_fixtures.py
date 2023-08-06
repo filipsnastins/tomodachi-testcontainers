@@ -10,9 +10,18 @@ from tomodachi_testcontainers.containers import EphemeralDockerImage, get_docker
 
 @pytest.fixture(scope="session")
 def tomodachi_image() -> Generator[DockerImage, None, None]:
-    if image_id := os.environ.get("TOMODACHI_TESTCONTAINER_IMAGE_ID"):
+    if image_id := os.getenv("TOMODACHI_TESTCONTAINER_IMAGE_ID"):
         yield get_docker_image(image_id)
     else:
-        dockerfile = Path(os.environ.get("TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH", "."))
-        with EphemeralDockerImage(dockerfile) as image:
+        dockerfile = (
+            Path(os.environ["TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH"])
+            if os.getenv("TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH")
+            else None
+        )
+        context = (
+            Path(os.environ["TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT"])
+            if os.getenv("TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT")
+            else None
+        )
+        with EphemeralDockerImage(dockerfile=dockerfile, context=context) as image:
             yield image

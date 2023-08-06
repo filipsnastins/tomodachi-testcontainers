@@ -11,7 +11,7 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture(scope="session")
 def sftp_container() -> Generator[SFTPContainer, None, None]:
-    image = os.environ.get("SFTP_TESTCONTAINER_IMAGE_ID", "atmoz/sftp:latest")
+    image = os.getenv("SFTP_TESTCONTAINER_IMAGE_ID", "atmoz/sftp:latest")
     with SFTPContainer(image=image, edge_port=get_available_port()) as container:
         yield container
 
