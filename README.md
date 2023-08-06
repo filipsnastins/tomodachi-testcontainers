@@ -149,13 +149,14 @@ is working as expected, all with a Docker container, on the highest test level -
 
 ### Changing Dockerfile location
 
-If the Dockerfile is not located in the current working directory, specify a new path
-with the `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` environment variable.
+If the Dockerfile is not located in the current working directory or you need a different Docker build context,
+specify a new path with the `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` and `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT`
+environment variables.
 
 Examples:
 
-- `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/` - specify just a directory, Dockerfile is inferred automatically
-- `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile.testing` - explicitly specify the Dockerfile name
+- `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile.testing`
+- `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples/`
 
 ### Running Tomodachi container from pre-built image
 
@@ -194,9 +195,9 @@ from types_aiobotocore_s3 import S3Client
 def get_s3_client() -> S3Client:
     return get_session().create_client(
         "s3",
-        aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
-        endpoint_url=os.environ.get("AWS_S3_ENDPOINT_URL"),
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+        endpoint_url=os.getenv("AWS_S3_ENDPOINT_URL"),
     )
 
 
@@ -442,12 +443,12 @@ implemented and create your own Testcontainers as you go.
 [testcontainers-python](https://github.com/testcontainers/testcontainers-python) provide and easy way
 to create your own Testcontainers.
 
-| Container Name | Default Image               | Fixture                |                                                        Image Env Var Override |
-| :------------- | :-------------------------- | :--------------------- | ----------------------------------------------------------------------------: |
-| Tomodachi      | n/a (build from Dockerfile) | `tomodachi_image`      | `TOMODACHI_TESTCONTAINER_IMAGE_ID`, `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` |
-| Moto           | `motoserver/moto:latest`    | `moto_container`       |                                                 `MOTO_TESTCONTAINER_IMAGE_ID` |
-| LocalStack     | `localstack/localstack:2.1` | `localstack_container` |                                           `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
-| SFTP           | `atmoz/sftp:latest`         | `sftp_container`       |                                                 `SFTP_TESTCONTAINER_IMAGE_ID` |
+| Container Name | Default Image               | Fixture                |              Image Env Var Override |
+| :------------- | :-------------------------- | :--------------------- | ----------------------------------: |
+| Tomodachi      | n/a (build from Dockerfile) | `tomodachi_image`      |  `TOMODACHI_TESTCONTAINER_IMAGE_ID` |
+| Moto           | `motoserver/moto:latest`    | `moto_container`       |       `MOTO_TESTCONTAINER_IMAGE_ID` |
+| LocalStack     | `localstack/localstack:2.1` | `localstack_container` | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
+| SFTP           | `atmoz/sftp:latest`         | `sftp_container`       |       `SFTP_TESTCONTAINER_IMAGE_ID` |
 
 ### Tomodachi
 
@@ -485,12 +486,13 @@ DockerHub: <https://hub.docker.com/r/atmoz/sftp>
 e.g. with [pytest-env](https://pypi.org/project/pytest-env/) plugin or
 by setting it in the shell before running `pytest`.
 
-| Environment Variable                      | Description                                                                                                                   |
-| :---------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
-| `TESTCONTAINER_DOCKER_NETWORK`            | Launch testcontainers in specified Docker network. Defaults to 'bridge'. Network must be created beforehand                   |
-| `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` | Override path to Dockerfile for building Tomodachi service image. Defaults to '.'                                             |
-| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID` | Override any supported Testcontainer Image ID. Defaults to `None`, `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` takes precedence |
-| `DOCKER_BUILDKIT`                         | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit in `EphemeralDockerImage`                                                      |
+| Environment Variable                           | Description                                                                                                              |
+| :--------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- |
+| `TESTCONTAINER_DOCKER_NETWORK`                 | Launch testcontainers in specified Docker network. Defaults to 'bridge'. Network must be created beforehand              |
+| `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH`      | Override path to Dockerfile for building Tomodachi service image. Corresponds to `--file` flag in `docker build` command |
+| `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT` | Override Docker build context                                                                                            |
+| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID`      | Override any supported Testcontainer Image ID. Defaults to `None`                                                        |
+| `DOCKER_BUILDKIT`                              | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit for building Docker images                                                |
 
 ## Changing default Docker network
 
