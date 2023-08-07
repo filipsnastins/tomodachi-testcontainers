@@ -27,7 +27,7 @@
 
 - [ ] Explore [contract testing](https://github.com/pact-foundation/pact-python) between Orders and Customers services
 - [ ] Param testing with [Hypothesis](https://hypothesis.readthedocs.io/en/latest/)
-- [ ] BDD with [Behave](https://behave.readthedocs.io/en/latest/)
+- [ ] BDD with [Behave](https://behave.readthedocs.io/en/latest/) or [pytest-bdd](https://pypi.org/project/pytest-bdd/)
 - [ ] <https://github.com/hamcrest/PyHamcrest>
 
 ## Misc

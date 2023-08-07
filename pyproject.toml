@@ -19,6 +19,8 @@ tenacity = "^8.2.2"
 testcontainers = "^3.7.1"
 types-aiobotocore = { extras = [
     "dynamodb",
+    "iam",
+    "lambda",
     "s3",
     "sns",
     "sqs",
@@ -167,8 +169,8 @@ norecursedirs = [".venv", "__pycache__", ".git"]
 log_cli_level = "INFO"
 env = [
     # Set dummy AWS credentials so that we don't accidentally mutate real infrastructure
-    "AWS_ACCESS_KEY_ID=testing",
     "AWS_DEFAULT_REGION=us-east-1",
+    "AWS_ACCESS_KEY_ID=testing",
     "AWS_SECRET_ACCESS_KEY=testing",
     "AWS_SECURITY_TOKEN=testing",
     "AWS_SESSION_TOKEN=testing",
