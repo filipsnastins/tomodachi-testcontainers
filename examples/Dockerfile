@@ -15,22 +15,22 @@ RUN python -m pip install --no-cache-dir -U \
   "pip==$PIP_VERSION" \
   "poetry==$POETRY_VERSION" && \
   virtualenv "$VIRTUAL_ENV"
-COPY pyproject.toml poetry.lock ./
+COPY --link pyproject.toml poetry.lock ./
 RUN poetry install --without dev
 
 FROM dependencies-base AS dependencies-release
-COPY src ./src
+COPY --link src ./src
 RUN poetry install --without dev && \
   poetry build
 
 FROM dependencies-base AS development
 RUN poetry install --with dev
-COPY . .
+COPY --link . .
 RUN poetry install
 CMD ["tomodachi", "run", "src/healthcheck.py", "--loop", "uvloop"]
 
 FROM python-base AS release
-COPY --from=dependencies-release --chown=app:app /opt/venv /opt/venv
-COPY --from=dependencies-release --chown=app:app /app .
+COPY --link --from=dependencies-release --chown=app:app /opt/venv /opt/venv
+COPY --link --from=dependencies-release --chown=app:app /app .
 USER app
 CMD ["tomodachi", "run", "src/healthcheck.py", "--production", "--loop", "uvloop"]

@@ -18,7 +18,7 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture(scope="session")
 def moto_container() -> Generator[MotoContainer, None, None]:
-    image = os.environ.get("MOTO_TESTCONTAINER_IMAGE_ID", "motoserver/moto:latest")
+    image = os.getenv("MOTO_TESTCONTAINER_IMAGE_ID", "motoserver/moto:latest")
     with MotoContainer(image=image, edge_port=get_available_port()) as container:
         yield container
 

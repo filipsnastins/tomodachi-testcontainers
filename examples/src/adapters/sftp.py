@@ -7,12 +7,12 @@ import asyncssh
 
 @asynccontextmanager
 async def get_sftp_client() -> AsyncGenerator[asyncssh.SFTPClient, None]:
-    client_keys = asyncssh.import_private_key(os.environ.get("SFTP_PRIVATE_KEY", ""))
-    known_hosts = asyncssh.SSHKnownHosts(os.environ.get("SFTP_KNOWN_HOST", ""))
+    client_keys = asyncssh.import_private_key(os.getenv("SFTP_PRIVATE_KEY", ""))
+    known_hosts = asyncssh.SSHKnownHosts(os.getenv("SFTP_KNOWN_HOST", ""))
     async with asyncssh.connect(
-        host=os.environ.get("SFTP_HOST"),
-        port=int(os.environ.get("SFTP_PORT", "")),
-        username=os.environ.get("SFTP_USERNAME"),
+        host=os.getenv("SFTP_HOST"),
+        port=int(os.getenv("SFTP_PORT", "22")),
+        username=os.getenv("SFTP_USERNAME"),
         client_keys=client_keys,
         known_hosts=known_hosts,
     ) as ssh_conn:

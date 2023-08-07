@@ -18,18 +18,18 @@ class TomodachiServiceS3(tomodachi.Service):
 
     options = tomodachi.Options(
         aws_endpoint_urls=tomodachi.Options.AWSEndpointURLs(
-            sns=os.environ.get("AWS_SNS_ENDPOINT_URL"),
-            sqs=os.environ.get("AWS_SQS_ENDPOINT_URL"),
+            sns=os.getenv("AWS_SNS_ENDPOINT_URL"),
+            sqs=os.getenv("AWS_SQS_ENDPOINT_URL"),
         ),
         http=tomodachi.Options.HTTP(
             content_type="application/json; charset=utf-8",
         ),
         aws_sns_sqs=tomodachi.Options.AWSSNSSQS(
             region_name=os.environ["AWS_REGION"],
-            aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
-            aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
-            topic_prefix=os.environ.get("AWS_SNS_TOPIC_PREFIX", ""),
-            queue_name_prefix=os.environ.get("AWS_SQS_QUEUE_NAME_PREFIX", ""),
+            aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+            aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+            topic_prefix=os.getenv("AWS_SNS_TOPIC_PREFIX", ""),
+            queue_name_prefix=os.getenv("AWS_SQS_QUEUE_NAME_PREFIX", ""),
         ),
     )
 
