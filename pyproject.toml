@@ -172,7 +172,9 @@ env = [
     "AWS_SECRET_ACCESS_KEY=testing",
     "AWS_SECURITY_TOKEN=testing",
     "AWS_SESSION_TOKEN=testing",
+    # Testcontainers configuration
     "DOCKER_BUILDKIT=1",
     "TESTCONTAINER_DOCKER_NETWORK=tomodachi-testcontainers",
     "TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile",
+    "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples",
 ]

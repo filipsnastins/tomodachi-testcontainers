@@ -20,9 +20,9 @@ class MotoContainer(DockerContainer):
         self.internal_port = internal_port
         self.edge_port = edge_port
 
-        self.region_name = region_name or os.environ.get("AWS_DEFAULT_REGION") or "us-east-1"
-        self.aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID") or "testing"  # nosec: B105
-        self.aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY") or "testing"  # nosec: B105
+        self.region_name = region_name or os.getenv("AWS_DEFAULT_REGION") or "us-east-1"
+        self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID") or "testing"  # nosec: B105
+        self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY") or "testing"  # nosec: B105
 
         self.with_bind_ports(self.internal_port, self.edge_port)
         self.with_env("AWS_DEFAULT_REGION", self.region_name)

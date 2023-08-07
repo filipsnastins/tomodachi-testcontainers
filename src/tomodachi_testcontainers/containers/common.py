@@ -12,7 +12,7 @@ from testcontainers.core.utils import inside_container
 
 class DockerContainer(testcontainers.core.container.DockerContainer):
     def __init__(self, *args: Any, network: Optional[str] = None, **kwargs: Any) -> None:
-        self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK", "bridge")
+        self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
         super().__init__(*args, **kwargs, network=self.network)
 
     def get_container_host_ip(self) -> str:
@@ -40,56 +40,50 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
 
 
 class EphemeralDockerImage:
-    def __init__(self, dockerfile: Path, docker_client_kw: Optional[Dict] = None) -> None:
+    """Builds a Docker image from a given Dockerfile and removes it when the context manager exits."""
+
+    image: DockerImage
+
+    def __init__(
+        self, dockerfile: Optional[Path] = None, context: Optional[Path] = None, docker_client_kw: Optional[Dict] = None
+    ) -> None:
+        self.dockerfile = str(dockerfile) if dockerfile else None
+        self.context = str(context) if context else "."
         self.client = DockerClient(**(docker_client_kw or {}))
-        self.image = self.build_image(dockerfile)
 
     def __enter__(self) -> DockerImage:
+        self.image = self.build_image()
         return self.image
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         self.remove_image()
 
-    def build_image(self, path: Path) -> DockerImage:
-        if path.is_dir():
-            dockerfile_dir = path
-            dockerfile_name = ""
-        else:
-            dockerfile_dir = path.parent
-            dockerfile_name = path.name
-
+    def build_image(self) -> DockerImage:
         if os.getenv("DOCKER_BUILDKIT"):
-            return self._build_with_docker_buildkit(dockerfile_dir, dockerfile_name)
-
-        return self._build_with_docker_client(dockerfile_dir, dockerfile_name)
+            return self._build_with_docker_buildkit()
+        return self._build_with_docker_client()
 
     def remove_image(self) -> None:
         self.client.client.images.remove(image=str(self.image.id))
 
-    def _build_with_docker_buildkit(self, dockerfile_dir: Path, dockerfile_name: str) -> DockerImage:
-        filepath = dockerfile_dir / dockerfile_name
-
+    def _build_with_docker_buildkit(self) -> DockerImage:
         cmd = ["docker", "build", "-q", "--rm=true"]
-        if filepath.is_file():
-            cmd.extend(["-f", str(filepath)])
-        cmd.append(str(dockerfile_dir))
+        if self.dockerfile:
+            cmd.extend(["-f", self.dockerfile])
+        cmd.append(self.context)
 
-        result = subprocess.run(  # nosec: B603
-            cmd,
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=True,
-        )
+        result = subprocess.run(
+            cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True
+        )  # nosec: B603
         image_id = result.stdout.decode("utf-8").strip()
         return cast(DockerImage, self.client.client.images.get(image_id))
 
-    def _build_with_docker_client(self, dockerfile_dir: Path, dockerfile_name: str) -> DockerImage:
+    def _build_with_docker_client(self) -> DockerImage:
         image, _ = cast(
             Tuple[DockerImage, Iterator],
             self.client.client.images.build(
-                path=str(dockerfile_dir),
-                dockerfile=str(dockerfile_name),
+                dockerfile=self.dockerfile,
+                path=self.context,
                 forcerm=True,
             ),
         )
