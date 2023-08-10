@@ -78,10 +78,10 @@ def test_copy_folder_to_container(alpine_container: Container) -> None:
 
     code, output = alpine_container.exec_run("find /tmp -type f")
     assert code == 0
-    assert output.decode("utf-8") == "/tmp/file-1.txt\n/tmp/file-2.txt\n"
+    assert output.decode("utf-8") == "/tmp/file-1.txt\n/tmp/nested/file-2.txt\n"
     code, output = alpine_container.exec_run("cat /tmp/file-1.txt")
     assert code == 0
     assert output.decode("utf-8") == "file 1"
-    code, output = alpine_container.exec_run("cat /tmp/file-2.txt")
+    code, output = alpine_container.exec_run("cat /tmp/nested/file-2.txt")
     assert code == 0
     assert output.decode("utf-8") == "file 2"
