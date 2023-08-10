@@ -1,11 +1,14 @@
+import io
 import logging
 import os
 import subprocess  # nosec: B404
+import tarfile
 from pathlib import Path
 from typing import Any, Dict, Iterator, Optional, Tuple, cast
 
 import testcontainers.core.container
 from docker.errors import ImageNotFound
+from docker.models.containers import Container
 from docker.models.images import Image as DockerImage
 from testcontainers.core.docker_client import DockerClient
 from testcontainers.core.utils import inside_container
@@ -104,3 +107,15 @@ def get_docker_image(image_id: str, docker_client_kw: Optional[Dict] = None) -> 
         return cast(DockerImage, client.client.images.get(image_id))
     except ImageNotFound:
         return cast(DockerImage, client.client.images.pull(image_id))
+
+
+def copy_folder_to_container(host_path: Path, container_path: Path, container: Container) -> None:
+    tar_stream = io.BytesIO()
+    with tarfile.open(fileobj=tar_stream, mode="w") as tar:
+        for root, _, files in os.walk(host_path):
+            for file in files:
+                file_path = Path(root) / file
+                arcname = os.path.relpath(file_path, host_path)
+                tar.add(file_path, arcname=arcname)
+    tar_stream.seek(0)
+    container.put_archive(path=container_path, data=tar_stream)

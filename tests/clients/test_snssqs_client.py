@@ -6,7 +6,7 @@ from tomodachi.envelope.protobuf_base import ProtobufBase
 from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 
-from tests.proto_build.message_pb2 import Person
+from tests.clients.proto_build.message_pb2 import Person
 from tomodachi_testcontainers.clients import snssqs_client
 
 pytestmark = pytest.mark.usefixtures("_reset_moto_container_on_teardown")
