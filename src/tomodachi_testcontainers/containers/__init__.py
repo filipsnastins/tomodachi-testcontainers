@@ -1,6 +1,6 @@
 import contextlib
 
-from tomodachi_testcontainers.containers.common import EphemeralDockerImage, get_docker_image
+from tomodachi_testcontainers.containers.common import DockerContainer, EphemeralDockerImage, get_docker_image
 from tomodachi_testcontainers.containers.localstack import LocalStackContainer
 from tomodachi_testcontainers.containers.moto import MotoContainer
 from tomodachi_testcontainers.containers.tomodachi import TomodachiContainer
@@ -10,6 +10,7 @@ with contextlib.suppress(ModuleNotFoundError):
 
 
 __all__ = [
+    "DockerContainer",
     "EphemeralDockerImage",
     "LocalStackContainer",
     "MotoContainer",
