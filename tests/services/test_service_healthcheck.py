@@ -29,4 +29,4 @@ async def test_healthcheck_passes(http_client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
-    assert False
+    pytest.fail("Test failure")
