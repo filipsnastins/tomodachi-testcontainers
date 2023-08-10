@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-=======
 import io
-import logging
->>>>>>> Stashed changes
 import os
 import subprocess  # nosec: B404
 import tarfile

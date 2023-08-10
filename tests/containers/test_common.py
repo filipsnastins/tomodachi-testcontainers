@@ -7,11 +7,7 @@ from docker.errors import BuildError, ImageNotFound
 from docker.models.containers import Container
 from testcontainers.core.docker_client import DockerClient
 
-<<<<<<< Updated upstream
-from tomodachi_testcontainers.containers.common import EphemeralDockerImage, get_docker_image
-=======
-from tomodachi_testcontainers.containers import EphemeralDockerImage, get_docker_image
-from tomodachi_testcontainers.containers.common import copy_folder_to_container
+from tomodachi_testcontainers.containers import EphemeralDockerImage, copy_folder_to_container, get_docker_image
 
 
 @pytest.fixture()
@@ -20,7 +16,6 @@ def alpine_container() -> Generator[Container, None, None]:
     container = client.run("alpine:latest", command="sleep 10", detach=True, remove=True)
     yield container
     container.remove(force=True)
->>>>>>> Stashed changes
 
 
 class TestEphemeralDockerImage:
