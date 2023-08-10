@@ -1,3 +1,4 @@
+import logging
 import os
 import subprocess  # nosec: B404
 from pathlib import Path
@@ -14,6 +15,13 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
     def __init__(self, *args: Any, network: Optional[str] = None, **kwargs: Any) -> None:
         self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
         super().__init__(*args, **kwargs, network=self.network)
+
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        logger = logging.getLogger(self.__class__.__name__)
+        logs = self.get_wrapped_container().logs(timestamps=True).decode().split("\n")
+        for log in logs:
+            logger.info(log)
+        self.stop()
 
     def get_container_host_ip(self) -> str:
         host = self.get_docker_client().host()

@@ -36,6 +36,7 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [SFTP](#sftp)
   - [Configuration with environment variables](#configuration-with-environment-variables)
   - [Changing default Docker network](#changing-default-docker-network)
+  - [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
   - [Resources and acknowledgements](#resources-and-acknowledgements)
   - [Development](#development)
 
@@ -504,6 +505,18 @@ Specify a new network name with the `TOMODACHI_TESTCONTAINER_NETWORK` environmen
 The Docker network is not created automatically, so make sure that it exists before running tests.
 
 ⚠️ Make sure that the environment variable is set before running `pytest`.
+
+## Forward Testcontainer logs to Pytest
+
+Logs from a testcontainer are forwarded to Python's standard logger as `INFO` logs when
+`tomodachi_testcontainers.containers.DockerContainer` context manager exit.
+
+To see the logs in Pytest, set the log level to at least `INFO` in [Pytest configuration](https://docs.pytest.org/en/7.1.x/how-to/logging.html).
+
+```toml
+[tool.pytest.ini_options]
+log_level = "INFO"
+```
 
 ## Resources and acknowledgements
 
