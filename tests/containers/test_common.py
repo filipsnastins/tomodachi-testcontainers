@@ -4,8 +4,23 @@ from typing import Generator
 
 import pytest
 from docker.errors import BuildError, ImageNotFound
+from docker.models.containers import Container
+from testcontainers.core.docker_client import DockerClient
 
+<<<<<<< Updated upstream
 from tomodachi_testcontainers.containers.common import EphemeralDockerImage, get_docker_image
+=======
+from tomodachi_testcontainers.containers import EphemeralDockerImage, get_docker_image
+from tomodachi_testcontainers.containers.common import copy_folder_to_container
+
+
+@pytest.fixture()
+def alpine_container() -> Generator[Container, None, None]:
+    client = DockerClient()
+    container = client.run("alpine:latest", command="sleep 10", detach=True, remove=True)
+    yield container
+    container.remove(force=True)
+>>>>>>> Stashed changes
 
 
 class TestEphemeralDockerImage:
@@ -58,3 +73,20 @@ class TestEphemeralDockerImage:
 
         with pytest.raises(BuildError), EphemeralDockerImage(dockerfile_buildkit):
             pass
+
+
+def test_copy_folder_to_container(alpine_container: Container) -> None:
+    host_path = Path(__file__).parent / "sample-folder"
+    container_path = Path("/tmp")
+
+    copy_folder_to_container(host_path=host_path, container_path=container_path, container=alpine_container)
+
+    code, output = alpine_container.exec_run("find /tmp -type f")
+    assert code == 0
+    assert output.decode("utf-8") == "/tmp/file-1.txt\n/tmp/file-2.txt\n"
+    code, output = alpine_container.exec_run("cat /tmp/file-1.txt")
+    assert code == 0
+    assert output.decode("utf-8") == "file 1"
+    code, output = alpine_container.exec_run("cat /tmp/file-2.txt")
+    assert code == 0
+    assert output.decode("utf-8") == "file 2"
