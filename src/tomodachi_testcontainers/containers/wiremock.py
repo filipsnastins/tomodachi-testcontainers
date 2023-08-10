@@ -7,8 +7,7 @@ from typing import Any
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.containers import DockerContainer
-from tomodachi_testcontainers.containers.common import copy_folder_to_container
+from tomodachi_testcontainers.containers.common import DockerContainer, copy_folder_to_container
 
 
 class WireMockContainer(DockerContainer):
