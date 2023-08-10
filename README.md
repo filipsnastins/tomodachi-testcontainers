@@ -34,6 +34,7 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [Moto](#moto)
     - [LocalStack](#localstack)
     - [SFTP](#sftp)
+    - [WireMock](#wiremock)
   - [Configuration with environment variables](#configuration-with-environment-variables)
   - [Changing default Docker network](#changing-default-docker-network)
   - [Resources and acknowledgements](#resources-and-acknowledgements)
@@ -449,6 +450,7 @@ to create your own Testcontainers.
 | Moto           | `motoserver/moto:latest`    | `moto_container`       |       `MOTO_TESTCONTAINER_IMAGE_ID` |
 | LocalStack     | `localstack/localstack:2.1` | `localstack_container` | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
 | SFTP           | `atmoz/sftp:latest`         | `sftp_container`       |       `SFTP_TESTCONTAINER_IMAGE_ID` |
+| WireMock       | `wiremock/wiremock:latest`  | n/a                    |                                 n/a |
 
 ### Tomodachi
 
@@ -479,6 +481,14 @@ DockerHub: <https://hub.docker.com/r/atmoz/sftp>
 
 - Available as an extra dependency `sftp` - install with
   `pip install tomodachi-testcontainers[sftp]` or `poetry install -E sftp`
+
+### WireMock
+
+WireMock is a tool for building mock APIs. Create stable development environments,
+isolate yourself from flakey 3rd parties and simulate APIs that don't exist yet.
+
+Repository: <https://github.com/wiremock/wiremock>
+DockerHub: <https://hub.docker.com/r/wiremock/wiremock>
 
 ## Configuration with environment variables
 

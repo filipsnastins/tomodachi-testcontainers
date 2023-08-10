@@ -15,11 +15,9 @@
       which hasn't been thought thoroughly before creating this library.
 
 - [ ] HTTP test server
-  - <https://github.com/mock-server/mockserver>
-  - <https://vcrpy.readthedocs.io/en/latest/>
-  - <https://github.com/stripe/stripe-mock>
-  - <https://stripe.com/docs/automated-testing>
-  - <https://wiremock.org/docs/standalone/docker/>
+  - [ ] <https://github.com/mock-server/mockserver>
+  - [ ] <https://vcrpy.readthedocs.io/en/latest/>
+  - [x] <https://wiremock.org/docs/standalone/docker/>
 
 ## New test approaches
 
