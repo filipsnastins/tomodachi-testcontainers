@@ -464,6 +464,7 @@ Repository: <https://github.com/kalaspuff/tomodachi>
 Moto is a library that allows your tests to mock out AWS Services.
 
 Repository: <https://github.com/getmoto/moto>
+
 Docker Hub: <https://hub.docker.com/r/motoserver/moto>
 
 ### LocalStack
@@ -471,6 +472,7 @@ Docker Hub: <https://hub.docker.com/r/motoserver/moto>
 LocalStack provides an easy-to-use test/mocking framework for developing cloud applications.
 
 Repository: <https://github.com/localstack/localstack>
+
 DockerHub: <https://hub.docker.com/r/localstack/localstack>
 
 ### SFTP
@@ -478,6 +480,7 @@ DockerHub: <https://hub.docker.com/r/localstack/localstack>
 Easy to use SFTP (SSH File Transfer Protocol) server with OpenSSH.
 
 Repository: <https://github.com/atmoz/sftp>
+
 DockerHub: <https://hub.docker.com/r/atmoz/sftp>
 
 - Available as an extra dependency `sftp` - install with
@@ -489,6 +492,7 @@ WireMock is a tool for building mock APIs. Create stable development environment
 isolate yourself from flakey 3rd parties and simulate APIs that don't exist yet.
 
 Repository: <https://github.com/wiremock/wiremock>
+
 DockerHub: <https://hub.docker.com/r/wiremock/wiremock>
 
 ## Configuration with environment variables
