@@ -22,7 +22,7 @@ It facilitates the use of Docker containers for functional, integration, and end
   - [Quickstart and examples](#quickstart-and-examples)
   - [Getting started](#getting-started)
     - [Testing standalone Tomodachi service](#testing-standalone-tomodachi-service)
-    - [Changing Dockerfile path, build context and build target](#changing-dockerfile-path-build-context-and-build-target)
+    - [Change Dockerfile path, build context and build target](#change-dockerfile-path-build-context-and-build-target)
     - [Running Tomodachi container from pre-built image](#running-tomodachi-container-from-pre-built-image)
     - [Testing Tomodachi service with external dependencies](#testing-tomodachi-service-with-external-dependencies)
   - [Benefits and dangers of end-to-end tests](#benefits-and-dangers-of-end-to-end-tests)
@@ -36,7 +36,7 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [SFTP](#sftp)
     - [WireMock](#wiremock)
   - [Configuration with environment variables](#configuration-with-environment-variables)
-  - [Changing default Docker network](#changing-default-docker-network)
+  - [Change default Docker network](#change-default-docker-network)
   - [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
   - [Resources and acknowledgements](#resources-and-acknowledgements)
   - [Development](#development)
@@ -149,7 +149,7 @@ For inter-container communication, use `tomodachi_container.get_internal_url` in
 That's it! 🎉 We have tested that the Docker image can be built and run, and that the service
 is working as expected, all with a Docker container, on the highest test level - end-to-end.
 
-### Changing Dockerfile path, build context and build target
+### Change Dockerfile path, build context and build target
 
 If the Dockerfile is not located in the current working directory or you need a different Docker build context,
 specify a new path with the `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` and `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT`
@@ -449,8 +449,8 @@ Phew! 😅
 After going though all examples and understanding [benefits and dangers of end-to-end tests](#benefits-and-dangers-of-end-to-end-tests),
 you're well-equipped to get the most value out of Testcontainers.
 
-Bellow is the list of available Testcontainers in this library, but feel free to explore how they're
-implemented and create your own Testcontainers as you go.
+Bellow is the list of available Testcontainers in this library.
+Feel free to explore how they're implemented and create your own Testcontainers as you go.
 [testcontainers-python](https://github.com/testcontainers/testcontainers-python) provide and easy way
 to create your own Testcontainers.
 
@@ -519,7 +519,7 @@ by setting it in the shell before running `pytest`.
 | `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID`      | Override any supported Testcontainer Image ID. Defaults to `None`                                           |
 | `DOCKER_BUILDKIT`                              | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit for building Docker images                                   |
 
-## Changing default Docker network
+## Change default Docker network
 
 By default, testcontainers are started in the default `bridge` Docker network.
 Sometimes it's useful to start containers in a different network, e.g. a network
