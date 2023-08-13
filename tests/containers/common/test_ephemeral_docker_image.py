@@ -90,7 +90,22 @@ def test_default_build_target(dockerfile_multi_stage: Path) -> None:
 
 
 @pytest.mark.parametrize("target", ["development", "release"])
-def test_explicit_build_target(dockerfile_multi_stage: Path, target: str) -> None:
+def test_explicit_build_target__without_buildkit(
+    dockerfile_multi_stage: Path, target: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("DOCKER_BUILDKIT", raising=False)
+
+    with EphemeralDockerImage(dockerfile_multi_stage, target=target) as image:
+        assert image.attrs
+        assert image.attrs.get("Config", {}).get("Env") == ["PATH=", f"TARGET={target}"]
+
+
+@pytest.mark.parametrize("target", ["development", "release"])
+def test_explicit_build_target__with_buildkit(
+    dockerfile_multi_stage: Path, target: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("DOCKER_BUILDKIT", "1")
+
     with EphemeralDockerImage(dockerfile_multi_stage, target=target) as image:
         assert image.attrs
         assert image.attrs.get("Config", {}).get("Env") == ["PATH=", f"TARGET={target}"]
