@@ -24,7 +24,7 @@ def test_copy_folder_to_container(alpine_container: Container) -> None:
 
     code, output = alpine_container.exec_run("find /tmp -type f")
     assert code == 0
-    assert output.decode("utf-8") == "/tmp/file-1.txt\n/tmp/nested/file-2.txt\n"
+    assert set(output.decode("utf-8").strip().split("\n")) == {"/tmp/nested/file-2.txt", "/tmp/file-1.txt"}
     code, output = alpine_container.exec_run("cat /tmp/file-1.txt")
     assert code == 0
     assert output.decode("utf-8") == "file 1\n"
