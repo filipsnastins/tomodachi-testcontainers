@@ -23,5 +23,6 @@ def tomodachi_image() -> Generator[DockerImage, None, None]:
             if os.getenv("TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT")
             else None
         )
-        with EphemeralDockerImage(dockerfile=dockerfile, context=context) as image:
+        target = os.getenv("TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET")
+        with EphemeralDockerImage(dockerfile=dockerfile, context=context, target=target) as image:
             yield image

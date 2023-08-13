@@ -56,10 +56,15 @@ class EphemeralDockerImage:
     image: DockerImage
 
     def __init__(
-        self, dockerfile: Optional[Path] = None, context: Optional[Path] = None, docker_client_kw: Optional[Dict] = None
+        self,
+        dockerfile: Optional[Path] = None,
+        context: Optional[Path] = None,
+        target: Optional[str] = None,
+        docker_client_kw: Optional[Dict] = None,
     ) -> None:
         self.dockerfile = str(dockerfile) if dockerfile else None
         self.context = str(context) if context else "."
+        self.target = target
         self.client = DockerClient(**(docker_client_kw or {}))
 
     def __enter__(self) -> DockerImage:
@@ -81,6 +86,8 @@ class EphemeralDockerImage:
         cmd = ["docker", "build", "-q", "--rm=true"]
         if self.dockerfile:
             cmd.extend(["-f", self.dockerfile])
+        if self.target:
+            cmd.extend(["--target", self.target])
         cmd.append(self.context)
 
         result = subprocess.run(
@@ -95,6 +102,7 @@ class EphemeralDockerImage:
             self.client.client.images.build(
                 dockerfile=self.dockerfile,
                 path=self.context,
+                target=self.target,
                 forcerm=True,
             ),
         )
