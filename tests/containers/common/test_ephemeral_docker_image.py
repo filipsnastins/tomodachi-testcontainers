@@ -10,35 +10,35 @@ from tomodachi_testcontainers.containers import EphemeralDockerImage, get_docker
 
 @pytest.fixture()
 def dockerfile_hello_world(tmp_path: Path) -> Generator[Path, None, None]:
-    with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as dockerfile:
-        dockerfile.writelines(
+    with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as f:
+        f.writelines(
             [
                 "FROM alpine:latest\n",
                 "RUN echo 'Hello, world!'\n",
             ]
         )
-        dockerfile.flush()
-        yield Path(dockerfile.name)
+        f.flush()
+        yield Path(f.name)
 
 
 @pytest.fixture()
 def dockerfile_buildkit(tmp_path: Path) -> Generator[Path, None, None]:
-    with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as dockerfile:
-        dockerfile.writelines(
+    with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as f:
+        f.writelines(
             [
                 "FROM alpine:latest\n",
                 # -- mount is a buildkit feature
                 "RUN --mount=type=secret,id=test,target=test echo 'Hello, World!'\n",
             ]
         )
-        dockerfile.flush()
-        yield Path(dockerfile.name)
+        f.flush()
+        yield Path(f.name)
 
 
 @pytest.fixture()
 def dockerfile_multi_stage(tmp_path: Path) -> Generator[Path, None, None]:
-    with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as dockerfile:
-        dockerfile.writelines(
+    with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as f:
+        f.writelines(
             [
                 "FROM alpine:latest as base\n",
                 "ENV PATH=''\n",
@@ -51,8 +51,8 @@ def dockerfile_multi_stage(tmp_path: Path) -> Generator[Path, None, None]:
                 "ENV TARGET=release\n",
             ]
         )
-        dockerfile.flush()
-        yield Path(dockerfile.name)
+        f.flush()
+        yield Path(f.name)
 
 
 def test_build_docker_image_and_remove_on_cleanup(
