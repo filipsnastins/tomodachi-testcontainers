@@ -22,7 +22,7 @@ It facilitates the use of Docker containers for functional, integration, and end
   - [Quickstart and examples](#quickstart-and-examples)
   - [Getting started](#getting-started)
     - [Testing standalone Tomodachi service](#testing-standalone-tomodachi-service)
-    - [Changing Dockerfile location](#changing-dockerfile-location)
+    - [Changing Dockerfile path, build context and build target](#changing-dockerfile-path-build-context-and-build-target)
     - [Running Tomodachi container from pre-built image](#running-tomodachi-container-from-pre-built-image)
     - [Testing Tomodachi service with external dependencies](#testing-tomodachi-service-with-external-dependencies)
   - [Benefits and dangers of end-to-end tests](#benefits-and-dangers-of-end-to-end-tests)
@@ -149,7 +149,7 @@ For inter-container communication, use `tomodachi_container.get_internal_url` in
 That's it! 🎉 We have tested that the Docker image can be built and run, and that the service
 is working as expected, all with a Docker container, on the highest test level - end-to-end.
 
-### Changing Dockerfile location
+### Changing Dockerfile path, build context and build target
 
 If the Dockerfile is not located in the current working directory or you need a different Docker build context,
 specify a new path with the `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` and `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT`
@@ -159,6 +159,15 @@ Examples:
 
 - `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile.testing`
 - `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples/`
+
+If you have a multi-stage Dockerfile and want to run testcontainer tests against a specific stage, specify the stage name
+with the `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET` environment variable.
+Note that usually want to run tests against the release/production stage, so this environment variable is not needed in most cases,
+as it's the last stage in the Dockerfile.
+
+Example:
+
+- `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET=development`
 
 ### Running Tomodachi container from pre-built image
 
@@ -501,13 +510,14 @@ DockerHub: <https://hub.docker.com/r/wiremock/wiremock>
 e.g. with [pytest-env](https://pypi.org/project/pytest-env/) plugin or
 by setting it in the shell before running `pytest`.
 
-| Environment Variable                           | Description                                                                                                              |
-| :--------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- |
-| `TESTCONTAINER_DOCKER_NETWORK`                 | Launch testcontainers in specified Docker network. Defaults to 'bridge'. Network must be created beforehand              |
-| `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH`      | Override path to Dockerfile for building Tomodachi service image. Corresponds to `--file` flag in `docker build` command |
-| `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT` | Override Docker build context                                                                                            |
-| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID`      | Override any supported Testcontainer Image ID. Defaults to `None`                                                        |
-| `DOCKER_BUILDKIT`                              | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit for building Docker images                                                |
+| Environment Variable                           | Description                                                                                                 |
+| :--------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |
+| `TESTCONTAINER_DOCKER_NETWORK`                 | Launch testcontainers in specified Docker network. Defaults to 'bridge'. Network must be created beforehand |
+| `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH`      | Override path to Dockerfile for building Tomodachi service image. (`--file` flag in `docker build` command) |
+| `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT` | Override Docker build context                                                                               |
+| `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET`  | Override Docker build target (`--target` flag in `docker build` command)                                    |
+| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID`      | Override any supported Testcontainer Image ID. Defaults to `None`                                           |
+| `DOCKER_BUILDKIT`                              | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit for building Docker images                                   |
 
 ## Changing default Docker network
 
@@ -523,9 +533,13 @@ The Docker network is not created automatically, so make sure that it exists bef
 ## Forward Testcontainer logs to Pytest
 
 Logs from a testcontainer are forwarded to Python's standard logger as `INFO` logs when
-`tomodachi_testcontainers.containers.DockerContainer` context manager exit.
+`tomodachi_testcontainers.containers.DockerContainer` context manager exits.
 
 To see the logs in Pytest, set the log level to at least `INFO` in [Pytest configuration](https://docs.pytest.org/en/7.1.x/how-to/logging.html).
+
+Capturing container logs is useful to see what happened inside a container if a test failed.
+It's especially useful if tests have failed in CI, because the containers are immediately deleted
+after the test run, and there's nothing else to inspect apart from logs.
 
 ```toml
 [tool.pytest.ini_options]
