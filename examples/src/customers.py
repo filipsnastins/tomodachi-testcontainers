@@ -132,7 +132,7 @@ class TomodachiServiceCustomers(tomodachi.Service):
 
     @tomodachi.aws_sns_sqs(
         "order--created",
-        queue="customer--order-created",
+        queue_name="customer--order-created",
         message_envelope=JsonBase,
     )
     async def handle_order_created(self, data: Dict) -> None:

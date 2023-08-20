@@ -59,7 +59,7 @@ class TomodachiServiceS3(tomodachi.Service):
 
     @tomodachi.aws_sns_sqs(
         "s3--upload-notification",
-        queue="s3--upload-notification",
+        queue_name="s3--upload-notification",
         message_envelope=None,
     )
     async def handle_upload_notification(self, data: str) -> None:
