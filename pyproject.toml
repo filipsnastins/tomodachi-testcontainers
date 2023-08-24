@@ -11,7 +11,7 @@ repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-aiobotocore = "^2.5.2"
+aiobotocore = "^2.4.2"
 asyncssh = { version = "^2.13.2", optional = true }
 pytest = "^7.1.2"
 pytest-asyncio = "^0.21.1"
@@ -25,7 +25,7 @@ types-aiobotocore = { extras = [
     "sns",
     "sqs",
     "ssm",
-], version = "^2.5.2" }
+], version = "^2.4.2" }
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "^2.2.0"
@@ -59,7 +59,7 @@ pytest-cov = "^4.1.0"
 pytest-env = "^0.8.2"
 ruff = ">=0.0.277,<0.0.283"
 structlog = "^23.1.0"
-tomodachi = "^0.25.0"
+tomodachi = "^0.25.1"
 types-protobuf = "^4.23.0.2"
 
 [tool.poetry.extras]
