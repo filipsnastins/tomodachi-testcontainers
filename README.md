@@ -385,7 +385,7 @@ it's hard to understand what's broken when they fail.
 End-to-end tests are expensive, but necessary to build confidence of releasability,
 so it's important to use them intentionally and know about other kinds of tests.
 After all, we can't be confident that the system _really_ works in production if we haven't
-tested it in the environment as close as possible as production.
+tested it in the environment as close to production as possible.
 
 The [Test Pyramid](https://martinfowler.com/bliki/TestPyramid.html) is a useful thinking model about
 different kinds of tests and their value. It proposes that the majority of tests should be unit tests,
