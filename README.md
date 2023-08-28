@@ -83,7 +83,7 @@ from aiohttp import web
 class TomodachiServiceHealthcheck(tomodachi.Service):
     name = "service-healthcheck"
 
-    @tomodachi.http("GET", r"/health")
+    @tomodachi.http("GET", r"/health/?")
         async def healthcheck(self, request: web.Request) -> web.Response:
         return web.json_response(data={"status": "ok"})
 ```

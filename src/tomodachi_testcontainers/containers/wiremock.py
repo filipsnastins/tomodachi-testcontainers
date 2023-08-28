@@ -43,7 +43,7 @@ class WireMockContainer(DockerContainer):
         host = self.get_container_host_ip()
         return f"http://{host}:{self.edge_port}"
 
-    def start(self, timeout: float = 10) -> "WireMockContainer":
+    def start(self, timeout: float = 10.0) -> "WireMockContainer":
         super().start()
         wait_for_logs(self, "port:", timeout=timeout)
         self.copy_mappings_to_container()

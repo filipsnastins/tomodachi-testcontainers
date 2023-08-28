@@ -46,7 +46,7 @@ class LocalStackContainer(DockerContainer):
             endpoint_url=self.get_external_url(),
         )
 
-    def start(self, timeout: int = 10) -> "LocalStackContainer":
+    def start(self, timeout: float = 10.0) -> "LocalStackContainer":
         super().start()
         wait_for_logs(self, r"Ready\.\n", timeout=timeout)
         return self

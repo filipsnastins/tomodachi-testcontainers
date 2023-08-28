@@ -62,7 +62,7 @@ class SFTPContainer(DockerContainer):
         self.exec(f"bash -c 'echo \"{public_key}\" >> /home/{username}/.ssh/authorized_keys'")
         self.exec(f"bash -c 'chown -R {uid}:{gid} /home/{username}/.ssh'")
 
-    def start(self, timeout: int = 10) -> "SFTPContainer":
+    def start(self, timeout: float = 10.0) -> "SFTPContainer":
         super().start()
         wait_for_logs(self, r"Server listening on", timeout=timeout)
 
