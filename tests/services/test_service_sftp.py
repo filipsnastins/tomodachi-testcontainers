@@ -17,7 +17,11 @@ def service_sftp_container(
     tomodachi_image: DockerImage, sftp_container: SFTPContainer
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(image=str(tomodachi_image.id), edge_port=get_available_port())
+        TomodachiContainer(
+            image=str(tomodachi_image.id),
+            edge_port=get_available_port(),
+            http_healthcheck_path="/health",
+        )
         .with_env("SFTP_HOST", sftp_container.get_internal_conn_details().host)
         .with_env("SFTP_PORT", str(sftp_container.get_internal_conn_details().port))
         .with_env("SFTP_USERNAME", "userssh")

@@ -51,7 +51,7 @@ class MotoContainer(DockerContainer):
             endpoint_url=self.get_external_url(),
         )
 
-    def start(self, timeout: float = 10) -> "MotoContainer":
+    def start(self, timeout: float = 10.0) -> "MotoContainer":
         super().start()
         wait_for_logs(self, "Running on all addresses", timeout=timeout)
         return self

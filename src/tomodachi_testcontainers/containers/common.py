@@ -6,10 +6,14 @@ import tarfile
 from pathlib import Path
 from typing import Any, Dict, Iterator, Optional, Tuple, cast
 
+import requests
 import testcontainers.core.container
 from docker.errors import ImageNotFound
 from docker.models.containers import Container
 from docker.models.images import Image as DockerImage
+from tenacity import Retrying
+from tenacity.stop import stop_after_delay
+from tenacity.wait import wait_fixed
 from testcontainers.core.docker_client import DockerClient
 from testcontainers.core.utils import inside_container
 
@@ -127,3 +131,11 @@ def copy_folder_to_container(host_path: Path, container_path: Path, container: C
                 tar.add(file_path, arcname=arcname)
     tar_stream.seek(0)
     container.put_archive(path=container_path, data=tar_stream)
+
+
+def wait_for_http_healthcheck(url: str, timeout: float = 10.0, interval: float = 0.5, status_code: int = 200) -> None:
+    for attempt in Retrying(stop=stop_after_delay(timeout), wait=wait_fixed(interval), reraise=True):
+        with attempt:
+            response = requests.get(url, timeout=timeout)
+            if response.status_code != status_code:
+                raise RuntimeError(f"Healthcheck failed with HTTP status code: {response.status_code}")

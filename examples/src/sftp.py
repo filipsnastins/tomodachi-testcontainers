@@ -16,6 +16,10 @@ class TomodachiServiceSFTP(tomodachi.Service):
     async def _start_service(self) -> None:
         configure_logger()
 
+    @tomodachi.http("GET", r"/health/?")
+    async def healthcheck(self, request: web.Request) -> web.Response:
+        return web.json_response(data={"status": "ok"})
+
     @tomodachi.http("GET", r"/file/(?P<key>[^/]+?)/?")
     async def get_file(self, request: web.Request, key: str) -> web.Response:
         links = {

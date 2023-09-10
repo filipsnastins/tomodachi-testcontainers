@@ -15,6 +15,7 @@ aiobotocore = "^2.4.2"
 asyncssh = { version = "^2.13.2", optional = true }
 pytest = "^7.1.2"
 pytest-asyncio = "^0.21.1"
+requests = "^2.31.0"
 tenacity = "^8.2.2"
 testcontainers = "^3.7.1"
 types-aiobotocore = { extras = [
@@ -61,6 +62,7 @@ ruff = ">=0.0.277,<0.0.283"
 structlog = "^23.1.0"
 tomodachi = "^0.25.1"
 types-protobuf = "^4.23.0.2"
+types-requests = "^2.31.0.2"
 
 [tool.poetry.extras]
 sftp = ["asyncssh"]

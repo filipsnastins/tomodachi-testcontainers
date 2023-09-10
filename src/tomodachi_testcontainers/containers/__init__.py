@@ -5,6 +5,7 @@ from tomodachi_testcontainers.containers.common import (
     EphemeralDockerImage,
     copy_folder_to_container,
     get_docker_image,
+    wait_for_http_healthcheck,
 )
 from tomodachi_testcontainers.containers.localstack import LocalStackContainer
 from tomodachi_testcontainers.containers.moto import MotoContainer
@@ -25,4 +26,5 @@ __all__ = [
     "WireMockContainer",
     "copy_folder_to_container",
     "get_docker_image",
+    "wait_for_http_healthcheck",
 ]

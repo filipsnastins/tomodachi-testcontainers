@@ -67,6 +67,10 @@ class TomodachiServiceOrders(tomodachi.Service):
         configure_logger()
         await dynamodb.create_dynamodb_table()
 
+    @tomodachi.http("GET", r"/health/?")
+    async def healthcheck(self, request: web.Request) -> web.Response:
+        return web.json_response(data={"status": "ok"})
+
     @tomodachi.http("POST", r"/orders")
     async def create_order(self, request: web.Request) -> web.Response:
         data = await request.json()
