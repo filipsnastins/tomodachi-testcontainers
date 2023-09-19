@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import urllib.parse
 from typing import Any, Optional
 
@@ -20,6 +22,10 @@ class TomodachiContainer(DockerContainer):
         self.edge_port = edge_port
         self.http_healthcheck_path = http_healthcheck_path
         self.with_bind_ports(internal_port, edge_port)
+
+    def __enter__(self) -> TomodachiContainer:
+        self.logger.info(f"Tomodachi service: http://localhost:{self.edge_port}")
+        return self.start()
 
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()
