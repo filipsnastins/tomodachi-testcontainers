@@ -1,3 +1,4 @@
+import json
 from typing import Dict
 
 import pytest
@@ -36,6 +37,73 @@ async def test_publish_and_receive_messages(moto_sns_client: SNSClient, moto_sqs
     messages = await snssqs_client.receive(moto_sqs_client, "test-queue", JsonBase, Dict[str, str])
 
     assert messages == [{"message": "1"}, {"message": "2"}]
+
+
+@pytest.mark.asyncio()
+async def test_publish_and_receive_with_message_attributes(
+    moto_sns_client: SNSClient, moto_sqs_client: SQSClient
+) -> None:
+    await snssqs_client.subscribe_to(
+        moto_sns_client,
+        moto_sqs_client,
+        topic="test-topic",
+        queue="test-queue",
+        attributes={"FilterPolicy": json.dumps({"MyMessageAttribute": ["will-be-included"]})},
+    )
+
+    await snssqs_client.publish(
+        moto_sns_client,
+        "test-topic",
+        {"message": "1"},
+        JsonBase,
+        message_attributes={"MyMessageAttribute": {"DataType": "String", "StringValue": "will-be-included"}},
+    )
+    await snssqs_client.publish(
+        moto_sns_client,
+        "test-topic",
+        {"message": "2"},
+        JsonBase,
+        message_attributes={"MyMessageAttribute": {"DataType": "String", "StringValue": "not-included"}},
+    )
+
+    messages = await snssqs_client.receive(moto_sqs_client, "test-queue", JsonBase, Dict[str, str])
+    assert messages == [{"message": "1"}]
+
+
+@pytest.mark.asyncio()
+async def test_publish_and_receive_with_fifo(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> None:
+    await moto_sns_client.create_topic(
+        Name="test-topic.fifo", Attributes={"FifoTopic": "true", "ContentBasedDeduplication": "false"}
+    )
+    await moto_sqs_client.create_queue(
+        QueueName="test-queue.fifo", Attributes={"FifoQueue": "true", "ContentBasedDeduplication": "false"}
+    )
+    await snssqs_client.subscribe_to(
+        moto_sns_client,
+        moto_sqs_client,
+        topic="test-topic.fifo",
+        queue="test-queue.fifo",
+    )
+
+    await snssqs_client.publish(
+        moto_sns_client,
+        "test-topic.fifo",
+        {"message": "1"},
+        JsonBase,
+        message_deduplication_id="123456",
+        message_group_id="123456",
+    )
+    await snssqs_client.publish(
+        moto_sns_client,
+        "test-topic.fifo",
+        {"message": "1"},
+        JsonBase,
+        message_deduplication_id="123456",
+        message_group_id="123456",
+    )
+
+    messages = await snssqs_client.receive(moto_sqs_client, "test-queue.fifo", JsonBase, Dict[str, str])
+    assert messages == [{"message": "1"}]
 
 
 @pytest.mark.asyncio()
