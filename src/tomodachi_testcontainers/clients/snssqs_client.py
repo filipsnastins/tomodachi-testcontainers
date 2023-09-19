@@ -1,42 +1,50 @@
 import json
-from typing import Any, Dict, List, Protocol, Type, TypeVar, Union
+from typing import Any, Dict, List, Mapping, Optional, Protocol, Type, TypeVar, Union
 
 from types_aiobotocore_sns import SNSClient
+from types_aiobotocore_sns.type_defs import MessageAttributeValueTypeDef
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_sqs.literals import QueueAttributeFilterType, QueueAttributeNameType
 
 MessageType = TypeVar("MessageType")
 
 
-class TomodachiSNSSQSEnvelopeStatic(Protocol):
+class _TomodachiSNSSQSEnvelopeStatic(Protocol):
     @classmethod
     async def build_message(
-        cls: "TomodachiSNSSQSEnvelopeStatic", service: Any, topic: str, data: Any, **kwargs: Any
+        cls: "_TomodachiSNSSQSEnvelopeStatic", service: Any, topic: str, data: Any, **kwargs: Any
     ) -> str:
         ...
 
     @classmethod
-    async def parse_message(cls: "TomodachiSNSSQSEnvelopeStatic", payload: str, **kwargs: Any) -> Union[dict, tuple]:
+    async def parse_message(cls: "_TomodachiSNSSQSEnvelopeStatic", payload: str, **kwargs: Any) -> Union[dict, tuple]:
         ...
 
 
-class TomodachiSNSSQSEnvelopeInstance(Protocol):
+class _TomodachiSNSSQSEnvelopeInstance(Protocol):
     async def build_message(
-        self: "TomodachiSNSSQSEnvelopeInstance", service: Any, topic: str, data: Any, **kwargs: Any
+        self: "_TomodachiSNSSQSEnvelopeInstance", service: Any, topic: str, data: Any, **kwargs: Any
     ) -> str:
         ...
 
-    async def parse_message(self: "TomodachiSNSSQSEnvelopeInstance", payload: str, **kwargs: Any) -> Union[dict, tuple]:
+    async def parse_message(
+        self: "_TomodachiSNSSQSEnvelopeInstance", payload: str, **kwargs: Any
+    ) -> Union[dict, tuple]:
         ...
 
 
-TomodachiSNSSQSEnvelope = Union[TomodachiSNSSQSEnvelopeStatic, TomodachiSNSSQSEnvelopeInstance]
+TomodachiSNSSQSEnvelope = Union[_TomodachiSNSSQSEnvelopeStatic, _TomodachiSNSSQSEnvelopeInstance]
 
 
-async def subscribe_to(sns_client: SNSClient, sqs_client: SQSClient, topic: str, queue: str) -> None:
+async def subscribe_to(
+    sns_client: SNSClient, sqs_client: SQSClient, topic: str, queue: str, attributes: Optional[Mapping[str, str]] = None
+) -> None:
     """Subscribe a SQS queue to a SNS topic; create the topic and queue if they don't exist."""
-    create_topic_response = await sns_client.create_topic(Name=topic)
-    topic_arn = create_topic_response["TopicArn"]
+    list_topics_response = await sns_client.list_topics()
+    topic_arn = next((v["TopicArn"] for v in list_topics_response["Topics"] if v["TopicArn"].endswith(topic)), None)
+    if not topic_arn:
+        create_topic_response = await sns_client.create_topic(Name=topic)
+        topic_arn = create_topic_response["TopicArn"]
 
     create_queue_response = await sqs_client.create_queue(QueueName=queue)
     queue_url = create_queue_response["QueueUrl"]
@@ -46,7 +54,7 @@ async def subscribe_to(sns_client: SNSClient, sqs_client: SQSClient, topic: str,
     )
     queue_arn = get_queue_attributes_response["Attributes"]["QueueArn"]
 
-    await sns_client.subscribe(TopicArn=topic_arn, Protocol="sqs", Endpoint=queue_arn)
+    await sns_client.subscribe(TopicArn=topic_arn, Protocol="sqs", Endpoint=queue_arn, Attributes=attributes or {})
 
 
 async def receive(
@@ -74,7 +82,15 @@ async def receive(
     return parsed_messages
 
 
-async def publish(sns_client: SNSClient, topic: str, data: Any, envelope: TomodachiSNSSQSEnvelopeStatic) -> None:
+async def publish(
+    sns_client: SNSClient,
+    topic: str,
+    data: Any,
+    envelope: TomodachiSNSSQSEnvelope,
+    message_attributes: Optional[Mapping[str, MessageAttributeValueTypeDef]] = None,
+    message_deduplication_id: Optional[str] = None,
+    message_group_id: Optional[str] = None,
+) -> None:
     """Publish a message to a SNS topic."""
     message = await envelope.build_message(service={}, topic=topic, data=data)
 
@@ -83,7 +99,15 @@ async def publish(sns_client: SNSClient, topic: str, data: Any, envelope: Tomoda
     if not topic_arn:
         raise ValueError(f"Topic does not exist: {topic}")
 
-    await sns_client.publish(TopicArn=topic_arn, Message=message)
+    kwargs: Dict[str, Any] = {}
+    if message_attributes:
+        kwargs["MessageAttributes"] = message_attributes
+    if message_deduplication_id:
+        kwargs["MessageDeduplicationId"] = message_deduplication_id
+    if message_group_id:
+        kwargs["MessageGroupId"] = message_group_id
+
+    await sns_client.publish(TopicArn=topic_arn, Message=message, **kwargs)
 
 
 async def get_queue_attributes(
