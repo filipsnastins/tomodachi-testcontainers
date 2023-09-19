@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from typing import Any, Optional
 
@@ -34,6 +36,10 @@ class MotoContainer(DockerContainer):
         # Docker is needed for running AWS Lambda container
         self.with_env("MOTO_DOCKER_NETWORK_NAME", self.network)
         self.with_volume_mapping("/var/run/docker.sock", "/var/run/docker.sock")
+
+    def __enter__(self) -> MotoContainer:
+        self.logger.info(f"Moto dashboard: http://localhost:{self.edge_port}/moto-api")
+        return self.start()
 
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()
