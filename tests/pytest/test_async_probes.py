@@ -14,10 +14,12 @@ async def test_probe_until__fails_and_reraises_exception() -> None:
 
 @pytest.mark.asyncio()
 async def test_probe_until__pass() -> None:
-    async def _func() -> None:
-        assert True
+    async def _func() -> bool:
+        return True
 
-    await probe_until(_func, probe_interval=0.1, stop_after=0.3)
+    result = await probe_until(_func, probe_interval=0.1, stop_after=0.3)
+
+    assert result is True
 
 
 @pytest.mark.asyncio()
@@ -46,13 +48,16 @@ async def test_probe_during_interval__runs_until_timeout_reached_and_passes() ->
     attempts = [True, True, True, True]
     attempt = len(attempts)
 
-    async def _func() -> None:
+    async def _func() -> bool:
         nonlocal attempt
         assert len(attempts) == attempt
         assert attempts.pop(0)
         attempt -= 1
+        return True
 
-    await probe_during_interval(_func, probe_interval=0.1, stop_after=0.3)
+    result = await probe_during_interval(_func, probe_interval=0.1, stop_after=0.3)
+
+    assert result is True
 
 
 @pytest.mark.asyncio()
@@ -63,7 +68,7 @@ async def test_probe_during_interval__fails_with_assertion_error() -> None:
         assert attempts.pop(0)
 
     with pytest.raises(AssertionError, match="assert False"):
-        await probe_during_interval(_func, probe_interval=0.1, stop_after=0.3)
+        await probe_during_interval(_func, probe_interval=0.1, stop_after=0.5)
 
 
 @pytest.mark.asyncio()
@@ -75,4 +80,4 @@ async def test_probe_during_interval__fails_with_other_exceptions() -> None:
             raise ValueError("Something went wrong")
 
     with pytest.raises(ValueError, match="Something went wrong"):
-        await probe_during_interval(_func, probe_interval=0.1, stop_after=0.3)
+        await probe_during_interval(_func, probe_interval=0.1, stop_after=0.5)

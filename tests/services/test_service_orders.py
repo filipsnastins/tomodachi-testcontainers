@@ -103,16 +103,16 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_sqs_client: SQS
         },
     }
 
-    async def _order_created_event_emitted() -> None:
+    async def _order_created_event_emitted() -> Dict[str, Any]:
         [event] = await snssqs_client.receive(moto_sqs_client, "order--created", JsonBase, Dict[str, Any])
+        return event
 
-        assert_datetime_within_range(datetime.fromisoformat(event["created_at"]))
-        assert event == {
-            "event_id": event["event_id"],
-            "order_id": order_id,
-            "customer_id": customer_id,
-            "products": products,
-            "created_at": event["created_at"],
-        }
-
-    await probe_until(_order_created_event_emitted)
+    event = await probe_until(_order_created_event_emitted)
+    assert_datetime_within_range(datetime.fromisoformat(event["created_at"]))
+    assert event == {
+        "event_id": event["event_id"],
+        "order_id": order_id,
+        "customer_id": customer_id,
+        "products": products,
+        "created_at": event["created_at"],
+    }
