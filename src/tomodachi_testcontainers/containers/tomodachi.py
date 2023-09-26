@@ -40,6 +40,14 @@ class TomodachiContainer(DockerContainer):
         if self.http_healthcheck_path:
             url = urllib.parse.urljoin(self.get_external_url(), self.http_healthcheck_path)
             wait_for_http_healthcheck(url=url, timeout=timeout, interval=interval, status_code=status_code)
-        else:
-            wait_for_logs(self, "Started service", timeout=timeout)
+
+        # Apart from HTTP healthcheck, we need to wait for "started service" log
+        # to make sure messaging transport like AWS SNS SQS is also up and running.
+        # It's started independently from HTTP transport.
+
+        # Different service start messages depending on tomodachi version
+        # tomodachi < 0.26.0 - "Started service"
+        # tomodachi >= 0.26.0 - "started service successfully"
+        # using (?i) to ignore case to support both versions
+        wait_for_logs(self, "(?i)started service", timeout=timeout)
         return self
