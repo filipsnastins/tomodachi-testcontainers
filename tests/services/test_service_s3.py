@@ -36,7 +36,9 @@ def service_s3_container(
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
-            image=str(tomodachi_image.id), edge_port=get_available_port(), http_healthcheck_path="/health"
+            image=str(tomodachi_image.id),
+            edge_port=get_available_port(),
+            http_healthcheck_path="/health",
         )
         .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
