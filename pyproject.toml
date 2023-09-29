@@ -10,7 +10,7 @@ homepage = "https://github.com/filipsnastins/tomodachi-testcontainers"
 repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
 [tool.poetry.dependencies]
-python = "^3.8.1"
+python = "^3.8"
 aiobotocore = "^2.4.2"
 asyncssh = { version = "^2.13.2", optional = true }
 pytest = "^7.1.2"
