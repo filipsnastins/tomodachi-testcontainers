@@ -3,7 +3,7 @@ import tempfile
 import asyncssh
 import pytest
 
-from tomodachi_testcontainers.containers import SFTPContainer
+from tomodachi_testcontainers import SFTPContainer
 
 
 @pytest.mark.asyncio()

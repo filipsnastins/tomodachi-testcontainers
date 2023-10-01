@@ -5,7 +5,7 @@ from typing import Any, Optional
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.containers.common import DockerContainer
+from tomodachi_testcontainers import DockerContainer
 from tomodachi_testcontainers.utils import AWSClientConfig
 
 

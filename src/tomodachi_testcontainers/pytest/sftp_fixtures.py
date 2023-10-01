@@ -5,7 +5,7 @@ import asyncssh
 import pytest
 import pytest_asyncio
 
-from tomodachi_testcontainers.containers import SFTPContainer
+from tomodachi_testcontainers import SFTPContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 

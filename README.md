@@ -96,7 +96,7 @@ from typing import Generator, cast
 import pytest
 from docker.models.images import Image
 
-from tomodachi_testcontainers.containers import TomodachiContainer
+from tomodachi_testcontainers import TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
@@ -128,7 +128,7 @@ returns status code `HTTP 200` and a correct JSON response.
 import httpx
 import pytest
 
-from tomodachi_testcontainers.containers import TomodachiContainer
+from tomodachi_testcontainers import TomodachiContainer
 
 
 @pytest.mark.asyncio()
@@ -265,7 +265,7 @@ from typing import Generator, cast
 import pytest
 from docker.models.images import Image as DockerImage
 
-from tomodachi_testcontainers.containers import LocalStackContainer, TomodachiContainer
+from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
@@ -316,7 +316,7 @@ import httpx
 import pytest
 from types_aiobotocore_s3 import S3Client
 
-from tomodachi_testcontainers.containers import TomodachiContainer
+from tomodachi_testcontainers import TomodachiContainer
 
 
 @pytest.mark.asyncio()

@@ -2,7 +2,7 @@ import httpx
 import pytest
 from types_aiobotocore_sns import SNSClient
 
-from tomodachi_testcontainers.containers import MotoContainer
+from tomodachi_testcontainers import MotoContainer
 
 
 @pytest.mark.asyncio()

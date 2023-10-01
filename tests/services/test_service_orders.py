@@ -8,8 +8,8 @@ import pytest_asyncio
 from docker.models.images import Image as DockerImage
 from tomodachi.envelope.json_base import JsonBase
 
+from tomodachi_testcontainers import MotoContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.containers import MotoContainer, TomodachiContainer
 from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port

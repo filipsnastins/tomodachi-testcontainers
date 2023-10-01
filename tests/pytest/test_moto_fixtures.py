@@ -2,7 +2,7 @@ from textwrap import dedent
 
 import pytest
 
-from tomodachi_testcontainers.containers import MotoContainer
+from tomodachi_testcontainers import MotoContainer
 
 
 def test_default_moto_image(moto_container: MotoContainer) -> None:
@@ -24,7 +24,7 @@ def test_moto_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
     pytester.makepyfile(
         dedent(
             """\
-            from tomodachi_testcontainers.containers import MotoContainer
+            from tomodachi_testcontainers import MotoContainer
 
 
             def test_moto_image_name_set_from_envvar(moto_container: MotoContainer) -> None:

@@ -12,8 +12,8 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
+from tomodachi_testcontainers import MotoContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.containers import MotoContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 

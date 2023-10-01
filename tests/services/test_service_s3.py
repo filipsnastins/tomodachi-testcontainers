@@ -8,8 +8,8 @@ from docker.models.images import Image as DockerImage
 from tomodachi.envelope.json_base import JsonBase
 from types_aiobotocore_s3 import S3Client
 
+from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.containers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.pytest.assertions import assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
