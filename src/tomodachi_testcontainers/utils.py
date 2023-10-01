@@ -32,7 +32,7 @@ def get_docker_image(image_id: str, docker_client_kw: Optional[Dict] = None) -> 
         return cast(DockerImage, client.client.images.pull(image_id))
 
 
-def copy_folder_to_container(host_path: Path, container_path: Path, container: Container) -> None:
+def copy_folder_to_container(container: Container, host_path: Path, container_path: Path) -> None:
     """Copies a folder from the host to the container."""
     tar_stream = io.BytesIO()
     with tarfile.open(fileobj=tar_stream, mode="w") as tar:

@@ -1,27 +1,8 @@
-from typing import Generator, cast
-
 import pytest
 from requests.exceptions import ConnectionError
 
-from tomodachi_testcontainers import DockerContainer
+from tests.conftest import HTTPBinContainer
 from tomodachi_testcontainers.utils import get_available_port, wait_for_http_healthcheck
-
-
-class HTTPBinContainer(DockerContainer):
-    def __init__(self) -> None:
-        super().__init__(image="kennethreitz/httpbin")
-        self.edge_port = get_available_port()
-        self.with_bind_ports(80, self.edge_port)
-
-    def get_external_url(self) -> str:
-        host = self.get_container_host_ip()
-        return f"http://{host}:{self.edge_port}"
-
-
-@pytest.fixture()
-def httpbin_container() -> Generator[HTTPBinContainer, None, None]:
-    with HTTPBinContainer() as container:
-        yield cast(HTTPBinContainer, container)
 
 
 def test_no_connection_to_host() -> None:

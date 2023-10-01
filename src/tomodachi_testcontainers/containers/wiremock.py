@@ -60,12 +60,12 @@ class WireMockContainer(DockerContainer):
 
     def copy_mappings_to_container(self) -> None:
         copy_folder_to_container(
-            host_path=self.mapping_stubs, container_path=self.MAPPINGS_DIR, container=self.get_wrapped_container()
+            self.get_wrapped_container(), host_path=self.mapping_stubs, container_path=self.MAPPINGS_DIR
         )
 
     def copy_mapping_files_to_container(self) -> None:
         copy_folder_to_container(
-            host_path=self.mapping_files, container_path=self.FILES_DIR, container=self.get_wrapped_container()
+            self.get_wrapped_container(), host_path=self.mapping_files, container_path=self.FILES_DIR
         )
 
     def reload_mappings(self) -> None:
