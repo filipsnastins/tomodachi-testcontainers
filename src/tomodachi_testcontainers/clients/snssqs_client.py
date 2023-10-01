@@ -7,7 +7,7 @@ from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_sqs.literals import QueueAttributeFilterType, QueueAttributeNameType
 
 __all__ = [
-    "SNSSQSClient",
+    "SNSSQSTestClient",
 ]
 
 MessageType = TypeVar("MessageType")
@@ -40,7 +40,9 @@ class _TomodachiSNSSQSEnvelopeInstance(Protocol):
 TomodachiSNSSQSEnvelope = Union[_TomodachiSNSSQSEnvelopeStatic, _TomodachiSNSSQSEnvelopeInstance]
 
 
-class SNSSQSClient:
+class SNSSQSTestClient:
+    """Wraps aiobotocore SNS and SQS clients and provides common methods for testing SNS SQS integrations."""
+
     def __init__(self, sns_client: SNSClient, sqs_client: SQSClient) -> None:
         self.sns_client = sns_client
         self.sqs_client = sqs_client

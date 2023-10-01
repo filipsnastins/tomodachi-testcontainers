@@ -8,10 +8,8 @@ import pytest
 import pytest_asyncio
 from docker.models.images import Image as DockerImage
 from tomodachi.envelope.json_base import JsonBase
-from types_aiobotocore_sns import SNSClient
-from types_aiobotocore_sqs import SQSClient
 
-from tomodachi_testcontainers.clients import snssqs_client
+from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.containers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
@@ -19,13 +17,8 @@ from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest_asyncio.fixture()
-async def _create_topics_and_queues(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient) -> None:
-    await snssqs_client.subscribe_to(
-        localstack_sns_client,
-        localstack_sqs_client,
-        topic="order--created",
-        queue="customer--order-created",
-    )
+async def _create_topics_and_queues(localstack_snssqs_tc: SNSSQSTestClient) -> None:
+    await localstack_snssqs_tc.subscribe_to(topic="order--created", queue="customer--order-created")
 
 
 @pytest.fixture()
@@ -105,7 +98,7 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_register_created_order(http_client: httpx.AsyncClient, localstack_sns_client: SNSClient) -> None:
+async def test_register_created_order(http_client: httpx.AsyncClient, localstack_snssqs_tc: SNSSQSTestClient) -> None:
     response = await http_client.post("/customers", json={"name": "John Doe"})
     body = response.json()
     customer_id = body["customer_id"]
@@ -115,8 +108,7 @@ async def test_register_created_order(http_client: httpx.AsyncClient, localstack
 
     order_ids = ["6c403295-2755-4178-a4f1-e3b698927971", "c8bb390a-71f4-4e8f-8879-c92261b0e18e"]
     for order_id in order_ids:
-        await snssqs_client.publish(
-            localstack_sns_client,
+        await localstack_snssqs_tc.publish(
             topic="order--created",
             data={
                 "event_id": str(uuid.uuid4()),
