@@ -12,7 +12,8 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
-from tomodachi_testcontainers.containers import MotoContainer
+from tomodachi_testcontainers import MotoContainer
+from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.utils import get_available_port
 
 
@@ -69,3 +70,8 @@ async def moto_sqs_client(moto_container: MotoContainer) -> AsyncGenerator[SQSCl
 async def moto_ssm_client(moto_container: MotoContainer) -> AsyncGenerator[SSMClient, None]:
     async with get_session().create_client("ssm", **moto_container.get_aws_client_config()) as c:
         yield c
+
+
+@pytest.fixture()
+def moto_snssqs_tc(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> SNSSQSTestClient:
+    return SNSSQSTestClient(moto_sns_client, moto_sqs_client)

@@ -3,7 +3,7 @@ from typing import Generator, cast
 import pytest
 from requests.exceptions import ConnectionError
 
-from tomodachi_testcontainers.containers import DockerContainer, wait_for_http_healthcheck
+from tomodachi_testcontainers import DockerContainer, wait_for_http_healthcheck
 from tomodachi_testcontainers.utils import get_available_port
 
 

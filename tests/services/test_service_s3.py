@@ -7,24 +7,17 @@ import pytest_asyncio
 from docker.models.images import Image as DockerImage
 from tomodachi.envelope.json_base import JsonBase
 from types_aiobotocore_s3 import S3Client
-from types_aiobotocore_sns import SNSClient
-from types_aiobotocore_sqs import SQSClient
 
-from tomodachi_testcontainers.clients import snssqs_client
-from tomodachi_testcontainers.containers import LocalStackContainer, TomodachiContainer
+from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
+from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.pytest.assertions import assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest_asyncio.fixture()
-async def _create_topics_and_queues(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient) -> None:
-    await snssqs_client.subscribe_to(
-        localstack_sns_client,
-        localstack_sqs_client,
-        topic="s3--file-uploaded",
-        queue="s3--file-uploaded",
-    )
+async def _create_topics_and_queues(localstack_snssqs_tc: SNSSQSTestClient) -> None:
+    await localstack_snssqs_tc.subscribe_to(topic="s3--file-uploaded", queue="s3--file-uploaded")
 
 
 @pytest.fixture()
@@ -74,7 +67,7 @@ async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
 
 @pytest.mark.asyncio()
 async def test_upload_and_read_file(
-    http_client: httpx.AsyncClient, localstack_s3_client: S3Client, localstack_sqs_client: SQSClient
+    http_client: httpx.AsyncClient, localstack_s3_client: S3Client, localstack_snssqs_tc: SNSSQSTestClient
 ) -> None:
     await localstack_s3_client.put_object(Bucket="filestore", Key="hello-world.txt", Body=b"Hello, World!")
 
@@ -89,7 +82,7 @@ async def test_upload_and_read_file(
     }
 
     async def _file_uploaded_event_emitted() -> Dict[str, Any]:
-        [event] = await snssqs_client.receive(localstack_sqs_client, "s3--file-uploaded", JsonBase, Dict[str, Any])
+        [event] = await localstack_snssqs_tc.receive("s3--file-uploaded", JsonBase, Dict[str, Any])
         return event
 
     event = await probe_until(_file_uploaded_event_emitted)

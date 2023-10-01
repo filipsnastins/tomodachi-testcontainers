@@ -4,7 +4,7 @@ from typing import Generator
 import httpx
 import pytest
 
-from tomodachi_testcontainers.containers import WireMockContainer
+from tomodachi_testcontainers import WireMockContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 

@@ -5,7 +5,7 @@ import pytest
 import pytest_asyncio
 from docker.models.images import Image as DockerImage
 
-from tomodachi_testcontainers.containers import TomodachiContainer
+from tomodachi_testcontainers import TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 

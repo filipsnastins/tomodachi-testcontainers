@@ -10,6 +10,7 @@ from tomodachi_testcontainers.pytest.localstack_fixtures import (
     localstack_lambda_client,
     localstack_s3_client,
     localstack_sns_client,
+    localstack_snssqs_tc,
     localstack_sqs_client,
     localstack_ssm_client,
 )
@@ -21,6 +22,7 @@ from tomodachi_testcontainers.pytest.moto_fixtures import (
     moto_lambda_client,
     moto_s3_client,
     moto_sns_client,
+    moto_snssqs_tc,
     moto_sqs_client,
     moto_ssm_client,
 )
@@ -42,6 +44,7 @@ __all__ = [
     "localstack_lambda_client",
     "localstack_s3_client",
     "localstack_sns_client",
+    "localstack_snssqs_tc",
     "localstack_sqs_client",
     "localstack_ssm_client",
     "moto_container",
@@ -50,6 +53,7 @@ __all__ = [
     "moto_lambda_client",
     "moto_s3_client",
     "moto_sns_client",
+    "moto_snssqs_tc",
     "moto_sqs_client",
     "moto_ssm_client",
     "sftp_container",

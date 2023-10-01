@@ -5,7 +5,7 @@ from typing import Generator
 import pytest
 from docker.errors import BuildError, ImageNotFound
 
-from tomodachi_testcontainers.containers import EphemeralDockerImage, get_docker_image
+from tomodachi_testcontainers import EphemeralDockerImage, get_docker_image
 
 
 @pytest.fixture()

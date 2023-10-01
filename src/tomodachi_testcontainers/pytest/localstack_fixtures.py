@@ -1,5 +1,5 @@
 import os
-from typing import AsyncGenerator, Generator
+from typing import AsyncGenerator, Generator, cast
 
 import pytest
 import pytest_asyncio
@@ -12,7 +12,8 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
-from tomodachi_testcontainers.containers import LocalStackContainer
+from tomodachi_testcontainers import LocalStackContainer
+from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.utils import get_available_port
 
 
@@ -20,7 +21,7 @@ from tomodachi_testcontainers.utils import get_available_port
 def localstack_container() -> Generator[LocalStackContainer, None, None]:
     image = os.getenv("LOCALSTACK_TESTCONTAINER_IMAGE_ID", "localstack/localstack:2.1")
     with LocalStackContainer(image=image, edge_port=get_available_port()) as container:
-        yield container
+        yield cast(LocalStackContainer, container)
 
 
 @pytest.fixture()
@@ -69,3 +70,8 @@ async def localstack_sqs_client(localstack_container: LocalStackContainer) -> As
 async def localstack_ssm_client(localstack_container: LocalStackContainer) -> AsyncGenerator[SSMClient, None]:
     async with get_session().create_client("ssm", **localstack_container.get_aws_client_config()) as c:
         yield c
+
+
+@pytest.fixture()
+def localstack_snssqs_tc(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient) -> SNSSQSTestClient:
+    return SNSSQSTestClient(localstack_sns_client, localstack_sqs_client)

@@ -2,7 +2,7 @@ from textwrap import dedent
 
 import pytest
 
-from tomodachi_testcontainers.containers import LocalStackContainer
+from tomodachi_testcontainers import LocalStackContainer
 
 
 def test_default_localstack_image(localstack_container: LocalStackContainer) -> None:
@@ -24,7 +24,7 @@ def test_localstack_image_name_set_from_envvar(pytester: pytest.Pytester) -> Non
     pytester.makepyfile(
         dedent(
             """\
-            from tomodachi_testcontainers.containers import LocalStackContainer
+            from tomodachi_testcontainers import LocalStackContainer
 
 
             def test_localstack_image_name_set_from_envvar(localstack_container: LocalStackContainer) -> None:

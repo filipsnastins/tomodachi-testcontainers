@@ -2,7 +2,7 @@ from textwrap import dedent
 
 import pytest
 
-from tomodachi_testcontainers.containers import SFTPContainer
+from tomodachi_testcontainers import SFTPContainer
 
 
 def test_default_sftp_image(sftp_container: SFTPContainer) -> None:
@@ -24,7 +24,7 @@ def test_sftp_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
     pytester.makepyfile(
         dedent(
             """\
-            from tomodachi_testcontainers.containers import SFTPContainer
+            from tomodachi_testcontainers import SFTPContainer
 
 
             def test_sftp_image_name_set_from_envvar(sftp_container: SFTPContainer) -> None:

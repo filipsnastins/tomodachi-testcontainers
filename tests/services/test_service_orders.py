@@ -7,24 +7,17 @@ import pytest
 import pytest_asyncio
 from docker.models.images import Image as DockerImage
 from tomodachi.envelope.json_base import JsonBase
-from types_aiobotocore_sns import SNSClient
-from types_aiobotocore_sqs import SQSClient
 
-from tomodachi_testcontainers.clients import snssqs_client
-from tomodachi_testcontainers.containers import MotoContainer, TomodachiContainer
+from tomodachi_testcontainers import MotoContainer, TomodachiContainer
+from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest_asyncio.fixture()
-async def _create_topics_and_queues(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> None:
-    await snssqs_client.subscribe_to(
-        moto_sns_client,
-        moto_sqs_client,
-        topic="order--created",
-        queue="order--created",
-    )
+async def _create_topics_and_queues(moto_snssqs_tc: SNSSQSTestClient) -> None:
+    await moto_snssqs_tc.subscribe_to(topic="order--created", queue="order--created")
 
 
 @pytest.fixture()
@@ -72,7 +65,7 @@ async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_create_order(http_client: httpx.AsyncClient, moto_sqs_client: SQSClient) -> None:
+async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSSQSTestClient) -> None:
     customer_id = "4752ce1f-d2a8-4bf1-88e7-ca05b9b3d756"
     products: List[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]
 
@@ -106,7 +99,7 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_sqs_client: SQS
     }
 
     async def _order_created_event_emitted() -> Dict[str, Any]:
-        [event] = await snssqs_client.receive(moto_sqs_client, "order--created", JsonBase, Dict[str, Any])
+        [event] = await moto_snssqs_tc.receive("order--created", JsonBase, Dict[str, Any])
         return event
 
     event = await probe_until(_order_created_event_emitted)
