@@ -3,7 +3,8 @@ from typing import Generator, cast
 
 import pytest
 
-from tomodachi_testcontainers import DockerContainer, copy_folder_to_container
+from tomodachi_testcontainers import DockerContainer
+from tomodachi_testcontainers.utils import copy_folder_to_container
 
 
 class AlpineContainer(DockerContainer):

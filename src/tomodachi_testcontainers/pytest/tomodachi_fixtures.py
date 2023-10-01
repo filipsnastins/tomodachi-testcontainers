@@ -5,7 +5,8 @@ from typing import Generator
 import pytest
 from docker.models.images import Image as DockerImage
 
-from tomodachi_testcontainers import EphemeralDockerImage, get_docker_image
+from tomodachi_testcontainers import EphemeralDockerImage
+from tomodachi_testcontainers.utils import get_docker_image
 
 
 @pytest.fixture(scope="session")
