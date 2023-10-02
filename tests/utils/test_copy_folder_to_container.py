@@ -1,20 +1,7 @@
 from pathlib import Path
-from typing import Generator, cast
 
-import pytest
-
-from tomodachi_testcontainers import DockerContainer, copy_folder_to_container
-
-
-class AlpineContainer(DockerContainer):
-    def __init__(self) -> None:
-        super().__init__(image="alpine:latest")
-
-
-@pytest.fixture()
-def alpine_container() -> Generator[AlpineContainer, None, None]:
-    with AlpineContainer().with_command("sleep 10") as container:
-        yield cast(AlpineContainer, container)
+from tests.conftest import AlpineContainer
+from tomodachi_testcontainers.utils import copy_folder_to_container
 
 
 def test_copy_folder_to_container(alpine_container: AlpineContainer) -> None:
@@ -22,7 +9,7 @@ def test_copy_folder_to_container(alpine_container: AlpineContainer) -> None:
     container_path = Path("/tmp")
 
     copy_folder_to_container(
-        host_path=host_path, container_path=container_path, container=alpine_container.get_wrapped_container()
+        alpine_container.get_wrapped_container(), host_path=host_path, container_path=container_path
     )
 
     code, output = alpine_container.exec("find /tmp -type f")

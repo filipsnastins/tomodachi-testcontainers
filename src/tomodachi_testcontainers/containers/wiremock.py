@@ -9,7 +9,8 @@ from typing import Any
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.containers.common import DockerContainer, copy_folder_to_container
+from tomodachi_testcontainers.containers.common import DockerContainer
+from tomodachi_testcontainers.utils import copy_folder_to_container
 
 
 class WireMockContainer(DockerContainer):
@@ -59,12 +60,12 @@ class WireMockContainer(DockerContainer):
 
     def copy_mappings_to_container(self) -> None:
         copy_folder_to_container(
-            host_path=self.mapping_stubs, container_path=self.MAPPINGS_DIR, container=self.get_wrapped_container()
+            self.get_wrapped_container(), host_path=self.mapping_stubs, container_path=self.MAPPINGS_DIR
         )
 
     def copy_mapping_files_to_container(self) -> None:
         copy_folder_to_container(
-            host_path=self.mapping_files, container_path=self.FILES_DIR, container=self.get_wrapped_container()
+            self.get_wrapped_container(), host_path=self.mapping_files, container_path=self.FILES_DIR
         )
 
     def reload_mappings(self) -> None:
