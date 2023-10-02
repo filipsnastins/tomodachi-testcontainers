@@ -5,7 +5,7 @@ from tomodachi_testcontainers.pytest.async_probes import probe_during_interval, 
 
 @pytest.mark.asyncio()
 async def test_probe_until__fails_and_reraises_exception() -> None:
-    def _func() -> None:
+    async def _func() -> None:
         raise ValueError("Something went wrong")
 
     with pytest.raises(ValueError, match="Something went wrong"):
