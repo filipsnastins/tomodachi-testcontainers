@@ -1,4 +1,5 @@
 import contextlib
+from asyncio import iscoroutinefunction
 from typing import Any, Callable
 
 from tenacity import AsyncRetrying, RetryError, retry_unless_exception_type
@@ -15,7 +16,10 @@ async def probe_until(func: Callable, probe_interval: float = 0.1, stop_after: f
         reraise=True,
     ):
         with attempt:
-            result = await func()
+            if iscoroutinefunction(func):
+                result = await func()
+            else:
+                result = func()
     return result
 
 
@@ -30,5 +34,8 @@ async def probe_during_interval(func: Callable, probe_interval: float = 0.1, sto
             reraise=True,
         ):
             with attempt:
-                result = await func()
+                if iscoroutinefunction(func):
+                    result = await func()
+                else:
+                    result = func()
     return result
