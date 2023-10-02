@@ -16,18 +16,18 @@ def assert_datetime_within_range(value: datetime, range: timedelta = DEFAULT_DAT
 
 
 def assert_logs_contain(container: DockerContainer, contains: str) -> None:
-    streams = cast(Tuple[bytes, bytes], container.get_logs())
-    for stream in streams:
-        if contains in stream.decode():
+    stdout_and_stderr_logs = cast(Tuple[bytes, bytes], container.get_logs())
+    for log in stdout_and_stderr_logs:
+        if contains in log.decode():
             return
     raise AssertionError(f"Expected logs to contain: '{contains}'")
 
 
-def assert_logs_not_contain(container: DockerContainer, expected: str) -> None:
-    streams = cast(Tuple[bytes, bytes], container.get_logs())
-    for stream in streams:
-        if expected in stream.decode():
-            raise AssertionError(f"Expected logs not to contain: '{expected}'")
+def assert_logs_not_contain(container: DockerContainer, contains: str) -> None:
+    stdout_and_stderr_logs = cast(Tuple[bytes, bytes], container.get_logs())
+    for log in stdout_and_stderr_logs:
+        if contains in log.decode():
+            raise AssertionError(f"Expected logs not to contain: '{contains}'")
 
 
 def assert_logs_match_line_count(container: DockerContainer, contains: str, count: int) -> None:
@@ -35,6 +35,5 @@ def assert_logs_match_line_count(container: DockerContainer, contains: str, coun
     stderr_logs = cast(bytes, container.get_logs()[1])
     logs = "\n".join([stdout_logs.decode(), stderr_logs.decode()])
     matched_lines = [log for log in logs.splitlines() if contains in log]
-    if len(matched_lines) == count:
-        return
-    raise AssertionError(f"Expected '{contains}' to be contained in {count} lines, found {len(matched_lines)} lines")
+    error_msg = f"Expected '{contains}' to be contained in {count} lines, found {len(matched_lines)} lines"
+    assert len(matched_lines) == count, error_msg  # nosec: B101
