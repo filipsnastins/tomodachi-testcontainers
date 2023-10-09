@@ -48,16 +48,29 @@ class SNSSQSTestClient:
         self.sqs_client = sqs_client
 
     async def subscribe_to(
-        self, topic: str, queue: str, subscribe_attributes: Optional[Mapping[str, str]] = None
+        self, topic: str, queue: str, fifo: bool = False, subscribe_attributes: Optional[Mapping[str, str]] = None
     ) -> None:
         """Subscribe a SQS queue to a SNS topic; create the topic and queue if they don't exist."""
         list_topics_response = await self.sns_client.list_topics()
         topic_arn = next((v["TopicArn"] for v in list_topics_response["Topics"] if v["TopicArn"].endswith(topic)), None)
+
+        topic_attributes: Mapping[str, str] = {}
+        queue_attributes: Mapping[QueueAttributeNameType, str] = {}
+        if fifo:
+            topic_attributes = {
+                "FifoTopic": "true",
+                "ContentBasedDeduplication": "false",
+            }
+            queue_attributes = {
+                "FifoQueue": "true",
+                "ContentBasedDeduplication": "false",
+            }
+
         if not topic_arn:
-            create_topic_response = await self.sns_client.create_topic(Name=topic)
+            create_topic_response = await self.sns_client.create_topic(Name=topic, Attributes=topic_attributes)
             topic_arn = create_topic_response["TopicArn"]
 
-        create_queue_response = await self.sqs_client.create_queue(QueueName=queue)
+        create_queue_response = await self.sqs_client.create_queue(QueueName=queue, Attributes=queue_attributes)
         queue_url = create_queue_response["QueueUrl"]
 
         get_queue_attributes_response = await self.sqs_client.get_queue_attributes(

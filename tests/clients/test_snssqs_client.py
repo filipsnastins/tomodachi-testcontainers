@@ -71,13 +71,7 @@ async def test_publish_and_receive_with_message_attributes(snssqs_test_client: S
 
 @pytest.mark.asyncio()
 async def test_publish_and_receive_with_fifo(snssqs_test_client: SNSSQSTestClient) -> None:
-    await snssqs_test_client.sns_client.create_topic(
-        Name="test-topic.fifo", Attributes={"FifoTopic": "true", "ContentBasedDeduplication": "false"}
-    )
-    await snssqs_test_client.sqs_client.create_queue(
-        QueueName="test-queue.fifo", Attributes={"FifoQueue": "true", "ContentBasedDeduplication": "false"}
-    )
-    await snssqs_test_client.subscribe_to(topic="test-topic.fifo", queue="test-queue.fifo")
+    await snssqs_test_client.subscribe_to(topic="test-topic.fifo", queue="test-queue.fifo", fifo=True)
 
     await snssqs_test_client.publish(
         "test-topic.fifo", {"message": "1"}, JsonBase, message_deduplication_id="123456", message_group_id="123456"
@@ -124,3 +118,22 @@ async def test_publish_and_receive_protobuf_message(snssqs_test_client: SNSSQSTe
     messages = await snssqs_test_client.receive("test-queue", ProtobufBase, Person)
 
     assert messages == [Person(id="123456", name="John Doe")]
+
+
+@pytest.mark.asyncio()
+async def test_subscribe_to_creates_fifo_queue_and_topic(snssqs_test_client: SNSSQSTestClient) -> None:
+    await snssqs_test_client.subscribe_to(
+        topic="test-topic.fifo",
+        queue="test-queue.fifo",
+        fifo=True,
+    )
+    get_queue_url_response = await snssqs_test_client.sqs_client.get_queue_url(QueueName="test-queue.fifo")
+    get_queue_attrs_response = await snssqs_test_client.sqs_client.get_queue_attributes(
+        QueueUrl=get_queue_url_response["QueueUrl"], AttributeNames=["FifoQueue"]
+    )
+    assert get_queue_attrs_response["Attributes"]["FifoQueue"] == "true"
+
+    get_topic_attrs_response = await snssqs_test_client.sns_client.get_topic_attributes(
+        TopicArn="arn:aws:sns:us-east-1:123456789012:test-topic.fifo"
+    )
+    assert get_topic_attrs_response["Attributes"]["FifoTopic"] == "true"
