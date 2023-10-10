@@ -48,7 +48,7 @@ class SNSSQSTestClient:
         self.sqs_client = sqs_client
 
     async def subscribe_to(
-        self, topic: str, queue: str, fifo: bool = False, subscribe_attributes: Optional[Mapping[str, str]] = None
+        self, topic: str, queue: str, subscribe_attributes: Optional[Mapping[str, str]] = None, fifo: bool = False
     ) -> None:
         """Subscribe a SQS queue to a SNS topic; create the topic and queue if they don't exist."""
         list_topics_response = await self.sns_client.list_topics()
