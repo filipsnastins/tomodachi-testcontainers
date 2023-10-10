@@ -47,7 +47,9 @@ class SNSSQSTestClient:
         self.sns_client = sns_client
         self.sqs_client = sqs_client
 
-    async def subscribe_to(self, topic: str, queue: str, attributes: Optional[Mapping[str, str]] = None) -> None:
+    async def subscribe_to(
+        self, topic: str, queue: str, subscribe_attributes: Optional[Mapping[str, str]] = None
+    ) -> None:
         """Subscribe a SQS queue to a SNS topic; create the topic and queue if they don't exist."""
         list_topics_response = await self.sns_client.list_topics()
         topic_arn = next((v["TopicArn"] for v in list_topics_response["Topics"] if v["TopicArn"].endswith(topic)), None)
@@ -64,7 +66,10 @@ class SNSSQSTestClient:
         queue_arn = get_queue_attributes_response["Attributes"]["QueueArn"]
 
         await self.sns_client.subscribe(
-            TopicArn=topic_arn, Protocol="sqs", Endpoint=queue_arn, Attributes=attributes or {}
+            TopicArn=topic_arn,
+            Protocol="sqs",
+            Endpoint=queue_arn,
+            Attributes=subscribe_attributes or {},
         )
 
     async def receive(

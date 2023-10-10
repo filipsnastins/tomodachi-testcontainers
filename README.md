@@ -402,7 +402,7 @@ describes a useful [rule of thumb for use of different types of tests](https://w
 
 - **Write the bulk of your tests against the service layer; maintain a small core of tests written against your domain model** -
   if you keep your application business logic use cases decoupled from the framework,
-  you can test most of the system without the need to rely on slow, read dependencies.
+  you can test most of the system without the need to rely on slow, real dependencies.
   You can use fakes for simulating input/output (databases, message brokers, external system adapters),
   making the tests focused on the business logic.
 
@@ -554,7 +554,7 @@ log_level = "INFO"
 
 - Talk ["Integration tests are needed and simple"](https://softwaregarden.dev/en/talks/integration-tests-are-needed-and-simple/)
   by [Piotr Przybyl](https://softwaregarden.dev/en/) - explains the why behind the need
-  for integration testing with read dependencies and gives a demo on Testcontainers.
+  for integration testing with real dependencies and gives a demo on Testcontainers.
 
 - [tomodachi-testcontainers-github-actions](https://github.com/filipsnastins/tomodachi-testcontainers-github-actions) -
   example of running Testcontainers in the CI pipeline.

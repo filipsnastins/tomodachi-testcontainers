@@ -49,7 +49,7 @@ async def test_publish_and_receive_with_message_attributes(snssqs_test_client: S
     await snssqs_test_client.subscribe_to(
         topic="test-topic",
         queue="test-queue",
-        attributes={"FilterPolicy": json.dumps({"MyMessageAttribute": ["will-be-included"]})},
+        subscribe_attributes={"FilterPolicy": json.dumps({"MyMessageAttribute": ["will-be-included"]})},
     )
 
     await snssqs_test_client.publish(
