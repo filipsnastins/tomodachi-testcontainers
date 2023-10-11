@@ -26,7 +26,8 @@ class TomodachiContainer(DockerContainer):
 
     def __enter__(self) -> TomodachiContainer:
         self.logger.info(f"Tomodachi service: http://localhost:{self.edge_port}")
-        return self.start()
+        super().__enter__()
+        return self
 
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()

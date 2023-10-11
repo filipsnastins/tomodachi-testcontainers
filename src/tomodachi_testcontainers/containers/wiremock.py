@@ -40,7 +40,8 @@ class WireMockContainer(DockerContainer):
 
     def __enter__(self) -> WireMockContainer:
         self.logger.info(f"Wiremock admin: http://localhost:{self.edge_port}/__admin")
-        return self.start()
+        super().__enter__()
+        return self
 
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()

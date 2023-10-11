@@ -39,7 +39,8 @@ class MotoContainer(DockerContainer):
 
     def __enter__(self) -> MotoContainer:
         self.logger.info(f"Moto dashboard: http://localhost:{self.edge_port}/moto-api")
-        return self.start()
+        super().__enter__()
+        return self
 
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()
