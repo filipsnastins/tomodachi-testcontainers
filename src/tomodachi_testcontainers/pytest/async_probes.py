@@ -1,13 +1,37 @@
 import asyncio
 import contextlib
-from typing import Any, Callable
+from typing import Any, Awaitable, Callable, TypeVar, Union, cast, overload
 
 from tenacity import AsyncRetrying, RetryError, retry_unless_exception_type
 from tenacity.stop import stop_after_delay
 from tenacity.wait import wait_fixed
 
+T = TypeVar("T")
 
-async def probe_until(f: Callable, probe_interval: float = 0.1, stop_after: float = 3.0) -> Any:
+
+@overload
+async def probe_until(
+    f: Callable[[], Awaitable[T]],
+    probe_interval: float = 0.1,
+    stop_after: float = 3.0,
+) -> T:
+    ...
+
+
+@overload
+async def probe_until(
+    f: Callable[[], T],
+    probe_interval: float = 0.1,
+    stop_after: float = 3.0,
+) -> T:
+    ...
+
+
+async def probe_until(
+    f: Union[Callable[[], Awaitable[T]], Callable[[], T]],
+    probe_interval: float = 0.1,
+    stop_after: float = 3.0,
+) -> T:
     """Run given function until it finishes without exceptions.
 
     Given function can be a regular synchronous function or an asynchronous function.
@@ -22,10 +46,32 @@ async def probe_until(f: Callable, probe_interval: float = 0.1, stop_after: floa
             result = f()
             if asyncio.iscoroutine(result):
                 result = await result
-    return result
+    return cast(T, result)
 
 
-async def probe_during_interval(f: Callable, probe_interval: float = 0.1, stop_after: float = 3.0) -> Any:
+@overload
+async def probe_during_interval(
+    f: Callable[[], Awaitable[T]],
+    probe_interval: float = 0.1,
+    stop_after: float = 3.0,
+) -> T:
+    ...
+
+
+@overload
+async def probe_during_interval(
+    f: Callable[[], T],
+    probe_interval: float = 0.1,
+    stop_after: float = 3.0,
+) -> T:
+    ...
+
+
+async def probe_during_interval(
+    f: Callable[[], Union[Awaitable[T], T]],
+    probe_interval: float = 0.1,
+    stop_after: float = 3.0,
+) -> T:
     """Run given function until timeout is reached and the function always finishes without exceptions.
 
     Given function can be a regular synchronous function or an asynchronous function.
@@ -42,4 +88,4 @@ async def probe_during_interval(f: Callable, probe_interval: float = 0.1, stop_a
                 result = f()
                 if asyncio.iscoroutine(result):
                     result = await result
-    return result
+    return cast(T, result)
