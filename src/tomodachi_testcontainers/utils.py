@@ -1,9 +1,9 @@
 import io
 import logging
 import os
+import socket
 import tarfile
 from pathlib import Path
-from socket import socket
 from typing import Dict, Optional, TypedDict, cast
 
 import requests
@@ -56,9 +56,16 @@ def wait_for_http_healthcheck(url: str, timeout: float = 10.0, interval: float =
 
 def get_available_port() -> int:
     """Returns a random available port on the host."""
-    with socket() as sock:
+    with socket.socket() as sock:
         sock.bind(("", 0))
         return int(sock.getsockname()[1])
+
+
+def get_current_ip_address() -> str:
+    """Returns the current IP address of the host."""
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+        sock.connect(("8.8.8.8", 80))
+        return str(sock.getsockname()[0])
 
 
 def setup_logger(name: str) -> logging.Logger:
