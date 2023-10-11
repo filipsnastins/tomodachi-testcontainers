@@ -67,9 +67,9 @@ class SFTPContainer(DockerContainer):
         wait_for_logs(self, r"Server listening on", timeout=timeout)
 
         self.exec("bash -c 'mkdir /home/userpass/upload && chown -R 1001:1001 /home/userpass/upload'")
-        self.exec("bash -c 'mkdir /home/userpass/upload && chown -R 1001:1001 /home/userpass/download'")
+        self.exec("bash -c 'mkdir /home/userpass/download && chown -R 1001:1001 /home/userpass/download'")
         self.exec("bash -c 'mkdir /home/userssh/upload && chown -R 1002:1002 /home/userssh/upload'")
-        self.exec("bash -c 'mkdir /home/userssh/upload && chown -R 1002:1002 /home/userssh/download'")
+        self.exec("bash -c 'mkdir /home/userssh/download && chown -R 1002:1002 /home/userssh/download'")
 
         self.add_authorized_key(username="userssh", uid="1002", gid="1002", public_key=self.authorized_public_key)
 
