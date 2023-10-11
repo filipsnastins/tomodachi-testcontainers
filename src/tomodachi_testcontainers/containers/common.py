@@ -20,12 +20,14 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
         super().__init__(*args, **kwargs, network=self.network)
 
     def __enter__(self) -> DockerContainer:
-        return self.start()
+        try:
+            return self.start()
+        except Exception:
+            self._forward_container_logs_to_logger()
+            raise
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
-        logs = self.get_wrapped_container().logs(timestamps=True).decode().split("\n")
-        for log in logs:
-            self.logger.info(log)
+        self._forward_container_logs_to_logger()
         self.stop()
 
     def get_container_host_ip(self) -> str:
@@ -50,6 +52,11 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
 
     def restart_container(self) -> None:
         self.get_wrapped_container().restart()
+
+    def _forward_container_logs_to_logger(self) -> None:
+        logs = self.get_wrapped_container().logs(timestamps=True).decode().split("\n")
+        for log in logs:
+            self.logger.info(log)
 
 
 class EphemeralDockerImage:
@@ -92,9 +99,13 @@ class EphemeralDockerImage:
             cmd.extend(["--target", self.target])
         cmd.append(self.context)
 
-        result = subprocess.run(
-            cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True
-        )  # nosec: B603
+        result = subprocess.run(  # nosec: B603
+            cmd,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+        )
         image_id = result.stdout.decode("utf-8").strip()
         return cast(DockerImage, self.client.client.images.get(image_id))
 

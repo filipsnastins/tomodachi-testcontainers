@@ -26,7 +26,8 @@ class TomodachiContainer(DockerContainer):
 
     def __enter__(self) -> TomodachiContainer:
         self.logger.info(f"Tomodachi service: http://localhost:{self.edge_port}")
-        return self.start()
+        super().__enter__()
+        return self
 
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()
@@ -41,7 +42,6 @@ class TomodachiContainer(DockerContainer):
         if self.http_healthcheck_path:
             url = urllib.parse.urljoin(self.get_external_url(), self.http_healthcheck_path)
             wait_for_http_healthcheck(url=url, timeout=timeout, interval=interval, status_code=status_code)
-
         # Apart from HTTP healthcheck, we need to wait for "started service" log
         # to make sure messaging transport like AWS SNS SQS is also up and running.
         # It's started independently from HTTP transport.
