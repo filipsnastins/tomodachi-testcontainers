@@ -1,6 +1,8 @@
+import inspect
 import json
 from typing import Any, Dict, List, Mapping, Optional, Protocol, Type, TypeVar, Union
 
+from google.protobuf.message import Message
 from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sns.type_defs import MessageAttributeValueTypeDef
 from types_aiobotocore_sqs import SQSClient
@@ -104,10 +106,15 @@ class SNSSQSTestClient:
         if not received_messages:
             return []
 
+        if inspect.isclass(message_type) and issubclass(message_type, Message):
+            proto_class = message_type
+        else:
+            proto_class = None
+
         parsed_messages: List[MessageType] = []
         for received_message in received_messages:
             payload = json.loads(received_message["Body"])["Message"]
-            parsed_message = await envelope.parse_message(payload=payload, proto_class=message_type)
+            parsed_message = await envelope.parse_message(payload=payload, proto_class=proto_class)
             parsed_messages.append(parsed_message[0]["data"])
             await self.sqs_client.delete_message(QueueUrl=queue_url, ReceiptHandle=received_message["ReceiptHandle"])
         return parsed_messages

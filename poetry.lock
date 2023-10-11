@@ -3169,4 +3169,4 @@ sftp = ["asyncssh"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "6d9017324ab2a1985546152cf20e479d11b67527b514829a7278e95eaba6df18"
+content-hash = "9524043dad5fe2250722dfa91034baec9c20b70ae46ef94f56a1a00fdd96f29e"
