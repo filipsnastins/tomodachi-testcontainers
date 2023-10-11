@@ -14,7 +14,7 @@ def service_healthcheck_container(tomodachi_image: DockerImage) -> Generator[Tom
     with TomodachiContainer(
         image=str(tomodachi_image.id),
         edge_port=get_available_port(),
-    ).with_command("tomodachi run src/healthcheck.py --production") as container:
+    ).with_command("tomodachi run src/healthcheck.py --foo") as container:
         yield cast(TomodachiContainer, container)
 
 
