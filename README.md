@@ -115,7 +115,7 @@ It builds a Docker image from a Dockerfile located in the current working direct
 The container is started by the `TomodachiContainer` context manager.
 When the context manager finishes, the built Docker image and containers are removed.
 
-The `tomodachi_image` fixture uses `tomodachi_testcontainers.containers.EphemeralDockerImage`.
+The `tomodachi_image` fixture uses `tomodachi_testcontainers.EphemeralDockerImage`.
 It automatically deletes the Docker image after the container is stopped.
 
 Furthermore, the `tomodachi_container` fixture will start a new Tomodachi service container
@@ -373,7 +373,7 @@ that the system will work in production without more manual testing._
 
 _To get a high confidence of releasability, it's necessary to test the system with real dependencies and infrastructure.
 Testcontainers make it easy to spin up real dependencies in Docker containers, and throw them away
-when the tests are finished. They work in thw same way locally and in the CI pipeline, so you need to
+when the tests are finished. They work in the same way locally and in the CI pipeline, so you need to
 setup test suite only once._
 
 ### ⚠️ Mind the Test Pyramid - don't overdo end-to-end tests
@@ -533,7 +533,7 @@ The Docker network is not created automatically, so make sure that it exists bef
 ## Forward Testcontainer logs to Pytest
 
 Logs from a testcontainer are forwarded to Python's standard logger as `INFO` logs when
-`tomodachi_testcontainers.containers.DockerContainer` context manager exits.
+`tomodachi_testcontainers.DockerContainer` context manager exits.
 
 To see the logs in Pytest, set the log level to at least `INFO` in [Pytest configuration](https://docs.pytest.org/en/7.1.x/how-to/logging.html).
 
