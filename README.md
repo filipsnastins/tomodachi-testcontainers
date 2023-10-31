@@ -101,21 +101,21 @@ from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture()
-def tomodachi_container(tomodachi_image: Image) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainers_docker_image: Image) -> Generator[TomodachiContainer, None, None]:
     with TomodachiContainer(
-        image=str(tomodachi_image.id),
+        image=str(testcontainers_docker_image.id),
         edge_port=get_available_port(),
     ) as container:
         yield cast(TomodachiContainer, container)
 ```
 
-The `tomodachi_image` fixture is from the `tomodachi_testcontainers` library.
+The `testcontainers_docker_image` fixture is from the `tomodachi_testcontainers` library.
 It builds a Docker image from a Dockerfile located in the current working directory.
 
 The container is started by the `TomodachiContainer` context manager.
 When the context manager finishes, the built Docker image and containers are removed.
 
-The `tomodachi_image` fixture uses `tomodachi_testcontainers.EphemeralDockerImage`.
+The `testcontainers_docker_image` fixture uses `tomodachi_testcontainers.EphemeralDockerImage`.
 It automatically deletes the Docker image after the container is stopped.
 
 Furthermore, the `tomodachi_container` fixture will start a new Tomodachi service container
@@ -271,11 +271,11 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture()
 def tomodachi_container(
-    tomodachi_image: DockerImage,
+    testcontainers_docker_image: DockerImage,
     localstack_container: LocalStackContainer,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(image=str(tomodachi_image.id), edge_port=get_available_port())
+        TomodachiContainer(image=str(testcontainers_docker_image.id), edge_port=get_available_port())
         .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")
@@ -456,7 +456,7 @@ to create your own Testcontainers.
 
 | Container Name | Default Image               | Fixture                |              Image Env Var Override |
 | :------------- | :-------------------------- | :--------------------- | ----------------------------------: |
-| Tomodachi      | n/a (build from Dockerfile) | `tomodachi_image`      |  `TOMODACHI_TESTCONTAINER_IMAGE_ID` |
+| Tomodachi      | n/a (build from Dockerfile) | n/a                    |  `TOMODACHI_TESTCONTAINER_IMAGE_ID` |
 | Moto           | `motoserver/moto:latest`    | `moto_container`       |       `MOTO_TESTCONTAINER_IMAGE_ID` |
 | LocalStack     | `localstack/localstack:2.1` | `localstack_container` | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
 | SFTP           | `atmoz/sftp:latest`         | `sftp_container`       |       `SFTP_TESTCONTAINER_IMAGE_ID` |
@@ -577,7 +577,7 @@ log_level = "INFO"
 - Install dev dependencies with [Poetry](https://python-poetry.org/)
 
 ```bash
-poetry install --all-extras
+poetry install --with dev --all-extras
 poetry shell
 pre-commit install
 ```
@@ -588,7 +588,7 @@ pre-commit install
 docker network create tomodachi-testcontainers
 
 pytest
-poetry run test-ci
+poetry run test-ci  # With test coverage
 ```
 
 - Format and lint code
