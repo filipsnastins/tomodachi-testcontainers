@@ -10,9 +10,11 @@ from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture()
-def service_healthcheck_container(tomodachi_image: DockerImage) -> Generator[TomodachiContainer, None, None]:
+def service_healthcheck_container(
+    testcontainers_docker_image: DockerImage,
+) -> Generator[TomodachiContainer, None, None]:
     with TomodachiContainer(
-        image=str(tomodachi_image.id),
+        image=str(testcontainers_docker_image.id),
         edge_port=get_available_port(),
     ).with_command("tomodachi run src/healthcheck.py --production") as container:
         yield cast(TomodachiContainer, container)

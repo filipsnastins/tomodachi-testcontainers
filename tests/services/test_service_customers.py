@@ -23,14 +23,14 @@ async def _create_topics_and_queues(localstack_snssqs_tc: SNSSQSTestClient) -> N
 
 @pytest.fixture()
 def service_customers_container(
-    tomodachi_image: DockerImage,
+    testcontainers_docker_image: DockerImage,
     localstack_container: LocalStackContainer,
     _create_topics_and_queues: None,
     _restart_localstack_container_on_teardown: None,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
-            image=str(tomodachi_image.id),
+            image=str(testcontainers_docker_image.id),
             edge_port=get_available_port(),
             http_healthcheck_path="/health",
         )
