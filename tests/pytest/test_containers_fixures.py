@@ -3,7 +3,7 @@ from textwrap import dedent
 import pytest
 
 
-def test_tomodachi_image_id_set_from_envvar(pytester: pytest.Pytester) -> None:
+def test_testcontainers_docker_image_set_from_envvar(pytester: pytest.Pytester) -> None:
     pytester.makeconftest(
         dedent(
             """\
@@ -23,10 +23,10 @@ def test_tomodachi_image_id_set_from_envvar(pytester: pytest.Pytester) -> None:
             from tomodachi_testcontainers.utils import get_docker_image
 
 
-            def test_tomodachi_image_id_set_from_envvar(tomodachi_image: DockerImage) -> None:
+            def test_testcontainers_docker_image_set_from_envvar(testcontainers_docker_image: DockerImage) -> None:
                 image = get_docker_image("alpine:3.18.2")
 
-                assert tomodachi_image.id == image.id
+                assert testcontainers_docker_image.id == image.id
             """
         )
     )
