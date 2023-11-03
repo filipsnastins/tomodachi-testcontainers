@@ -22,14 +22,14 @@ async def _create_topics_and_queues(moto_snssqs_tc: SNSSQSTestClient) -> None:
 
 @pytest.fixture()
 def service_orders_container(
-    tomodachi_image: DockerImage,
+    testcontainers_docker_image: DockerImage,
     moto_container: MotoContainer,
     _create_topics_and_queues: None,
     _reset_moto_container_on_teardown: None,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
-            image=str(tomodachi_image.id),
+            image=str(testcontainers_docker_image.id),
             edge_port=get_available_port(),
             http_healthcheck_path="/health",
         )

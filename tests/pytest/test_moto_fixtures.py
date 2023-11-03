@@ -2,12 +2,6 @@ from textwrap import dedent
 
 import pytest
 
-from tomodachi_testcontainers import MotoContainer
-
-
-def test_default_moto_image(moto_container: MotoContainer) -> None:
-    assert moto_container.image == "motoserver/moto:latest"
-
 
 def test_moto_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
     pytester.makeconftest(

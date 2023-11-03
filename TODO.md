@@ -10,13 +10,10 @@
 
 ## New testcontainers
 
-- [ ] Rename `tomodachi_image` to something generic like `service_image`;
-      this library seem to work just fine with any other framework,
-      which hasn't been thought thoroughly before creating this library.
-
-- [ ] HTTP test server
+- [ ] Explore HTTP mock/stub servers
   - [ ] <https://github.com/mock-server/mockserver>
   - [ ] <https://vcrpy.readthedocs.io/en/latest/>
+  - [ ] <https://www.mbtest.org/>
   - [x] <https://wiremock.org/docs/standalone/docker/>
 
 ## New test approaches

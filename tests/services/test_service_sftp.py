@@ -13,11 +13,11 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture()
 def service_sftp_container(
-    tomodachi_image: DockerImage, sftp_container: SFTPContainer
+    testcontainers_docker_image: DockerImage, sftp_container: SFTPContainer
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
-            image=str(tomodachi_image.id),
+            image=str(testcontainers_docker_image.id),
             edge_port=get_available_port(),
             http_healthcheck_path="/health",
         )
