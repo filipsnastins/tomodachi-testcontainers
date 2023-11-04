@@ -2,7 +2,7 @@ import os
 import subprocess  # nosec: B404
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Dict, Iterator, Optional, Tuple, cast
+from typing import Any, Dict, Iterator, Optional, Tuple, Type, cast
 
 import testcontainers.core.container
 from docker.models.images import Image as DockerImage
@@ -82,7 +82,7 @@ class EphemeralDockerImage:
         return self.image
 
     def __exit__(
-        self, exc_type: Optional[type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
+        self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
     ) -> None:
         self.remove_image()
 
