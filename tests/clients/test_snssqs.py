@@ -10,14 +10,21 @@ from types_aiobotocore_sqs import SQSClient
 
 from tests.clients.proto_build.message_pb2 import Person
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExist, TopicDoesNotExist
+from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExist, SNSSQSTestClientCache, TopicDoesNotExist
 
 pytestmark = pytest.mark.usefixtures("_reset_moto_container_on_teardown")
 
 
 @pytest.fixture()
-def snssqs_test_client(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> SNSSQSTestClient:
-    return SNSSQSTestClient(moto_sns_client, moto_sqs_client)
+def cache() -> SNSSQSTestClientCache:
+    return SNSSQSTestClientCache()
+
+
+@pytest.fixture()
+def snssqs_test_client(
+    moto_sns_client: SNSClient, moto_sqs_client: SQSClient, cache: SNSSQSTestClientCache
+) -> SNSSQSTestClient:
+    return SNSSQSTestClient(moto_sns_client, moto_sqs_client, cache)
 
 
 @pytest.mark.asyncio()
@@ -179,3 +186,52 @@ async def test_topic_attribute_getters__raise_when_topic_does_not_exist(snssqs_t
 
     with pytest.raises(TopicDoesNotExist, match="topic"):
         await snssqs_test_client.get_topic_attributes("topic")
+
+
+@pytest.mark.asyncio()
+async def test_cache_is_used__create_topic(snssqs_test_client: SNSSQSTestClient, cache: SNSSQSTestClientCache) -> None:
+    await snssqs_test_client.create_topic("topic")
+    assert cache.hit_count == 0
+
+    await snssqs_test_client.create_topic("topic")
+    assert cache.hit_count == 1
+
+
+@pytest.mark.asyncio()
+async def test_cache_is_used__topic_attribute_getters(
+    snssqs_test_client: SNSSQSTestClient, cache: SNSSQSTestClientCache
+) -> None:
+    await snssqs_test_client.create_topic("topic")
+    cache.clear()
+
+    await snssqs_test_client.get_topic_arn("topic")
+    assert cache.hit_count == 0
+
+    await snssqs_test_client.get_topic_arn("topic")
+    assert cache.hit_count == 1
+
+
+@pytest.mark.asyncio()
+async def test_cache_is_used__create_queue(snssqs_test_client: SNSSQSTestClient, cache: SNSSQSTestClientCache) -> None:
+    await snssqs_test_client.create_queue("queue")
+    assert cache.hit_count == 0
+
+    await snssqs_test_client.create_queue("queue")
+    assert cache.hit_count == 1
+
+
+@pytest.mark.asyncio()
+async def test_cache_is_used__queue_attribute_getters(
+    snssqs_test_client: SNSSQSTestClient, cache: SNSSQSTestClientCache
+) -> None:
+    await snssqs_test_client.create_queue("queue")
+    cache.clear()
+
+    await snssqs_test_client.get_queue_arn("queue")
+    assert cache.hit_count == 0
+
+    await snssqs_test_client.get_queue_arn("queue")
+    assert cache.hit_count == 1
+
+    await snssqs_test_client.get_queue_url("queue")
+    assert cache.hit_count == 2
