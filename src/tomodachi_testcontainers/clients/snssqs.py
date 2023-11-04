@@ -23,11 +23,11 @@ QueueURLType = str
 
 
 class TopicDoesNotExist(Exception):
-    pass
+    pass  # pragma: no cover
 
 
 class QueueDoesNotExist(Exception):
-    pass
+    pass  # pragma: no cover
 
 
 class _TomodachiSNSSQSEnvelopeStatic(Protocol):
@@ -35,23 +35,23 @@ class _TomodachiSNSSQSEnvelopeStatic(Protocol):
     async def build_message(
         cls: "_TomodachiSNSSQSEnvelopeStatic", service: Any, topic: str, data: Any, **kwargs: Any
     ) -> str:
-        ...
+        ...  # pragma: no cover
 
     @classmethod
     async def parse_message(cls: "_TomodachiSNSSQSEnvelopeStatic", payload: str, **kwargs: Any) -> Union[dict, tuple]:
-        ...
+        ...  # pragma: no cover
 
 
 class _TomodachiSNSSQSEnvelopeInstance(Protocol):
     async def build_message(
         self: "_TomodachiSNSSQSEnvelopeInstance", service: Any, topic: str, data: Any, **kwargs: Any
     ) -> str:
-        ...
+        ...  # pragma: no cover
 
     async def parse_message(
         self: "_TomodachiSNSSQSEnvelopeInstance", payload: str, **kwargs: Any
     ) -> Union[dict, tuple]:
-        ...
+        ...  # pragma: no cover
 
 
 TomodachiSNSSQSEnvelope = Union[_TomodachiSNSSQSEnvelopeStatic, _TomodachiSNSSQSEnvelopeInstance]

@@ -15,7 +15,7 @@ async def probe_until(
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -24,7 +24,7 @@ async def probe_until(
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
-    ...
+    ...  # pragma: no cover
 
 
 async def probe_until(
@@ -55,7 +55,7 @@ async def probe_during_interval(
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -64,7 +64,7 @@ async def probe_during_interval(
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
-    ...
+    ...  # pragma: no cover
 
 
 async def probe_during_interval(
