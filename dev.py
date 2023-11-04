@@ -36,14 +36,6 @@ def test() -> None:
 
 
 def test_ci() -> None:
-    check_call(
-        [
-            "pytest",
-            "-v",
-            "--cov=src",
-            "--cov-branch",
-            "--cov-report=xml:build/coverage.xml",
-            "--cov-report=html:build/htmlcov",
-            "--junitxml=build/tests.xml",
-        ]
-    )
+    check_call(["coverage", "run", "--branch", "-m", "pytest", "-v", "--junitxml=build/tests.xml"])
+    check_call(["coverage", "xml", "-o", "build/coverage.xml"])
+    check_call(["coverage", "html", "-d", "build/htmlcov"])
