@@ -1,7 +1,7 @@
 import inspect
 import json
 from contextlib import suppress
-from typing import Any, Dict, List, Mapping, Optional, Protocol, Type, TypeVar, Union
+from typing import Any, Dict, List, Optional, Protocol, Type, TypeVar, Union
 
 from botocore.exceptions import ClientError
 from google.protobuf.message import Message
@@ -67,7 +67,7 @@ class SNSSQSTestClient:
     async def create_topic(self, topic: str, *, fifo: bool = False) -> TopicARNType:
         with suppress(TopicDoesNotExist):
             return await self.get_topic_arn(topic)
-        topic_attributes: Mapping[str, str] = {}
+        topic_attributes: Dict[str, str] = {}
         if fifo:
             topic_attributes.update(
                 {
@@ -81,7 +81,7 @@ class SNSSQSTestClient:
     async def create_queue(self, queue: str, *, fifo: bool = False) -> QueueARNType:
         with suppress(QueueDoesNotExist):
             return await self.get_queue_arn(queue)
-        queue_attributes: Mapping[QueueAttributeNameType, str] = {}
+        queue_attributes: Dict[QueueAttributeNameType, str] = {}
         if fifo:
             queue_attributes.update(
                 {
@@ -97,7 +97,7 @@ class SNSSQSTestClient:
         self,
         topic: str,
         queue: str,
-        subscribe_attributes: Optional[Mapping[str, str]] = None,
+        subscribe_attributes: Optional[Dict[str, str]] = None,
         *,
         fifo: bool = False,
     ) -> None:
@@ -141,7 +141,7 @@ class SNSSQSTestClient:
         topic: str,
         data: Any,
         envelope: TomodachiSNSSQSEnvelope,
-        message_attributes: Optional[Mapping[str, MessageAttributeValueTypeDef]] = None,
+        message_attributes: Optional[Dict[str, MessageAttributeValueTypeDef]] = None,
         message_deduplication_id: Optional[str] = None,
         message_group_id: Optional[str] = None,
     ) -> None:
