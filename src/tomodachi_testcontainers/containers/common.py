@@ -15,9 +15,10 @@ from tomodachi_testcontainers.utils import setup_logger
 
 class DockerContainer(abc.ABC, TestcontainersDockerContainer):
     def __init__(self, *args: Any, network: Optional[str] = None, **kwargs: Any) -> None:
-        self.logger = setup_logger(self.__class__.__name__)
         self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
         super().__init__(*args, **kwargs, network=self.network)
+
+        self._logger = setup_logger(self.__class__.__name__)
 
     @abc.abstractmethod
     def log_message_on_container_start(self) -> str:
@@ -44,7 +45,7 @@ class DockerContainer(abc.ABC, TestcontainersDockerContainer):
         try:
             self._start()
             if message := self.log_message_on_container_start():
-                self.logger.info(message)
+                self._logger.info(message)
             return self
         except Exception:
             self._forward_container_logs_to_logger()
@@ -58,7 +59,7 @@ class DockerContainer(abc.ABC, TestcontainersDockerContainer):
         self.get_wrapped_container().restart()
 
     def _start(self) -> None:
-        self.logger.info(f"Pulling image: {self.image}")
+        self._logger.info(f"Pulling image: {self.image}")
         self._container = self.get_docker_client().run(
             image=self.image,
             command=self._command or "",
@@ -69,7 +70,7 @@ class DockerContainer(abc.ABC, TestcontainersDockerContainer):
             volumes=self.volumes,
             **self._kwargs,
         )
-        self.logger.info(f"Container started: {self._container.short_id}")
+        self._logger.info(f"Container started: {self._container.short_id}")
 
     def _stop(self) -> None:
         super().stop(force=True, delete_volume=True)
@@ -79,7 +80,7 @@ class DockerContainer(abc.ABC, TestcontainersDockerContainer):
         if container := self.get_wrapped_container():
             logs = bytes(container.logs(timestamps=True)).decode().split("\n")
             for log in logs:
-                self.logger.info(log)
+                self._logger.info(log)
 
     def _docker_inspect(self) -> Dict[str, Any]:
         return self.get_docker_client().get_container(self.get_wrapped_container().id)
