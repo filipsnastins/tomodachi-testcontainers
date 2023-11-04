@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import subprocess  # nosec: B404
 from pathlib import Path
+from types import TracebackType
 from typing import Any, Dict, Iterator, Optional, Tuple, cast
 
 import testcontainers.core.container
@@ -26,7 +27,9 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
             self._forward_container_logs_to_logger()
             raise
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+    def __exit__(
+        self, exc_type: Optional[type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
+    ) -> None:
         self._forward_container_logs_to_logger()
         self.stop()
 
@@ -80,7 +83,9 @@ class EphemeralDockerImage:
         self.build_image()
         return self.image
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+    def __exit__(
+        self, exc_type: Optional[type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
+    ) -> None:
         self.remove_image()
 
     def build_image(self) -> None:
