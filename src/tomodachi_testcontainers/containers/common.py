@@ -74,7 +74,7 @@ class EphemeralDockerImage:
         self.dockerfile = str(dockerfile) if dockerfile else None
         self.context = str(context) if context else "."
         self.target = target
-        self.client = DockerClient(**(docker_client_kw or {}))
+        self._client = DockerClient(**(docker_client_kw or {}))
 
     def __enter__(self) -> DockerImage:
         self.build_image()
@@ -90,7 +90,7 @@ class EphemeralDockerImage:
             self.image = self._build_with_docker_client()
 
     def remove_image(self) -> None:
-        self.client.client.images.remove(image=str(self.image.id))
+        self._client.client.images.remove(image=str(self.image.id))
 
     def _build_with_docker_buildkit(self) -> DockerImage:
         cmd = ["docker", "build", "-q", "--rm=true"]
@@ -108,12 +108,12 @@ class EphemeralDockerImage:
             check=True,
         )
         image_id = result.stdout.decode("utf-8").strip()
-        return cast(DockerImage, self.client.client.images.get(image_id))
+        return cast(DockerImage, self._client.client.images.get(image_id))
 
     def _build_with_docker_client(self) -> DockerImage:
         image, _ = cast(
             Tuple[DockerImage, Iterator],
-            self.client.client.images.build(
+            self._client.client.images.build(
                 dockerfile=self.dockerfile,
                 path=self.context,
                 target=self.target,
