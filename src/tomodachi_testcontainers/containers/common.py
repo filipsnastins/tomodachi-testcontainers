@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import os
 import subprocess  # nosec: B404
 from pathlib import Path
@@ -20,7 +18,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
         self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
         super().__init__(*args, **kwargs, network=self.network)
 
-    def __enter__(self) -> DockerContainer:
+    def __enter__(self) -> "DockerContainer":
         try:
             return self.start()
         except Exception:

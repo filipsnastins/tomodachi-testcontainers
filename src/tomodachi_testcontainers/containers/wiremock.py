@@ -2,8 +2,6 @@
 
 Adaptation of https://github.com/wiremock/python-wiremock
 """
-from __future__ import annotations
-
 from pathlib import Path
 from typing import Any
 
