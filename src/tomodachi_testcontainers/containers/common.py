@@ -18,19 +18,6 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
         self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
         super().__init__(*args, **kwargs, network=self.network)
 
-    def __enter__(self) -> "DockerContainer":
-        try:
-            return self.start()
-        except Exception:
-            self._forward_container_logs_to_logger()
-            raise
-
-    def __exit__(
-        self, exc_type: Optional[type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
-    ) -> None:
-        self._forward_container_logs_to_logger()
-        self.stop()
-
     def get_container_host_ip(self) -> str:
         host = self.get_docker_client().host()
         if not host:
@@ -51,6 +38,17 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
         container = self.get_docker_client().get_container(self.get_wrapped_container().id)
         return container["NetworkSettings"]["Networks"][self.network]["Gateway"]
 
+    def start(self) -> "DockerContainer":
+        try:
+            return super().start()
+        except Exception:
+            self._forward_container_logs_to_logger()
+            raise
+
+    def stop(self) -> None:
+        self._forward_container_logs_to_logger()
+        self._stop()
+
     def restart(self) -> None:
         self.get_wrapped_container().restart()
 
@@ -58,6 +56,10 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
         logs = self.get_wrapped_container().logs(timestamps=True).decode().split("\n")
         for log in logs:
             self.logger.info(log)
+
+    def _stop(self) -> None:
+        super().stop(force=True, delete_volume=True)
+        self._container = None
 
 
 class EphemeralDockerImage:

@@ -65,22 +65,23 @@ confidence=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable=missing-module-docstring,
+disable=arguments-differ,
+        duplicate-code,
+        fixme,
+        invalid-name,
+        logging-fstring-interpolation,
         missing-class-docstring,
         missing-function-docstring,
+        missing-module-docstring,
+        no-name-in-module,
         protected-access,
+        redefined-builtin,
+        redefined-outer-name,
         too-few-public-methods,
         too-many-arguments,
         too-many-instance-attributes,
-        duplicate-code,
-        invalid-name,
-        fixme,
-        redefined-outer-name,
-        redefined-builtin,
-        unused-argument,
         unspecified-encoding,
-        no-name-in-module,
-        logging-fstring-interpolation
+        unused-argument,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
