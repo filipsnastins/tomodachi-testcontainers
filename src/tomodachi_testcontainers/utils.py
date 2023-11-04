@@ -23,9 +23,9 @@ class AWSClientConfig(TypedDict):
     endpoint_url: str
 
 
-def get_docker_image(image_id: str, docker_client_kw: Optional[Dict] = None) -> DockerImage:
+def get_docker_image(image_id: str, docker_client_kwargs: Optional[Dict] = None) -> DockerImage:
     """Returns a Docker image, pulling it if not exists on host."""
-    client = DockerClient(**(docker_client_kw or {}))
+    client = DockerClient(**(docker_client_kwargs or {}))
     try:
         return cast(DockerImage, client.client.images.get(image_id))
     except ImageNotFound:

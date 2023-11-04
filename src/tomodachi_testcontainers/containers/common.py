@@ -69,12 +69,12 @@ class EphemeralDockerImage:
         dockerfile: Optional[Path] = None,
         context: Optional[Path] = None,
         target: Optional[str] = None,
-        docker_client_kw: Optional[Dict] = None,
+        docker_client_kwargs: Optional[Dict] = None,
     ) -> None:
         self.dockerfile = str(dockerfile) if dockerfile else None
         self.context = str(context) if context else "."
         self.target = target
-        self._client = DockerClient(**(docker_client_kw or {}))
+        self._client = DockerClient(**(docker_client_kwargs or {}))
 
     def __enter__(self) -> DockerImage:
         self.build_image()
