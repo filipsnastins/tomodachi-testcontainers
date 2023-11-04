@@ -244,3 +244,7 @@ class SNSSQSTestClient:
             QueueUrl=queue_url, AttributeNames=attributes
         )
         return get_queue_attributes_response["Attributes"]
+
+    async def purge_queue(self, queue: str) -> None:
+        queue_url = await self.get_queue_url(queue)
+        await self._sqs_client.purge_queue(QueueUrl=queue_url)

@@ -130,6 +130,17 @@ async def test_publish_and_receive_protobuf_message(snssqs_test_client: SNSSQSTe
 
 
 @pytest.mark.asyncio()
+async def test_purge_queue(snssqs_test_client: SNSSQSTestClient) -> None:
+    await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
+    await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
+
+    await snssqs_test_client.purge_queue("queue")
+
+    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
+    assert messages == []
+
+
+@pytest.mark.asyncio()
 async def test_subscribe_to_creates_fifo_queue_and_topic(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(
         topic="topic.fifo",
