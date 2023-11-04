@@ -22,7 +22,7 @@ async def test_create_aws_resources_and_restart_localstack_container(
     list_topics_response = await localstack_sns_client.list_topics()
     assert list_topics_response["Topics"] == [{"TopicArn": "arn:aws:sns:us-east-1:000000000000:test-topic"}]
 
-    localstack_container.restart_container()
+    localstack_container.restart()
 
     list_topics_response = await localstack_sns_client.list_topics()
     assert list_topics_response["Topics"] == []

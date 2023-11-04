@@ -283,7 +283,7 @@ def tomodachi_container(
         .with_command("tomodachi run app.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
-    localstack_container.restart_container()
+    localstack_container.restart()
 ```
 
 This time, `tomodachi_container` fixture is more involved. It uses
@@ -301,7 +301,7 @@ following [12-factor app principle of providing app configuration in environment
 On `tomodachi_container` fixture teardown, `LocalStack` container is restarted
 to reset its state - delete all S3 buckets and files. This way we can be sure
 that each test starts with a clean state.
-As alternative for calling `restart_container` method explicitly,
+As alternative for calling `restart` method explicitly,
 you can use `_restart_localstack_container_on_teardown` fixture.
 We avoid flaky tests that depend on the state of the previous test or their execution order,
 and avoid leaking test data from one test to another.

@@ -30,6 +30,9 @@ class LocalStackContainer(DockerContainer):
         self.with_env("LAMBDA_DOCKER_NETWORK", self.network)
         self.with_volume_mapping("/var/run/docker.sock", "/var/run/docker.sock")
 
+    def log_message_on_container_start(self) -> str:
+        return f"LocalStack started: http://localhost:{self.edge_port}/"
+
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()
         return f"http://{ip}:{self.internal_port}"

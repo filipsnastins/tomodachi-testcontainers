@@ -27,7 +27,7 @@ def localstack_container() -> Generator[LocalStackContainer, None, None]:
 @pytest.fixture()
 def _restart_localstack_container_on_teardown(localstack_container: LocalStackContainer) -> Generator[None, None, None]:
     yield
-    localstack_container.restart_container()
+    localstack_container.restart()
 
 
 @pytest_asyncio.fixture()
