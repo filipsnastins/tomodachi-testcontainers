@@ -53,9 +53,10 @@ class DockerContainer(testcontainers.core.container.DockerContainer):
         self.get_wrapped_container().restart()
 
     def _forward_container_logs_to_logger(self) -> None:
-        logs = self.get_wrapped_container().logs(timestamps=True).decode().split("\n")
-        for log in logs:
-            self.logger.info(log)
+        if container := self.get_wrapped_container():
+            logs = bytes(container.logs(timestamps=True)).decode().split("\n")
+            for log in logs:
+                self.logger.info(log)
 
     def _stop(self) -> None:
         super().stop(force=True, delete_volume=True)
