@@ -17,6 +17,8 @@ from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_dat
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
 
+pytestmark = pytest.mark.usefixtures("_purge_queues_on_teardown")
+
 
 @pytest.fixture(scope="module")
 def snssqs_tc(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient) -> SNSSQSTestClient:
@@ -28,7 +30,7 @@ async def _create_topics_and_queues(snssqs_tc: SNSSQSTestClient) -> None:
     await snssqs_tc.subscribe_to(topic="order--created", queue="customer--order-created")
 
 
-@pytest_asyncio.fixture(autouse=True)
+@pytest_asyncio.fixture()
 async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerator[None, None]:
     yield
     await snssqs_tc.purge_queue("customer--order-created")
