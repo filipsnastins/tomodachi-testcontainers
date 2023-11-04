@@ -60,9 +60,9 @@ TomodachiSNSSQSEnvelope = Union[_TomodachiSNSSQSEnvelopeStatic, _TomodachiSNSSQS
 class SNSSQSTestClient:
     """Wraps aiobotocore SNS and SQS clients and provides common methods for testing SNS SQS integrations."""
 
-    def __init__(self, sns_client: SNSClient, sqs_client: SQSClient) -> None:
-        self.sns_client = sns_client
-        self.sqs_client = sqs_client
+    def __init__(self, sns_client: SNSClient, sqs_client: SQSClient, cache: SNSSQSTestClientCache) -> None:
+        self._sns_client = sns_client
+        self._sqs_client = sqs_client
 
     async def create_topic(self, topic: str, *, fifo: bool = False) -> TopicARNType:
         with suppress(TopicDoesNotExist):
@@ -75,7 +75,7 @@ class SNSSQSTestClient:
                     "ContentBasedDeduplication": "false",
                 }
             )
-        create_topic_response = await self.sns_client.create_topic(Name=topic, Attributes=topic_attributes)
+        create_topic_response = await self._sns_client.create_topic(Name=topic, Attributes=topic_attributes)
         return create_topic_response["TopicArn"]
 
     async def create_queue(self, queue: str, *, fifo: bool = False) -> QueueARNType:
@@ -89,7 +89,7 @@ class SNSSQSTestClient:
                     "ContentBasedDeduplication": "false",
                 }
             )
-        await self.sqs_client.create_queue(QueueName=queue, Attributes=queue_attributes)
+        await self._sqs_client.create_queue(QueueName=queue, Attributes=queue_attributes)
         queue_attributes = await self.get_queue_attributes(queue, attributes=["QueueArn"])
         return queue_attributes["QueueArn"]
 
@@ -104,7 +104,7 @@ class SNSSQSTestClient:
         """Subscribe a SQS queue to a SNS topic; create the topic and queue if they don't exist."""
         topic_arn = await self.create_topic(topic, fifo=fifo)
         queue_arn = await self.create_queue(queue, fifo=fifo)
-        await self.sns_client.subscribe(
+        await self._sns_client.subscribe(
             TopicArn=topic_arn,
             Protocol="sqs",
             Endpoint=queue_arn,
@@ -116,7 +116,7 @@ class SNSSQSTestClient:
     ) -> List[MessageType]:
         queue_url = await self.get_queue_url(queue)
 
-        received_messages_response = await self.sqs_client.receive_message(
+        received_messages_response = await self._sqs_client.receive_message(
             QueueUrl=queue_url, MaxNumberOfMessages=max_messages
         )
         received_messages = received_messages_response.get("Messages")
@@ -133,7 +133,7 @@ class SNSSQSTestClient:
             payload = json.loads(received_message["Body"])["Message"]
             parsed_message = await envelope.parse_message(payload=payload, proto_class=proto_class)
             parsed_messages.append(parsed_message[0]["data"])
-            await self.sqs_client.delete_message(QueueUrl=queue_url, ReceiptHandle=received_message["ReceiptHandle"])
+            await self._sqs_client.delete_message(QueueUrl=queue_url, ReceiptHandle=received_message["ReceiptHandle"])
         return parsed_messages
 
     async def publish(
@@ -154,10 +154,10 @@ class SNSSQSTestClient:
             sns_publish_kwargs["MessageDeduplicationId"] = message_deduplication_id
         if message_group_id:
             sns_publish_kwargs["MessageGroupId"] = message_group_id
-        await self.sns_client.publish(TopicArn=topic_arn, Message=message, **sns_publish_kwargs)
+        await self._sns_client.publish(TopicArn=topic_arn, Message=message, **sns_publish_kwargs)
 
     async def get_topic_arn(self, topic: str) -> str:
-        list_topics_response = await self.sns_client.list_topics()
+        list_topics_response = await self._sns_client.list_topics()
         topic_arn = next((v["TopicArn"] for v in list_topics_response["Topics"] if v["TopicArn"].endswith(topic)), None)
         if not topic_arn:
             raise TopicDoesNotExist(topic)
@@ -165,7 +165,7 @@ class SNSSQSTestClient:
 
     async def get_topic_attributes(self, topic: str) -> Dict[str, str]:
         topic_arn = await self.get_topic_arn(topic)
-        get_topic_attributes_response = await self.sns_client.get_topic_attributes(TopicArn=topic_arn)
+        get_topic_attributes_response = await self._sns_client.get_topic_attributes(TopicArn=topic_arn)
         return get_topic_attributes_response["Attributes"]
 
     async def get_queue_arn(self, queue: str) -> str:
@@ -174,7 +174,7 @@ class SNSSQSTestClient:
 
     async def get_queue_url(self, queue: str) -> str:
         try:
-            get_queue_response = await self.sqs_client.get_queue_url(QueueName=queue)
+            get_queue_response = await self._sqs_client.get_queue_url(QueueName=queue)
             return get_queue_response["QueueUrl"]
         except ClientError as exc:
             raise QueueDoesNotExist(queue) from exc
@@ -183,7 +183,7 @@ class SNSSQSTestClient:
         self, queue: str, attributes: List[QueueAttributeFilterType]
     ) -> Dict[QueueAttributeNameType, str]:
         queue_url = await self.get_queue_url(queue)
-        get_queue_attributes_response = await self.sqs_client.get_queue_attributes(
+        get_queue_attributes_response = await self._sqs_client.get_queue_attributes(
             QueueUrl=queue_url, AttributeNames=attributes
         )
         return get_queue_attributes_response["Attributes"]
