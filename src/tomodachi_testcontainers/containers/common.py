@@ -35,12 +35,10 @@ class DockerContainer(abc.ABC, TestcontainersDockerContainer):
         return host
 
     def get_container_internal_ip(self) -> str:
-        container = self.get_docker_client().get_container(self.get_wrapped_container().id)
-        return container["NetworkSettings"]["Networks"][self.network]["IPAddress"]
+        return self._docker_inspect()["NetworkSettings"]["Networks"][self.network]["IPAddress"]
 
     def get_container_gateway_ip(self) -> str:
-        container = self.get_docker_client().get_container(self.get_wrapped_container().id)
-        return container["NetworkSettings"]["Networks"][self.network]["Gateway"]
+        return self._docker_inspect()["NetworkSettings"]["Networks"][self.network]["Gateway"]
 
     def start(self) -> "DockerContainer":
         try:
@@ -82,6 +80,9 @@ class DockerContainer(abc.ABC, TestcontainersDockerContainer):
             logs = bytes(container.logs(timestamps=True)).decode().split("\n")
             for log in logs:
                 self.logger.info(log)
+
+    def _docker_inspect(self) -> Dict[str, Any]:
+        return self.get_docker_client().get_container(self.get_wrapped_container().id)
 
 
 class EphemeralDockerImage:
