@@ -8,13 +8,11 @@ from tomodachi_testcontainers import WireMockContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def wiremock_container() -> Generator[WireMockContainer, None, None]:
     mapping_stubs = Path(__file__).parent / "sample-wiremock-config" / "mappings"
     mapping_files = Path(__file__).parent / "sample-wiremock-config" / "files"
-    with WireMockContainer(
-        mapping_stubs=mapping_stubs, mapping_files=mapping_files, edge_port=get_available_port(), verbose=True
-    ) as container:
+    with WireMockContainer(mapping_stubs, mapping_files, edge_port=get_available_port(), verbose=True) as container:
         yield container
 
 

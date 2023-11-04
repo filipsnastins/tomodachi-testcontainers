@@ -9,7 +9,7 @@ from tomodachi_testcontainers import TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def service_healthcheck_container(
     testcontainers_docker_image: DockerImage,
 ) -> Generator[TomodachiContainer, None, None]:
@@ -20,7 +20,7 @@ def service_healthcheck_container(
         yield cast(TomodachiContainer, container)
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(scope="module")
 async def http_client(service_healthcheck_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
     async with httpx.AsyncClient(base_url=service_healthcheck_container.get_external_url()) as client:
         yield client

@@ -7,6 +7,8 @@ import pytest
 import pytest_asyncio
 from docker.models.images import Image as DockerImage
 from tomodachi.envelope.json_base import JsonBase
+from types_aiobotocore_sns import SNSClient
+from types_aiobotocore_sqs import SQSClient
 
 from tomodachi_testcontainers import MotoContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
@@ -15,17 +17,25 @@ from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
 
 
-@pytest_asyncio.fixture()
-async def _create_topics_and_queues(moto_snssqs_tc: SNSSQSTestClient) -> None:
-    await moto_snssqs_tc.subscribe_to(topic="order--created", queue="order--created")
+@pytest.fixture(scope="module")
+def snssqs_tc(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> SNSSQSTestClient:
+    return SNSSQSTestClient.create(moto_sns_client, moto_sqs_client)
 
 
-@pytest.fixture()
+@pytest_asyncio.fixture(scope="module")
+async def _create_topics_and_queues(snssqs_tc: SNSSQSTestClient) -> None:
+    await snssqs_tc.subscribe_to(topic="order--created", queue="order--created")
+
+
+@pytest_asyncio.fixture(autouse=True)
+async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerator[None, None]:
+    yield
+    await snssqs_tc.purge_queue("order--created")
+
+
+@pytest.fixture(scope="module")
 def service_orders_container(
-    testcontainers_docker_image: DockerImage,
-    moto_container: MotoContainer,
-    _create_topics_and_queues: None,
-    _reset_moto_container_on_teardown: None,
+    testcontainers_docker_image: DockerImage, moto_container: MotoContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
@@ -43,9 +53,10 @@ def service_orders_container(
         .with_command("tomodachi run src/orders.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
+    moto_container.reset_moto()
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(scope="module")
 async def http_client(service_orders_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
     async with httpx.AsyncClient(base_url=service_orders_container.get_external_url()) as client:
         yield client
@@ -65,7 +76,7 @@ async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSSQSTestClient) -> None:
+async def test_create_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTestClient) -> None:
     customer_id = "4752ce1f-d2a8-4bf1-88e7-ca05b9b3d756"
     products: List[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]
 
@@ -99,7 +110,7 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSS
     }
 
     async def _order_created_event_emitted() -> Dict[str, Any]:
-        [event] = await moto_snssqs_tc.receive("order--created", JsonBase, Dict[str, Any])
+        [event] = await snssqs_tc.receive("order--created", JsonBase, Dict[str, Any])
         return event
 
     event = await probe_until(_order_created_event_emitted)
