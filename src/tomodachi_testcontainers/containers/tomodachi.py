@@ -22,10 +22,8 @@ class TomodachiContainer(DockerContainer):
         self.http_healthcheck_path = http_healthcheck_path
         self.with_bind_ports(internal_port, edge_port)
 
-    def __enter__(self) -> "TomodachiContainer":
-        self.logger.info(f"Tomodachi service: http://localhost:{self.edge_port}")
-        super().__enter__()
-        return self
+    def log_message_on_container_start(self) -> str:
+        return f"Tomodachi service: http://localhost:{self.edge_port}"
 
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()

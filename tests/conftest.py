@@ -12,12 +12,18 @@ class AlpineContainer(DockerContainer):
     def __init__(self) -> None:
         super().__init__(image="alpine:latest")
 
+    def log_message_on_container_start(self) -> str:
+        return "Alpine container started"
+
 
 class HTTPBinContainer(DockerContainer):
     def __init__(self) -> None:
         super().__init__(image="kennethreitz/httpbin")
         self.edge_port = get_available_port()
         self.with_bind_ports(80, self.edge_port)
+
+    def log_message_on_container_start(self) -> str:
+        return "HTTPBin container started"
 
     def get_external_url(self) -> str:
         host = self.get_container_host_ip()

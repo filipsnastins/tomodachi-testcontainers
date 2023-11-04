@@ -26,6 +26,9 @@ class SFTPContainer(DockerContainer):
         self.authorized_private_key = asyncssh.generate_private_key("ssh-ed25519")
         self.authorized_public_key = self.authorized_private_key.export_public_key().decode()
 
+    def log_message_on_container_start(self) -> str:
+        return f"SFTP server running on port: {self.edge_port}"
+
     def get_internal_conn_details(self) -> ConnectionDetails:
         host = self.get_container_internal_ip()
         return ConnectionDetails(host=host, port=self.internal_port)

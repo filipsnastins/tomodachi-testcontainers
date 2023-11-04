@@ -35,10 +35,8 @@ class MotoContainer(DockerContainer):
         self.with_env("MOTO_DOCKER_NETWORK_NAME", self.network)
         self.with_volume_mapping("/var/run/docker.sock", "/var/run/docker.sock")
 
-    def __enter__(self) -> "MotoContainer":
-        self.logger.info(f"Moto dashboard: http://localhost:{self.edge_port}/moto-api")
-        super().__enter__()
-        return self
+    def log_message_on_container_start(self) -> str:
+        return f"Moto dashboard: http://localhost:{self.edge_port}/moto-api"
 
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()
