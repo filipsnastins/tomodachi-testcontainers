@@ -71,7 +71,6 @@ ruff = "^0.0.291"
 structlog = "^23.1.0"
 tomodachi = "^0.26.0"
 types-protobuf = "^4.23.0.2"
-types-pymysql = "^1.1.0.1"
 types-requests = "^2.31.0.2"
 
 [build-system]
