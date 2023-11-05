@@ -36,6 +36,7 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [SFTP](#sftp)
     - [WireMock](#wiremock)
     - [MySQL](#mysql)
+    - [PostgreSQL](#postgresql)
   - [Configuration with environment variables](#configuration-with-environment-variables)
   - [Change default Docker network](#change-default-docker-network)
   - [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
@@ -54,6 +55,9 @@ pip install tomodachi-testcontainers[db]
 
 # MySQLContainer, SQLAlchemy and pymysql
 pip install tomodachi-testcontainers[mysql]
+
+# PostgreSQLContainer, SQLAlchemy and psycopg2
+pip install tomodachi-testcontainers[postgres]
 
 # SFTPContainer and asyncssh
 pip install tomodachi-testcontainers[sftp]
@@ -471,6 +475,7 @@ to create your own Testcontainers.
 | SFTP           | `atmoz/sftp:latest`         | `sftp_container`       |       `SFTP_TESTCONTAINER_IMAGE_ID` |
 | WireMock       | `wiremock/wiremock:latest`  | n/a                    |                                 n/a |
 | MySQL          | `mysql:8`                   | `mysql_container`      |      `MYSQL_TESTCONTAINER_IMAGE_ID` |
+| PostgreSQL     | `postgres:16-bullseye`      | `postgres_container`   |   `POSTGRES_TESTCONTAINER_IMAGE_ID` |
 
 ### Tomodachi
 
@@ -516,9 +521,15 @@ DockerHub: <https://hub.docker.com/r/wiremock/wiremock>
 
 ### MySQL
 
-MySQL is an open-source relational database management system.
+MySQL is a widely used, open-source relational database management system (RDBMS).
 
 DockerHub: <https://hub.docker.com/_/mysql>
+
+### PostgreSQL
+
+The PostgreSQL object-relational database system provides reliability and data integrity.
+
+DockerHub: <https://hub.docker.com/_/postgres>
 
 ## Configuration with environment variables
 
