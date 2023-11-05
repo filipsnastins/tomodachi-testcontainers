@@ -6,7 +6,7 @@
 
 ## Test clients
 
-...
+- [ ] Experiment with WireMock test client with [python-wiremock](https://github.com/wiremock/python-wiremock) SDK
 
 ## New testcontainers
 
@@ -31,8 +31,9 @@
 
 ## Docs
 
-...
+- [ ] Use cases, patterns and good practices
 
 ## Testing
 
+- [ ] Run tests in parallel with `pytest-xdist`
 - [ ] Docker-from-Docker test
