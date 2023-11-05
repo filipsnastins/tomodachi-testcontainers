@@ -7,14 +7,17 @@ from tomodachi_testcontainers.containers.tomodachi import TomodachiContainer
 from tomodachi_testcontainers.containers.wiremock import WireMockContainer
 
 with contextlib.suppress(ModuleNotFoundError):
-    from tomodachi_testcontainers.containers.sftp import SFTPContainer
+    from tomodachi_testcontainers.containers.mysql import MySQLContainer
 
+with contextlib.suppress(ModuleNotFoundError):
+    from tomodachi_testcontainers.containers.sftp import SFTPContainer
 
 __all__ = [
     "DockerContainer",
     "EphemeralDockerImage",
     "LocalStackContainer",
     "MotoContainer",
+    "MySQLContainer",
     "SFTPContainer",
     "TomodachiContainer",
     "WireMockContainer",
