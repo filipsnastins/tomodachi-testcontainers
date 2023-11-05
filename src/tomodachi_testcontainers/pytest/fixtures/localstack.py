@@ -13,6 +13,7 @@ from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
 from tomodachi_testcontainers import LocalStackContainer
+from tomodachi_testcontainers.clients.snssqs import SNSSQSTestClient
 from tomodachi_testcontainers.utils import get_available_port
 
 
@@ -69,3 +70,8 @@ async def localstack_sqs_client(localstack_container: LocalStackContainer) -> As
 async def localstack_ssm_client(localstack_container: LocalStackContainer) -> AsyncGenerator[SSMClient, None]:
     async with get_session().create_client("ssm", **localstack_container.get_aws_client_config()) as c:
         yield c
+
+
+@pytest.fixture()
+def localstack_snssqs_tc(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient) -> SNSSQSTestClient:
+    return SNSSQSTestClient.create(localstack_sns_client, localstack_sqs_client)
