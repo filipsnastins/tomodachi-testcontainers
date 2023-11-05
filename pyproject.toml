@@ -12,7 +12,7 @@ repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 [tool.poetry.extras]
 db = ["sqlalchemy"]
 myslq = ["sqlalchemy", "pymysql"]
-postgres = ["sqlalchemy", "postgres"]
+postgres = ["sqlalchemy", "psycopg2"]
 sftp = ["asyncssh"]
 
 [tool.poetry.dependencies]

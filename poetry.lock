@@ -3365,10 +3365,10 @@ multidict = ">=4.0"
 [extras]
 db = ["sqlalchemy"]
 myslq = ["pymysql", "sqlalchemy"]
-postgres = ["sqlalchemy"]
+postgres = ["psycopg2", "sqlalchemy"]
 sftp = ["asyncssh"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "ea734e603cfcad2fad3bffcc7e2bfa2482bffd0342380b142c64ab62d57feeff"
+content-hash = "977833bd4e60d8fb49aedce2de0d7b26d0e611bd0ec332be8833634e05ffad71"
