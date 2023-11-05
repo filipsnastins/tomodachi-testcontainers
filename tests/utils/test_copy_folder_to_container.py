@@ -5,7 +5,7 @@ from tomodachi_testcontainers.utils import copy_folder_to_container
 
 
 def test_copy_folder_to_container(alpine_container: AlpineContainer) -> None:
-    host_path = Path(__file__).parent / "sample-folder"
+    host_path = Path(__file__).parent / "test-copy-folder-to-container"
     container_path = Path("/tmp")
 
     copy_folder_to_container(

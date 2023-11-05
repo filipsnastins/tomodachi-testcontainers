@@ -14,9 +14,7 @@ async def test_moto_container_starts(moto_container: MotoContainer) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_create_aws_resources_and_reset_moto_container(
-    moto_container: MotoContainer, moto_sns_client: SNSClient
-) -> None:
+async def test_create_aws_resources_and_reset_moto(moto_container: MotoContainer, moto_sns_client: SNSClient) -> None:
     await moto_sns_client.create_topic(Name="test-topic")
 
     list_topics_response = await moto_sns_client.list_topics()

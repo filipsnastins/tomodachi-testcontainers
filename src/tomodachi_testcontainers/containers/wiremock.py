@@ -22,6 +22,7 @@ class WireMockContainer(DockerContainer):
         image: str = "wiremock/wiremock:latest",
         internal_port: int = 8080,
         edge_port: int = 8080,
+        *,
         verbose: bool = False,
         **kwargs: Any,
     ) -> None:

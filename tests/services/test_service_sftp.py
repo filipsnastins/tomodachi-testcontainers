@@ -11,7 +11,7 @@ from tomodachi_testcontainers import SFTPContainer, TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def service_sftp_container(
     testcontainers_docker_image: DockerImage, sftp_container: SFTPContainer
 ) -> Generator[TomodachiContainer, None, None]:
@@ -31,7 +31,7 @@ def service_sftp_container(
         yield cast(TomodachiContainer, container)
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(scope="module")
 async def http_client(service_sftp_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
     async with httpx.AsyncClient(base_url=service_sftp_container.get_external_url()) as client:
         yield client

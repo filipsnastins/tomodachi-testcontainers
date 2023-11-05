@@ -1,4 +1,6 @@
-from typing import Generator, cast
+import asyncio
+from contextlib import closing
+from typing import Generator, Iterator, cast
 
 import pytest
 
@@ -28,6 +30,12 @@ class HTTPBinContainer(DockerContainer):
     def get_external_url(self) -> str:
         host = self.get_container_host_ip()
         return f"http://{host}:{self.edge_port}"
+
+
+@pytest.fixture(scope="session")
+def event_loop() -> Iterator[asyncio.AbstractEventLoop]:
+    with closing(asyncio.new_event_loop()) as loop:
+        yield loop
 
 
 @pytest.fixture()

@@ -22,7 +22,7 @@ class DockerContainer(abc.ABC, TestcontainersDockerContainer):
 
     @abc.abstractmethod
     def log_message_on_container_start(self) -> str:
-        pass
+        pass  # pragma: no cover
 
     def get_container_host_ip(self) -> str:
         host = self.get_docker_client().host()

@@ -16,7 +16,7 @@ def sftp_container() -> Generator[SFTPContainer, None, None]:
         yield cast(SFTPContainer, container)
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(scope="session")
 async def userpass_sftp_client(sftp_container: SFTPContainer) -> AsyncGenerator[asyncssh.SFTPClient, None]:
     conn_details = sftp_container.get_external_conn_details()
     async with asyncssh.connect(
@@ -30,7 +30,7 @@ async def userpass_sftp_client(sftp_container: SFTPContainer) -> AsyncGenerator[
             yield sftp_client
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(scope="session")
 async def userssh_sftp_client(sftp_container: SFTPContainer) -> AsyncGenerator[asyncssh.SFTPClient, None]:
     conn_details = sftp_container.get_external_conn_details()
     async with asyncssh.connect(
