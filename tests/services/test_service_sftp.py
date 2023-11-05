@@ -1,4 +1,5 @@
 import tempfile
+import uuid
 from typing import AsyncGenerator, Generator, cast
 
 import asyncssh
@@ -52,18 +53,18 @@ async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
 
 @pytest.mark.asyncio()
 async def test_upload_and_read_file(http_client: httpx.AsyncClient, userssh_sftp_client: asyncssh.SFTPClient) -> None:
+    filename = f"{uuid.uuid4()}.txt"
     with tempfile.NamedTemporaryFile() as f:
         f.write(b"Hello, World!")
         f.seek(0)
+        await userssh_sftp_client.put(f.name, f"upload/{filename}")
 
-        await userssh_sftp_client.put(f.name, "upload/hello-world.txt")
-
-    response = await http_client.get("/file/hello-world.txt")
+    response = await http_client.get(f"/file/{filename}")
 
     assert response.status_code == 200
     assert response.json() == {
         "content": "Hello, World!",
         "_links": {
-            "self": {"href": "/file/hello-world.txt"},
+            "self": {"href": f"/file/{filename}"},
         },
     }

@@ -1,21 +1,29 @@
 import contextlib
 
-from tomodachi_testcontainers.containers.common import DockerContainer, EphemeralDockerImage
+from tomodachi_testcontainers.containers.common import DockerContainer, EphemeralDockerImage, WebContainer
 from tomodachi_testcontainers.containers.localstack import LocalStackContainer
 from tomodachi_testcontainers.containers.moto import MotoContainer
 from tomodachi_testcontainers.containers.tomodachi import TomodachiContainer
 from tomodachi_testcontainers.containers.wiremock import WireMockContainer
 
-with contextlib.suppress(ModuleNotFoundError):
+with contextlib.suppress(ImportError):  # 'db' extra dependency
+    from tomodachi_testcontainers.containers.common import DatabaseContainer
+
+with contextlib.suppress(ImportError):  # 'mysql' extra dependency
+    from tomodachi_testcontainers.containers.mysql import MySQLContainer
+
+with contextlib.suppress(ImportError):  # 'sftp' extra dependency
     from tomodachi_testcontainers.containers.sftp import SFTPContainer
 
-
 __all__ = [
+    "DatabaseContainer",
     "DockerContainer",
     "EphemeralDockerImage",
     "LocalStackContainer",
     "MotoContainer",
+    "MySQLContainer",
     "SFTPContainer",
     "TomodachiContainer",
+    "WebContainer",
     "WireMockContainer",
 ]

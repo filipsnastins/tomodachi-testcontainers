@@ -3,11 +3,11 @@ from typing import Any, Optional
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.containers.common import DockerContainer
+from tomodachi_testcontainers.containers.common import WebContainer
 from tomodachi_testcontainers.utils import AWSClientConfig
 
 
-class LocalStackContainer(DockerContainer):
+class LocalStackContainer(WebContainer):
     def __init__(
         self,
         image: str = "localstack/localstack:2.1",
@@ -16,15 +16,11 @@ class LocalStackContainer(DockerContainer):
         region_name: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, **kwargs)
-        self.internal_port = internal_port
-        self.edge_port = edge_port
+        super().__init__(image, internal_port=internal_port, edge_port=edge_port, **kwargs)
 
         self.region_name = region_name or os.getenv("AWS_DEFAULT_REGION") or "us-east-1"
         self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID") or "testing"  # nosec: B105
         self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY") or "testing"  # nosec: B105
-
-        self.with_bind_ports(self.internal_port, self.edge_port)
 
         # Docker is needed for running AWS Lambda container
         self.with_env("LAMBDA_DOCKER_NETWORK", self.network)
@@ -32,14 +28,6 @@ class LocalStackContainer(DockerContainer):
 
     def log_message_on_container_start(self) -> str:
         return f"LocalStack started: http://localhost:{self.edge_port}/"
-
-    def get_internal_url(self) -> str:
-        ip = self.get_container_internal_ip()
-        return f"http://{ip}:{self.internal_port}"
-
-    def get_external_url(self) -> str:
-        host = self.get_container_host_ip()
-        return f"http://{host}:{self.edge_port}"
 
     def get_aws_client_config(self) -> AWSClientConfig:
         return AWSClientConfig(
@@ -49,7 +37,7 @@ class LocalStackContainer(DockerContainer):
             endpoint_url=self.get_external_url(),
         )
 
-    def start(self, timeout: float = 10.0) -> "LocalStackContainer":
-        super().start()
+    def start(self, timeout: float = 10.0, interval: float = 0.5, status_code: int = 200) -> "LocalStackContainer":
+        super().start(timeout=timeout, interval=interval, status_code=status_code)
         wait_for_logs(self, r"Ready\.\n", timeout=timeout)
         return self
