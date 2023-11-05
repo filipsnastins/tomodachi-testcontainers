@@ -1,6 +1,6 @@
 import abc
 import os
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from testcontainers.core.container import DockerContainer as TestcontainersDockerContainer
 from testcontainers.core.utils import inside_container
@@ -9,9 +9,9 @@ from tomodachi_testcontainers.utils import setup_logger
 
 
 class DockerContainer(TestcontainersDockerContainer, abc.ABC):
-    def __init__(self, *args: Any, network: Optional[str] = None, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         self._logger = setup_logger(self.__class__.__name__)
-        self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
+        self.network = os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
         super().__init__(*args, **kwargs, network=self.network)
 
     @abc.abstractmethod
