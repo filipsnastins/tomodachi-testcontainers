@@ -76,8 +76,8 @@ class DockerContainer(TestcontainersDockerContainer, abc.ABC):
                 logs = bytes(container.logs(timestamps=True)).decode().split("\n")
                 for log in logs:
                     self._logger.info(log)
-        except Exception as exc:
-            self._logger.error("Failed to forward container logs to logger", exc_info=exc)
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            self._logger.exception("Failed to forward container logs to logger", exc_info=exc)
             return
 
     def _docker_inspect(self) -> Dict[str, Any]:
