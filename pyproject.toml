@@ -12,6 +12,7 @@ repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 [tool.poetry.extras]
 db = ["sqlalchemy"]
 myslq = ["sqlalchemy", "pymysql"]
+postgres = ["sqlalchemy", "postgres"]
 sftp = ["asyncssh"]
 
 [tool.poetry.dependencies]
@@ -19,6 +20,7 @@ python = "^3.8"
 aiobotocore = "^2.4.2"
 asyncssh = { version = "^2.13.2", optional = true }
 protobuf = "^4.0"
+psycopg2 = { version = "^2.9.9", optional = true }
 pymysql = { version = "^1.1.0", optional = true }
 pytest = "^7.1.2"
 pytest-asyncio = "^0.21.1"
