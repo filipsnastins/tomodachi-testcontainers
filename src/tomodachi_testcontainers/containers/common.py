@@ -13,12 +13,11 @@ from testcontainers.core.utils import inside_container
 from tomodachi_testcontainers.utils import setup_logger
 
 
-class DockerContainer(abc.ABC, TestcontainersDockerContainer):
+class DockerContainer(TestcontainersDockerContainer, abc.ABC):
     def __init__(self, *args: Any, network: Optional[str] = None, **kwargs: Any) -> None:
+        self._logger = setup_logger(self.__class__.__name__)
         self.network = network or os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
         super().__init__(*args, **kwargs, network=self.network)
-
-        self._logger = setup_logger(self.__class__.__name__)
 
     @abc.abstractmethod
     def log_message_on_container_start(self) -> str:
