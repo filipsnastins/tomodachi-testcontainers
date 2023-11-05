@@ -71,10 +71,14 @@ class DockerContainer(TestcontainersDockerContainer, abc.ABC):
         self._container = None
 
     def _forward_container_logs_to_logger(self) -> None:
-        if container := self.get_wrapped_container():
-            logs = bytes(container.logs(timestamps=True)).decode().split("\n")
-            for log in logs:
-                self._logger.info(log)
+        try:
+            if container := self.get_wrapped_container():
+                logs = bytes(container.logs(timestamps=True)).decode().split("\n")
+                for log in logs:
+                    self._logger.info(log)
+        except Exception as exc:
+            self._logger.error("Failed to forward container logs to logger", exc_info=exc)
+            return
 
     def _docker_inspect(self) -> Dict[str, Any]:
         return self.get_docker_client().get_container(self.get_wrapped_container().id)
