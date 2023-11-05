@@ -72,4 +72,4 @@ def wait_for_database_healthcheck(url: DatabaseURL, timeout: float = 20.0, inter
         with attempt:
             engine = sqlalchemy.create_engine(url.to_str())
             with engine.connect() as conn:
-                conn.execute(sqlalchemy.text("SELECT 1"))
+                conn.execute(sqlalchemy.text("SELECT 1;"))
