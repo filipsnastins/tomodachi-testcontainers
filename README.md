@@ -47,7 +47,15 @@ It facilitates the use of Docker containers for functional, integration, and end
 ```bash
 pip install tomodachi-testcontainers
 
-# Extra dependency - SFTP container and asyncssh
+# Extra dependencies:
+
+# DatabaseContainer and SQLAlchemy
+pip install tomodachi-testcontainers[db]
+
+# MySQLContainer, SQLAlchemy and pymysql
+pip install tomodachi-testcontainers[mysql]
+
+# SFTPContainer and asyncssh
 pip install tomodachi-testcontainers[sftp]
 ```
 
