@@ -8,6 +8,6 @@ def test_postgres_container_starts(postgres_container: PostgreSQLContainer) -> N
     engine = sqlalchemy.create_engine(url.to_str())
 
     with engine.connect() as conn:
-        result = conn.execute(sqlalchemy.text("SELECT 1"))
+        result = conn.execute(sqlalchemy.text("SELECT version();"))
 
-    assert result.scalar() == 1
+    assert "PostgreSQL" in str(result.scalar())
