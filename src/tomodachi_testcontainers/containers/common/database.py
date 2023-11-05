@@ -61,13 +61,13 @@ class DatabaseContainer(DockerContainer, abc.ABC):
             database=self.database,
         )
 
-    def start(self, timeout: float = 10.0) -> "DatabaseContainer":
+    def start(self, timeout: float = 20.0) -> "DatabaseContainer":
         super().start()
         wait_for_database_healthcheck(url=self.get_external_url(), timeout=timeout)
         return self
 
 
-def wait_for_database_healthcheck(url: DatabaseURL, timeout: float = 10.0, interval: float = 0.5) -> None:
+def wait_for_database_healthcheck(url: DatabaseURL, timeout: float = 20.0, interval: float = 0.5) -> None:
     for attempt in Retrying(stop=stop_after_delay(timeout), wait=wait_fixed(interval), reraise=True):
         with attempt:
             engine = sqlalchemy.create_engine(url.to_str())
