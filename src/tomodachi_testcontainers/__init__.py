@@ -12,6 +12,9 @@ with contextlib.suppress(ImportError):  # 'db' extra dependency
 with contextlib.suppress(ImportError):  # 'mysql' extra dependency
     from tomodachi_testcontainers.containers.mysql import MySQLContainer
 
+with contextlib.suppress(ImportError):  # 'postgres' extra dependency
+    from tomodachi_testcontainers.containers.postgres import PostgreSQLContainer
+
 with contextlib.suppress(ImportError):  # 'sftp' extra dependency
     from tomodachi_testcontainers.containers.sftp import SFTPContainer
 
@@ -22,6 +25,7 @@ __all__ = [
     "LocalStackContainer",
     "MotoContainer",
     "MySQLContainer",
+    "PostgreSQLContainer",
     "SFTPContainer",
     "TomodachiContainer",
     "WebContainer",

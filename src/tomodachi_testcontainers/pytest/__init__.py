@@ -28,6 +28,7 @@ from tomodachi_testcontainers.pytest.fixtures.moto import (
     moto_ssm_client,
 )
 from tomodachi_testcontainers.pytest.fixtures.mysql import mysql_container
+from tomodachi_testcontainers.pytest.fixtures.postgres import postgres_container
 
 with contextlib.suppress(ImportError):
     from tomodachi_testcontainers.pytest.fixtures.sftp import sftp_container, userpass_sftp_client, userssh_sftp_client
@@ -58,6 +59,7 @@ __all__ = [
     "moto_sqs_client",
     "moto_ssm_client",
     "mysql_container",
+    "postgres_container",
     "sftp_container",
     "testcontainers_docker_image",
     "userpass_sftp_client",
