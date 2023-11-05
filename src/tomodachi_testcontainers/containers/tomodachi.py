@@ -1,6 +1,6 @@
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.containers.web import WebContainer
+from tomodachi_testcontainers.containers.common import WebContainer
 
 
 class TomodachiContainer(WebContainer):

@@ -29,7 +29,7 @@ from tomodachi_testcontainers.pytest.fixtures.moto import (
 )
 from tomodachi_testcontainers.pytest.fixtures.mysql import mysql_container
 
-with contextlib.suppress(ModuleNotFoundError):
+with contextlib.suppress(ImportError):
     from tomodachi_testcontainers.pytest.fixtures.sftp import sftp_container, userpass_sftp_client, userssh_sftp_client
 
 

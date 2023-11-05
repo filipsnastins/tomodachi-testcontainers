@@ -7,7 +7,7 @@ from typing import Any
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.containers.web import WebContainer
+from tomodachi_testcontainers.containers.common import WebContainer
 from tomodachi_testcontainers.utils import copy_folder_to_container
 
 

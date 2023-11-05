@@ -8,7 +8,7 @@ from tenacity import Retrying
 from tenacity.stop import stop_after_delay
 from tenacity.wait import wait_fixed
 
-from tomodachi_testcontainers.containers.common import DockerContainer
+from tomodachi_testcontainers.containers.common.container import DockerContainer
 
 
 class DatabaseURL(NamedTuple):

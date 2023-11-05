@@ -2,7 +2,7 @@ import pytest
 from requests.exceptions import ConnectionError
 
 from tests.conftest import HTTPBinContainer
-from tomodachi_testcontainers.containers.web import wait_for_http_healthcheck
+from tomodachi_testcontainers.containers.common.web import wait_for_http_healthcheck
 from tomodachi_testcontainers.utils import get_available_port
 
 
