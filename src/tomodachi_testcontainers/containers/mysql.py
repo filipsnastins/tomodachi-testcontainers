@@ -5,7 +5,7 @@ Adaptation of https://github.com/testcontainers/testcontainers-python/tree/main/
 import os
 from typing import Any, Optional
 
-from tomodachi_testcontainers.containers.database import DatabaseContainer
+from tomodachi_testcontainers.containers.common import DatabaseContainer
 
 
 class MySQLContainer(DatabaseContainer):
@@ -36,6 +36,10 @@ class MySQLContainer(DatabaseContainer):
         self.with_env("MYSQL_ROOT_PASSWORD", self.root_password)
         self.with_env("MYSQL_PASSWORD", self.password)
         self.with_env("MYSQL_DATABASE", self.database)
+
+        # Do not flush data on disk to improve test container performance
+        # https://pythonspeed.com/articles/faster-db-tests/
+        self.with_command("--innodb_flush_method=O_DIRECT_NO_FSYNC")
 
     def log_message_on_container_start(self) -> str:
         return f"MySQL started: {self.get_external_url()}"
