@@ -21,7 +21,7 @@ def test_mysql_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
             from tomodachi_testcontainers import MySQLContainer
 
 
-            def test_localstack_image_name_set_from_envvar(mysql_container: MySQLContainer) -> None:
+            def test_mysql_image_name_set_from_envvar(mysql_container: MySQLContainer) -> None:
                 assert mysql_container.image == "mysql:8.2.0"
             """
         )
