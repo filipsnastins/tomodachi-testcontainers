@@ -27,10 +27,14 @@ from tomodachi_testcontainers.pytest.fixtures.moto import (
     moto_sqs_client,
     moto_ssm_client,
 )
-from tomodachi_testcontainers.pytest.fixtures.mysql import mysql_container
-from tomodachi_testcontainers.pytest.fixtures.postgres import postgres_container
 
-with contextlib.suppress(ImportError):
+with contextlib.suppress(ImportError):  # 'mysql' extra dependency
+    from tomodachi_testcontainers.pytest.fixtures.mysql import mysql_container
+
+with contextlib.suppress(ImportError):  # 'postgres' extra dependency
+    from tomodachi_testcontainers.pytest.fixtures.postgres import postgres_container
+
+with contextlib.suppress(ImportError):  # 'sftp' extra dependency
     from tomodachi_testcontainers.pytest.fixtures.sftp import sftp_container, userpass_sftp_client, userssh_sftp_client
 
 
