@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.1 (2023-11-06)
+
+### Bug fixes
+
+- `import tomodachi_testcontainers.pytest` was failing with `ImportError` because `MySQL` and `PostgreSQL` fixtures were not
+  handled as optional imports.
+
 ## 0.10.0 (2023-11-05)
 
 ### New features
