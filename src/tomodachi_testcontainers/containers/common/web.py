@@ -18,8 +18,8 @@ class WebContainer(DockerContainer, abc.ABC):
     def __init__(
         self,
         image: str,
-        internal_port: int = 9700,
-        edge_port: int = 9700,
+        internal_port: int,
+        edge_port: int,
         http_healthcheck_path: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
