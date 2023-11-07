@@ -3,20 +3,17 @@ from typing import AsyncGenerator, Generator, cast
 import httpx
 import pytest
 import pytest_asyncio
-from docker.models.images import Image as DockerImage
+from docker.models.images import Image
 
 from tomodachi_testcontainers import TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="module")
-def service_healthcheck_container(
-    testcontainers_docker_image: DockerImage,
-) -> Generator[TomodachiContainer, None, None]:
-    with TomodachiContainer(
-        image=str(testcontainers_docker_image.id),
-        edge_port=get_available_port(),
-    ).with_command("tomodachi run src/healthcheck.py --production") as container:
+def service_healthcheck_container(testcontainers_docker_image: Image) -> Generator[TomodachiContainer, None, None]:
+    with TomodachiContainer(image=str(testcontainers_docker_image.id), edge_port=get_available_port()).with_command(
+        "tomodachi run src/healthcheck.py --production"
+    ) as container:
         yield cast(TomodachiContainer, container)
 
 

@@ -1,5 +1,5 @@
 import asyncio
-from contextlib import closing
+import contextlib
 from typing import Generator, Iterator, cast
 
 import pytest
@@ -29,7 +29,7 @@ class HTTPBinContainer(WebContainer):
 
 @pytest.fixture(scope="session")
 def event_loop() -> Iterator[asyncio.AbstractEventLoop]:
-    with closing(asyncio.new_event_loop()) as loop:
+    with contextlib.closing(asyncio.new_event_loop()) as loop:
         yield loop
 
 

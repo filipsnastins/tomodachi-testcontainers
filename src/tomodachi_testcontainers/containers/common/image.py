@@ -4,14 +4,14 @@ from pathlib import Path
 from types import TracebackType
 from typing import Dict, Iterator, Optional, Tuple, Type, cast
 
-from docker.models.images import Image as DockerImage
+from docker.models.images import Image
 from testcontainers.core.docker_client import DockerClient
 
 
 class EphemeralDockerImage:
     """Builds a Docker image from a given Dockerfile and removes it when the context manager exits."""
 
-    image: DockerImage
+    image: Image
 
     def __init__(
         self,
@@ -25,7 +25,7 @@ class EphemeralDockerImage:
         self.target = target
         self._docker_client = DockerClient(**(docker_client_kwargs or {}))
 
-    def __enter__(self) -> DockerImage:
+    def __enter__(self) -> Image:
         self.build_image()
         return self.image
 
@@ -43,7 +43,7 @@ class EphemeralDockerImage:
     def remove_image(self) -> None:
         self._docker_client.client.images.remove(image=str(self.image.id))
 
-    def _build_with_docker_buildkit(self) -> DockerImage:
+    def _build_with_docker_buildkit(self) -> Image:
         cmd = ["docker", "build", "-q", "--rm=true"]
         if self.dockerfile:
             cmd.extend(["-f", self.dockerfile])
@@ -59,11 +59,11 @@ class EphemeralDockerImage:
             check=True,
         )
         image_id = result.stdout.decode("utf-8").strip()
-        return cast(DockerImage, self._docker_client.client.images.get(image_id))
+        return cast(Image, self._docker_client.client.images.get(image_id))
 
-    def _build_with_docker_client(self) -> DockerImage:
+    def _build_with_docker_client(self) -> Image:
         image, _ = cast(
-            Tuple[DockerImage, Iterator],
+            Tuple[Image, Iterator],
             self._docker_client.client.images.build(
                 dockerfile=self.dockerfile,
                 path=self.context,

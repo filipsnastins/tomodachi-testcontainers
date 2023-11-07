@@ -18,12 +18,12 @@ def test_testcontainers_docker_image_set_from_envvar(pytester: pytest.Pytester) 
     pytester.makepyfile(
         dedent(
             """\
-            from docker.models.images import Image as DockerImage
+            from docker.models.images import Image
 
             from tomodachi_testcontainers.utils import get_docker_image
 
 
-            def test_testcontainers_docker_image_set_from_envvar(testcontainers_docker_image: DockerImage) -> None:
+            def test_testcontainers_docker_image_set_from_envvar(testcontainers_docker_image: Image) -> None:
                 image = get_docker_image("alpine:3.18.2")
 
                 assert testcontainers_docker_image.id == image.id

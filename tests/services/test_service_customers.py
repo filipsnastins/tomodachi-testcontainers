@@ -6,7 +6,7 @@ from typing import AsyncGenerator, Generator, cast
 import httpx
 import pytest
 import pytest_asyncio
-from docker.models.images import Image as DockerImage
+from docker.models.images import Image
 from tomodachi.envelope.json_base import JsonBase
 from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
@@ -38,7 +38,7 @@ async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerat
 
 @pytest.fixture(scope="module")
 def service_customers_container(
-    testcontainers_docker_image: DockerImage, localstack_container: LocalStackContainer, _create_topics_and_queues: None
+    testcontainers_docker_image: Image, localstack_container: LocalStackContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
@@ -67,13 +67,14 @@ async def http_client(service_customers_container: TomodachiContainer) -> AsyncG
 
 @pytest.mark.asyncio()
 async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
-    response = await http_client.get("/customer/foo")
+    customer_id = uuid.uuid4()
+    response = await http_client.get(f"/customer/{customer_id}")
 
     assert response.status_code == 404
     assert response.json() == {
         "error": "Customer not found",
         "_links": {
-            "self": {"href": "/customer/foo"},
+            "self": {"href": f"/customer/{customer_id}"},
         },
     }
 
@@ -142,7 +143,10 @@ async def test_register_created_order(http_client: httpx.AsyncClient, snssqs_tc:
         assert body == {
             "customer_id": customer_id,
             "name": "John Doe",
-            "orders": [{"order_id": order_id} for order_id in order_ids],
+            "orders": [
+                {"order_id": order_ids[0]},
+                {"order_id": order_ids[1]},
+            ],
             "created_at": body["created_at"],
             "_links": {
                 "self": {"href": f"/customer/{customer_id}"},
