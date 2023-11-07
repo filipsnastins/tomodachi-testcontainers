@@ -1,9 +1,27 @@
+from typing import Any, Optional
+
 from testcontainers.core.waiting_utils import wait_for_logs
 
 from tomodachi_testcontainers.containers.common import WebContainer
 
 
 class TomodachiContainer(WebContainer):
+    def __init__(
+        self,
+        image: str,
+        internal_port: int = 9700,
+        edge_port: int = 9700,
+        http_healthcheck_path: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(
+            image=image,
+            internal_port=internal_port,
+            edge_port=edge_port,
+            http_healthcheck_path=http_healthcheck_path,
+            **kwargs,
+        )
+
     def log_message_on_container_start(self) -> str:
         return f"Tomodachi service: http://localhost:{self.edge_port}"
 
