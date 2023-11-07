@@ -26,21 +26,21 @@ class EphemeralDockerImage:
         self._docker_client = DockerClient(**(docker_client_kwargs or {}))
 
     def __enter__(self) -> Image:
-        self.build_image()
+        self._build_image()
         return self.image
 
     def __exit__(
         self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
     ) -> None:
-        self.remove_image()
+        self._remove_image()
 
-    def build_image(self) -> None:
+    def _build_image(self) -> None:
         if os.getenv("DOCKER_BUILDKIT"):
             self.image = self._build_with_docker_buildkit()
         else:
             self.image = self._build_with_docker_client()
 
-    def remove_image(self) -> None:
+    def _remove_image(self) -> None:
         self._docker_client.client.images.remove(image=str(self.image.id))
 
     def _build_with_docker_buildkit(self) -> Image:
