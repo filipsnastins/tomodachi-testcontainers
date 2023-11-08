@@ -3,14 +3,14 @@ from pathlib import Path
 from typing import Generator
 
 import pytest
-from docker.models.images import Image as DockerImage
+from docker.models.images import Image
 
 from tomodachi_testcontainers import EphemeralDockerImage
 from tomodachi_testcontainers.utils import get_docker_image
 
 
 @pytest.fixture(scope="session")
-def testcontainers_docker_image() -> Generator[DockerImage, None, None]:
+def testcontainers_docker_image() -> Generator[Image, None, None]:
     if image_id := os.getenv("TOMODACHI_TESTCONTAINER_IMAGE_ID"):
         yield get_docker_image(image_id)
     else:

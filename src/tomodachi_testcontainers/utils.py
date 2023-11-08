@@ -8,7 +8,7 @@ from typing import Dict, Optional, TypedDict, cast
 
 from docker.errors import ImageNotFound
 from docker.models.containers import Container
-from docker.models.images import Image as DockerImage
+from docker.models.images import Image
 from testcontainers.core.docker_client import DockerClient
 
 
@@ -19,13 +19,13 @@ class AWSClientConfig(TypedDict):
     endpoint_url: str
 
 
-def get_docker_image(image_id: str, docker_client_kwargs: Optional[Dict] = None) -> DockerImage:
+def get_docker_image(image_id: str, docker_client_kwargs: Optional[Dict] = None) -> Image:
     """Returns a Docker image, pulling it if not exists on host."""
     client = DockerClient(**(docker_client_kwargs or {}))
     try:
-        return cast(DockerImage, client.client.images.get(image_id))
+        return cast(Image, client.client.images.get(image_id))
     except ImageNotFound:
-        return cast(DockerImage, client.client.images.pull(image_id))
+        return cast(Image, client.client.images.pull(image_id))
 
 
 def copy_folder_to_container(container: Container, host_path: Path, container_path: Path) -> None:

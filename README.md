@@ -276,7 +276,7 @@ in the example below.
 from typing import Generator, cast
 
 import pytest
-from docker.models.images import Image as DockerImage
+from docker.models.images import Image
 
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
@@ -284,7 +284,7 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture()
 def tomodachi_container(
-    testcontainers_docker_image: DockerImage,
+    testcontainers_docker_image: Image,
     localstack_container: LocalStackContainer,
 ) -> Generator[TomodachiContainer, None, None]:
     with (

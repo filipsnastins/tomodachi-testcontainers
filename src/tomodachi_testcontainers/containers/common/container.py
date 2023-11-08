@@ -1,22 +1,44 @@
 import abc
+import contextlib
+import logging
 import os
-from typing import Any, Dict
+from types import TracebackType
+from typing import Any, Dict, Optional, Type
 
-from testcontainers.core.container import DockerContainer as TestcontainersDockerContainer
+import shortuuid
+import testcontainers.core.container
+from docker.models.containers import Container
 from testcontainers.core.utils import inside_container
 
 from tomodachi_testcontainers.utils import setup_logger
 
 
-class DockerContainer(TestcontainersDockerContainer, abc.ABC):
+class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
+    _container: Optional[Container]
+    _name: str
+    _logger: logging.Logger
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        self._logger = setup_logger(self.__class__.__name__)
         self.network = os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
         super().__init__(*args, **kwargs, network=self.network)
 
+    def __enter__(self) -> "DockerContainer":
+        try:
+            return self.start()
+        except Exception:
+            self._forward_container_logs_to_logger()
+            self.stop()
+            raise
+
+    def __exit__(
+        self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
+    ) -> None:
+        self._forward_container_logs_to_logger()
+        self.stop()
+
     @abc.abstractmethod
     def log_message_on_container_start(self) -> str:
-        pass  # pragma: no cover
+        """Returns a message that will be logged when the container starts."""
 
     def get_container_host_ip(self) -> str:
         host = self.get_docker_client().host()
@@ -30,27 +52,35 @@ class DockerContainer(TestcontainersDockerContainer, abc.ABC):
         return host
 
     def get_container_internal_ip(self) -> str:
-        return self._docker_inspect()["NetworkSettings"]["Networks"][self.network]["IPAddress"]
+        return self.docker_inspect()["NetworkSettings"]["Networks"][self.network]["IPAddress"]
 
     def get_container_gateway_ip(self) -> str:
-        return self._docker_inspect()["NetworkSettings"]["Networks"][self.network]["Gateway"]
+        return self.docker_inspect()["NetworkSettings"]["Networks"][self.network]["Gateway"]
+
+    def docker_inspect(self) -> Dict[str, Any]:
+        return self.get_docker_client().get_container(self.get_wrapped_container().id)
 
     def start(self) -> "DockerContainer":
-        try:
-            self._start()
-            if message := self.log_message_on_container_start():
-                self._logger.info(message)
-            return self
-        except Exception:
-            self._forward_container_logs_to_logger()
-            raise
+        self._set_container_name()
+        self._setup_logger()
+        self._start()
+        self._log_message_on_container_start()
+        return self
 
     def stop(self) -> None:
-        self._forward_container_logs_to_logger()
-        self._stop()
+        if self._container is not None:
+            with contextlib.suppress(Exception):
+                self.get_wrapped_container().remove(force=True, v=True)
+            self._container = None
 
     def restart(self) -> None:
         self.get_wrapped_container().restart()
+
+    def _set_container_name(self) -> None:
+        self._name = self._name or shortuuid.uuid()
+
+    def _setup_logger(self) -> None:
+        self._logger = setup_logger(f"{self.__class__.__name__} ({self._name})")
 
     def _start(self) -> None:
         self._logger.info(f"Pulling image: {self.image}")
@@ -64,21 +94,14 @@ class DockerContainer(TestcontainersDockerContainer, abc.ABC):
             volumes=self.volumes,
             **self._kwargs,
         )
-        self._logger.info(f"Container started: {self._container.short_id}")
+        self._logger.info(f"Container started: {self._name}")
 
-    def _stop(self) -> None:
-        super().stop(force=True, delete_volume=True)
-        self._container = None
+    def _log_message_on_container_start(self) -> None:
+        if message := self.log_message_on_container_start():
+            self._logger.info(message)
 
     def _forward_container_logs_to_logger(self) -> None:
-        try:
-            if container := self.get_wrapped_container():
-                logs = bytes(container.logs(timestamps=True)).decode().split("\n")
-                for log in logs:
-                    self._logger.info(log)
-        except Exception as exc:  # pylint: disable=broad-exception-caught
-            self._logger.exception("Failed to forward container logs to logger", exc_info=exc)
-            return
-
-    def _docker_inspect(self) -> Dict[str, Any]:
-        return self.get_docker_client().get_container(self.get_wrapped_container().id)
+        if container := self.get_wrapped_container():
+            logs = bytes(container.logs(timestamps=True)).decode().split("\n")
+            for log in logs:
+                self._logger.info(log)

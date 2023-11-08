@@ -1,11 +1,12 @@
 import re
+import uuid
 from datetime import datetime
 from typing import Any, AsyncGenerator, Dict, Generator, List, cast
 
 import httpx
 import pytest
 import pytest_asyncio
-from docker.models.images import Image as DockerImage
+from docker.models.images import Image
 from tomodachi.envelope.json_base import JsonBase
 from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
@@ -37,7 +38,7 @@ async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerat
 
 @pytest.fixture(scope="module")
 def service_orders_container(
-    testcontainers_docker_image: DockerImage, moto_container: MotoContainer, _create_topics_and_queues: None
+    testcontainers_docker_image: Image, moto_container: MotoContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
@@ -66,20 +67,21 @@ async def http_client(service_orders_container: TomodachiContainer) -> AsyncGene
 
 @pytest.mark.asyncio()
 async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
-    response = await http_client.get("/order/foo")
+    order_id = str(uuid.uuid4())
+    response = await http_client.get(f"/order/{order_id}")
 
     assert response.status_code == 404
     assert response.json() == {
         "error": "Order not found",
         "_links": {
-            "self": {"href": "/order/foo"},
+            "self": {"href": f"/order/{order_id}"},
         },
     }
 
 
 @pytest.mark.asyncio()
 async def test_create_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTestClient) -> None:
-    customer_id = "4752ce1f-d2a8-4bf1-88e7-ca05b9b3d756"
+    customer_id = str(uuid.uuid4())
     products: List[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]
 
     response = await http_client.post("/orders", json={"customer_id": customer_id, "products": products})

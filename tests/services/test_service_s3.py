@@ -1,10 +1,11 @@
+import uuid
 from datetime import datetime
 from typing import Any, AsyncGenerator, Dict, Generator, cast
 
 import httpx
 import pytest
 import pytest_asyncio
-from docker.models.images import Image as DockerImage
+from docker.models.images import Image
 from tomodachi.envelope.json_base import JsonBase
 from types_aiobotocore_s3 import S3Client
 from types_aiobotocore_sns import SNSClient
@@ -37,7 +38,7 @@ async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerat
 
 @pytest.fixture(scope="module")
 def service_s3_container(
-    testcontainers_docker_image: DockerImage, localstack_container: LocalStackContainer, _create_topics_and_queues: None
+    testcontainers_docker_image: Image, localstack_container: LocalStackContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
@@ -82,15 +83,16 @@ async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
 async def test_upload_and_read_file(
     http_client: httpx.AsyncClient, localstack_s3_client: S3Client, snssqs_tc: SNSSQSTestClient
 ) -> None:
-    await localstack_s3_client.put_object(Bucket="filestore", Key="hello-world.txt", Body=b"Hello, World!")
+    filename = f"{uuid.uuid4()}.txt"
+    await localstack_s3_client.put_object(Bucket="filestore", Key=filename, Body=b"Hello, World!")
 
-    response = await http_client.get("/file/hello-world.txt")
+    response = await http_client.get(f"/file/{filename}")
 
     assert response.status_code == 200
     assert response.json() == {
         "content": "Hello, World!",
         "_links": {
-            "self": {"href": "/file/hello-world.txt"},
+            "self": {"href": f"/file/{filename}"},
         },
     }
 
@@ -101,7 +103,7 @@ async def test_upload_and_read_file(
     event = await probe_until(_file_uploaded_event_emitted)
     assert_datetime_within_range(datetime.fromisoformat(event["event_time"]))
     assert event == {
-        "uri": "s3://filestore/hello-world.txt",
+        "uri": f"s3://filestore/{filename}",
         "eTag": "65a8e27d8879283831b664bd8b7f0ad4",
         "request_id": event["request_id"],
         "event_time": event["event_time"],
