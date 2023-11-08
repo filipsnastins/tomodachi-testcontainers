@@ -61,6 +61,9 @@ pip install tomodachi-testcontainers[postgres]
 
 # SFTPContainer and asyncssh
 pip install tomodachi-testcontainers[sftp]
+
+# Installs python-wiremock SDK
+pip install tomodachi-testcontainers[wiremock]
 ```
 
 ## Quickstart and examples
@@ -513,11 +516,13 @@ DockerHub: <https://hub.docker.com/r/atmoz/sftp>
 ### WireMock
 
 WireMock is a tool for building mock APIs. Create stable development environments,
-isolate yourself from flakey 3rd parties and simulate APIs that don't exist yet.
+isolate yourself from flaky 3rd parties and simulate APIs that don't exist yet.
 
 Repository: <https://github.com/wiremock/wiremock>
 
 DockerHub: <https://hub.docker.com/r/wiremock/wiremock>
+
+Python SDK: <https://github.com/wiremock/python-wiremock>
 
 ### MySQL
 
