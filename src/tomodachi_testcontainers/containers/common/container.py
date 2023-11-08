@@ -1,18 +1,24 @@
 import abc
 import contextlib
+import logging
 import os
 from types import TracebackType
 from typing import Any, Dict, Optional, Type
 
+import shortuuid
 import testcontainers.core.container
+from docker.models.containers import Container
 from testcontainers.core.utils import inside_container
 
 from tomodachi_testcontainers.utils import setup_logger
 
 
 class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
+    _container: Optional[Container]
+    _name: str
+    _logger: logging.Logger
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        self._logger = setup_logger(self.__class__.__name__)
         self.network = os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
         super().__init__(*args, **kwargs, network=self.network)
 
@@ -32,7 +38,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
 
     @abc.abstractmethod
     def log_message_on_container_start(self) -> str:
-        pass  # pragma: no cover
+        """Returns a message that will be logged when the container starts."""
 
     def get_container_host_ip(self) -> str:
         host = self.get_docker_client().host()
@@ -55,6 +61,28 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
         return self.get_docker_client().get_container(self.get_wrapped_container().id)
 
     def start(self) -> "DockerContainer":
+        self._set_container_name()
+        self._setup_logger()
+        self._start()
+        self._log_message_on_container_start()
+        return self
+
+    def stop(self) -> None:
+        if self._container is not None:
+            with contextlib.suppress(Exception):
+                self.get_wrapped_container().remove(force=True, v=True)
+            self._container = None
+
+    def restart(self) -> None:
+        self.get_wrapped_container().restart()
+
+    def _set_container_name(self) -> None:
+        self._name = self._name or shortuuid.uuid()
+
+    def _setup_logger(self) -> None:
+        self._logger = setup_logger(f"{self.__class__.__name__} ({self._name})")
+
+    def _start(self) -> None:
         self._logger.info(f"Pulling image: {self.image}")
         self._container = self.get_docker_client().run(
             image=self.image,
@@ -66,19 +94,11 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
             volumes=self.volumes,
             **self._kwargs,
         )
-        self._logger.info(f"Container started: {self._container.short_id}")
+        self._logger.info(f"Container started: {self._name}")
+
+    def _log_message_on_container_start(self) -> None:
         if message := self.log_message_on_container_start():
             self._logger.info(message)
-        return self
-
-    def stop(self) -> None:
-        if self._container is not None:
-            with contextlib.suppress(Exception):
-                self.get_wrapped_container().remove(force=True, v=True)
-            self._container = None
-
-    def restart(self) -> None:
-        self.get_wrapped_container().restart()
 
     def _forward_container_logs_to_logger(self) -> None:
         if container := self.get_wrapped_container():
