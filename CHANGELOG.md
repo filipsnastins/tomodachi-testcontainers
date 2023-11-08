@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.10.2 (2023-11-08)
+
+### New features
+
+- `DockerContainer`: logs from the container are now prefixed with the container name.
+  This makes it easier to distinguish logs from multiple containers,
+  especially when using multiple containers of the same type.
+
+- `WireMockContainer`: added example of configuring WireMock mappings with [python-wiremock](https://github.com/wiremock/python-wiremock).
+  Install [python-wiremock](https://github.com/wiremock/python-wiremock) as an extra dependency with:
+
+  ```bash
+  pip install tomodachi-testcontainers[wiremock]
+  ```
+
+### Bug fixes
+
+- `DockerContainer`: forward container logs to the Python logger only when the `DockerContainer` used as a context manager.
+  Otherwise, the logger fails in the `DockerContainer.__del__` method, because the logger instance is already closed.
+
 ## 0.10.1 (2023-11-06)
 
 ### Bug fixes
