@@ -30,7 +30,7 @@ async def test_wiremock_configured_from_mapping_files(wiremock_container: WireMo
 
 
 @pytest.mark.asyncio()
-async def test_wiremock_configured_with_sdk(wiremock_container: WireMockContainer) -> None:
+async def test_wiremock_configured_with_python_wiremock_sdk(wiremock_container: WireMockContainer) -> None:
     mapping = wm.Mapping(
         request=wm.MappingRequest(method=wm.HttpMethods.GET, url="/test-wiremock-sdk"),
         response=wm.MappingResponse(status=200, json_body={"message": "Mapping created by WireMock SDK!"}),
