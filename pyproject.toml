@@ -14,6 +14,7 @@ db = ["sqlalchemy"]
 myslq = ["sqlalchemy", "pymysql"]
 postgres = ["sqlalchemy", "psycopg2"]
 sftp = ["asyncssh"]
+wiremock = ["wiremock"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -38,6 +39,7 @@ types-aiobotocore = { extras = [
     "sqs",
     "ssm",
 ], version = "^2.4.2" }
+wiremock = { version = "^2.6.1", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "^1.7.8"
