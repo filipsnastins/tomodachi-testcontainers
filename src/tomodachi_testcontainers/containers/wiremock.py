@@ -1,9 +1,10 @@
 """WireMock testcontainer.
 
 Adaptation of https://github.com/wiremock/python-wiremock
+See WireMock usage examples in https://github.com/wiremock/python-wiremock/tree/master/examples
 """
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
@@ -17,8 +18,8 @@ class WireMockContainer(WebContainer):
 
     def __init__(
         self,
-        mapping_stubs: Path,
-        mapping_files: Path,
+        mapping_stubs: Optional[Path] = None,
+        mapping_files: Optional[Path] = None,
         image: str = "wiremock/wiremock:latest",
         internal_port: int = 8080,
         edge_port: int = 8080,
@@ -46,14 +47,16 @@ class WireMockContainer(WebContainer):
         return self
 
     def copy_mappings_to_container(self) -> None:
-        copy_folder_to_container(
-            self.get_wrapped_container(), host_path=self.mapping_stubs, container_path=self.MAPPINGS_DIR
-        )
+        if self.mapping_stubs is not None:
+            copy_folder_to_container(
+                self.get_wrapped_container(), host_path=self.mapping_stubs, container_path=self.MAPPINGS_DIR
+            )
 
     def copy_mapping_files_to_container(self) -> None:
-        copy_folder_to_container(
-            self.get_wrapped_container(), host_path=self.mapping_files, container_path=self.FILES_DIR
-        )
+        if self.mapping_files is not None:
+            copy_folder_to_container(
+                self.get_wrapped_container(), host_path=self.mapping_files, container_path=self.FILES_DIR
+            )
 
     def reload_mappings(self) -> None:
         self.exec(["curl", "-X", "POST", f"http://localhost:{self.internal_port}/__admin/mappings/reset"])

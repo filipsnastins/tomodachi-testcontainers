@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/test-mapping-files"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "get--test-mapping-files.json"
+  }
+}
