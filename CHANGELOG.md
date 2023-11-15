@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.3 (2023-11-15)
+
+### Bug fixes
+
+- Fixed a typo in `pyproject` extra dependencies - `pip install tomodachi-testcontainers[mysql]`
+
 ## 0.10.2 (2023-11-08)
 
 ### New features
