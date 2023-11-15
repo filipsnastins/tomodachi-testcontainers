@@ -11,7 +11,7 @@ repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
 [tool.poetry.extras]
 db = ["sqlalchemy"]
-myslq = ["sqlalchemy", "pymysql"]
+mysql = ["sqlalchemy", "pymysql"]
 postgres = ["sqlalchemy", "psycopg2"]
 sftp = ["asyncssh"]
 wiremock = ["wiremock"]

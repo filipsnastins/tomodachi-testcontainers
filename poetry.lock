@@ -3426,7 +3426,7 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [extras]
 db = ["sqlalchemy"]
-myslq = ["pymysql", "sqlalchemy"]
+mysql = ["pymysql", "sqlalchemy"]
 postgres = ["psycopg2", "sqlalchemy"]
 sftp = ["asyncssh"]
 wiremock = ["wiremock"]
@@ -3434,4 +3434,4 @@ wiremock = ["wiremock"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "f752f6d3a3fef8072f70601dd03fb5a421820df80765e9f8078767ed8daa2dd2"
+content-hash = "cb3912a12c4c13df9c2393a5b7f8503a10b72a3b31e71ce283d12418389aff95"
