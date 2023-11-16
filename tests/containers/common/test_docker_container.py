@@ -87,6 +87,15 @@ class TestCleanup:
         with pytest.raises(docker.errors.NotFound):
             docker.from_env().containers.get(container_name)
 
+    def test_container_removed_on_failed_healthcheck(self) -> None:
+        container_name = shortuuid.uuid()
+
+        with pytest.raises(RuntimeError), FailingHealthcheckContainer().with_name(container_name):
+            pass
+
+        with pytest.raises(docker.errors.NotFound):
+            docker.from_env().containers.get(container_name)
+
 
 class TestLogging:
     def test_container_logs_are_forwarded_on_context_manager_exit(self, capsys: pytest.CaptureFixture) -> None:
