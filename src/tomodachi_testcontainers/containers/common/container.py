@@ -69,7 +69,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
 
     def stop(self) -> None:
         with contextlib.suppress(Exception):
-            container = cast(Container, self.get_docker_client().client.containers.get(self._name))
+            container = self._container or cast(Container, self.get_docker_client().client.containers.get(self._name))
             container.remove(force=True, v=True)
         self._container = None
 
