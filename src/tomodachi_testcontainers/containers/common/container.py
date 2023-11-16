@@ -77,7 +77,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
         self.get_wrapped_container().restart()
 
     def _set_container_name(self) -> None:
-        self._name = self._name or shortuuid.uuid()
+        self._name = self._name or f"testcontainer-{shortuuid.uuid()}"
 
     def _setup_logger(self) -> None:
         self._logger = setup_logger(f"{self.__class__.__name__} ({self._name})")
