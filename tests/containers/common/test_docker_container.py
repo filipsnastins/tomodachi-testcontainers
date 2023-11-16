@@ -47,7 +47,7 @@ class TestCleanup:
         with pytest.raises(docker.errors.NotFound):
             docker.from_env().containers.get(container_name)
 
-    def test_stop_container_is_idempotent(self) -> None:
+    def test_container_stop_is_idempotent(self) -> None:
         container = WorkingContainer().start()
 
         container.stop()
