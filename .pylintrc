@@ -73,6 +73,7 @@ disable=arguments-differ,
         missing-class-docstring,
         missing-function-docstring,
         missing-module-docstring,
+        no-else-raise,
         no-name-in-module,
         protected-access,
         redefined-builtin,
@@ -81,7 +82,7 @@ disable=arguments-differ,
         too-many-arguments,
         too-many-instance-attributes,
         unspecified-encoding,
-        unused-argument,
+        unused-argument
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
