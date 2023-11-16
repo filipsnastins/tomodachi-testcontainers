@@ -34,6 +34,7 @@ class TestCleanup:
     def test_container_started(self) -> None:
         container_name = shortuuid.uuid()
 
+        # We need to keep a reference to the container object, otherwise it will be garbage collected
         _ = WorkingContainer().with_name(container_name).start()
 
         assert docker.from_env().containers.get(container_name)
