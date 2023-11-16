@@ -32,7 +32,7 @@ class TestCleanup:
     def test_container_started(self) -> None:
         container_name = shortuuid.uuid()
 
-        _ = WorkingContainer().with_command("sleep infinity").with_name(container_name).start()
+        _ = WorkingContainer().with_name(container_name).with_command("sleep infinity").start()
 
         assert docker.from_env().containers.get(container_name)
 
@@ -40,7 +40,7 @@ class TestCleanup:
     async def test_container_removed_on_garbage_collection(self) -> None:
         container_name = shortuuid.uuid()
 
-        WorkingContainer().with_command("sleep infinity").with_name(container_name).start()
+        WorkingContainer().with_name(container_name).with_command("sleep infinity").start()
 
         # Since we don't have a reference (variable) to the container object,
         # it is eventually garbage collected and removed
@@ -52,7 +52,7 @@ class TestCleanup:
 
     def test_container_removed_on_context_manager_exit(self) -> None:
         container_name = shortuuid.uuid()
-        with WorkingContainer().with_command("sleep infinity").with_name(container_name):
+        with WorkingContainer().with_name(container_name).with_command("sleep infinity"):
             pass
 
         with pytest.raises(docker.errors.NotFound):
@@ -60,9 +60,21 @@ class TestCleanup:
 
     def test_container_removed_on_stop(self) -> None:
         container_name = shortuuid.uuid()
-        container = WorkingContainer().with_command("sleep infinity").with_name(container_name).start()
+        container = WorkingContainer().with_name(container_name).with_command("sleep infinity").start()
 
         container.stop()
+
+        with pytest.raises(docker.errors.NotFound):
+            docker.from_env().containers.get(container_name)
+
+    def test_container_removed_on_failed_startup(self) -> None:
+        container_name = shortuuid.uuid()
+
+        with pytest.raises(
+            docker.errors.APIError,
+            match=r'unable to start container process: exec: "foo": executable file not found in \$PATH',
+        ), WorkingContainer().with_name(container_name).with_command("foo"):
+            pass
 
         with pytest.raises(docker.errors.NotFound):
             docker.from_env().containers.get(container_name)
