@@ -619,7 +619,7 @@ pre-commit install
 ```bash
 docker network create tomodachi-testcontainers
 
-pytest
+poetry run test
 poetry run test-ci  # With test coverage
 ```
 

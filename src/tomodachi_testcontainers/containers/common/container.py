@@ -75,8 +75,10 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
         return self
 
     def stop(self) -> None:
-        with contextlib.suppress(Exception):
+        with contextlib.suppress(docker.errors.NotFound):
             container = self._container or cast(Container, self.get_docker_client().client.containers.get(self._name))
+            if os.getenv("TESTCONTAINER_GRACEFUL_STOP"):
+                container.stop(timeout=int(os.getenv("TESTCONTAINER_GRACEFUL_STOP_TIMEOUT", 10)))
             container.remove(force=True, v=True)
         self._container = None
 

@@ -4,6 +4,8 @@ import docker
 import docker.errors
 import pytest
 import shortuuid
+from pytest_mock import MockerFixture
+from testcontainers.core.waiting_utils import wait_for_logs
 
 from tomodachi_testcontainers import DockerContainer
 from tomodachi_testcontainers.containers.common.container import ContainerWithSameNameAlreadyExistsError
@@ -33,6 +35,20 @@ class FailingHealthcheckContainer(DockerContainer):
         raise RuntimeError("Container healthcheck failed")
 
 
+class NginxContainer(DockerContainer):
+    def __init__(self) -> None:
+        super().__init__(image="nginx:alpine-slim")
+        self.with_command("nginx -g 'daemon off;'")
+
+    def log_message_on_container_start(self) -> str:
+        return "Nginx container started"
+
+    def start(self) -> "NginxContainer":
+        super().start()
+        wait_for_logs(self, "start worker process", timeout=10)
+        return self
+
+
 class TestContainerStartupAndCleanup:
     def test_container_started(self) -> None:
         container_name = shortuuid.uuid()
@@ -42,12 +58,32 @@ class TestContainerStartupAndCleanup:
 
         assert docker.from_env().containers.get(container_name)
 
-    def test_container_removed_on_stop(self) -> None:
+    def test_container_force_removed_on_stop(self, monkeypatch: pytest.MonkeyPatch, mocker: MockerFixture) -> None:
+        monkeypatch.delenv("TESTCONTAINER_GRACEFUL_STOP", raising=False)
         container_name = shortuuid.uuid()
         container = WorkingContainer().with_name(container_name).start()
+        stop_container_spy = mocker.spy(container.get_wrapped_container(), "stop")
+        remove_container_spy = mocker.spy(container.get_wrapped_container(), "remove")
 
         container.stop()
 
+        stop_container_spy.assert_not_called()
+        remove_container_spy.assert_called_once_with(force=True, v=True)
+        with pytest.raises(docker.errors.NotFound):
+            docker.from_env().containers.get(container_name)
+
+    def test_container_stopped_gracefully(self, monkeypatch: pytest.MonkeyPatch, mocker: MockerFixture) -> None:
+        monkeypatch.setenv("TESTCONTAINER_GRACEFUL_STOP", "true")
+        monkeypatch.setenv("TESTCONTAINER_GRACEFUL_STOP_TIMEOUT", "2")
+        container_name = shortuuid.uuid()
+        container = WorkingContainer().with_name(container_name).start()
+        stop_container_spy = mocker.spy(container.get_wrapped_container(), "stop")
+        remove_container_spy = mocker.spy(container.get_wrapped_container(), "remove")
+
+        container.stop()
+
+        stop_container_spy.assert_called_once_with(timeout=2)
+        remove_container_spy.assert_called_once_with(force=True, v=True)
         with pytest.raises(docker.errors.NotFound):
             docker.from_env().containers.get(container_name)
 
