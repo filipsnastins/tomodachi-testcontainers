@@ -19,7 +19,7 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture(scope="session")
 def localstack_container() -> Generator[LocalStackContainer, None, None]:
-    image = os.getenv("LOCALSTACK_TESTCONTAINER_IMAGE_ID", "localstack/localstack:2.1")
+    image = os.getenv("LOCALSTACK_TESTCONTAINER_IMAGE_ID", "localstack/localstack:3")
     with LocalStackContainer(image=image, edge_port=get_available_port()) as container:
         yield cast(LocalStackContainer, container)
 

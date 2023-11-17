@@ -10,7 +10,7 @@ from tomodachi_testcontainers.utils import AWSClientConfig
 class LocalStackContainer(WebContainer):
     def __init__(
         self,
-        image: str = "localstack/localstack:2.1",
+        image: str = "localstack/localstack:3",
         internal_port: int = 4566,
         edge_port: int = 4566,
         region_name: Optional[str] = None,

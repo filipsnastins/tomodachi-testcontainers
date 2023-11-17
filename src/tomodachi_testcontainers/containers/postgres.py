@@ -11,7 +11,7 @@ from tomodachi_testcontainers.containers.common import DatabaseContainer
 class PostgreSQLContainer(DatabaseContainer):
     def __init__(
         self,
-        image: str = "postgres:16-bullseye",
+        image: str = "postgres:16",
         internal_port: int = 5432,
         edge_port: int = 5432,
         drivername: Optional[str] = None,

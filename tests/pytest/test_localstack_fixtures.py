@@ -10,7 +10,7 @@ def test_localstack_image_name_set_from_envvar(pytester: pytest.Pytester) -> Non
             import os
 
 
-            os.environ["LOCALSTACK_TESTCONTAINER_IMAGE_ID"] = "localstack/localstack:2.0"
+            os.environ["LOCALSTACK_TESTCONTAINER_IMAGE_ID"] = "localstack/localstack:2.3"
             """
         )
     )
@@ -22,7 +22,7 @@ def test_localstack_image_name_set_from_envvar(pytester: pytest.Pytester) -> Non
 
 
             def test_localstack_image_name_set_from_envvar(localstack_container: LocalStackContainer) -> None:
-                assert localstack_container.image == "localstack/localstack:2.0"
+                assert localstack_container.image == "localstack/localstack:2.3"
             """
         )
     )
