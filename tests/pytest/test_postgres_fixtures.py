@@ -10,7 +10,7 @@ def test_postgres_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
             import os
 
 
-            os.environ["POSTGRES_TESTCONTAINER_IMAGE_ID"] = "postgres:15.4-alpine3.18"
+            os.environ["POSTGRES_TESTCONTAINER_IMAGE_ID"] = "postgres:16-alpine"
             """
         )
     )
@@ -22,7 +22,7 @@ def test_postgres_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
 
 
             def test_postgres_image_name_set_from_envvar(postgres_container: PostgreSQLContainer) -> None:
-                assert postgres_container.image == "postgres:15.4-alpine3.18"
+                assert postgres_container.image == "postgres:16-alpine"
             """
         )
     )
