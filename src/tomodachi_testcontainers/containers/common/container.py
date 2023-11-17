@@ -3,14 +3,19 @@ import contextlib
 import logging
 import os
 from types import TracebackType
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, Optional, Type, cast
 
+import docker.errors
 import shortuuid
 import testcontainers.core.container
 from docker.models.containers import Container
 from testcontainers.core.utils import inside_container
 
 from tomodachi_testcontainers.utils import setup_logger
+
+
+class ContainerWithSameNameAlreadyExistsError(Exception):
+    pass
 
 
 class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
@@ -25,6 +30,8 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     def __enter__(self) -> "DockerContainer":
         try:
             return self.start()
+        except ContainerWithSameNameAlreadyExistsError:
+            raise
         except Exception:
             self._forward_container_logs_to_logger()
             self.stop()
@@ -68,33 +75,40 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
         return self
 
     def stop(self) -> None:
-        if self._container is not None:
-            with contextlib.suppress(Exception):
-                self.get_wrapped_container().remove(force=True, v=True)
-            self._container = None
+        with contextlib.suppress(Exception):
+            container = self._container or cast(Container, self.get_docker_client().client.containers.get(self._name))
+            container.remove(force=True, v=True)
+        self._container = None
 
     def restart(self) -> None:
         self.get_wrapped_container().restart()
 
     def _set_container_name(self) -> None:
-        self._name = self._name or shortuuid.uuid()
+        self._name = self._name or f"testcontainer-{shortuuid.uuid()}"
 
     def _setup_logger(self) -> None:
         self._logger = setup_logger(f"{self.__class__.__name__} ({self._name})")
 
     def _start(self) -> None:
         self._logger.info(f"Pulling image: {self.image}")
-        self._container = self.get_docker_client().run(
-            image=self.image,
-            command=self._command or "",
-            detach=True,
-            environment=self.env,
-            ports=self.ports,
-            name=self._name,
-            volumes=self.volumes,
-            **self._kwargs,
-        )
-        self._logger.info(f"Container started: {self._name}")
+        try:
+            self._container = self.get_docker_client().run(
+                image=self.image,
+                command=self._command or "",
+                detach=True,
+                environment=self.env,
+                ports=self.ports,
+                name=self._name,
+                volumes=self.volumes,
+                **self._kwargs,
+            )
+        except Exception as exc:
+            self._logger.exception("Failed to start the container")
+            if isinstance(exc, docker.errors.APIError) and exc.status_code == 409:  # pylint: disable=no-member
+                raise ContainerWithSameNameAlreadyExistsError(self._name) from exc
+            raise
+        else:
+            self._logger.info(f"Container started: {self._name}")
 
     def _log_message_on_container_start(self) -> None:
         if message := self.log_message_on_container_start():

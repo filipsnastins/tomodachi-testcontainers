@@ -57,7 +57,6 @@ def service_s3_container(
         .with_command("tomodachi run src/s3.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
-    localstack_container.restart()
 
 
 @pytest_asyncio.fixture(scope="module")
