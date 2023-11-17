@@ -5,12 +5,17 @@ import os
 from types import TracebackType
 from typing import Any, Dict, Optional, Type, cast
 
+import docker.errors
 import shortuuid
 import testcontainers.core.container
 from docker.models.containers import Container
 from testcontainers.core.utils import inside_container
 
 from tomodachi_testcontainers.utils import setup_logger
+
+
+class ContainerWithSameNameAlreadyExistsError(Exception):
+    pass
 
 
 class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
@@ -25,6 +30,8 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     def __enter__(self) -> "DockerContainer":
         try:
             return self.start()
+        except ContainerWithSameNameAlreadyExistsError:
+            raise
         except Exception:
             self._forward_container_logs_to_logger()
             self.stop()
@@ -95,8 +102,10 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
                 volumes=self.volumes,
                 **self._kwargs,
             )
-        except Exception:
+        except Exception as exc:
             self._logger.exception("Failed to start the container")
+            if isinstance(exc, docker.errors.APIError) and exc.status_code == 409:
+                raise ContainerWithSameNameAlreadyExistsError(self._name) from exc
             raise
         else:
             self._logger.info(f"Container started: {self._name}")
