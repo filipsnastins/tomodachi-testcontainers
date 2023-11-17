@@ -11,7 +11,7 @@ repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
 [tool.poetry.extras]
 db = ["sqlalchemy"]
-mysql = ["sqlalchemy", "pymysql"]
+mysql = ["sqlalchemy", "pymysql", "cryptography"]
 postgres = ["sqlalchemy", "psycopg2"]
 sftp = ["asyncssh"]
 wiremock = ["wiremock"]
@@ -20,6 +20,7 @@ wiremock = ["wiremock"]
 python = "^3.8"
 aiobotocore = "^2.4.2"
 asyncssh = { version = "^2.13.2", optional = true }
+cryptography = { version = "^41.0.5", optional = true }
 protobuf = "^4.0"
 psycopg2 = { version = "^2.9.9", optional = true }
 pymysql = { version = "^1.1.0", optional = true }
@@ -40,6 +41,7 @@ types-aiobotocore = { extras = [
     "ssm",
 ], version = "^2.4.2" }
 wiremock = { version = "^2.6.1", optional = true }
+
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "^1.7.8"
