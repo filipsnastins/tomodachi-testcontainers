@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.4 (2023-11-17)
+
+### New features
+
+- `LocalStackContainer` - updated base image to `localstack/localstack:3`
+- `PostgreSQLContainer` - updated base image to `postgres:16`
+
+### Bug fixes
+
+- `DockerContainer`: remove container if startup failed instead of leaving it in stopped state.
+- `MySQLContainer`: add `cryptography` as an extra dependency. Required for `pymysql`.
+
 ## 0.10.3 (2023-11-15)
 
 ### Bug fixes
