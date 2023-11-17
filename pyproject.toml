@@ -20,7 +20,7 @@ wiremock = ["wiremock"]
 python = "^3.8"
 aiobotocore = "^2.4.2"
 asyncssh = { version = "^2.13.2", optional = true }
-cryptography = { version = "^41.0.5", optional = true }
+cryptography = { version = "^41.0", optional = true }
 protobuf = "^4.0"
 psycopg2 = { version = "^2.9.9", optional = true }
 pymysql = { version = "^1.1.0", optional = true }

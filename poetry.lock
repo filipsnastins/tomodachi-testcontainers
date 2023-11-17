@@ -496,7 +496,7 @@ files = [
 name = "cffi"
 version = "1.16.0"
 description = "Foreign Function Interface for Python calling C code."
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "cffi-1.16.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:6b3d6606d369fc1da4fd8c357d026317fbb9c9b75d36dc16e90e84c26854b088"},
@@ -762,7 +762,7 @@ toml = ["tomli"]
 name = "cryptography"
 version = "41.0.5"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "cryptography-41.0.5-cp37-abi3-macosx_10_12_universal2.whl", hash = "sha256:da6a0ff8f1016ccc7477e6339e1d50ce5f59b88905585f77193ebd5068f1e797"},
@@ -1795,7 +1795,7 @@ files = [
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 files = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
@@ -3359,7 +3359,7 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [extras]
 db = ["sqlalchemy"]
-mysql = ["pymysql", "sqlalchemy"]
+mysql = ["cryptography", "pymysql", "sqlalchemy"]
 postgres = ["psycopg2", "sqlalchemy"]
 sftp = ["asyncssh"]
 wiremock = ["wiremock"]
@@ -3367,4 +3367,4 @@ wiremock = ["wiremock"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "9d5cf878cb12320c7d07b841beec362ee3cea9a5b7813e25b1082a0e9c8882f3"
+content-hash = "abdf3aabe244e98776a0840d151c165abaac34e8dac6ba502a41e5f6cbb2ca06"

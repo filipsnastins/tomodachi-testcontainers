@@ -104,7 +104,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
             )
         except Exception as exc:
             self._logger.exception("Failed to start the container")
-            if isinstance(exc, docker.errors.APIError) and exc.status_code == 409:
+            if isinstance(exc, docker.errors.APIError) and exc.status_code == 409:  # pylint: disable=no-member
                 raise ContainerWithSameNameAlreadyExistsError(self._name) from exc
             raise
         else:
