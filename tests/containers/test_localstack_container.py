@@ -8,7 +8,7 @@ from tomodachi_testcontainers import LocalStackContainer
 @pytest.mark.asyncio()
 async def test_localstack_container_starts(localstack_container: LocalStackContainer) -> None:
     async with httpx.AsyncClient(base_url=localstack_container.get_external_url()) as client:
-        response = await client.get("_localstack/health")
+        response = await client.get("/_localstack/health")
 
         assert response.status_code == 200
 
