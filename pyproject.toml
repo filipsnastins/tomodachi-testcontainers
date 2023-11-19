@@ -17,7 +17,7 @@ sftp = ["asyncssh"]
 wiremock = ["wiremock"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8,<3.12"
 aiobotocore = "^2.4.2"
 asyncssh = { version = "^2.13.2", optional = true }
 cryptography = { version = "^41.0", optional = true }

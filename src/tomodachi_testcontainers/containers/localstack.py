@@ -22,6 +22,10 @@ class LocalStackContainer(WebContainer):
         self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID") or "testing"  # nosec: B105
         self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY") or "testing"  # nosec: B105
 
+        self.with_env("AWS_DEFAULT_REGION", self.region_name)
+        self.with_env("AWS_ACCESS_KEY_ID", self.aws_access_key_id)
+        self.with_env("AWS_SECRET_ACCESS_KEY", self.aws_secret_access_key)
+
         # Docker is needed for running AWS Lambda container
         self.with_env("LAMBDA_DOCKER_NETWORK", self.network)
         self.with_volume_mapping("/var/run/docker.sock", "/var/run/docker.sock")

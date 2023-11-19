@@ -3,6 +3,7 @@ import contextlib
 from tomodachi_testcontainers.containers.common import DockerContainer, EphemeralDockerImage, WebContainer
 from tomodachi_testcontainers.containers.dynamodb_admin import DynamoDBAdminContainer
 from tomodachi_testcontainers.containers.localstack import LocalStackContainer
+from tomodachi_testcontainers.containers.minio import MinioContainer
 from tomodachi_testcontainers.containers.moto import MotoContainer
 from tomodachi_testcontainers.containers.tomodachi import TomodachiContainer
 from tomodachi_testcontainers.containers.wiremock import WireMockContainer
@@ -25,6 +26,7 @@ __all__ = [
     "DynamoDBAdminContainer",
     "EphemeralDockerImage",
     "LocalStackContainer",
+    "MinioContainer",
     "MotoContainer",
     "MySQLContainer",
     "PostgreSQLContainer",
