@@ -1,5 +1,5 @@
 import os
-from typing import AsyncGenerator, Generator
+from typing import AsyncGenerator, Generator, cast
 
 import pytest
 import pytest_asyncio
@@ -21,7 +21,7 @@ from tomodachi_testcontainers.utils import get_available_port
 def moto_container() -> Generator[MotoContainer, None, None]:
     image = os.getenv("MOTO_TESTCONTAINER_IMAGE_ID", "motoserver/moto:latest")
     with MotoContainer(image=image, edge_port=get_available_port()) as container:
-        yield container
+        yield cast(MotoContainer, container)
 
 
 @pytest.fixture()
