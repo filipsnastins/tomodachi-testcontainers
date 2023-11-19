@@ -34,6 +34,7 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [Moto](#moto)
     - [LocalStack](#localstack)
     - [Minio](#minio)
+    - [DynamoDB Admin](#dynamodb-admin)
     - [SFTP](#sftp)
     - [WireMock](#wiremock)
     - [MySQL](#mysql)
@@ -471,16 +472,17 @@ Feel free to explore how they're implemented and create your own Testcontainers 
 [testcontainers-python](https://github.com/testcontainers/testcontainers-python) provide and easy way
 to create your own Testcontainers.
 
-| Container Name | Default Image               | Fixture                                        |              Image Env Var Override |
-| :------------- | :-------------------------- | :--------------------------------------------- | ----------------------------------: |
-| Tomodachi      | n/a (build from Dockerfile) | n/a                                            |  `TOMODACHI_TESTCONTAINER_IMAGE_ID` |
-| Moto           | `motoserver/moto:latest`    | `moto_container`                               |       `MOTO_TESTCONTAINER_IMAGE_ID` |
-| LocalStack     | `localstack/localstack:3`   | `localstack_container`                         | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
-| Minio          | `minio/minio:latest`        | `minio_container`                              |      `MINIO_TESTCONTAINER_IMAGE_ID` |
-| SFTP           | `atmoz/sftp:latest`         | `sftp_container`                               |       `SFTP_TESTCONTAINER_IMAGE_ID` |
-| WireMock       | `wiremock/wiremock:latest`  | n/a (can't be generalized, copy from examples) |                                 n/a |
-| MySQL          | `mysql:8`                   | `mysql_container`                              |      `MYSQL_TESTCONTAINER_IMAGE_ID` |
-| PostgreSQL     | `postgres:16`               | `postgres_container`                           |   `POSTGRES_TESTCONTAINER_IMAGE_ID` |
+| Container Name | Default Image                     | Fixture                                            |              Image Env Var Override |
+| :------------- | :-------------------------------- | :------------------------------------------------- | ----------------------------------: |
+| Tomodachi      | n/a (build from Dockerfile)       | n/a                                                |  `TOMODACHI_TESTCONTAINER_IMAGE_ID` |
+| Moto           | `motoserver/moto:latest`          | `moto_container`                                   |       `MOTO_TESTCONTAINER_IMAGE_ID` |
+| LocalStack     | `localstack/localstack:3`         | `localstack_container`                             | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
+| Minio          | `minio/minio:latest`              | `minio_container`                                  |      `MINIO_TESTCONTAINER_IMAGE_ID` |
+| DynamoDBAdmin  | `aaronshaf/dynamodb-admin:latest` | n/a (use on demand for exploring data in DynamoDB) |                                 n/a |
+| SFTP           | `atmoz/sftp:latest`               | `sftp_container`                                   |       `SFTP_TESTCONTAINER_IMAGE_ID` |
+| WireMock       | `wiremock/wiremock:latest`        | n/a (can't be generalized, copy from examples)     |                                 n/a |
+| MySQL          | `mysql:8`                         | `mysql_container`                                  |      `MYSQL_TESTCONTAINER_IMAGE_ID` |
+| PostgreSQL     | `postgres:16`                     | `postgres_container`                               |   `POSTGRES_TESTCONTAINER_IMAGE_ID` |
 
 ### Tomodachi
 
@@ -511,6 +513,14 @@ MinIO is a High Performance Object Storage released under GNU Affero General Pub
 Repository: <https://github.com/minio/minio>
 
 DockerHub: <https://hub.docker.com/r/minio/minio>
+
+### DynamoDB Admin
+
+GUI for DynamoDB Local, dynalite, localstack etc. Useful for exploring DynamoDB tables and data during development and testing.
+
+Repository: <https://github.com/aaronshaf/dynamodb-admin>
+
+DockerHub: <https://hub.docker.com/r/aaronshaf/dynamodb-admin>
 
 ### SFTP
 

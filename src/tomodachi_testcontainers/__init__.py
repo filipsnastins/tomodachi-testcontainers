@@ -1,6 +1,7 @@
 import contextlib
 
 from tomodachi_testcontainers.containers.common import DockerContainer, EphemeralDockerImage, WebContainer
+from tomodachi_testcontainers.containers.dynamodb_admin import DynamoDBAdminContainer
 from tomodachi_testcontainers.containers.localstack import LocalStackContainer
 from tomodachi_testcontainers.containers.minio import MinioContainer
 from tomodachi_testcontainers.containers.moto import MotoContainer
@@ -22,6 +23,7 @@ with contextlib.suppress(ImportError):  # 'sftp' extra dependency
 __all__ = [
     "DatabaseContainer",
     "DockerContainer",
+    "DynamoDBAdminContainer",
     "EphemeralDockerImage",
     "LocalStackContainer",
     "MinioContainer",
