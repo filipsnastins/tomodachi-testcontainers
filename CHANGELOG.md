@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.11.0 (2023-11-19)
+
+### New features
+
+- Added Minio container - `MinioContainer`
+- Added DynamoDB Admin container - `DynamoDBAdminContainer`
+
+### Bug fixes
+
+- Set `AWS_DEFAULT_REGION`, `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables on LocalStack container.
+
 ## 0.10.4 (2023-11-17)
 
 ### New features
