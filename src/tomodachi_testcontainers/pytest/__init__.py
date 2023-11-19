@@ -15,6 +15,7 @@ from tomodachi_testcontainers.pytest.fixtures.localstack import (
     localstack_sqs_client,
     localstack_ssm_client,
 )
+from tomodachi_testcontainers.pytest.fixtures.minio import minio_container, minio_s3_client
 from tomodachi_testcontainers.pytest.fixtures.moto import (
     _reset_moto_container_on_teardown,
     moto_container,
@@ -53,6 +54,8 @@ __all__ = [
     "localstack_snssqs_tc",
     "localstack_sqs_client",
     "localstack_ssm_client",
+    "minio_container",
+    "minio_s3_client",
     "moto_container",
     "moto_dynamodb_client",
     "moto_iam_client",

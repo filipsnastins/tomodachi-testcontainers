@@ -33,6 +33,7 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [Tomodachi](#tomodachi)
     - [Moto](#moto)
     - [LocalStack](#localstack)
+    - [Minio](#minio)
     - [SFTP](#sftp)
     - [WireMock](#wiremock)
     - [MySQL](#mysql)
@@ -475,6 +476,7 @@ to create your own Testcontainers.
 | Tomodachi      | n/a (build from Dockerfile) | n/a                                            |  `TOMODACHI_TESTCONTAINER_IMAGE_ID` |
 | Moto           | `motoserver/moto:latest`    | `moto_container`                               |       `MOTO_TESTCONTAINER_IMAGE_ID` |
 | LocalStack     | `localstack/localstack:3`   | `localstack_container`                         | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
+| Minio          | `minio/minio:latest`        | `minio_container`                              |      `MINIO_TESTCONTAINER_IMAGE_ID` |
 | SFTP           | `atmoz/sftp:latest`         | `sftp_container`                               |       `SFTP_TESTCONTAINER_IMAGE_ID` |
 | WireMock       | `wiremock/wiremock:latest`  | n/a (can't be generalized, copy from examples) |                                 n/a |
 | MySQL          | `mysql:8`                   | `mysql_container`                              |      `MYSQL_TESTCONTAINER_IMAGE_ID` |
@@ -501,6 +503,14 @@ LocalStack provides an easy-to-use test/mocking framework for developing cloud a
 Repository: <https://github.com/localstack/localstack>
 
 DockerHub: <https://hub.docker.com/r/localstack/localstack>
+
+### Minio
+
+MinIO is a High Performance Object Storage released under GNU Affero General Public License v3.0. It is API compatible with Amazon S3 cloud storage service.
+
+Repository: <https://github.com/minio/minio>
+
+DockerHub: <https://hub.docker.com/r/minio/minio>
 
 ### SFTP
 
