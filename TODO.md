@@ -6,7 +6,7 @@
 
 ## Test clients
 
-- [ ] Experiment with WireMock test client with [python-wiremock](https://github.com/wiremock/python-wiremock) SDK
+- [x] Experiment with WireMock test client with [python-wiremock](https://github.com/wiremock/python-wiremock) SDK
 
 ## New testcontainers
 
@@ -15,6 +15,8 @@
   - [ ] <https://vcrpy.readthedocs.io/en/latest/>
   - [ ] <https://www.mbtest.org/>
   - [x] <https://wiremock.org/docs/standalone/docker/>
+- [x] DynamoDB Admin container for debugging
+- [x] Minio container for S3
 
 ## New test approaches
 
@@ -27,11 +29,18 @@
 
 ## Misc
 
-...
+- [ ] Python 3.12
+- [ ] `DockerContainer`: envvar to gracefully stop containers before removing
+  - Wont really work. Try `before_stop_hook` method instead
+- [ ] Export test coverage from `TomodachiContainer`
+- [ ] Document hooking up Python debugger to `TomodachiContainer`
 
 ## Docs
 
-- [ ] Use cases, patterns and good practices
+- [ ] Rewrite docs about end-to-end tests.
+      Testcontainer tests described in this repository are not integrated end-to-end tests,
+      but rather isolated, individual microservice integration test.
+- [ ] Use cases, patterns and good practices (examples with C4 diagrams)
 
 ## Testing
 
