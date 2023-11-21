@@ -7,6 +7,19 @@
       "request": "test",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
+    },
+    {
+      "name": "Python: attach to debugger (examples/src)",
+      "type": "python",
+      "request": "attach",
+      "port": 5678,
+      "host": "localhost",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/examples",
+          "remoteRoot": "/app"
+        }
+      ]
     }
   ]
 }

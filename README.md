@@ -42,6 +42,7 @@ It facilitates the use of Docker containers for functional, integration, and end
   - [Configuration with environment variables](#configuration-with-environment-variables)
   - [Change default Docker network](#change-default-docker-network)
   - [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
+  - [Debugging Testcontainers](#debugging-testcontainers)
   - [Resources and acknowledgements](#resources-and-acknowledgements)
   - [Development](#development)
 
@@ -597,6 +598,14 @@ after the test run, and there's nothing else to inspect apart from logs.
 [tool.pytest.ini_options]
 log_level = "INFO"
 ```
+
+## Debugging Testcontainers
+
+TODO
+
+- [ ] Look at logs - they should tell you everything
+- [ ] Breakpoint in the test, inspect all running containers
+- [ ] Last resort - attaching a debugger
 
 ## Resources and acknowledgements
 
