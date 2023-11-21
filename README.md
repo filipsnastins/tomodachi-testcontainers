@@ -43,6 +43,7 @@ It facilitates the use of Docker containers for functional, integration, and end
   - [Change default Docker network](#change-default-docker-network)
   - [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
   - [Debugging Testcontainers](#debugging-testcontainers)
+  - [Troubleshooting common issues](#troubleshooting-common-issues)
   - [Resources and acknowledgements](#resources-and-acknowledgements)
   - [Development](#development)
 
@@ -616,11 +617,38 @@ e.g. `pytest -rA`. It will show extra summary for A(ll) tests, including capture
 
 ## Debugging Testcontainers
 
-TODO
-
+- [ ] Container doesn't start - logs will output error message
 - [ ] Look at logs - they should tell you everything
 - [ ] Breakpoint in the test, inspect all running containers
 - [ ] Last resort - attaching a debugger
+
+## Troubleshooting common issues
+
+- Error on running tests with pytest: `ScopeMismatch: You tried to access the function scoped fixture
+event_loop with a session scoped request object, involved factories`
+
+  - **Problem:** the error occurs when you're using asynchronous fixtures with the scope higher
+    than `function` e.g. fixture `moto_container` has `session` scope.
+    The default `event_loop` fixture provided by `pytest-asyncio` is a function-scoped fixture,
+    so it can't be used with session-scoped fixtures.
+
+  - **Solution:** override the `event_loop` fixture with a session-scoped fixture
+    by placing it to your project's default `conftest.py`.
+    See [tests/conftest.py](tests/conftest.py) for an example:
+
+    ```python
+    import asyncio
+    import contextlib
+    from typing import Iterator
+
+    import pytest
+
+
+    @pytest.fixture(scope="session")
+    def event_loop() -> Iterator[asyncio.AbstractEventLoop]:
+        with contextlib.closing(asyncio.new_event_loop()) as loop:
+            yield loop
+    ```
 
 ## Resources and acknowledgements
 
