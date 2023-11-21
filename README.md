@@ -599,6 +599,21 @@ after the test run, and there's nothing else to inspect apart from logs.
 log_level = "INFO"
 ```
 
+By default, `pytest` won't show any output if all tests pass. To see the logs in the console, run `pytest` with `-rA` flag,
+e.g. `pytest -rA`. It will show extra summary for A(ll) tests, including captured logs.
+
+```bash
+-r chars              Show extra test summary info as specified by chars: (f)ailed, (E)rror, (s)kipped, (x)failed, (X)passed, (p)assed, (P)assed with output, (a)ll except passed (p/P), or (A)ll. (w)arnings are enabled by default (see --disable-warnings), 'N' can be used to reset the list. (default: 'fE').
+```
+
+- `pytest tests/services/test_service_healthcheck.py -rA`
+
+![Testcontainers logs - test passed](docs/images/pytest-with-testcontainers-logs-passed-test.png)
+
+- `pytest tests/services/test_service_s3.py -k test_upload_and_read_file`
+
+![Testcontainer logs - test failed](docs/images/pytest-with-testcontainers-logs-failed-test.png)
+
 ## Debugging Testcontainers
 
 TODO
