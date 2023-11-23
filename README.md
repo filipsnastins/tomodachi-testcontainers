@@ -1,5 +1,13 @@
 # tomodachi-testcontainers
 
+![Build Status](https://github.com/filipsnastins/tomodachi-testcontainers/actions/workflows/main/badge.svg)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffilipsnastins%2Ftomodachi-testcontainers.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffilipsnastins%2Ftomodachi-testcontainers?ref=badge_shield&issueType=license)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=filipsnastins_tomodachi-testcontainers&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=filipsnastins_tomodachi-testcontainers)
+[![CodeScene Code Health](https://codescene.io/projects/46808/status-badges/code-health)](https://codescene.io/projects/46808)
+[![CodeScene System Mastery](https://codescene.io/projects/46808/status-badges/system-mastery)](https://codescene.io/projects/46808)
+[![codecov](https://codecov.io/gh/filipsnastins/tomodachi-testcontainers/graph/badge.svg?token=ZPWNYCRTV0)](https://codecov.io/gh/filipsnastins/tomodachi-testcontainers)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d3002235e028a3f713c9/maintainability)](https://codeclimate.com/github/filipsnastins/tomodachi-testcontainers/maintainability)
+
 The library provides [Testcontainers](src/tomodachi_testcontainers/containers/),
 [Pytest fixtures](src/tomodachi_testcontainers/pytest/),
 and [test clients](src/tomodachi_testcontainers/clients/) for working with Testcontainers,
@@ -625,7 +633,7 @@ e.g. `pytest -rA`. It will show extra summary for A(ll) tests, including capture
 ## Troubleshooting common issues
 
 - Error on running tests with pytest: `ScopeMismatch: You tried to access the function scoped fixture
-event_loop with a session scoped request object, involved factories`
+event_loop with a session scoped request object, involved factories`.
 
   - **Problem:** the error occurs when you're using asynchronous fixtures with the scope higher
     than `function` e.g. fixture `moto_container` has `session` scope.
