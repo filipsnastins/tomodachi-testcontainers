@@ -36,6 +36,7 @@ def test() -> None:
 
 
 def test_ci() -> None:
-    check_call(["coverage", "run", "--branch", "-m", "pytest", "-v", "--junitxml=build/tests.xml"])
+    check_call(["coverage", "run", "-m", "pytest", "-v", "--junitxml=build/tests.xml"])
+    check_call(["coverage", "combine", "--append"])
     check_call(["coverage", "xml", "-o", "build/coverage.xml"])
     check_call(["coverage", "html", "-d", "build/htmlcov"])
