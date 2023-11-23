@@ -1,6 +1,6 @@
 # tomodachi-testcontainers
 
-![Build Status](https://github.com/filipsnastins/tomodachi-testcontainers/actions/workflows/main/badge.svg)
+![Build Status](https://github.com/filipsnastins/tomodachi-testcontainers/actions/workflows/main.yml/badge.svg)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffilipsnastins%2Ftomodachi-testcontainers.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffilipsnastins%2Ftomodachi-testcontainers?ref=badge_shield&issueType=license)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=filipsnastins_tomodachi-testcontainers&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=filipsnastins_tomodachi-testcontainers)
 [![CodeScene Code Health](https://codescene.io/projects/46808/status-badges/code-health)](https://codescene.io/projects/46808)
