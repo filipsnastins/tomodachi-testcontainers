@@ -24,8 +24,9 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     _logger: logging.Logger
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        self.network = os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
+        self._set_container_network()
         super().__init__(*args, **kwargs, network=self.network)
+        self._set_default_container_name()
 
     def __enter__(self) -> "DockerContainer":
         try:
@@ -96,7 +97,6 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
         return self.get_docker_client().get_container(self.get_wrapped_container().id)
 
     def start(self) -> "DockerContainer":
-        self._set_container_name()
         self._setup_logger()
         self._start()
         self._log_message_on_container_start()
@@ -111,8 +111,11 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     def restart(self) -> None:
         self.get_wrapped_container().restart()
 
-    def _set_container_name(self) -> None:
-        self._name = self._name or f"testcontainer-{shortuuid.uuid()}"
+    def _set_container_network(self) -> None:
+        self.network = os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
+
+    def _set_default_container_name(self) -> None:
+        self._name = shortuuid.uuid()
 
     def _setup_logger(self) -> None:
         self._logger = setup_logger(f"{self.__class__.__name__} ({self._name})")

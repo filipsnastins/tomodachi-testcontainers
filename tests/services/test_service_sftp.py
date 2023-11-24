@@ -21,13 +21,14 @@ def service_sftp_container(
             image=str(testcontainers_docker_image.id),
             edge_port=get_available_port(),
             http_healthcheck_path="/health",
+            export_coverage=True,
         )
         .with_env("SFTP_HOST", sftp_container.get_internal_conn_details().host)
         .with_env("SFTP_PORT", str(sftp_container.get_internal_conn_details().port))
         .with_env("SFTP_USERNAME", "userssh")
         .with_env("SFTP_PRIVATE_KEY", sftp_container.authorized_private_key.export_private_key().decode())
         .with_env("SFTP_KNOWN_HOST", sftp_container.get_internal_known_host())
-        .with_command("tomodachi run src/sftp.py --production")
+        .with_command("bash -c 'pip install pytest-cov && coverage run -m tomodachi run src/sftp.py --production'")
     ) as container:
         yield cast(TomodachiContainer, container)
 

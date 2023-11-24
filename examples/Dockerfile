@@ -1,8 +1,7 @@
 FROM python:3.11.4-slim-buster AS python-base
 WORKDIR /app
 ARG VIRTUAL_ENV=/opt/venv
-RUN addgroup --gid 1001 app && adduser --uid 1000 --gid 1001 app && \
-  chown -R app:app /app
+RUN addgroup --gid 1001 app && adduser --uid 1000 --gid 1001 app
 ENV VIRTUAL_ENV=$VIRTUAL_ENV \
   PATH=$VIRTUAL_ENV/bin:$PATH \
   PYTHONDONTWRITEBYTECODE=1 \
