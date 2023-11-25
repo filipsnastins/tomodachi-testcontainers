@@ -147,6 +147,6 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
 
     def _forward_container_logs_to_logger(self) -> None:
         if container := self.get_wrapped_container():
-            logs = bytes(container.logs(timestamps=True)).decode().split("\n")
+            logs = bytes(container.logs(timestamps=False)).decode().split("\n")
             for log in logs:
                 self._logger.info(log)
