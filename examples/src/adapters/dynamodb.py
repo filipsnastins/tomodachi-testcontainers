@@ -8,10 +8,7 @@ logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 
 
 def get_table_name() -> str:
-    table_name = os.getenv("DYNAMODB_TABLE_NAME")
-    if not table_name:
-        raise ValueError("DYNAMODB_TABLE_NAME environment variable is not set")
-    return table_name
+    return os.environ["DYNAMODB_TABLE_NAME"]
 
 
 def get_dynamodb_client() -> DynamoDBClient:
@@ -26,6 +23,7 @@ def get_dynamodb_client() -> DynamoDBClient:
 
 async def create_dynamodb_table() -> None:
     table_name = get_table_name()
+    log = logger.bind(table_name=table_name)
     async with get_dynamodb_client() as client:
         try:
             await client.create_table(
@@ -49,6 +47,6 @@ async def create_dynamodb_table() -> None:
                 },
             )
         except client.exceptions.ResourceInUseException:
-            logger.info("dynamodb_table_already_exists", table_name=table_name)
+            log.info("dynamodb_table_already_exists")
         else:
-            logger.info("dynamodb_table_created", table_name=table_name)
+            log.info("dynamodb_table_created")

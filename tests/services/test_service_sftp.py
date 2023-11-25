@@ -21,7 +21,6 @@ def service_sftp_container(
             image=str(testcontainers_docker_image.id),
             edge_port=get_available_port(),
             http_healthcheck_path="/health",
-            export_coverage=True,
         )
         .with_env("SFTP_HOST", sftp_container.get_internal_conn_details().host)
         .with_env("SFTP_PORT", str(sftp_container.get_internal_conn_details().port))

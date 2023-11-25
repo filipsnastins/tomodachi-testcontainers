@@ -9,17 +9,11 @@ logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 
 
 def get_bucket_name() -> str:
-    bucket_name = os.getenv("S3_BUCKET_NAME")
-    if not bucket_name:
-        raise ValueError("S3_BUCKET_NAME environment variable is not set")
-    return bucket_name
+    return os.environ["S3_BUCKET_NAME"]
 
 
 def get_s3_notification_topic_name() -> str:
-    topic_name = os.getenv("S3_NOTIFICATION_TOPIC_NAME")
-    if not topic_name:
-        raise ValueError("S3_NOTIFICATION_TOPIC_NAME environment variable is not set")
-    return topic_name
+    return os.environ["S3_NOTIFICATION_TOPIC_NAME"]
 
 
 def get_s3_client() -> S3Client:
@@ -41,7 +35,9 @@ async def create_s3_bucket() -> None:
             await s3_client.create_bucket(Bucket=bucket_name)
             log.info("s3_bucket_created")
 
-            notification_topic = await sns_client.create_topic(Name=notification_queue_name)
+            notification_topic = await sns_client.create_topic(
+                Name=notification_queue_name
+            )
             await s3_client.put_bucket_notification_configuration(
                 Bucket=bucket_name,
                 NotificationConfiguration={
@@ -53,6 +49,12 @@ async def create_s3_bucket() -> None:
                     ],
                 },
             )
-            log.info("s3_bucket_notification_set", notification_topic_arn=notification_topic["TopicArn"])
-        except (s3_client.exceptions.BucketAlreadyExists, s3_client.exceptions.BucketAlreadyOwnedByYou):
+            log.info(
+                "s3_bucket_notification_set",
+                notification_topic_arn=notification_topic["TopicArn"],
+            )
+        except (
+            s3_client.exceptions.BucketAlreadyExists,
+            s3_client.exceptions.BucketAlreadyOwnedByYou,
+        ):
             log.info("s3_bucket_already_exists")

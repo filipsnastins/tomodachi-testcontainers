@@ -27,7 +27,7 @@ class TomodachiContainer(WebContainer):
             http_healthcheck_path=http_healthcheck_path,
             **kwargs,
         )
-        self._export_coverage = export_coverage
+        self._export_coverage = export_coverage or bool(os.getenv("TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE"))
         if self._export_coverage:
             self._configure_coverage_export()
 

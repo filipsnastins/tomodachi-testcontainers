@@ -45,7 +45,6 @@ def service_s3_container(
             image=str(testcontainers_docker_image.id),
             edge_port=get_available_port(),
             http_healthcheck_path="/health",
-            export_coverage=True,
         )
         .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")

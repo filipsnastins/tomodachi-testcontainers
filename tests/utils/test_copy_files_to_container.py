@@ -22,7 +22,7 @@ def alpine_container() -> Generator[AlpineContainer, None, None]:
 
 
 def test_copy_file_to_container(alpine_container: AlpineContainer) -> None:
-    host_path = Path(__file__).parent / "test-copy-folder-to-container" / "file-1.txt"
+    host_path = Path(__file__).parent / "test-files" / "file-1.txt"
     alpine_container.exec("mkdir -p /tmp/dir-1")
     container_path = Path("/tmp/dir-1")
 
@@ -40,7 +40,7 @@ def test_copy_file_to_container(alpine_container: AlpineContainer) -> None:
 
 
 def test_copy_folder_to_container(alpine_container: AlpineContainer) -> None:
-    host_path = Path(__file__).parent / "test-copy-folder-to-container"
+    host_path = Path(__file__).parent / "test-files"
     alpine_container.exec("mkdir -p /tmp/dir-2")
     container_path = Path("/tmp/dir-2")
 

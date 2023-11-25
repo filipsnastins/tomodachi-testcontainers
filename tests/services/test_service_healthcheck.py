@@ -14,7 +14,6 @@ def service_healthcheck_container(testcontainers_docker_image: Image) -> Generat
     with TomodachiContainer(
         image=str(testcontainers_docker_image.id),
         edge_port=get_available_port(),
-        export_coverage=True,
     ).with_command(
         "bash -c 'pip install pytest-cov && coverage run -m tomodachi run src/healthcheck.py --production'"
     ) as container:
