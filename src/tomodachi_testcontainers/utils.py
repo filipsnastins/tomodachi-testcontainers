@@ -28,16 +28,18 @@ def get_docker_image(image_id: str, docker_client_kwargs: Optional[Dict] = None)
         return cast(Image, client.client.images.pull(image_id))
 
 
-# TODO support copying standalone files too
-def copy_folder_to_container(container: Container, host_path: Path, container_path: Path) -> None:
-    """Copies a folder from the host to the container."""
+def copy_to_container(container: Container, host_path: Path, container_path: Path) -> None:
+    """Copies a folder or a file from the host to the container."""
     tar_stream = io.BytesIO()
     with tarfile.open(fileobj=tar_stream, mode="w") as tar:
-        for root, _, files in os.walk(host_path):
-            for file in files:
-                file_path = Path(root) / file
-                arcname = os.path.relpath(file_path, host_path)
-                tar.add(file_path, arcname=arcname)
+        if host_path.is_dir():
+            for root, _, files in os.walk(host_path):
+                for file in files:
+                    file_path = Path(root) / file
+                    arcname = os.path.relpath(file_path, host_path)
+                    tar.add(file_path, arcname=arcname)
+        else:
+            tar.add(host_path, arcname=host_path.name)
     tar_stream.seek(0)
     container.put_archive(path=container_path, data=tar_stream)
 

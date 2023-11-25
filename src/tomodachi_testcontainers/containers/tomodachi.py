@@ -49,15 +49,15 @@ class TomodachiContainer(WebContainer):
 
     def stop(self) -> None:
         if self._export_coverage:
-            self._copy_coverage()
+            with contextlib.suppress(Exception):
+                self._stop_container_and_copy_coverage_report()
         super().stop()
 
     def _configure_coverage_export(self) -> None:
         self._coverage_file_path = f"/tmp/.coverage.testcontainer.{shortuuid.uuid()}"
         self.with_env("COVERAGE_FILE", self._coverage_file_path)
 
-    def _copy_coverage(self) -> None:
-        with contextlib.suppress(Exception):
-            container = self.get_wrapped_container()
-            container.stop()
-            copy_from_container(container, container_path=Path(self._coverage_file_path), host_path=Path(os.getcwd()))
+    def _stop_container_and_copy_coverage_report(self) -> None:
+        container = self.get_wrapped_container()
+        container.stop()
+        copy_from_container(container, container_path=Path(self._coverage_file_path), host_path=Path(os.getcwd()))
