@@ -32,11 +32,11 @@ def test_copy_file_to_container(alpine_container: AlpineContainer) -> None:
 
     code, output = alpine_container.exec("find /tmp/dir-1 -type f")
     assert code == 0
-    assert set(output.decode("utf-8").strip().split("\n")) == {"/tmp/dir-1/file-1.txt"}
+    assert set(bytes(output).decode("utf-8").strip().split("\n")) == {"/tmp/dir-1/file-1.txt"}
 
     code, output = alpine_container.exec("cat /tmp/dir-1/file-1.txt")
     assert code == 0
-    assert output.decode("utf-8") == "file 1\n"
+    assert bytes(output).decode("utf-8") == "file 1\n"
 
 
 def test_copy_folder_to_container(alpine_container: AlpineContainer) -> None:
@@ -50,12 +50,15 @@ def test_copy_folder_to_container(alpine_container: AlpineContainer) -> None:
 
     code, output = alpine_container.exec("find /tmp/dir-2 -type f")
     assert code == 0
-    assert set(output.decode("utf-8").strip().split("\n")) == {"/tmp/dir-2/nested/file-2.txt", "/tmp/dir-2/file-1.txt"}
+    assert set(bytes(output).decode("utf-8").strip().split("\n")) == {
+        "/tmp/dir-2/nested/file-2.txt",
+        "/tmp/dir-2/file-1.txt",
+    }
 
     code, output = alpine_container.exec("cat /tmp/dir-2/file-1.txt")
     assert code == 0
-    assert output.decode("utf-8") == "file 1\n"
+    assert bytes(output).decode("utf-8") == "file 1\n"
 
     code, output = alpine_container.exec("cat /tmp/dir-2/nested/file-2.txt")
     assert code == 0
-    assert output.decode("utf-8") == "file 2\n"
+    assert bytes(output).decode("utf-8") == "file 2\n"
