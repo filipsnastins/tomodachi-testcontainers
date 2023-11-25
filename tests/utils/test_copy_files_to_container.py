@@ -4,7 +4,7 @@ from typing import Generator, cast
 import pytest
 
 from tomodachi_testcontainers import DockerContainer
-from tomodachi_testcontainers.utils import copy_to_container
+from tomodachi_testcontainers.utils import copy_files_to_container
 
 
 class AlpineContainer(DockerContainer):
@@ -26,7 +26,9 @@ def test_copy_file_to_container(alpine_container: AlpineContainer) -> None:
     alpine_container.exec("mkdir -p /tmp/dir-1")
     container_path = Path("/tmp/dir-1")
 
-    copy_to_container(alpine_container.get_wrapped_container(), host_path=host_path, container_path=container_path)
+    copy_files_to_container(
+        alpine_container.get_wrapped_container(), host_path=host_path, container_path=container_path
+    )
 
     code, output = alpine_container.exec("find /tmp/dir-1 -type f")
     assert code == 0
@@ -42,7 +44,9 @@ def test_copy_folder_to_container(alpine_container: AlpineContainer) -> None:
     alpine_container.exec("mkdir -p /tmp/dir-2")
     container_path = Path("/tmp/dir-2")
 
-    copy_to_container(alpine_container.get_wrapped_container(), host_path=host_path, container_path=container_path)
+    copy_files_to_container(
+        alpine_container.get_wrapped_container(), host_path=host_path, container_path=container_path
+    )
 
     code, output = alpine_container.exec("find /tmp/dir-2 -type f")
     assert code == 0

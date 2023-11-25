@@ -7,7 +7,7 @@ import shortuuid
 from testcontainers.core.waiting_utils import wait_for_logs
 
 from tomodachi_testcontainers.containers.common import WebContainer
-from tomodachi_testcontainers.utils import copy_from_container
+from tomodachi_testcontainers.utils import copy_files_from_container
 
 
 class TomodachiContainer(WebContainer):
@@ -60,4 +60,4 @@ class TomodachiContainer(WebContainer):
     def _stop_container_and_copy_coverage_report(self) -> None:
         container = self.get_wrapped_container()
         container.stop()
-        copy_from_container(container, container_path=Path(self._coverage_file_path), host_path=Path(os.getcwd()))
+        copy_files_from_container(container, container_path=Path(self._coverage_file_path), host_path=Path(os.getcwd()))

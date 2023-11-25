@@ -28,7 +28,7 @@ def get_docker_image(image_id: str, docker_client_kwargs: Optional[Dict] = None)
         return cast(Image, client.client.images.pull(image_id))
 
 
-def copy_to_container(container: Container, host_path: Path, container_path: Path) -> None:
+def copy_files_to_container(container: Container, host_path: Path, container_path: Path) -> None:
     """Copies a folder or a file from the host to the container."""
     tar_stream = io.BytesIO()
     with tarfile.open(fileobj=tar_stream, mode="w") as tar:
@@ -44,7 +44,7 @@ def copy_to_container(container: Container, host_path: Path, container_path: Pat
     container.put_archive(path=container_path, data=tar_stream)
 
 
-def copy_from_container(container: Container, container_path: Path, host_path: Path) -> None:
+def copy_files_from_container(container: Container, container_path: Path, host_path: Path) -> None:
     """Copies a folder or a file from the container to the host."""
     tar_stream, _ = container.get_archive(container_path)
     with tarfile.open(fileobj=io.BytesIO(b"".join(tar_stream))) as tar:
