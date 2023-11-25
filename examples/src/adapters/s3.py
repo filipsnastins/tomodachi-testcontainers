@@ -35,9 +35,7 @@ async def create_s3_bucket() -> None:
             await s3_client.create_bucket(Bucket=bucket_name)
             log.info("s3_bucket_created")
 
-            notification_topic = await sns_client.create_topic(
-                Name=notification_queue_name
-            )
+            notification_topic = await sns_client.create_topic(Name=notification_queue_name)
             await s3_client.put_bucket_notification_configuration(
                 Bucket=bucket_name,
                 NotificationConfiguration={
