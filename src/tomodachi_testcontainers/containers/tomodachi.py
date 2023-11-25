@@ -54,7 +54,7 @@ class TomodachiContainer(WebContainer):
         super().stop()
 
     def _configure_coverage_export(self) -> None:
-        self._coverage_file_path = f"/tmp/.coverage.testcontainer.{shortuuid.uuid()}"
+        self._coverage_file_path = f"/tmp/.coverage.testcontainer.{shortuuid.uuid()}"  # nosec: B108
         self.with_env("COVERAGE_FILE", self._coverage_file_path)
 
     def _stop_container_and_copy_coverage_report(self) -> None:
