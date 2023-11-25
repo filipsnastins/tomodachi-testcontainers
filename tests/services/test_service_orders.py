@@ -122,7 +122,7 @@ async def test_create_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTes
     assert event == {
         "event_id": event["event_id"],
         "order_id": order_id,
-        "customer_id": "foo",
+        "customer_id": customer_id,
         "products": products,
         "created_at": event["created_at"],
     }
