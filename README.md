@@ -630,31 +630,31 @@ e.g. `pytest -rA`. It will show extra summary for A(ll) tests, including capture
 
 ## Debugging Testcontainers
 
-Debugging failing Testcontainer tests can be tricky. The code is running in separate ephemeral Docker containers,
-which are immediately deleted after the test run finishes, leaving behind only logs.
+Debugging failing Testcontainer tests can be tricky. The code is running in separate ephemeral Docker containers
+that are immediately deleted after the test run finishes.
 
-Bellow are some debugging/exploratory testing tips that might help you to debug failing Testcontainer tests.
+Bellow are some debugging and exploratory testing tips that will help you to debug failing Testcontainer tests.
 
 ### 1. Inspect container logs
 
 Logs are the main source of information when debugging Testcontainers.
-Generally, you should be able to pinpoint the problem by looking at the container logs,
+Generally, you should be able to pinpoint any problem by looking at the container logs,
 in the same way as you'd investigate a problem in a production environment.
-If you find it difficult to understand how the system is behaving by looking at the logs,
-it might be a sign that the logging is insufficient and needs to be improved.
+If you find it difficult to understand how the system is behaving from the logs,
+it's be a sign that the logging is insufficient and needs to be improved.
 
 By default, `tomodachi_testcontainers` will forward all container logs to Python's standard logger
-as `INFO` logs when the containers stop. See [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
+as `INFO` logs when containers stop. See [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
 section for more information and examples of how to configure Pytest to show the logs.
 
-Running Testcontainer tests is a great way to do some exploratory testing of the system,
+Running Testcontainer tests is a great way to do exploratory testing of the system,
 check out if log messages are meaningful and it's easy to understand what the system is doing.
 
 ### 2. Pause a test with a breakpoint and inspect running containers
 
 Testcontainers are ephemeral - they're removed immediately after the test run finishes.
 Sometimes it's useful to inspect the state of running containers,
-e.g. manually check the contents of a database, S3 bucket, message queue or various logs at a certain point in time.
+e.g. manually check the contents of a database, S3 buckets, message queues or various logs at a certain point in time.
 
 To do that, pause the execution of a test with a breakpoint and manually inspect running containers:
 
@@ -678,7 +678,7 @@ async def test_healthcheck_passes(http_client: httpx.AsyncClient) -> None:
 ### 3. Use helper containers and tools for exploratory testing
 
 When logs are insufficient to understand what's going on, it's useful to use other helper containers and tools
-for inspecting container state, e.g. what's in the database, S3 bucket, message queue, etc.
+for inspecting container state, e.g. what's in the database, S3 buckets, message queues, etc.
 
 [Pause a test with a breakpoint](#2-pause-a-test-with-a-breakpoint-and-inspect-running-containers)
 and inspect running containers with other tools, for example:
