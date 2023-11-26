@@ -198,5 +198,6 @@ source = ["src/", "tests/"]
 source = ["examples/", "src/", "/app"]
 
 [tool.coverage.report]
+skip_covered = true
 show_missing = true
 include_namespace_packages = true
