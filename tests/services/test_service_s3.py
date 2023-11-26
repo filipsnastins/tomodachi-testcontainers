@@ -54,7 +54,7 @@ def service_s3_container(
         .with_env("AWS_S3_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("S3_BUCKET_NAME", "filestore")
         .with_env("S3_NOTIFICATION_TOPIC_NAME", "s3--upload-notification")
-        .with_command("bash -c 'pip install pytest-cov && coverage run -m tomodachi run src/s3.py --production'")
+        .with_command("bash -c 'pip install coverage && coverage run -m tomodachi run src/s3.py --production'")
     ) as container:
         yield cast(TomodachiContainer, container)
 

@@ -53,7 +53,7 @@ def service_customers_container(
         .with_env("AWS_SQS_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("AWS_DYNAMODB_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("DYNAMODB_TABLE_NAME", "customers")
-        .with_command("bash -c 'pip install pytest-cov && coverage run -m tomodachi run src/customers.py --production'")
+        .with_command("bash -c 'pip install coverage && coverage run -m tomodachi run src/customers.py --production'")
     ) as container:
         yield cast(TomodachiContainer, container)
 
