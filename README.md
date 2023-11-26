@@ -688,6 +688,9 @@ is running in a different directory, you might have to re-map the paths with `co
 See [Re-mapping paths](https://coverage.readthedocs.io/en/7.3.2/cmd.html#re-mapping-paths) in the
 `coverage.py` documentation, and configuration example in the [pyproject.toml](pyproject.toml) (search for 'tool.coverage' section).
 
+See an example of how the combined test coverage looks at <https://app.codecov.io/gh/filipsnastins/tomodachi-testcontainers>.
+The [examples/](examples/) services are tested only with Testcontainer tests, and their coverage is included in the final report.
+
 ## Troubleshooting common issues
 
 - Error on running tests with pytest: `ScopeMismatch: You tried to access the function scoped fixture
