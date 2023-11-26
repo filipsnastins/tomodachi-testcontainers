@@ -11,8 +11,11 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture(scope="module")
 def service_healthcheck_container(testcontainers_docker_image: Image) -> Generator[TomodachiContainer, None, None]:
-    with TomodachiContainer(image=str(testcontainers_docker_image.id), edge_port=get_available_port()).with_command(
-        "tomodachi run src/healthcheck.py --production"
+    with TomodachiContainer(
+        image=str(testcontainers_docker_image.id),
+        edge_port=get_available_port(),
+    ).with_command(
+        "bash -c 'pip install pytest-cov && coverage run -m tomodachi run src/healthcheck.py --production'"
     ) as container:
         yield cast(TomodachiContainer, container)
 

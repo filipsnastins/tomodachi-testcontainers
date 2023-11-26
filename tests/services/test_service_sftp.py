@@ -27,7 +27,7 @@ def service_sftp_container(
         .with_env("SFTP_USERNAME", "userssh")
         .with_env("SFTP_PRIVATE_KEY", sftp_container.authorized_private_key.export_private_key().decode())
         .with_env("SFTP_KNOWN_HOST", sftp_container.get_internal_known_host())
-        .with_command("tomodachi run src/sftp.py --production")
+        .with_command("bash -c 'pip install coverage && coverage run -m tomodachi run src/sftp.py --production'")
     ) as container:
         yield cast(TomodachiContainer, container)
 

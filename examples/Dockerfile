@@ -9,8 +9,8 @@ ENV VIRTUAL_ENV=$VIRTUAL_ENV \
   PYTHONPATH=/app/src:$PYTHONPATH
 
 FROM python-base AS dependencies-base
-ARG PIP_VERSION=23.2
-ARG POETRY_VERSION=1.5.1
+ARG PIP_VERSION=23.3.1
+ARG POETRY_VERSION=1.7.1
 RUN python -m pip install --no-cache-dir -U \
   "pip==$PIP_VERSION" \
   "poetry==$POETRY_VERSION" && \

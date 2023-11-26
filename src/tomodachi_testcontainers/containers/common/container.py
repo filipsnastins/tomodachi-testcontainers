@@ -24,8 +24,9 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     _logger: logging.Logger
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        self.network = os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
+        self._set_container_network()
         super().__init__(*args, **kwargs, network=self.network)
+        self._set_default_container_name()
 
     def __enter__(self) -> "DockerContainer":
         try:
@@ -46,6 +47,34 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     @abc.abstractmethod
     def log_message_on_container_start(self) -> str:
         """Returns a message that will be logged when the container starts."""
+
+    def with_env(self, key: str, value: str) -> "DockerContainer":
+        super().with_env(key, value)
+        return self
+
+    def with_bind_ports(self, container: int, host: Optional[int] = None) -> "DockerContainer":
+        super().with_bind_ports(container, host)  # type: ignore
+        return self
+
+    def with_exposed_ports(self, *ports: int) -> "DockerContainer":
+        super().with_exposed_ports(*ports)
+        return self
+
+    def with_kwargs(self, **kwargs: Any) -> "DockerContainer":
+        super().with_kwargs(**kwargs)
+        return self
+
+    def with_command(self, command: str) -> "DockerContainer":
+        super().with_command(command)
+        return self
+
+    def with_name(self, name: str) -> "DockerContainer":
+        super().with_name(name)
+        return self
+
+    def with_volume_mapping(self, host: str, container: str, mode: str = "ro") -> "DockerContainer":
+        super().with_volume_mapping(host, container, mode)
+        return self
 
     def get_container_host_ip(self) -> str:
         host = self.get_docker_client().host()
@@ -68,7 +97,6 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
         return self.get_docker_client().get_container(self.get_wrapped_container().id)
 
     def start(self) -> "DockerContainer":
-        self._set_container_name()
         self._setup_logger()
         self._start()
         self._log_message_on_container_start()
@@ -83,8 +111,11 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     def restart(self) -> None:
         self.get_wrapped_container().restart()
 
-    def _set_container_name(self) -> None:
-        self._name = self._name or f"testcontainer-{shortuuid.uuid()}"
+    def _set_container_network(self) -> None:
+        self.network = os.getenv("TESTCONTAINER_DOCKER_NETWORK") or "bridge"
+
+    def _set_default_container_name(self) -> None:
+        self._name = shortuuid.uuid()
 
     def _setup_logger(self) -> None:
         self._logger = setup_logger(f"{self.__class__.__name__} ({self._name})")
@@ -94,7 +125,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
         try:
             self._container = self.get_docker_client().run(
                 image=self.image,
-                command=self._command or "",
+                command=self._command or "",  # type: ignore
                 detach=True,
                 environment=self.env,
                 ports=self.ports,
@@ -116,6 +147,6 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
 
     def _forward_container_logs_to_logger(self) -> None:
         if container := self.get_wrapped_container():
-            logs = bytes(container.logs(timestamps=True)).decode().split("\n")
+            logs = bytes(container.logs(timestamps=False)).decode().split("\n")
             for log in logs:
                 self._logger.info(log)

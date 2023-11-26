@@ -9,7 +9,7 @@ from typing import Any, Optional
 from testcontainers.core.waiting_utils import wait_for_logs
 
 from tomodachi_testcontainers.containers.common import WebContainer
-from tomodachi_testcontainers.utils import copy_folder_to_container
+from tomodachi_testcontainers.utils import copy_files_to_container
 
 
 class WireMockContainer(WebContainer):
@@ -48,13 +48,13 @@ class WireMockContainer(WebContainer):
 
     def copy_mappings_to_container(self) -> None:
         if self.mapping_stubs is not None:
-            copy_folder_to_container(
+            copy_files_to_container(
                 self.get_wrapped_container(), host_path=self.mapping_stubs, container_path=self.MAPPINGS_DIR
             )
 
     def copy_mapping_files_to_container(self) -> None:
         if self.mapping_files is not None:
-            copy_folder_to_container(
+            copy_files_to_container(
                 self.get_wrapped_container(), host_path=self.mapping_files, container_path=self.FILES_DIR
             )
 

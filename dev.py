@@ -1,4 +1,5 @@
 # noqa: INP001
+import os
 from subprocess import check_call
 
 
@@ -32,10 +33,21 @@ def lint() -> None:
 
 
 def test() -> None:
-    check_call(["pytest"])
+    check_call(["pytest", "-v"])
 
 
 def test_ci() -> None:
-    check_call(["coverage", "run", "--branch", "-m", "pytest", "-v", "--junitxml=build/tests.xml"])
-    check_call(["coverage", "xml", "-o", "build/coverage.xml"])
-    check_call(["coverage", "html", "-d", "build/htmlcov"])
+    check_call(["coverage", "erase"])
+    check_call(
+        [
+            "pytest",
+            "--cov",
+            "--cov-append",
+            "--cov-branch",
+            "--cov-report=xml:build/coverage.xml",
+            "--cov-report=html:build/htmlcov",
+            "-v",
+            "--junitxml=build/tests.xml",
+        ],
+        env={"TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE": "1", **os.environ},
+    )

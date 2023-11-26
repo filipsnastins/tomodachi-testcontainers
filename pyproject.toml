@@ -189,6 +189,15 @@ env = [
     "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples",
 ]
 
+[tool.coverage.run]
+branch = true
+relative_files = true
+source = ["src/", "tests/"]
+
+[tool.coverage.paths]
+source = ["examples/", "src/", "/app"]
+
 [tool.coverage.report]
 skip_covered = true
 show_missing = true
+include_namespace_packages = true

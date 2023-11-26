@@ -1,5 +1,13 @@
 # tomodachi-testcontainers
 
+![Build Status](https://github.com/filipsnastins/tomodachi-testcontainers/actions/workflows/main.yml/badge.svg)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffilipsnastins%2Ftomodachi-testcontainers.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffilipsnastins%2Ftomodachi-testcontainers?ref=badge_shield&issueType=license)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=filipsnastins_tomodachi-testcontainers&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=filipsnastins_tomodachi-testcontainers)
+[![CodeScene Code Health](https://codescene.io/projects/46808/status-badges/code-health)](https://codescene.io/projects/46808)
+[![CodeScene System Mastery](https://codescene.io/projects/46808/status-badges/system-mastery)](https://codescene.io/projects/46808)
+[![codecov](https://codecov.io/gh/filipsnastins/tomodachi-testcontainers/graph/badge.svg?token=ZPWNYCRTV0)](https://codecov.io/gh/filipsnastins/tomodachi-testcontainers)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d3002235e028a3f713c9/maintainability)](https://codeclimate.com/github/filipsnastins/tomodachi-testcontainers/maintainability)
+
 The library provides [Testcontainers](src/tomodachi_testcontainers/containers/),
 [Pytest fixtures](src/tomodachi_testcontainers/pytest/),
 and [test clients](src/tomodachi_testcontainers/clients/) for working with Testcontainers,
@@ -28,7 +36,7 @@ It facilitates the use of Docker containers for functional, integration, and end
   - [Benefits and dangers of end-to-end tests](#benefits-and-dangers-of-end-to-end-tests)
     - [Building confidence of releasability](#building-confidence-of-releasability)
     - [⚠️ Mind the Test Pyramid - don't overdo end-to-end tests](#️-mind-the-test-pyramid---dont-overdo-end-to-end-tests)
-  - [Running Testcontainers in CI pipeline](#running-testcontainers-in-ci-pipeline)
+  - [Running Testcontainers in the deployment pipeline](#running-testcontainers-in-the-deployment-pipeline)
   - [Supported Testcontainers](#supported-testcontainers)
     - [Tomodachi](#tomodachi)
     - [Moto](#moto)
@@ -42,6 +50,13 @@ It facilitates the use of Docker containers for functional, integration, and end
   - [Configuration with environment variables](#configuration-with-environment-variables)
   - [Change default Docker network](#change-default-docker-network)
   - [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
+  - [Debugging Testcontainers](#debugging-testcontainers)
+    - [1. Inspect container logs](#1-inspect-container-logs)
+    - [2. Pause a test with a breakpoint and inspect running containers](#2-pause-a-test-with-a-breakpoint-and-inspect-running-containers)
+    - [3. Use helper containers and tools for exploratory testing](#3-use-helper-containers-and-tools-for-exploratory-testing)
+    - [4. Attach a remote debugger to a running container](#4-attach-a-remote-debugger-to-a-running-container)
+  - [Exporting code coverage from Testcontainers](#exporting-code-coverage-from-testcontainers)
+  - [Troubleshooting common issues](#troubleshooting-common-issues)
   - [Resources and acknowledgements](#resources-and-acknowledgements)
   - [Development](#development)
 
@@ -192,8 +207,7 @@ Example:
 If the Tomodachi service Docker image is already built, you can run the container
 by specifying the image ID in the `TOMODACHI_TESTCONTAINER_IMAGE_ID` environment variable.
 
-It is useful when running tests in the CI pipeline when the image has been already built
-on the build step.
+It is useful when running tests in the deployment pipeline when the image has been already built on the build step.
 Instead of building a new image from scratch for the tests, we want to test the exact same image that
 will be pushed to a Container Registry and deployed to production.
 
@@ -260,7 +274,7 @@ There are a couple of ways to test the service.
 
   - This is the most production-like way, but has some significant drawbacks in automated testing.
   - It requires a separate AWS account dedicated only to automated tests.
-  - It's tricky to setup AWS credentials and permissions securely in the CI pipeline.
+  - It's tricky to setup AWS credentials and permissions securely in the deployment pipeline.
   - Need to be careful to not mutate production infrastructure.
   - Costs some money for using real AWS services.
   - It's slow, because we're making real network calls to AWS.
@@ -270,7 +284,7 @@ There are a couple of ways to test the service.
   - Although it's not a real AWS, it's very close to simulating AWS services,
     so that it can be confidently used in cloud service integration tests.
   - Battle-tested and used by many organizations with wide community support.
-  - Easy to use on a local machine and in the CI pipeline, simply run it in a Docker container and remove it when finished.
+  - Easy to use on a local machine and in the deployment pipeline, simply run it in a Docker container and remove it when finished.
   - Works well with Testcontainers! This is the approach we'll take in this example. 🐳
 
 As in the previous example, first, we need to create Tomodachi Testcontainer fixture
@@ -391,7 +405,7 @@ that the system will work in production without more manual testing._
 
 _To get a high confidence of releasability, it's necessary to test the system with real dependencies and infrastructure.
 Testcontainers make it easy to spin up real dependencies in Docker containers, and throw them away
-when the tests are finished. They work in the same way locally and in the CI pipeline, so you need to
+when the tests are finished. They work in the same way locally and in the deployment pipeline, so you need to
 setup test suite only once._
 
 ### ⚠️ Mind the Test Pyramid - don't overdo end-to-end tests
@@ -450,14 +464,14 @@ and not private methods and attributes.
 Since there're no explicit private methods and attributes in Python, it's important to remember this,
 and use automated code quality assertion tools like `flake8` and `pylint` as a safety net.
 
-## Running Testcontainers in CI pipeline
+## Running Testcontainers in the deployment pipeline
 
-To run Testcontainers in the CI pipeline, you'll need a container runtime installed
-on the CI server (GitHub Actions, Jenkins etc.). That's pretty much it!
+To run Testcontainers in the deployment pipeline, you'll need a container runtime installed
+on the CI/CD server (GitHub Actions, Jenkins etc.). That's pretty much it!
 
-Running Testcontainers in the CI shouldn't be much different from running them locally.
+Running Testcontainers in the deployment pipeline shouldn't be much different from running them locally.
 
-For a complete example of how to run Testcontainers in the CI pipeline, check out
+For a complete example of how to run Testcontainers in the deployment pipeline, check out
 [tomodachi-testcontainers-github-actions](https://github.com/filipsnastins/tomodachi-testcontainers-github-actions)
 repository.
 
@@ -564,12 +578,13 @@ by setting it in the shell before running `pytest`.
 
 | Environment Variable                           | Description                                                                                                 |
 | :--------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |
+| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID`      | Override any supported Testcontainer Image ID. Defaults to `None`                                           |
+| `DOCKER_BUILDKIT`                              | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit for building Docker images                                   |
 | `TESTCONTAINER_DOCKER_NETWORK`                 | Launch testcontainers in specified Docker network. Defaults to 'bridge'. Network must be created beforehand |
 | `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH`      | Override path to Dockerfile for building Tomodachi service image. (`--file` flag in `docker build` command) |
 | `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT` | Override Docker build context                                                                               |
 | `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET`  | Override Docker build target (`--target` flag in `docker build` command)                                    |
-| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID`      | Override any supported Testcontainer Image ID. Defaults to `None`                                           |
-| `DOCKER_BUILDKIT`                              | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit for building Docker images                                   |
+| `TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE`      | Set `TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE=1` to export `.coverage` file when the container stops.        |
 
 ## Change default Docker network
 
@@ -598,6 +613,177 @@ after the test run, and there's nothing else to inspect apart from logs.
 log_level = "INFO"
 ```
 
+By default, `pytest` won't show any output if all tests pass. To see the logs in the console, run `pytest` with `-rA` flag,
+e.g. `pytest -rA`. It will show extra summary for A(ll) tests, including captured logs.
+
+```bash
+-r chars              Show extra test summary info as specified by chars: (f)ailed, (E)rror, (s)kipped, (x)failed, (X)passed, (p)assed, (P)assed with output, (a)ll except passed (p/P), or (A)ll. (w)arnings are enabled by default (see --disable-warnings), 'N' can be used to reset the list. (default: 'fE').
+```
+
+- `pytest tests/services/test_service_healthcheck.py -rA`
+
+![Testcontainers logs - test passed](docs/images/pytest-with-testcontainers-logs-passed-test.png)
+
+- `pytest tests/services/test_service_s3.py -k test_upload_and_read_file`
+
+![Testcontainer logs - test failed](docs/images/pytest-with-testcontainers-logs-failed-test.png)
+
+## Debugging Testcontainers
+
+Debugging failing Testcontainer tests can be tricky. The code is running in separate ephemeral Docker containers
+that are immediately deleted after the test run finishes.
+
+Bellow are some debugging and exploratory testing tips that will help you to debug failing Testcontainer tests.
+
+### 1. Inspect container logs
+
+Logs are the main source of information when debugging Testcontainers.
+Generally, you should be able to pinpoint any problem by looking at the container logs,
+in the same way as you'd investigate a problem in a production environment.
+If you find it difficult to understand how the system is behaving from the logs,
+it's be a sign that the logging is insufficient and needs to be improved.
+
+By default, `tomodachi_testcontainers` will forward all container logs to Python's standard logger
+as `INFO` logs when containers stop. See [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
+section for more information and examples of how to configure Pytest to show the logs.
+
+Running Testcontainer tests is a great way to do exploratory testing of the system,
+check out if log messages are meaningful and it's easy to understand what the system is doing.
+
+### 2. Pause a test with a breakpoint and inspect running containers
+
+Testcontainers are ephemeral - they're removed immediately after the test run finishes.
+Sometimes it's useful to inspect the state of running containers,
+e.g. manually check the contents of a database, S3 buckets, message queues or various logs at a certain point in time.
+
+To do that, pause the execution of a test with a breakpoint and manually inspect running containers:
+
+```python
+import httpx
+import pytest
+
+
+@pytest.mark.asyncio()
+async def test_healthcheck_passes(http_client: httpx.AsyncClient) -> None:
+    response = await http_client.get("/health")
+
+    # The breakpoint will pause the execution of the test
+    # and allow you to inspect running Docker containers.
+    breakpoint()
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+```
+
+### 3. Use helper containers and tools for exploratory testing
+
+When logs are insufficient to understand what's going on, it's useful to use other helper containers and tools
+for inspecting container state, e.g. what's in the database, S3 buckets, message queues, etc.
+
+[Pause a test with a breakpoint](#2-pause-a-test-with-a-breakpoint-and-inspect-running-containers)
+and inspect running containers with other tools, for example:
+
+- Use AWS CLI with `aws --endpoint-url=http://localhost:<port>` to inspect the state of `LocalStack` or `Moto` containers.
+  Find out `LocalStack` or `Moto` port in the pytest console output or by inspecting the containers with `docker ps`.
+- `Moto` provides a convenient [web UI dashboard](https://docs.getmoto.org/en/latest/docs/server_mode.html#dashboard).
+  Find the link to the Moto dashboard in the pytest console output.
+- Use [DynamoDB Admin](#dynamodb-admin) container for inspecting the state of DynamoDB tables.
+
+### 4. Attach a remote debugger to a running container
+
+As a last resort, you can attach a remote debugger to a running container, e.g. to a `TomodachiContainer` that's running your application code.
+
+See an example of how to start `TomodachiContainer` in the debug mode in [tests/services/test_service_debug.py](tests/services/test_service_debug.py).
+If using `VScode`, see the [documentation](https://code.visualstudio.com/docs/python/debugging#_debugging-by-attaching-over-a-network-connection)
+of how to attach a remote debugger to a running process over HTTP.
+An example configuration is in the [.vscode/launch.example.json](.vscode/launch.example.json)
+
+## Exporting code coverage from Testcontainers
+
+Since Testcontainers run in a separate Docker container, their code coverage will not be included to the coverage report by default.
+
+Assuming you're using [coverage.py](https://github.com/nedbat/coveragepy) or [pytest-cov](https://github.com/pytest-dev/pytest-cov),
+to see the code coverage from the Testcontainer, you need to export the `.coverage` file from the container to the host machine,
+and then append it to the root `.coverage` report.
+
+To generate the code coverage report from `TomodachiContainer`, start the container with the `coverage run -m tomodachi run ...` command.
+The `coverage` tool will keep track of the code that has been executed in the container,
+and write the coverage report to `.coverage` file when the container stops.
+
+```python
+from typing import Generator, cast
+
+import pytest
+from docker.models.images import Image
+
+from tomodachi_testcontainers import TomodachiContainer
+from tomodachi_testcontainers.utils import get_available_port
+
+
+@pytest.fixture()
+def tomodachi_container(testcontainers_docker_image: Image) -> Generator[TomodachiContainer, None, None]:
+    with TomodachiContainer(
+        image=str(testcontainers_docker_image.id),
+        edge_port=get_available_port(),
+    ).with_command(
+        "bash -c 'pip install coverage && coverage run -m tomodachi run src/healthcheck.py --production'"
+    ) as container:
+        yield cast(TomodachiContainer, container)
+```
+
+Configure the `coverage` tool in the `pyproject.toml` file - see [examples/pyproject.toml](examples/pyproject.toml).
+
+To signal the `TomodachiContainer` to export the `.coverage` file when the container stops,
+set the `TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE` environment variable to `1`.
+Coverage export is disabled by default to not pollute the host machine with `.coverage` files.
+Generally, you'll be running tests with coverage in the deployment pipeline,
+so set the environment variable in the CI/CD server configuration.
+
+Tying it all together, run pytest with the coverage mode:
+
+```bash
+TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE=1 pytest --cov --cov-branch
+```
+
+The `.coverage` file will be saved on the host machine in the current working directory.
+Also, see [dev.py::test_ci](dev.py) for an example of how this project is running tests with code coverage in the deployment pipeline.
+
+If source code paths are different in the container and on the host machine, e.g. because the container
+is running in a different directory, you might have to re-map the paths with `coverage` tool.
+See [Re-mapping paths](https://coverage.readthedocs.io/en/7.3.2/cmd.html#re-mapping-paths) in the
+`coverage.py` documentation, and configuration example in the [pyproject.toml](pyproject.toml) (search for 'tool.coverage' section).
+
+See an example of how the combined test coverage looks at <https://app.codecov.io/gh/filipsnastins/tomodachi-testcontainers>.
+The [examples/](examples/) services are tested only with Testcontainer tests, and their coverage is included in the final report.
+
+## Troubleshooting common issues
+
+- Error on running tests with pytest: `ScopeMismatch: You tried to access the function scoped fixture
+event_loop with a session scoped request object, involved factories`.
+
+  - **Problem:** the error occurs when you're using asynchronous fixtures with the scope higher
+    than `function` e.g. fixture `moto_container` has `session` scope.
+    The default `event_loop` fixture provided by `pytest-asyncio` is a function-scoped fixture,
+    so it can't be used with session-scoped fixtures.
+
+  - **Solution:** override the `event_loop` fixture with a session-scoped fixture
+    by placing it to your project's default `conftest.py`.
+    See [tests/conftest.py](tests/conftest.py) for an example:
+
+    ```python
+    import asyncio
+    import contextlib
+    from typing import Iterator
+
+    import pytest
+
+
+    @pytest.fixture(scope="session")
+    def event_loop() -> Iterator[asyncio.AbstractEventLoop]:
+        with contextlib.closing(asyncio.new_event_loop()) as loop:
+            yield loop
+    ```
+
 ## Resources and acknowledgements
 
 - [testcontainers.com](https://testcontainers.com/) - home of Testcontainers.
@@ -609,7 +795,7 @@ log_level = "INFO"
   for integration testing with real dependencies and gives a demo on Testcontainers.
 
 - [tomodachi-testcontainers-github-actions](https://github.com/filipsnastins/tomodachi-testcontainers-github-actions) -
-  example of running Testcontainers in the CI pipeline.
+  example of running Testcontainers in the deployment pipeline.
 
 - [Awaitility](https://github.com/awaitility/awaitility) for Java and [busypie](https://github.com/rockem/busypie)
   for Python - libraries for testing asynchronous systems with async probes.
@@ -639,8 +825,8 @@ pre-commit install
 ```bash
 docker network create tomodachi-testcontainers
 
-pytest
-poetry run test-ci  # With test coverage
+poetry run test
+poetry run test-ci  # With code coverage
 ```
 
 - Format and lint code

@@ -16,7 +16,13 @@ class LocalStackContainer(WebContainer):
         region_name: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, internal_port=internal_port, edge_port=edge_port, **kwargs)
+        super().__init__(
+            image,
+            internal_port=internal_port,
+            edge_port=edge_port,
+            http_healthcheck_path="/_localstack/health",
+            **kwargs,
+        )
 
         self.region_name = region_name or os.getenv("AWS_DEFAULT_REGION") or "us-east-1"
         self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID") or "testing"  # nosec: B105
