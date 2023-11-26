@@ -33,14 +33,21 @@ def lint() -> None:
 
 
 def test() -> None:
-    check_call(["pytest"])
+    check_call(["pytest", "-v"])
 
 
 def test_ci() -> None:
+    check_call(["rm", "-rf", ".coverage"])
     check_call(
-        ["coverage", "run", "-m", "pytest", "-v", "--junitxml=build/tests.xml"],
+        [
+            "pytest",
+            "--cov",
+            "--cov-append",
+            "--cov-branch",
+            "--cov-report=xml:build/coverage.xml",
+            "--cov-report=html:build/htmlcov",
+            "-v",
+            "--junitxml=build/tests.xml",
+        ],
         env={"TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE": "1", **os.environ},
     )
-    check_call(["coverage", "combine", "--append"])
-    check_call(["coverage", "xml", "-o", "build/coverage.xml"])
-    check_call(["coverage", "html", "-d", "build/htmlcov"])
