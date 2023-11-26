@@ -6,7 +6,7 @@
 
 ## Test clients
 
-- [x] Experiment with WireMock test client with [python-wiremock](https://github.com/wiremock/python-wiremock) SDK
+...
 
 ## New testcontainers
 
@@ -15,8 +15,6 @@
   - [ ] <https://vcrpy.readthedocs.io/en/latest/>
   - [ ] <https://www.mbtest.org/>
   - [x] <https://wiremock.org/docs/standalone/docker/>
-- [x] DynamoDB Admin container for debugging
-- [x] Minio container for S3
 
 ## New test approaches
 
@@ -30,10 +28,7 @@
 ## Misc
 
 - [ ] Python 3.12
-- [ ] `DockerContainer`: envvar to gracefully stop containers before removing
-  - Wont really work. Try `before_stop_hook` method instead
-- [ ] Export test coverage from `TomodachiContainer`
-- [ ] Document hooking up Python debugger to `TomodachiContainer`
+- [ ] Hooks, e.g. `after_start`, `before_stop`
 
 ## Docs
 

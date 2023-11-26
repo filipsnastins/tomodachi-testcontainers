@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.12.0 (2023-11-26)
+
+### New features
+
+- `TomodachiContainer` - added support for exporting code coverage.
+- `TomodachiContainer` - added example of how to attach a remote debugger to the container.
+
+### Documentation
+
+- `README`: documented Testcontainer debugging tips.
+- `README`: documented how to export test coverage from `TomodachiContainer`.
+
+### Changes
+
+- `DockerContainer` - logs forwarded from the Testcontainers will exclude timestamps
+  to make it easier to read the logs - log lines will be shorter.
+- `DockerContainer` - removed `testconatiners-` prefix from the container name
+  to make it easier to read the logs - log lines will be shorter.
+
 ## 0.11.0 (2023-11-19)
 
 ### New features
