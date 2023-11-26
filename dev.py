@@ -37,7 +37,7 @@ def test() -> None:
 
 
 def test_ci() -> None:
-    check_call(["rm", "-rf", ".coverage"])
+    check_call(["coverage", "erase"])
     check_call(
         [
             "pytest",
