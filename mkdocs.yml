@@ -1,0 +1,25 @@
+site_name: Tomodachi Testcontainers
+site_description: Collection of Testcontainers, pytest fixtures and test clients for end-to-end/integration testing for Python Tomodachi framework. A great starting point to learn more about Testcontainers and necessity of integration testing.
+site_url: https://github.com/filipsnastins/tomodachi-testcontainers
+
+repo_name: filipsnastins/tomodachi-testcontainers
+repo_url: https://github.com/filipsnastins/tomodachi-testcontainers
+
+docs_dir: docs
+
+theme:
+  name: material
+  features:
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - navigation.indexes
+    - content.tooltips
+    - navigation.path
+    - content.code.annotate
+    - content.code.copy
+    - content.code.select
+    - navigation.tabs
+
+nav:
+  - Tomodachi Testcontainers: index.md

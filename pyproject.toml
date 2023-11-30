@@ -42,7 +42,6 @@ types-aiobotocore = { extras = [
 ], version = "^2.4.2" }
 wiremock = { version = "^2.6.1", optional = true }
 
-
 [tool.poetry.group.dev.dependencies]
 autoflake = "^1.7.8"
 bandit = "^1.7.5"
@@ -76,6 +75,9 @@ structlog = "^23.1.0"
 tomodachi = "^0.26.0"
 types-protobuf = "^4.23.0.2"
 types-requests = "^2.31.0.2"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "^9.4.14"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -726,7 +726,7 @@ def tomodachi_container(testcontainers_docker_image: Image) -> Generator[Tomodac
         image=str(testcontainers_docker_image.id),
         edge_port=get_available_port(),
     ).with_command(
-        "bash -c 'pip install coverage && coverage run -m tomodachi run src/healthcheck.py --production'"
+        "bash -c 'pip install coverage[toml] && coverage run -m tomodachi run src/healthcheck.py --production'"
     ) as container:
         yield cast(TomodachiContainer, container)
 ```
@@ -846,4 +846,10 @@ poetry run hooks
 
 ```bash
 poetry build
+```
+
+- Build documentation with [MkDocs](https://www.mkdocs.org/) and [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
+
+```bash
+mkdocs serve
 ```
