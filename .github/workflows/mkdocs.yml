@@ -2,7 +2,7 @@ name: mkdocs
 on:
   push:
     branches: [main]
-  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -12,11 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Configure Git Credentials
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
       - name: Set up Poetry cache for Python dependencies
         uses: actions/cache@v3
@@ -39,4 +34,10 @@ jobs:
           poetry install --no-interaction --only docs
           poetry show --tree
 
-      - run: mkdocs gh-deploy --force
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Deploy Documentation to GitHub Pages
+        run: poetry run mkdocs gh-deploy --force
