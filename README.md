@@ -1,4 +1,4 @@
-# tomodachi-testcontainers
+# Tomodachi Testcontainers
 
 ![Build Status](https://github.com/filipsnastins/tomodachi-testcontainers/actions/workflows/main.yml/badge.svg)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffilipsnastins%2Ftomodachi-testcontainers.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffilipsnastins%2Ftomodachi-testcontainers?ref=badge_shield&issueType=license)
@@ -25,7 +25,7 @@ lightweight instances of databases, message brokers, web browsers,
 or just about anything that can run in a Docker container.
 It facilitates the use of Docker containers for functional, integration, and end-to-end testing.
 
-- [tomodachi-testcontainers](#tomodachi-testcontainers)
+- [Tomodachi Testcontainers](#tomodachi-testcontainers)
   - [Installation](#installation)
   - [Quickstart and examples](#quickstart-and-examples)
   - [Getting started](#getting-started)
@@ -852,4 +852,13 @@ poetry build
 
 ```bash
 mkdocs serve
+```
+
+- Generate C4 diagrams with PlantUML from [docs/architecture/c4](docs/architecture/c4)
+  (get plantuml.jar at <https://plantuml.com/starting>).
+
+```bash
+export JAVA_HOME=`/usr/libexec/java_home -v 21`
+
+java -jar plantuml.jar -DRELATIVE_INCLUDE="." docs/**/*.puml
 ```
