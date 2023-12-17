@@ -3,7 +3,7 @@ from typing import Any, NamedTuple
 import asyncssh
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.containers.common import DockerContainer
+from .common import DockerContainer
 
 ConnectionDetails = NamedTuple("ConnectionDetails", [("host", str), ("port", int)])
 

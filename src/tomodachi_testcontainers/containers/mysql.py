@@ -5,7 +5,7 @@ Adaptation of https://github.com/testcontainers/testcontainers-python/tree/main/
 import os
 from typing import Any, Optional
 
-from tomodachi_testcontainers.containers.common import DatabaseContainer
+from .common import DatabaseContainer
 
 
 class MySQLContainer(DatabaseContainer):

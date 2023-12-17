@@ -6,8 +6,9 @@ from typing import Any, Optional
 import shortuuid
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.containers.common import WebContainer
 from tomodachi_testcontainers.utils import copy_files_from_container
+
+from .common import WebContainer
 
 
 class TomodachiContainer(WebContainer):
