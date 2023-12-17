@@ -815,7 +815,7 @@ event_loop with a session scoped request object, involved factories`.
 - Install dev dependencies with [Poetry](https://python-poetry.org/)
 
 ```bash
-poetry install --with dev --all-extras
+poetry install --all-extras --with dev --with docs
 poetry shell
 pre-commit install
 ```
