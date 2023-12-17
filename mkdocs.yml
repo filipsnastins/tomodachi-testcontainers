@@ -9,10 +9,27 @@ docs_dir: docs
 
 theme:
   name: material
+  palette:
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
   features:
     - content.code.annotate
     - content.code.copy
+    - content.code.select
     - content.tabs.link
+    - content.tooltips
     - navigation.expand
     - navigation.indexes
     - navigation.path
@@ -21,6 +38,27 @@ theme:
     - search.highlight
     - search.suggest
     - toc.follow
+  icon:
+    repo: fontawesome/brands/github-alt
+
+plugins:
+  - search: null
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            extensions:
+              - griffe_typingdoc
+            show_root_heading: true
+            show_if_no_docstring: true
+            inherited_members: false
+            members_order: source
+            separate_signature: true
+            unwrap_annotated: true
+            filters: ['!^_']
+            merge_init_into_class: true
+            docstring_section_style: spacy
+            signature_crossrefs: true
 
 markdown_extensions:
   - admonition
@@ -38,3 +76,11 @@ nav:
   - Recipes:
       - recipes/index.md
       - recipes/testing-databases.md
+  - Reference - Code API:
+      - Containers: reference/containers.md
+      - Clients: reference/clients.md
+      - Pytest:
+          - Fixtures: reference/pytest-fixtures.md
+          - Assertions: reference/pytest-assertions.md
+          - Async Probes: reference/pytest-async-probes.md
+      - Utils: reference/utils.md

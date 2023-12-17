@@ -1360,6 +1360,35 @@ docs = ["Sphinx"]
 test = ["objgraph", "psutil"]
 
 [[package]]
+name = "griffe"
+version = "0.38.1"
+description = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "griffe-0.38.1-py3-none-any.whl", hash = "sha256:334c79d3b5964ade65c05dfcaf53518c576dedd387aaba5c9fd71212f34f1483"},
+    {file = "griffe-0.38.1.tar.gz", hash = "sha256:bd68d7da7f3d87bc57eb9962b250db123efd9bbcc06c11c1a91b6e583b2a9361"},
+]
+
+[package.dependencies]
+colorama = ">=0.4"
+
+[[package]]
+name = "griffe-typingdoc"
+version = "0.2.4"
+description = "Griffe extension for PEP 727 – Documentation Metadata in Typing."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "griffe_typingdoc-0.2.4-py3-none-any.whl", hash = "sha256:bc7843c2e8163454252da70c513313b8454c886dd0973637c4690453ecdbb387"},
+    {file = "griffe_typingdoc-0.2.4.tar.gz", hash = "sha256:83c1bf81216dd76d41d7f973f4bb63d2bb34d2f731e0ef3aef450320c80520cb"},
+]
+
+[package.dependencies]
+griffe = ">=0.38"
+typing-extensions = ">=4.7"
+
+[[package]]
 name = "h11"
 version = "0.14.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
@@ -1702,6 +1731,21 @@ i18n = ["babel (>=2.9.0)"]
 min-versions = ["babel (==2.9.0)", "click (==7.0)", "colorama (==0.4)", "ghp-import (==1.0)", "importlib-metadata (==4.3)", "jinja2 (==2.11.1)", "markdown (==3.2.1)", "markupsafe (==2.0.1)", "mergedeep (==1.3.4)", "packaging (==20.5)", "pathspec (==0.11.1)", "platformdirs (==2.2.0)", "pyyaml (==5.1)", "pyyaml-env-tag (==0.1)", "typing-extensions (==3.10)", "watchdog (==2.0)"]
 
 [[package]]
+name = "mkdocs-autorefs"
+version = "0.5.0"
+description = "Automatically link across pages in MkDocs."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "mkdocs_autorefs-0.5.0-py3-none-any.whl", hash = "sha256:7930fcb8ac1249f10e683967aeaddc0af49d90702af111a5e390e8b20b3d97ff"},
+    {file = "mkdocs_autorefs-0.5.0.tar.gz", hash = "sha256:9a5054a94c08d28855cfab967ada10ed5be76e2bfad642302a610b252c3274c0"},
+]
+
+[package.dependencies]
+Markdown = ">=3.3"
+mkdocs = ">=1.1"
+
+[[package]]
 name = "mkdocs-material"
 version = "9.4.14"
 description = "Documentation that simply works"
@@ -1740,6 +1784,50 @@ files = [
     {file = "mkdocs_material_extensions-1.3.1-py3-none-any.whl", hash = "sha256:adff8b62700b25cb77b53358dad940f3ef973dd6db797907c49e3c2ef3ab4e31"},
     {file = "mkdocs_material_extensions-1.3.1.tar.gz", hash = "sha256:10c9511cea88f568257f960358a467d12b970e1f7b2c0e5fb2bb48cab1928443"},
 ]
+
+[[package]]
+name = "mkdocstrings"
+version = "0.24.0"
+description = "Automatic documentation from sources, for MkDocs."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "mkdocstrings-0.24.0-py3-none-any.whl", hash = "sha256:f4908560c10f587326d8f5165d1908817b2e280bbf707607f601c996366a2264"},
+    {file = "mkdocstrings-0.24.0.tar.gz", hash = "sha256:222b1165be41257b494a9d29b14135d2b7ca43f38161d5b10caae03b87bd4f7e"},
+]
+
+[package.dependencies]
+click = ">=7.0"
+importlib-metadata = {version = ">=4.6", markers = "python_version < \"3.10\""}
+Jinja2 = ">=2.11.1"
+Markdown = ">=3.3"
+MarkupSafe = ">=1.1"
+mkdocs = ">=1.4"
+mkdocs-autorefs = ">=0.3.1"
+mkdocstrings-python = {version = ">=0.5.2", optional = true, markers = "extra == \"python\""}
+platformdirs = ">=2.2.0"
+pymdown-extensions = ">=6.3"
+typing-extensions = {version = ">=4.1", markers = "python_version < \"3.10\""}
+
+[package.extras]
+crystal = ["mkdocstrings-crystal (>=0.3.4)"]
+python = ["mkdocstrings-python (>=0.5.2)"]
+python-legacy = ["mkdocstrings-python-legacy (>=0.2.1)"]
+
+[[package]]
+name = "mkdocstrings-python"
+version = "1.7.5"
+description = "A Python handler for mkdocstrings."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "mkdocstrings_python-1.7.5-py3-none-any.whl", hash = "sha256:5f6246026353f0c0785135db70c3fe9a5d9318990fc7ceb11d62097b8ffdd704"},
+    {file = "mkdocstrings_python-1.7.5.tar.gz", hash = "sha256:c7d143728257dbf1aa550446555a554b760dcd40a763f077189d298502b800be"},
+]
+
+[package.dependencies]
+griffe = ">=0.37"
+mkdocstrings = ">=0.20"
 
 [[package]]
 name = "multidict"
@@ -3920,4 +4008,4 @@ wiremock = ["wiremock"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "d87c0fe4ba9903ffe2c0140d7aab5da34e9e8f90e6068819f872c10fb6d88cc7"
+content-hash = "f12d2121495b62e0233e7db07b5b93f1adf15d219de92eb57ada17e2ce87ad57"

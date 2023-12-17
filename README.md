@@ -9,7 +9,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/d3002235e028a3f713c9/maintainability)](https://codeclimate.com/github/filipsnastins/tomodachi-testcontainers/maintainability)
 
 The library provides [Testcontainers](src/tomodachi_testcontainers/containers/),
-[Pytest fixtures](src/tomodachi_testcontainers/pytest/),
+[pytest fixtures](src/tomodachi_testcontainers/pytest/),
 and [test clients](src/tomodachi_testcontainers/clients/) for working with Testcontainers,
 and testing applications built with [Python Tomodachi framework](https://github.com/kalaspuff/tomodachi).
 
@@ -26,6 +26,7 @@ or just about anything that can run in a Docker container.
 It facilitates the use of Docker containers for functional, integration, and end-to-end testing.
 
 - [Tomodachi Testcontainers](#tomodachi-testcontainers)
+  - [Documentation](#documentation)
   - [Installation](#installation)
   - [Quickstart and examples](#quickstart-and-examples)
   - [Getting started](#getting-started)
@@ -49,7 +50,7 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [PostgreSQL](#postgresql)
   - [Configuration with environment variables](#configuration-with-environment-variables)
   - [Change default Docker network](#change-default-docker-network)
-  - [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
+  - [Forward Testcontainer logs to pytest](#forward-testcontainer-logs-to-pytest)
   - [Debugging Testcontainers](#debugging-testcontainers)
     - [1. Inspect container logs](#1-inspect-container-logs)
     - [2. Pause a test with a breakpoint and inspect running containers](#2-pause-a-test-with-a-breakpoint-and-inspect-running-containers)
@@ -57,8 +58,13 @@ It facilitates the use of Docker containers for functional, integration, and end
     - [4. Attach a remote debugger to a running container](#4-attach-a-remote-debugger-to-a-running-container)
   - [Exporting code coverage from Testcontainers](#exporting-code-coverage-from-testcontainers)
   - [Troubleshooting common issues](#troubleshooting-common-issues)
-  - [Resources and acknowledgements](#resources-and-acknowledgements)
+  - [Resources and acknowledgments](#resources-and-acknowledgments)
   - [Development](#development)
+
+## Documentation
+
+Find complete documentation at <https://filipsnastins.github.io/tomodachi-testcontainers/>;
+contains more learning material, examples, recipes, and the API reference.
 
 ## Installation
 
@@ -92,7 +98,7 @@ For full list of available testcontainers, check out [Supported Testcontainers](
 and the official [testcontainers-python](https://github.com/testcontainers/testcontainers-python) library -
 it makes it easy to create your own Testcontainers.
 
-For full list of available Pytest fixtures check out [tomodachi_testcontainers.pytest](src/tomodachi_testcontainers/pytest/) module,
+For full list of available pytest fixtures check out [tomodachi_testcontainers.pytest](src/tomodachi_testcontainers/pytest/) module,
 and for test clients - [tomodachi_testcontainers.clients](src/tomodachi_testcontainers/clients/) module.
 
 ## Getting started
@@ -597,12 +603,12 @@ The Docker network is not created automatically, so make sure that it exists bef
 
 ⚠️ Make sure that the environment variable is set before running `pytest`.
 
-## Forward Testcontainer logs to Pytest
+## Forward Testcontainer logs to pytest
 
 Logs from a testcontainer are forwarded to Python's standard logger as `INFO` logs when
 `tomodachi_testcontainers.DockerContainer` context manager exits.
 
-To see the logs in Pytest, set the log level to at least `INFO` in [Pytest configuration](https://docs.pytest.org/en/7.1.x/how-to/logging.html).
+To see the logs in pytest, set the log level to at least `INFO` in [pytest configuration](https://docs.pytest.org/en/7.1.x/how-to/logging.html).
 
 Capturing container logs is useful to see what happened inside a container if a test failed.
 It's especially useful if tests have failed in CI, because the containers are immediately deleted
@@ -644,8 +650,8 @@ If you find it difficult to understand how the system is behaving from the logs,
 it's be a sign that the logging is insufficient and needs to be improved.
 
 By default, `tomodachi_testcontainers` will forward all container logs to Python's standard logger
-as `INFO` logs when containers stop. See [Forward Testcontainer logs to Pytest](#forward-testcontainer-logs-to-pytest)
-section for more information and examples of how to configure Pytest to show the logs.
+as `INFO` logs when containers stop. See [Forward Testcontainer logs to pytest](#forward-testcontainer-logs-to-pytest)
+section for more information and examples of how to configure pytest to show the logs.
 
 Running Testcontainer tests is a great way to do exploratory testing of the system,
 check out if log messages are meaningful and it's easy to understand what the system is doing.
@@ -770,21 +776,7 @@ event_loop with a session scoped request object, involved factories`.
     by placing it to your project's default `conftest.py`.
     See [tests/conftest.py](tests/conftest.py) for an example:
 
-    ```python
-    import asyncio
-    import contextlib
-    from typing import Iterator
-
-    import pytest
-
-
-    @pytest.fixture(scope="session")
-    def event_loop() -> Iterator[asyncio.AbstractEventLoop]:
-        with contextlib.closing(asyncio.new_event_loop()) as loop:
-            yield loop
-    ```
-
-## Resources and acknowledgements
+## Resources and acknowledgments
 
 - [testcontainers.com](https://testcontainers.com/) - home of Testcontainers.
 
