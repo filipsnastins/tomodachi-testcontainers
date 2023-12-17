@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Container>
+
+!procedure appContainer()
+    Container(app, "Application", "Python, tomodachi")
+!endprocedure
+
+!procedure relationalDbContainer()
+    ContainerDb(relationalDb, "Relational database", "PostgreSQL", "Datastore.")
+!endprocedure
+
+!procedure externalSftpContainer()
+    Container_Ext(externalSftp, "Client SFTP server", "SFTP", "Files provided by a client.")
+!endprocedure
+
+!procedure s3BucketContainer()
+    Container(s3Bucket, "S3 bucket", "AWS S3", "Internal file storage.")
+!endprocedure
+
+@enduml

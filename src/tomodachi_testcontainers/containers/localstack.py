@@ -3,8 +3,9 @@ from typing import Any, Optional
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.containers.common import WebContainer
 from tomodachi_testcontainers.utils import AWSClientConfig
+
+from .common import WebContainer
 
 
 class LocalStackContainer(WebContainer):

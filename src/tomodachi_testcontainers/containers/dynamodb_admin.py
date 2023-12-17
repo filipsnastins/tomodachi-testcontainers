@@ -1,7 +1,7 @@
 import os
 from typing import Any, Optional
 
-from tomodachi_testcontainers.containers.common import WebContainer
+from .common import WebContainer
 
 
 class DynamoDBAdminContainer(WebContainer):
