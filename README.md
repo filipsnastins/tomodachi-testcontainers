@@ -64,7 +64,7 @@ It facilitates the use of Docker containers for functional, integration, and end
 ## Documentation
 
 Find complete documentation at <https://filipsnastins.github.io/tomodachi-testcontainers/>;
-contains more learning material, examples, recipes, and the API reference.
+contains more learning material, examples, recipes, and the code API reference.
 
 ## Installation
 
