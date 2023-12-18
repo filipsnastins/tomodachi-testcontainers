@@ -17,7 +17,7 @@ sftp = ["asyncssh"]
 wiremock = ["wiremock"]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = "^3.8"
 aiobotocore = "^2.4.2"
 asyncssh = { version = "^2.13.2", optional = true }
 cryptography = { version = "^41.0", optional = true }
@@ -135,7 +135,7 @@ python_version = "3.8"
 ignore_missing_imports = true
 
 [tool.flake8]
-ignore = ["ANN101", "ANN401", "BLK100", "E501", "LIT101", "PL123"]
+ignore = ["ANN101", "ANN401", "BLK100", "E231", "E501", "LIT101", "PL123"]
 literal-inline-quotes = "double"
 literal-multiline-quotes = "double"
 exclude = [
@@ -181,6 +181,7 @@ line-length = 120
 log_level = "INFO"
 env = [
     # Set dummy AWS credentials so that we don't accidentally mutate real infrastructure
+    "AWS_REGION=us-east-1",
     "AWS_DEFAULT_REGION=us-east-1",
     "AWS_ACCESS_KEY_ID=testing",
     "AWS_SECRET_ACCESS_KEY=testing",

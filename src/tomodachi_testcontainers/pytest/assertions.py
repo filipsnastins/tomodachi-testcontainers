@@ -9,7 +9,7 @@ DEFAULT_DATETIME_RANGE = timedelta(seconds=10)
 
 
 def assert_datetime_within_range(value: datetime, range: timedelta = DEFAULT_DATETIME_RANGE) -> None:
-    current_datetime = datetime.utcnow().replace(tzinfo=timezone.utc)
+    current_datetime = datetime.now(timezone.utc)
     start_datetime = current_datetime - range
     end_datetime = current_datetime + range
     assert start_datetime <= value <= end_datetime  # nosec: B101

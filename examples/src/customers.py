@@ -83,7 +83,7 @@ class TomodachiServiceCustomers(tomodachi.Service):
             customer_id=str(uuid.uuid4()),
             name=data["name"],
             orders=[],
-            created_at=datetime.utcnow().replace(tzinfo=timezone.utc),
+            created_at=datetime.now(timezone.utc),
         )
 
         async with dynamodb.get_dynamodb_client() as dynamodb_client:
@@ -117,7 +117,8 @@ class TomodachiServiceCustomers(tomodachi.Service):
         }
         async with dynamodb.get_dynamodb_client() as dynamodb_client:
             response = await dynamodb_client.get_item(
-                TableName=dynamodb.get_table_name(), Key={"PK": {"S": f"CUSTOMER#{customer_id}"}}
+                TableName=dynamodb.get_table_name(),
+                Key={"PK": {"S": f"CUSTOMER#{customer_id}"}},
             )
             if "Item" not in response:
                 logger.error("customer_not_found", customer_id=customer_id)

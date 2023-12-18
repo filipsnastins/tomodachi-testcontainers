@@ -81,7 +81,7 @@ class TomodachiServiceOrders(tomodachi.Service):
             order_id=str(uuid.uuid4()),
             customer_id=customer_id,
             products=products,
-            created_at=datetime.utcnow().replace(tzinfo=timezone.utc),
+            created_at=datetime.now(timezone.utc),
         )
         event = OrderCreatedEvent(
             event_id=str(uuid.uuid4()),

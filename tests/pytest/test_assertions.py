@@ -1,6 +1,6 @@
-import datetime
 import re
 import uuid
+from datetime import datetime, timedelta, timezone
 from unittest.mock import Mock
 
 import pytest
@@ -22,15 +22,15 @@ def test_match_uuid4_pattern() -> None:
 
 
 def test_assert_datetime_within_range() -> None:
-    now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+    now = datetime.now(timezone.utc)
 
-    assert_datetime_within_range(now - datetime.timedelta(seconds=9))
-    assert_datetime_within_range(now + datetime.timedelta(seconds=10))
+    assert_datetime_within_range(now - timedelta(seconds=9))
+    assert_datetime_within_range(now + timedelta(seconds=10))
 
     with pytest.raises(AssertionError):
-        assert_datetime_within_range(now - datetime.timedelta(seconds=10))
+        assert_datetime_within_range(now - timedelta(seconds=10))
     with pytest.raises(AssertionError):
-        assert_datetime_within_range(now + datetime.timedelta(seconds=11))
+        assert_datetime_within_range(now + timedelta(seconds=11))
 
 
 def test_assert_logs_contain() -> None:
