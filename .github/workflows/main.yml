@@ -55,7 +55,7 @@ jobs:
 
       - name: Install dependencies - dev and extas
         run: |
-          poetry install --no-interaction --with dev --all-extras
+          poetry install --no-interaction --all-extras --with dev
           poetry show --tree
 
       - name: Test Poetry build step

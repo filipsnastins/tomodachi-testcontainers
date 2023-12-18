@@ -133,16 +133,15 @@ The following `tomodachi_container` fixture builds and runs the service as a Doc
 from typing import Generator, cast
 
 import pytest
-from docker.models.images import Image
 
 from tomodachi_testcontainers import TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture()
-def tomodachi_container(testcontainers_docker_image: Image) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainers_docker_image: str) -> Generator[TomodachiContainer, None, None]:
     with TomodachiContainer(
-        image=str(testcontainers_docker_image.id),
+        image=testcontainers_docker_image,
         edge_port=get_available_port(),
     ) as container:
         yield cast(TomodachiContainer, container)
@@ -301,7 +300,6 @@ in the example below.
 from typing import Generator, cast
 
 import pytest
-from docker.models.images import Image
 
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
@@ -309,11 +307,11 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture()
 def tomodachi_container(
-    testcontainers_docker_image: Image,
+    testcontainers_docker_image: str,
     localstack_container: LocalStackContainer,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(image=str(testcontainers_docker_image.id), edge_port=get_available_port())
+        TomodachiContainer(image=testcontainers_docker_image, edge_port=get_available_port())
         .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")
@@ -720,16 +718,15 @@ and write the coverage report to `.coverage` file when the container stops.
 from typing import Generator, cast
 
 import pytest
-from docker.models.images import Image
 
 from tomodachi_testcontainers import TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture()
-def tomodachi_container(testcontainers_docker_image: Image) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainers_docker_image: str) -> Generator[TomodachiContainer, None, None]:
     with TomodachiContainer(
-        image=str(testcontainers_docker_image.id),
+        image=testcontainers_docker_image,
         edge_port=get_available_port(),
     ).with_command(
         "bash -c 'pip install coverage[toml] && coverage run -m tomodachi run src/healthcheck.py --production'"
@@ -807,7 +804,7 @@ event_loop with a session scoped request object, involved factories`.
 - Install dev dependencies with [Poetry](https://python-poetry.org/)
 
 ```sh
-poetry install --all-extras --with dev --with docs
+poetry install --all-extras --with dev,docs
 poetry shell
 pre-commit install
 ```

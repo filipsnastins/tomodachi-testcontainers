@@ -50,9 +50,9 @@ class MotoContainer(WebContainer):
             endpoint_url=self.get_external_url(),
         )
 
-    def start(self, timeout: float = 10.0, interval: float = 0.5, status_code: int = 200) -> "MotoContainer":
-        super().start(timeout=timeout, interval=interval, status_code=status_code)
-        wait_for_logs(self, "Running on all addresses", timeout=timeout)
+    def start(self) -> "MotoContainer":
+        super().start()
+        wait_for_logs(self, "Running on all addresses", timeout=10.0)
         return self
 
     def reset_moto(self) -> None:

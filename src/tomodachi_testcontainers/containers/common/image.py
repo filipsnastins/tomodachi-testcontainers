@@ -19,31 +19,35 @@ class EphemeralDockerImage:
         context: Optional[Path] = None,
         target: Optional[str] = None,
         docker_client_kwargs: Optional[Dict] = None,
+        *,
+        remove_image_on_exit: bool = True,
     ) -> None:
         self.dockerfile = str(dockerfile) if dockerfile else None
         self.context = str(context) if context else "."
         self.target = target
         self._docker_client = DockerClient(**(docker_client_kwargs or {}))
+        self._remove_image_on_exit = remove_image_on_exit
 
     def __enter__(self) -> Image:
-        self._build_image()
-        return self.image
+        return self._build_image()
 
     def __exit__(
         self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
     ) -> None:
-        self._remove_image()
+        if self._remove_image_on_exit:
+            self._remove_image()
 
-    def _build_image(self) -> None:
+    def _build_image(self) -> Image:
         if os.getenv("DOCKER_BUILDKIT"):
-            self.image = self._build_with_docker_buildkit()
+            self.image = self._build_with_docker_buildkit_cli()
         else:
             self.image = self._build_with_docker_client()
+        return self.image
 
     def _remove_image(self) -> None:
         self._docker_client.client.images.remove(image=str(self.image.id))
 
-    def _build_with_docker_buildkit(self) -> Image:
+    def _build_with_docker_buildkit_cli(self) -> Image:
         cmd = ["docker", "build", "-q", "--rm=true"]
         if self.dockerfile:
             cmd.extend(["-f", self.dockerfile])
