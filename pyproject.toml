@@ -46,6 +46,9 @@ types-aiobotocore = { extras = [
 ], version = "^2.4.2" }
 wiremock = { version = "^2.6.1", optional = true }
 
+[tool.poetry.group.dev]
+optional = true
+
 [tool.poetry.group.dev.dependencies]
 autoflake = "^1.7.8"
 bandit = "^1.7.5"
@@ -192,6 +195,7 @@ env = [
     "TESTCONTAINER_DOCKER_NETWORK=tomodachi-testcontainers",
     "TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile",
     "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples",
+    "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET=test",
 ]
 
 [tool.coverage.run]

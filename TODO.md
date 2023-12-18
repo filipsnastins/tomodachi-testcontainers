@@ -1,6 +1,6 @@
 # TODOs
 
-## GitHubActions
+## GitHub Actions
 
 ...
 
@@ -27,10 +27,10 @@
 
 ## Misc
 
-- [ ] Python 3.12
 - [ ] Container lifecycle hooks, e.g. `after_start`, `before_stop`
-- [ ] Export coverage: install `coverage` from Poetry `test` dependency group
+- [x] Export coverage: install `coverage` from Poetry `test` dependency group
   - Add a new Docker image stage `test` with `coverage` installed
+  - [ ] Rewrite code coverage docs section
 
 ## Docs
 

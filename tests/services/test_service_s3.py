@@ -17,8 +17,6 @@ from tomodachi_testcontainers.pytest.assertions import assert_datetime_within_ra
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
 
-pytestmark = pytest.mark.usefixtures("_purge_queues_on_teardown")
-
 
 @pytest.fixture(scope="module")
 def snssqs_tc(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient) -> SNSSQSTestClient:
@@ -30,7 +28,7 @@ async def _create_topics_and_queues(snssqs_tc: SNSSQSTestClient) -> None:
     await snssqs_tc.subscribe_to(topic="s3--file-uploaded", queue="s3--file-uploaded")
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(autouse=True)
 async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerator[None, None]:
     yield
     await snssqs_tc.purge_queue("s3--file-uploaded")
@@ -54,7 +52,7 @@ def service_s3_container(
         .with_env("AWS_S3_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("S3_BUCKET_NAME", "filestore")
         .with_env("S3_NOTIFICATION_TOPIC_NAME", "s3--upload-notification")
-        .with_command("bash -c 'pip install coverage && coverage run -m tomodachi run src/s3.py --production'")
+        .with_command("coverage run -m tomodachi run src/s3.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
 

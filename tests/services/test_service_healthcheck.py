@@ -14,9 +14,7 @@ def service_healthcheck_container(testcontainers_docker_image: Image) -> Generat
     with TomodachiContainer(
         image=str(testcontainers_docker_image.id),
         edge_port=get_available_port(),
-    ).with_command(
-        "bash -c 'pip install pytest-cov && coverage run -m tomodachi run src/healthcheck.py --production'"
-    ) as container:
+    ).with_command("coverage run -m tomodachi run src/healthcheck.py --production") as container:
         yield cast(TomodachiContainer, container)
 
 

@@ -17,8 +17,6 @@ from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_dat
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
 
-pytestmark = pytest.mark.usefixtures("_purge_queues_on_teardown")
-
 
 @pytest.fixture(scope="module")
 def snssqs_tc(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> SNSSQSTestClient:
@@ -30,7 +28,7 @@ async def _create_topics_and_queues(snssqs_tc: SNSSQSTestClient) -> None:
     await snssqs_tc.subscribe_to(topic="order--created", queue="order--created")
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(autouse=True)
 async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerator[None, None]:
     yield
     await snssqs_tc.purge_queue("order--created")
@@ -53,7 +51,7 @@ def service_orders_container(
         .with_env("AWS_SQS_ENDPOINT_URL", moto_container.get_internal_url())
         .with_env("AWS_DYNAMODB_ENDPOINT_URL", moto_container.get_internal_url())
         .with_env("DYNAMODB_TABLE_NAME", "orders")
-        .with_command("bash -c 'pip install coverage && coverage run -m tomodachi run src/orders.py --production'")
+        .with_command("coverage run -m tomodachi run src/orders.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
     moto_container.reset_moto()

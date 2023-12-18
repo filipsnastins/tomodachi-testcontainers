@@ -19,9 +19,19 @@ types-aiobotocore = { extras = [
 types-aiobotocore-dynamodb = "2.5.2"
 uvloop = "^0.19.0"
 
+[tool.poetry.group.dev]
+optional = true
+
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
 isort = "^5.12.0"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+debugpy = "^1.8.0"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
