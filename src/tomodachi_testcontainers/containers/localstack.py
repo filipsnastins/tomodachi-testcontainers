@@ -48,7 +48,7 @@ class LocalStackContainer(WebContainer):
             endpoint_url=self.get_external_url(),
         )
 
-    def start(self, timeout: float = 10.0, interval: float = 0.5, status_code: int = 200) -> "LocalStackContainer":
-        super().start(timeout=timeout, interval=interval, status_code=status_code)
-        wait_for_logs(self, r"Ready\.\n", timeout=timeout)
+    def start(self) -> "LocalStackContainer":
+        super().start()
+        wait_for_logs(self, r"Ready\.\n", timeout=10.0)
         return self

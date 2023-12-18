@@ -36,8 +36,8 @@ class TomodachiContainer(WebContainer):
     def log_message_on_container_start(self) -> str:
         return f"Tomodachi service: http://localhost:{self.edge_port}"
 
-    def start(self, timeout: float = 10.0, interval: float = 0.5, status_code: int = 200) -> "TomodachiContainer":
-        super().start(timeout=timeout, interval=interval, status_code=status_code)
+    def start(self) -> "TomodachiContainer":
+        super().start()
         # Apart from HTTP healthcheck, we need to wait for "started service" log
         # to make sure messaging transport like AWS SNS SQS is also up and running.
         # It's started independently from HTTP transport.
@@ -46,7 +46,7 @@ class TomodachiContainer(WebContainer):
         # tomodachi < 0.26.0 - "Started service"
         # tomodachi >= 0.26.0 - "started service successfully"
         # using (?i) to ignore case to support both versions
-        wait_for_logs(self, "(?i)started service", timeout=timeout)
+        wait_for_logs(self, "(?i)started service", timeout=10.0)
         return self
 
     def stop(self) -> None:

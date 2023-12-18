@@ -37,17 +37,28 @@ class WebContainer(DockerContainer, abc.ABC):
         host = self.get_container_host_ip()
         return f"http://{host}:{self.edge_port}"
 
-    def start(self, timeout: float = 10.0, interval: float = 0.5, status_code: int = 200) -> "WebContainer":
+    def start(self) -> "WebContainer":
         super().start()
         if self.http_healthcheck_path:
             url = urllib.parse.urljoin(self.get_external_url(), self.http_healthcheck_path)
-            wait_for_http_healthcheck(url=url, timeout=timeout, interval=interval, status_code=status_code)
+            wait_for_http_healthcheck(url=url)
         return self
 
 
-def wait_for_http_healthcheck(url: str, timeout: float = 10.0, interval: float = 0.5, status_code: int = 200) -> None:
-    for attempt in Retrying(stop=stop_after_delay(timeout), wait=wait_fixed(interval), reraise=True):
+def wait_for_http_healthcheck(
+    url: str,
+    interval: float = 1.0,
+    timeout: float = 3.0,
+    start_period: float = 10.0,
+    retries: int = 3,
+    status_code: int = 200,
+) -> None:
+    for attempt in Retrying(
+        stop=stop_after_delay(start_period + (timeout * retries)),
+        wait=wait_fixed(interval),
+        reraise=True,
+    ):
         with attempt:
-            response = requests.get(url, timeout=1.0)
+            response = requests.get(url, timeout=timeout)
             if response.status_code != status_code:
                 raise RuntimeError(f"Healthcheck failed with HTTP status code: {response.status_code}")

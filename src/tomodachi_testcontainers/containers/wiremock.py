@@ -39,9 +39,9 @@ class WireMockContainer(WebContainer):
     def log_message_on_container_start(self) -> str:
         return f"Wiremock admin: http://localhost:{self.edge_port}/__admin"
 
-    def start(self, timeout: float = 10.0, interval: float = 0.5, status_code: int = 200) -> "WireMockContainer":
-        super().start(timeout=timeout, interval=interval, status_code=status_code)
-        wait_for_logs(self, "port:", timeout=timeout)
+    def start(self) -> "WireMockContainer":
+        super().start()
+        wait_for_logs(self, "port:", timeout=10.0)
         self.copy_mappings_to_container()
         self.copy_mapping_files_to_container()
         self.reload_mappings()
