@@ -81,7 +81,7 @@ class TomodachiServiceOrders(tomodachi.Service):
             order_id=str(uuid.uuid4()),
             customer_id=customer_id,
             products=products,
-            created_at=datetime.utcnow().replace(tzinfo=timezone.utc),
+            created_at=datetime.now(timezone.utc),
         )
         event = OrderCreatedEvent(
             event_id=str(uuid.uuid4()),
@@ -139,7 +139,9 @@ class TomodachiServiceOrders(tomodachi.Service):
             )
             if "Item" not in response:
                 logger.error("order_not_found", order_id=order_id)
-                return web.json_response({"error": "Order not found", **links}, status=404)
+                return web.json_response(
+                    {"error": "Order not found", **links}, status=404
+                )
 
             item = response["Item"]
             order = Order(

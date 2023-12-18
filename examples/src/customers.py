@@ -83,7 +83,7 @@ class TomodachiServiceCustomers(tomodachi.Service):
             customer_id=str(uuid.uuid4()),
             name=data["name"],
             orders=[],
-            created_at=datetime.utcnow().replace(tzinfo=timezone.utc),
+            created_at=datetime.now(timezone.utc),
         )
 
         async with dynamodb.get_dynamodb_client() as dynamodb_client:
@@ -109,7 +109,9 @@ class TomodachiServiceCustomers(tomodachi.Service):
         )
 
     @tomodachi.http("GET", r"/customer/(?P<customer_id>[^/]+?)/?")
-    async def get_customer(self, request: web.Request, customer_id: str) -> web.Response:
+    async def get_customer(
+        self, request: web.Request, customer_id: str
+    ) -> web.Response:
         links = {
             "_links": {
                 "self": {"href": f"/customer/{customer_id}"},
@@ -117,11 +119,14 @@ class TomodachiServiceCustomers(tomodachi.Service):
         }
         async with dynamodb.get_dynamodb_client() as dynamodb_client:
             response = await dynamodb_client.get_item(
-                TableName=dynamodb.get_table_name(), Key={"PK": {"S": f"CUSTOMER#{customer_id}"}}
+                TableName=dynamodb.get_table_name(),
+                Key={"PK": {"S": f"CUSTOMER#{customer_id}"}},
             )
             if "Item" not in response:
                 logger.error("customer_not_found", customer_id=customer_id)
-                return web.json_response({"error": "Customer not found", **links}, status=404)
+                return web.json_response(
+                    {"error": "Customer not found", **links}, status=404
+                )
 
             item = response["Item"]
             orders = item["Orders"]["SS"] if "Orders" in item else []

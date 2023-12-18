@@ -1,6 +1,6 @@
 import re
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import AsyncGenerator, Generator, cast
 
 import httpx
@@ -128,7 +128,7 @@ async def test_register_created_order(http_client: httpx.AsyncClient, snssqs_tc:
                 "order_id": order_id,
                 "customer_id": customer_id,
                 "products": ["foo", "bar"],
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
             },
             envelope=JsonBase,
         )

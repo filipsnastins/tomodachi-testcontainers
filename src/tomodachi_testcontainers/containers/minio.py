@@ -45,7 +45,7 @@ class MinioContainer(WebContainer):
     def log_message_on_container_start(self) -> str:
         return (
             "Minio started: "
-            f"S3-API: http://localhost:{self.s3_api_edge_port}/; "
+            f"S3-API: http://localhost:{self.s3_api_edge_port}/; "  # noqa: E702
             f"console: http://localhost:{self.console_edge_port}/"
         )
 
