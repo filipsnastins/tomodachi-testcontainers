@@ -68,7 +68,7 @@ contains more learning material, examples, recipes, and the code API reference.
 
 ## Installation
 
-```bash
+```sh
 pip install tomodachi-testcontainers
 
 # Extra dependencies:
@@ -114,7 +114,7 @@ send some requests, and assert the responses.
 The example assumes that a Dockerfile for running the service is present in the
 current working directory. An [example Dockerfile](examples/Dockerfile) is in the [examples/](examples/).
 
-```python
+```py
 import tomodachi
 from aiohttp import web
 
@@ -129,7 +129,7 @@ class TomodachiServiceHealthcheck(tomodachi.Service):
 
 The following `tomodachi_container` fixture builds and runs the service as a Docker container.
 
-```python
+```py
 from typing import Generator, cast
 
 import pytest
@@ -163,7 +163,7 @@ and remove the old one for every test.
 In this example, `tomodachi_container` fixture is used to test that the `GET /health` endpoint
 returns status code `HTTP 200` and a correct JSON response.
 
-```python
+```py
 import httpx
 import pytest
 
@@ -232,7 +232,7 @@ production-like external dependencies - databases, message brokers, file stores,
 For example, let's test a Tomodachi service that uses AWS S3 to store files.
 The `TomodachiServiceS3` has one endpoint `GET /file/<key>` that returns a content of a file stored in AWS S3.
 
-```python
+```py
 import os
 
 import tomodachi
@@ -297,7 +297,7 @@ As in the previous example, first, we need to create Tomodachi Testcontainer fix
 to build and run the service under test. It's done with a `tomodachi_container` fixture
 in the example below.
 
-```python
+```py
 from typing import Generator, cast
 
 import pytest
@@ -349,7 +349,7 @@ deleting all S3 buckets and DynamoDB tables after every test.
 
 That's the setup, now on to the application test. 🧪
 
-```python
+```py
 import httpx
 import pytest
 from types_aiobotocore_s3 import S3Client
@@ -622,7 +622,7 @@ log_level = "INFO"
 By default, `pytest` won't show any output if all tests pass. To see the logs in the console, run `pytest` with `-rA` flag,
 e.g. `pytest -rA`. It will show extra summary for A(ll) tests, including captured logs.
 
-```bash
+```sh
 -r chars              Show extra test summary info as specified by chars: (f)ailed, (E)rror, (s)kipped, (x)failed, (X)passed, (p)assed, (P)assed with output, (a)ll except passed (p/P), or (A)ll. (w)arnings are enabled by default (see --disable-warnings), 'N' can be used to reset the list. (default: 'fE').
 ```
 
@@ -664,7 +664,7 @@ e.g. manually check the contents of a database, S3 buckets, message queues or va
 
 To do that, pause the execution of a test with a breakpoint and manually inspect running containers:
 
-```python
+```py
 import httpx
 import pytest
 
@@ -716,7 +716,7 @@ To generate the code coverage report from `TomodachiContainer`, start the contai
 The `coverage` tool will keep track of the code that has been executed in the container,
 and write the coverage report to `.coverage` file when the container stops.
 
-```python
+```py
 from typing import Generator, cast
 
 import pytest
@@ -747,7 +747,7 @@ so set the environment variable in the CI/CD server configuration.
 
 Tying it all together, run pytest with the coverage mode:
 
-```bash
+```sh
 TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE=1 pytest --cov --cov-branch
 ```
 
@@ -806,7 +806,7 @@ event_loop with a session scoped request object, involved factories`.
 
 - Install dev dependencies with [Poetry](https://python-poetry.org/)
 
-```bash
+```sh
 poetry install --all-extras --with dev --with docs
 poetry shell
 pre-commit install
@@ -814,7 +814,7 @@ pre-commit install
 
 - Run tests
 
-```bash
+```sh
 docker network create tomodachi-testcontainers
 
 poetry run test
@@ -823,33 +823,33 @@ poetry run test-ci  # With code coverage
 
 - Format and lint code
 
-```bash
+```sh
 poetry run format
 poetry run lint
 ```
 
 - Run all commit hooks at once
 
-```bash
+```sh
 poetry run hooks
 ```
 
 - Build package release
 
-```bash
+```sh
 poetry build
 ```
 
-- Build documentation with [MkDocs](https://www.mkdocs.org/) and [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
+- Develop documentation with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
 
-```bash
+```sh
 mkdocs serve
 ```
 
 - Generate C4 diagrams with PlantUML from [docs/architecture/c4](docs/architecture/c4)
   (get plantuml.jar at <https://plantuml.com/starting>).
 
-```bash
+```sh
 export JAVA_HOME=`/usr/libexec/java_home -v 21`
 
 java -jar plantuml.jar -DRELATIVE_INCLUDE="." docs/**/*.puml
