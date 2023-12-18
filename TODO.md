@@ -42,6 +42,6 @@
 ## Testing
 
 - [x] Run tests in parallel with `pytest-xdist`
-  - [ ] Docs
-  - [ ] Test in GitHub Actions
+  - [x] Test in GitHub Actions
+  - [ ] Document in README and recipes
 - [ ] Docker-from-Docker test
