@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.13.0 (2023-12-18)
+
+### New features
+
+- Support Python 3.12
+
+### Bug fixes
+
+- `DynamoDBAdminContainer`: fix AWS region configuration.
+
 ## 0.12.0 (2023-11-26)
 
 ### New features
