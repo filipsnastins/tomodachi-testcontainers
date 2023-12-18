@@ -139,9 +139,7 @@ class TomodachiServiceOrders(tomodachi.Service):
             )
             if "Item" not in response:
                 logger.error("order_not_found", order_id=order_id)
-                return web.json_response(
-                    {"error": "Order not found", **links}, status=404
-                )
+                return web.json_response({"error": "Order not found", **links}, status=404)
 
             item = response["Item"]
             order = Order(

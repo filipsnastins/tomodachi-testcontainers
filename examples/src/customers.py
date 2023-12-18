@@ -109,9 +109,7 @@ class TomodachiServiceCustomers(tomodachi.Service):
         )
 
     @tomodachi.http("GET", r"/customer/(?P<customer_id>[^/]+?)/?")
-    async def get_customer(
-        self, request: web.Request, customer_id: str
-    ) -> web.Response:
+    async def get_customer(self, request: web.Request, customer_id: str) -> web.Response:
         links = {
             "_links": {
                 "self": {"href": f"/customer/{customer_id}"},
@@ -124,9 +122,7 @@ class TomodachiServiceCustomers(tomodachi.Service):
             )
             if "Item" not in response:
                 logger.error("customer_not_found", customer_id=customer_id)
-                return web.json_response(
-                    {"error": "Customer not found", **links}, status=404
-                )
+                return web.json_response({"error": "Customer not found", **links}, status=404)
 
             item = response["Item"]
             orders = item["Orders"]["SS"] if "Orders" in item else []
