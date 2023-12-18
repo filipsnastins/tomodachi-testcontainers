@@ -9,6 +9,10 @@ readme = "README.md"
 homepage = "https://github.com/filipsnastins/tomodachi-testcontainers"
 repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry.extras]
 db = ["sqlalchemy"]
 mysql = ["sqlalchemy", "pymysql", "cryptography"]
@@ -80,10 +84,6 @@ types-requests = "^2.31.0.2"
 griffe-typingdoc = "^0.2.4"
 mkdocs-material = "^9.4.14"
 mkdocstrings = { extras = ["python"], version = "^0.24.0" }
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.plugins."pytest11"]
 tomodachi_testcontainers = "tomodachi_testcontainers.pytest"
