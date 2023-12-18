@@ -5,7 +5,6 @@ from typing import Any, AsyncGenerator, Dict, Generator, cast
 import httpx
 import pytest
 import pytest_asyncio
-from docker.models.images import Image
 from tomodachi.envelope.json_base import JsonBase
 from types_aiobotocore_s3 import S3Client
 from types_aiobotocore_sns import SNSClient
@@ -36,11 +35,11 @@ async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerat
 
 @pytest.fixture(scope="module")
 def service_s3_container(
-    testcontainers_docker_image: Image, localstack_container: LocalStackContainer, _create_topics_and_queues: None
+    testcontainers_docker_image: str, localstack_container: LocalStackContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
-            image=str(testcontainers_docker_image.id),
+            image=testcontainers_docker_image,
             edge_port=get_available_port(),
             http_healthcheck_path="/health",
         )

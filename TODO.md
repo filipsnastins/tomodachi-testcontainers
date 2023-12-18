@@ -30,7 +30,7 @@
 - [ ] Container lifecycle hooks, e.g. `after_start`, `before_stop`
 - [x] Export coverage: install `coverage` from Poetry `test` dependency group
   - Add a new Docker image stage `test` with `coverage` installed
-  - [ ] Rewrite code coverage docs section
+  - [ ] Rewrite code coverage docs section; suggest different ways of starting app in coverage mode
 
 ## Docs
 
@@ -41,5 +41,7 @@
 
 ## Testing
 
-- [ ] Run tests in parallel with `pytest-xdist`
+- [x] Run tests in parallel with `pytest-xdist`
+  - [ ] Docs
+  - [ ] Test in GitHub Actions
 - [ ] Docker-from-Docker test

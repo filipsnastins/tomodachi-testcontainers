@@ -6,7 +6,6 @@ import asyncssh
 import httpx
 import pytest
 import pytest_asyncio
-from docker.models.images import Image
 
 from tomodachi_testcontainers import SFTPContainer, TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
@@ -14,11 +13,11 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture(scope="module")
 def service_sftp_container(
-    testcontainers_docker_image: Image, sftp_container: SFTPContainer
+    testcontainers_docker_image: str, sftp_container: SFTPContainer
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
-            image=str(testcontainers_docker_image.id),
+            image=testcontainers_docker_image,
             edge_port=get_available_port(),
             http_healthcheck_path="/health",
         )

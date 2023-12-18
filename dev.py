@@ -48,6 +48,8 @@ def test_ci() -> None:
             "--cov-report=html:build/htmlcov",
             "-v",
             "--junitxml=build/tests.xml",
+            "-n",
+            "auto",
         ],
         env={"TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE": "1", **os.environ},
     )

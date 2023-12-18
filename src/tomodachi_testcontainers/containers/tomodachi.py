@@ -18,6 +18,7 @@ class TomodachiContainer(WebContainer):
         internal_port: int = 9700,
         edge_port: int = 9700,
         http_healthcheck_path: Optional[str] = None,
+        *,
         export_coverage: bool = False,
         **kwargs: Any,
     ) -> None:

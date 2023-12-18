@@ -56,6 +56,8 @@ A collection of recipes for testing applications with testcontainers.
 - Pre-pull required docker images in CI
 - Start containers only once, isolate the state with application means
 
+- Running tests in parallel with pytest-xdist
+
 ## Techniques
 
 - Integration testing - verify that all system components and frameworks are integrated correctly.
