@@ -48,6 +48,6 @@ class WebContainer(DockerContainer, abc.ABC):
 def wait_for_http_healthcheck(url: str, timeout: float = 10.0, interval: float = 0.5, status_code: int = 200) -> None:
     for attempt in Retrying(stop=stop_after_delay(timeout), wait=wait_fixed(interval), reraise=True):
         with attempt:
-            response = requests.get(url, timeout=timeout)
+            response = requests.get(url, timeout=1.0)
             if response.status_code != status_code:
                 raise RuntimeError(f"Healthcheck failed with HTTP status code: {response.status_code}")
