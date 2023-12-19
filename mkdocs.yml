@@ -76,6 +76,7 @@ nav:
   - Recipes:
       - recipes/index.md
       - recipes/testing-databases.md
+      - recipes/parallelizing-tests.md
   - Reference - Code API:
       - Containers: reference/containers.md
       - Clients: reference/clients.md
