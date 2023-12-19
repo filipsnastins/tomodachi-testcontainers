@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.13.1 (XXXX-XX-XX)
+## 0.13.1 (2023-12-19)
 
 ### New features
 
