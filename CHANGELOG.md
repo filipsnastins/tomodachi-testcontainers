@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.13.1 (XXXX-XX-XX)
+
+### New features
+
+- Enable parallel test execution with `pytest-xdist`
+
+### Breaking changes
+
+- Fixture `testcontainers_docker_image` now returns an `image_id` as a `str` instead of `docker.models.images.Image` instance.
+
 ## 0.13.0 (2023-12-18)
 
 ### New features
