@@ -31,6 +31,7 @@ theme:
     - content.tabs.link
     - content.tooltips
     - navigation.expand
+    - navigation.footer
     - navigation.indexes
     - navigation.path
     - navigation.sections
@@ -38,6 +39,7 @@ theme:
     - search.highlight
     - search.suggest
     - toc.follow
+
   icon:
     repo: fontawesome/brands/github-alt
 
@@ -62,6 +64,8 @@ plugins:
 
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
   - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
@@ -70,12 +74,12 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
-
 nav:
   - index.md
   - Recipes:
       - recipes/index.md
       - recipes/testing-databases.md
+      - recipes/testing-repositories.md
       - recipes/parallelizing-tests.md
   - Reference - Code API:
       - Containers: reference/containers.md
