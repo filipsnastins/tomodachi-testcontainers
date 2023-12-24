@@ -19,14 +19,11 @@ class EphemeralDockerImage:
         context: Optional[Path] = None,
         target: Optional[str] = None,
         docker_client_kwargs: Optional[Dict] = None,
-        *,
-        remove_image_on_exit: bool = True,
     ) -> None:
         self.dockerfile = str(dockerfile) if dockerfile else None
         self.context = str(context) if context else "."
         self.target = target
         self._docker_client = DockerClient(**(docker_client_kwargs or {}))
-        self._remove_image_on_exit = remove_image_on_exit
 
     def __enter__(self) -> Image:
         return self._build_image()
@@ -34,8 +31,7 @@ class EphemeralDockerImage:
     def __exit__(
         self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
     ) -> None:
-        if self._remove_image_on_exit:
-            self._remove_image()
+        self._remove_image()
 
     def _build_image(self) -> Image:
         if os.getenv("DOCKER_BUILDKIT"):

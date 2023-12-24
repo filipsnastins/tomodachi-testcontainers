@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from typing import Generator
 
+import docker.errors
 import pytest
 
 from tomodachi_testcontainers import EphemeralDockerImage
@@ -10,20 +11,26 @@ from tomodachi_testcontainers import EphemeralDockerImage
 
 @pytest.fixture(scope="session")
 def testcontainers_docker_image() -> Generator[str, None, None]:
-    # Test are running in parallel with pytest-xdist
     if os.getenv("PYTEST_XDIST_WORKER"):
-        # Don't remove the image on teardown because it's used by other pytest-xdist workers at the same time
-        with _testcontainers_docker_image(remove_image_on_exit=False) as image_id:
-            yield image_id
-    # Tests are running without parallelization
+        try:
+            with _testcontainers_docker_image() as image_id:
+                yield image_id
+        except docker.errors.APIError as exc:
+            if exc.response is not None:
+                message = str(exc.response.json().get("message", ""))
+                # Race condition when running tests in parallel -
+                # multiple tests try to delete the same image at the same time.
+                # The last test will succeed with deleting the image, the preceding tests will fail.
+                if exc.response.status_code == 409 and "image is being used by running container" in message:
+                    return
+            raise
     else:
-        # No one else is using the image, remove it on teardown
-        with _testcontainers_docker_image(remove_image_on_exit=True) as image_id:
+        with _testcontainers_docker_image() as image_id:
             yield image_id
 
 
 @contextlib.contextmanager
-def _testcontainers_docker_image(*, remove_image_on_exit: bool) -> Generator[str, None, None]:
+def _testcontainers_docker_image() -> Generator[str, None, None]:
     if image_id := os.getenv("TOMODACHI_TESTCONTAINER_IMAGE_ID"):
         yield image_id
     else:
@@ -42,6 +49,5 @@ def _testcontainers_docker_image(*, remove_image_on_exit: bool) -> Generator[str
             dockerfile=dockerfile,
             context=context,
             target=target,
-            remove_image_on_exit=remove_image_on_exit,
         ) as image:
             yield str(image.id)
