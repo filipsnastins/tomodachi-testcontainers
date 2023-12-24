@@ -39,7 +39,6 @@ theme:
     - search.highlight
     - search.suggest
     - toc.follow
-
   icon:
     repo: fontawesome/brands/github-alt
 
