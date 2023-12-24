@@ -11,6 +11,7 @@ from tomodachi_testcontainers import EphemeralDockerImage
 
 @pytest.fixture(scope="session")
 def testcontainers_docker_image() -> Generator[str, None, None]:
+    # When tests are running in parallel with pytest-xdist
     if os.getenv("PYTEST_XDIST_WORKER"):
         try:
             with _testcontainers_docker_image() as image_id:
@@ -24,6 +25,7 @@ def testcontainers_docker_image() -> Generator[str, None, None]:
                 if exc.response.status_code == 409 and "image is being used by running container" in message:
                     return
             raise
+    # When tests are running sequentially
     else:
         with _testcontainers_docker_image() as image_id:
             yield image_id
