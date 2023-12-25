@@ -105,13 +105,13 @@ you might find that the database is getting in the way - test data is tedious to
 It might signal that the system component under test is unnecessarily tightly coupled to the database, making it difficult to test its behavior.
 
 In this case, the system might benefit from separating the data storage layer from the business logic layer.
-The [Repository pattern](https://www.cosmicpython.com/book/chapter_02_repository.html) is an abstraction over data storage layer.
+The [Repository pattern](https://martinfowler.com/eaaCatalog/repository.html) is an abstraction over the data storage layer.
 It wraps database operations in an interface and hides the complexity and mechanics of the database.
-When using the Repository pattern, the business logic doesn't directly call ORM models or database drivers to access data storage,
+When using the Repository pattern, the business logic doesn't directly call ORM models or database drivers to access data storage
 but does so indirectly through the Repository interface.
 
 To test the business logic without the complexity of the production database, substitute the real Repository with a fake or mock.
-To ensure that the data storage layer works, separately test the real Repository implementation with the production database.
+To ensure the data storage layer works, separately test the real Repository implementation with the production database.
 That is described in the next section - [Testing Repositories](./testing-repositories.md).
 
 To learn more about the Repository pattern use cases,
@@ -120,7 +120,7 @@ and the [original pattern description in the PoEAA catalog](https://martinfowler
 
 Since examples in this section focused on relational databases,
 it's worth mentioning that the Repository pattern is database technology agnostic -
-[see an example implementation with DynamoDB in this book](https://ddd.mikaelvesavuori.se/tactical-ddd/repositories).
+[see an example implementation with DynamoDB](https://ddd.mikaelvesavuori.se/tactical-ddd/repositories).
 
 ## References
 
