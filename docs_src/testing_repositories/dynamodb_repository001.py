@@ -4,7 +4,7 @@ from .domain001 import Customer
 
 
 class DynamoDBCustomerRepository:
-    def __init__(self, client: DynamoDBClient, table_name: str):
+    def __init__(self, client: DynamoDBClient, table_name: str) -> None:
         self._client = client
         self._table_name = table_name
 
