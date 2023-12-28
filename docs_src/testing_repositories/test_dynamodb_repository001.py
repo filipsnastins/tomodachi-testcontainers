@@ -5,8 +5,9 @@ import pytest
 import pytest_asyncio
 from types_aiobotocore_dynamodb import DynamoDBClient
 
+from .create_customers_table001 import create_customers_table
 from .domain001 import Customer
-from .dynamodb_repository001 import DynamoDBCustomerRepository, create_customers_table
+from .dynamodb_repository001 import DynamoDBCustomerRepository
 
 
 @pytest_asyncio.fixture()
