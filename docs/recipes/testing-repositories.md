@@ -180,6 +180,8 @@ docs_src/testing_repositories/test_dynamodb_repository005.py:test
 
 ## Testing other Repository implementations with the same test suite
 
+TODO
+
 ## Using Ports & Adapters pattern for decoupling infrastructure components
 
 TODO link to a more general pattern - ports and adapters
