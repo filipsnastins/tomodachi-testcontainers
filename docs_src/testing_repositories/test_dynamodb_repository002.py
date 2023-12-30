@@ -18,8 +18,9 @@ async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[Dyn
     await moto_dynamodb_client.delete_table(TableName=table_name)
 
 
+# --8<-- [start:test]
 @pytest.mark.asyncio()
-async def test_save_customer(repository: DynamoDBCustomerRepository) -> None:
+async def test_save_customer(repository: DynamoDBCustomerRepository, moto_dynamodb_client: DynamoDBClient) -> None:
     # Arrange
     customer = Customer.create(name="John Doe", email="john.doe@example.com")
 
@@ -27,4 +28,16 @@ async def test_save_customer(repository: DynamoDBCustomerRepository) -> None:
     await repository.save(customer)
 
     # Assert
-    ...
+    item = await moto_dynamodb_client.get_item(
+        TableName=repository._table_name,
+        Key={"PK": {"S": f"CUSTOMER#{customer.id}"}},
+    )
+    assert item["Item"] == {
+        "PK": {"S": f"CUSTOMER#{customer.id}"},
+        "Id": {"S": customer.id},
+        "Name": {"S": "John Doe"},
+        "Email": {"S": "john.doe@example.com"},
+    }
+
+
+# --8<-- [start:end]

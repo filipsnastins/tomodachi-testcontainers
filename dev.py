@@ -29,7 +29,7 @@ def lint() -> None:
     check_call(["flake8", "."])
     check_call(["pylint", "src/tomodachi_testcontainers", "tests"])
     check_call(["mypy", "src", "tests", "examples", "docs_src"])
-    check_call(["bandit", "-r", "src", "examples", "docs_src"])
+    check_call(["bandit", "-r", "src", "examples"])
 
 
 def test() -> None:

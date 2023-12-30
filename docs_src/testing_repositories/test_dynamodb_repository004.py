@@ -6,8 +6,7 @@ import pytest_asyncio
 from types_aiobotocore_dynamodb import DynamoDBClient
 
 from .create_customers_table import create_customers_table
-from .domain import Customer
-from .dynamodb_repository001 import DynamoDBCustomerRepository
+from .dynamodb_repository003 import DynamoDBCustomerRepository
 
 
 @pytest_asyncio.fixture()
@@ -18,13 +17,11 @@ async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[Dyn
     await moto_dynamodb_client.delete_table(TableName=table_name)
 
 
+# --8<-- [start:test]
 @pytest.mark.asyncio()
-async def test_save_customer(repository: DynamoDBCustomerRepository) -> None:
-    # Arrange
-    customer = Customer.create(name="John Doe", email="john.doe@example.com")
+async def test_customer_not_found(repository: DynamoDBCustomerRepository) -> None:
+    with pytest.raises(KeyError):
+        await repository.get("123456")
 
-    # Act
-    await repository.save(customer)
 
-    # Assert
-    ...
+# --8<-- [end:test]

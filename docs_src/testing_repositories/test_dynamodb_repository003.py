@@ -7,7 +7,7 @@ from types_aiobotocore_dynamodb import DynamoDBClient
 
 from .create_customers_table import create_customers_table
 from .domain import Customer
-from .dynamodb_repository001 import DynamoDBCustomerRepository
+from .dynamodb_repository003 import DynamoDBCustomerRepository
 
 
 @pytest_asyncio.fixture()
@@ -18,6 +18,7 @@ async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[Dyn
     await moto_dynamodb_client.delete_table(TableName=table_name)
 
 
+# --8<-- [start:test]
 @pytest.mark.asyncio()
 async def test_save_customer(repository: DynamoDBCustomerRepository) -> None:
     # Arrange
@@ -27,4 +28,7 @@ async def test_save_customer(repository: DynamoDBCustomerRepository) -> None:
     await repository.save(customer)
 
     # Assert
-    ...
+    assert await repository.get(customer.id) == customer
+
+
+# --8<-- [end:test]

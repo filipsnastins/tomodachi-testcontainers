@@ -2,7 +2,7 @@
 
 The [Repository pattern](https://martinfowler.com/eaaCatalog/repository.html) is an abstraction over the data storage layer.
 It wraps database operations in an interface and hides the complexity and mechanics of the database.
-The domain layer uses the Repository to query and save domain objects.
+The domain layer uses the Repository to query and persist domain objects.
 From the domain layer point of view, the Repository's interface looks like an in-memory domain object collection.
 
 The Repository's responsibility is object retrieval and persistence - it contains no business logic.
@@ -36,18 +36,18 @@ with the default constructor (auto-generated with `@dataclass`) or a `create` fa
 The former is used for _object reconstruction_ and the latter for _new object creation_.
 
 ```py title="customers/domain.py", hl_lines="7-9 12"
---8<-- "docs_src/testing_repositories/domain001.py"
+--8<-- "docs_src/testing_repositories/domain.py"
 ```
 
-When you're querying for an existing object, e.g., by customer identifier or email address, the object is
+When you're querying an existing object, e.g., by customer identifier or email address, the object is
 _reconstructed_ from existing data from a datastore. When the data layer is separated from the domain layer,
 the Repository is responsible for reconstructing the objects.
 The domain layer provides an interface for object reconstruction - the object constructor method (`__init__`).
 
 To create a new, unique customer, e.g., when a user registers in your application, we'll use the _new object creation_ method - `create`.
-The `create` method requires the necessary data in the input arguments to create a new customer - `name` and `email`.
+The `create` method requires the data to create a new customer - `name` and `email`.
 Unlike `__init__`, the `create` method doesn't require the `id`; the new random `uuid` is generated inside the `create` method.
-Therefore, the _new object creation_ method encapsulates the business rules of new object creation -
+Therefore, the _new object creation_ method encapsulates the rules of a new object creation -
 in this example, the `Customer.id` generation - and offloads this responsibility from the data layer.
 
 We'll see how separating the object reconstruction from the new object creation is useful when implementing a sample Repository.
@@ -58,28 +58,26 @@ In this example, we'll use [AWS DynamoDB](https://aws.amazon.com/pm/dynamodb/) t
 The sample Repository has two methods - constructor (`__init__`) and `save` method.
 
 The constructor takes two dependencies - `DynamoDBClient` and `table_name`. Explicitly passing the dependencies increases flexibility -
-the Repository will be easy to test and configure in the production code,
-as the next section where we'll write Repository tests will show.
-The `save` method persists a `Customer` object in the database; its current implementation is the simplest version.
+the Repository will be easy to configure in tests and in the production code, as we'll see in the following sections.
+The `save` method persists a `Customer` object in the database; its implementation is the minimal working version to showcase the example.
 
-```py title="customers/dynamodb_repository.py" hl_lines="7 11"
+```py title="adapters/dynamodb_repository.py" hl_lines="7 11"
 --8<-- "docs_src/testing_repositories/dynamodb_repository001.py"
 ```
 
 ## Testing with a production-like database
 
-As we learned in the [Testing Databases](testing-databases.md), we want to test the Repository
-as close to the production setup as possible.
-To test DynamoDB, we'll use [Moto AWS service mocks](https://github.com/getmoto/moto). An alternative is using a real AWS account -
-that will make the tests most accurate but slower and more complicated to configure securely due to permission and account management - if we're not careful, we can accidentally run the tests on a production AWS account.
-Service mocks like [Moto](https://github.com/getmoto/moto) or [LocalStack](https://www.localstack.cloud/)
-are good enough for most use cases.
+As we learned in the [Testing Databases](testing-databases.md), we want to test the Repository with a production-like database.
+To test the DynamoDB Repository, we'll use [Moto AWS service mocks](https://github.com/getmoto/moto).
+An alternative is using a real AWS account - that will make the tests accurate but slower
+and more complicated to configure securely due to permission and account management -
+if we're not careful, we can accidentally run the tests on a production AWS account.
+Service mocks like [Moto](https://github.com/getmoto/moto) or [LocalStack](https://www.localstack.cloud/) are good enough for most use cases.
 
 To test the Repository, we need to instantiate it with `DynamoDBClient` and `table_name`.
 We'll get the `DynamoDBClient` from the Tomodachi Testcontainers library with the `moto_dynamodb_client` fixture.
-The fixture will automatically start `MotoContainer`.
-For the `table_name`, any string value will suffice - we're using a value with
-a random `uuid` suffix as a namespace to avoid table name clashes during tests.
+The fixture will automatically start `MotoContainer`. For the `table_name`, any string value will suffice;
+the example is using a value with a random `uuid` suffix as a namespace to avoid table name clashes during tests.
 
 !!! success "Dependency injection increases testability."
 
@@ -98,14 +96,91 @@ The assertion is missing for now - we'll look into what to assert in the next se
 For the example completeness, the function below creates a new DynamoDB table.
 
 ```py title="tests/create_customers_table.py"
---8<-- "docs_src/testing_repositories/create_customers_table001.py"
+--8<-- "docs_src/testing_repositories/create_customers_table.py"
 ```
 
 ## Test the interface, not the implementation
 
+To test that the Repository has saved an object in a database, we can query the database and assert that the data is stored correctly.
+This approach has a significant drawback - the tests know about the Repository's implementation details,
+such as how and where the data is stored. As more functionality is added to the Repository, the tests
+will become brittle, lengthy, and difficult to maintain.
+
+```py title="tests/test_dynamodb_repository.py" hl_lines="10-19"
+--8<--
+docs_src/testing_repositories/test_dynamodb_repository002.py:test
+--8<--
+```
+
+To test the Repository, verify its behavior by calling only its public API - _test the interface, not the implementation_.
+The intent of the `test_save_customer` is to assert that the `Customer` object is saved to the Repository -
+that it's possible to retrieve it back from the Repository and that its data is the same.
+This way, the tests are not concerned with the database's internal data structure,
+which can now change independently without breaking the tests.
+
+The `DynamoDBCustomerRepository.get` reconstructs a customer's object from existing data from the database.
+
+```py title="adapters/dynamodb_repository.py" hl_lines="22"
+class DynamoDBCustomerRepository:
+    ...
+
+--8<--
+docs_src/testing_repositories/dynamodb_repository003.py:get
+--8<--
+```
+
+!!! success "Repository's public API round-trip testing helps to avoid testing implementation details."
+
+    You can think of the pattern of saving an object and querying it in the same test as a "round-trip" test.
+    The same test verifies a complete cycle of a domain object persistence - saved in the datastore and retrieved back.
+    The example doesn't include updating the domain object, but the same idea applies -
+    create (arrange), update (act), query (assert).
+
+To test a negative case when the `Customer` is not found in the Repository,
+we can test that the `get` method raises an exception.
+The current Repository implementation will throw the `KeyError` because the `Item` key will
+not exist in the DynamoDB `GetItem` API response. This test has the same problem as the first example -
+it asserts on the implementation detail - `KeyError`.
+
+The test shouldn't care if the internal data structure is a dictionary that throws the `KeyError` when the dictionary key is not found.
+In addition, the `KeyError` might not necessarily mean that the customer is not found in the Repository.
+If the Repository has a bug and is not saving the customer's object field, the same error will be raised
+when trying to access the unsaved field, e.g., `email=item["Email"]["S"]`. In this case, the error handling code
+catching the `KeyError` will always treat it as the "customer not found" case and return misleading results to the application's end user.
+
+```py title="tests/test_dynamodb_repository.py" hl_lines="3"
+--8<--
+docs_src/testing_repositories/test_dynamodb_repository004.py:test
+--8<--
+```
+
+To hide the implementation detail, we introduce a new _domain exception_ - `CustomerNotFoundError` -
+to identify and handle the error unambiguously.
+The domain exception is part of the Repository's public API - when a customer with a given `customer_id` is not found,
+the `CustomerNotFoundError` is raised.
+All Repository's implementations must adhere to this public API or contract, regardless of the underlying database technology.
+
+```py title="adapters/dynamodb_repository.py" hl_lines="9-11"
+class DynamoDBCustomerRepository:
+    ...
+
+--8<--
+docs_src/testing_repositories/dynamodb_repository005.py:get
+--8<--
+```
+
+```py title="tests/test_dynamodb_repository.py" hl_lines="6"
+from .dynamodb_repository005 import CustomerNotFoundError
+
+
+--8<--
+docs_src/testing_repositories/test_dynamodb_repository005.py:test
+--8<--
+```
+
 ## Testing other Repository implementations with the same test suite
 
-## Tying it all together with the Ports & Adapters pattern
+## Using Ports & Adapters pattern for decoupling infrastructure components
 
 TODO link to a more general pattern - ports and adapters
 
