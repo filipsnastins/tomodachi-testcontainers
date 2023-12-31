@@ -178,18 +178,18 @@ docs_src/testing_repositories/test_repository005.py:tests
 --8<--
 ```
 
-## Implementing a fake Repository for testing
+## Implementing a fake Repository
 
 The database implementation details obscure the intent of the application's business logic, so we have hidden
 the details behind the Repository's interface - a contract between application's domain layer and persistence layer.
 
 To further ease domain layer testing, instead of using the production `DynamoDBCustomerRepository`,
 we can replace it with an in-memory fake Repository. The fake Repository will store the data in an in-memory dictionary.
-It's unsuitable for real-world use because the data is lost on application shutdown, and the Repository is not scalable.
+The in-memory version is unsuitable for real-world use because the data is lost on application shutdown, and the Repository is not scalable.
 However, if the fake Repository behaves the same as the real one, it's a good choice for unit testing, prototyping, and demos.
-There's no database or Testcontainers to manage, and the tests will be very fast.
+There's no database or Testcontainers to manage, and the tests will be fast.
 
-```py title="adapters/repository.py" hl_lines="2-3"
+```py title="adapters/repository.py"
 --8<--
 docs_src/testing_repositories/repository006.py:in_memory_repository
 --8<--
@@ -219,10 +219,9 @@ Knowing this property, we could have implemented the in-memory repository and it
 
 To reuse the same test suite for testing multiple Repository versions, we'll use `pytest` parametrized fixtures.
 Any other popular test runner should have a similar concept.
-We'll define two fixtures `dynamodb_repository` and `fake_repository`, and use them in a generic fixture `repository`.
-The `repository` fixture is parametrized - when a test case uses the fixture, it will be run twice -
-once with `dynamodb` and `fake` parameters. Depending on the passed parameter,
-the fixture will return `DynamoDBCustomerRepository` or `InMemoryRepository`.
+We'll define two fixtures, `dynamodb_repository` and `fake_repository`, and use them in the generic `repository` fixture.
+The `repository` fixture is parametrized; when a test case uses the fixture, it will be run twice -
+with `dynamodb` and `fake` parameters. Depending on the passed parameter, the fixture will return `DynamoDBCustomerRepository` or `InMemoryRepository`.
 
 ```py title="tests/test_repository.py" hl_lines="20 28 33"
 --8<--
@@ -242,7 +241,7 @@ docs_src/testing_repositories/test_repository006.py:tests
 --8<--
 ```
 
-For the type hint, the repository tests use the generic protocol - the "Port" part of the "Ports & Adapters" pattern.
+For the type hint, the repository tests use the generic Repository's protocol - the "Port" part of the "Ports & Adapters" pattern.
 
 ```py title="customers/ports.py"
 --8<-- "docs_src/testing_repositories/ports006.py"
@@ -250,20 +249,33 @@ For the type hint, the repository tests use the generic protocol - the "Port" pa
 
 <figure markdown>
   ![Testing other Repository implementations with the same test suite](../images/testing-multiple-repositories-with-the-same-test-suite.png)
-  <figcaption>Running the same test suite with different pytest fixture implementations</figcaption>
+  <figcaption>Running the same test suite with different pytest fixture implementations.</figcaption>
 </figure>
 
 ## Decoupling infrastructure components with Ports & Adapters pattern
 
-TODO
+This section used the Repository pattern to decouple the persistence layer from the domain layer.
+The Repository pattern is a specific application for another, more general pattern -
+[Ports & Adapters](<https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)>).
+The Ports & Adapters pattern helps decouple all sorts of components, not just databases.
+The following section [Decoupling Infrastructure Components with Ports & Adapters Pattern](./ports-and-adapters.md)
+describes in more detail the applications of Ports & Adapters,
+and how Testcontainers help to implement and test the "Adapters" part of the pattern.
 
-Describe the drawbacks and when it's appropriate to test the implementation details.
-
-[Decoupling Infrastructure Components with Ports & Adapters Pattern](./ports-and-adapters.md)
+The diagrams below ([C4](https://c4model.com/)) showcase how the Ports & Adapters pattern helps to implement the example Repository.
 
 <figure markdown>
   ![Container Diagram - Application with DynamoDB Database](../architecture/c4/level_2_container/02_app_with_dynamodb.png)
 </figure>
+
+Ports are the interfaces of our infrastructure components; they reside in the domain layer.
+Adapters or Infrastructure layers implement the Ports.
+There are two implementations - in-memory Repository and DynamoDB Repository.
+Testcontainers help to test the DynamoDB Repository in a production-like environment by provisioning AWS service mocks -
+LocalStack, Moto, or something else.
+
+The diagram shows that all dependencies (arrows) flow towards the domain layer. It means the domain layer doesn't depend on other
+infrastructure components. It makes the domain layer testable in isolation and makes it easier to understand the code.
 
 <figure markdown>
   ![Component Diagram - Application with DynamoDB Database](../architecture/c4/level_3_component/02_app_with_dynamodb.png)
@@ -276,3 +288,4 @@ Describe the drawbacks and when it's appropriate to test the implementation deta
 - <https://www.cosmicpython.com/book/chapter_02_repository.html>
 - <https://ddd.mikaelvesavuori.se/tactical-ddd/repositories>
 - <https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design>
+- <https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)>
