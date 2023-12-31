@@ -28,12 +28,16 @@ def lint() -> None:
     check_call(["ruff", "check", "."])
     check_call(["flake8", "."])
     check_call(["pylint", "src/tomodachi_testcontainers", "tests"])
-    check_call(["mypy", "src", "tests", "examples"])
+    check_call(["mypy", "src", "tests", "examples", "docs_src"])
     check_call(["bandit", "-r", "src", "examples"])
 
 
 def test() -> None:
     check_call(["pytest", "-v"])
+
+
+def test_docs_src() -> None:
+    check_call(["pytest", "-v", "docs_src"])
 
 
 def test_ci() -> None:
@@ -53,3 +57,4 @@ def test_ci() -> None:
         ],
         env={"TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE": "1", **os.environ},
     )
+    check_call(["pytest", "-v", "docs_src"])

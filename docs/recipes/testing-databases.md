@@ -29,7 +29,7 @@ When using SQLite for testing, the application code must only use standard featu
 This cuts the benefits an application can get by using unique features of a particular database technology,
 potentially lowering performance and increasing the complexity of the application code.
 
-!!! danger "Testing with SQLite does not guarantee that the application will work in production"
+!!! danger "Testing with SQLite does not guarantee that the application will work in production."
 
     Theres's no guarantee that the application that passed the tests using SQLite will work in the production environment with the production database.
     An ORM can still fail to work with the production database due to unknown differences in behavior.
@@ -39,7 +39,7 @@ potentially lowering performance and increasing the complexity of the applicatio
 Autotests must give confidence that the application will work in the production environment,
 so development/test/production [environment parity](https://12factor.net/dev-prod-parity) is crucial for reliable automated testing.
 
-!!! success "Use production-like database in tests"
+!!! success "Use production-like database in tests."
 
     Whether your application uses a relational or NoSQL database,
     use the same database technology, version, and configuration in automated tests as in your production environment.
@@ -64,7 +64,6 @@ from my_project import create_app
 @pytest.fixture()
 def app(monkeypatch: pytest.MonkeyPatch, postgres_container: PostgreSQLContainer) -> Flask:
     monkeypatch.setenv("DATABASE_URL", str(postgres_container.get_external_url()))
-
     return create_app()
 ```
 
@@ -97,9 +96,38 @@ docker run --rm -p 3306:3306 mysql:8 --innodb_flush_method=O_DIRECT_NO_FSYNC
 
     In Tomodachi Testcontainers library, database containers have `fsync` disabled by default.
 
+## Replacing the database with fakes or mocks
+
+The previous section described testing with a production-like database to verify that interactions
+between an application and the database will work in the production environment.
+However, when writing unit tests that exercise individual application components in isolation,
+you might find that the database is getting in the way - test data is tedious to set up, and the database setup code obscures the intent of the test.
+It might signal that the system component under test is unnecessarily tightly coupled to the database, making it difficult to test its behavior.
+
+In this case, the system might benefit from separating the data storage layer from the business logic layer.
+The [Repository pattern](https://martinfowler.com/eaaCatalog/repository.html) is an abstraction over the data storage layer.
+It wraps database operations in an interface and hides the complexity and mechanics of the database.
+When using the Repository pattern, the business logic doesn't directly call ORM models or database drivers to access data storage
+but does so indirectly through the Repository interface.
+
+To test the business logic without the complexity of the production database, substitute the real Repository with a fake or mock.
+To ensure the data storage layer works, separately test the real Repository implementation with the production database.
+That is described in the next section - [Testing Repositories](./testing-repositories.md).
+
+To learn more about the Repository pattern use cases,
+check out [cosmicpython book chapter](https://www.cosmicpython.com/book/chapter_02_repository.html) on the topic
+and the [original pattern description in the PoEAA catalog](https://martinfowler.com/eaaCatalog/repository.html).
+
+Since examples in this section focused on relational databases,
+it's worth mentioning that the Repository pattern is database technology agnostic -
+[see an example implementation with DynamoDB](https://ddd.mikaelvesavuori.se/tactical-ddd/repositories).
+
 ## References
 
 - <https://12factor.net/dev-prod-parity>
 - <https://12factor.net/config>
 - <http://michael.robellard.com/2015/07/dont-test-with-sqllite-when-you-use.html>
 - <https://pythonspeed.com/articles/faster-db-tests/>
+- <https://www.cosmicpython.com/book/chapter_02_repository.html>
+- <https://martinfowler.com/eaaCatalog/repository.html>
+- <https://ddd.mikaelvesavuori.se/tactical-ddd/repositories>

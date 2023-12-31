@@ -814,7 +814,8 @@ pre-commit install
 ```sh
 docker network create tomodachi-testcontainers
 
-poetry run test
+poetry run test  # Run tests during development
+poetry run test-docs-src  # Test documentation code examples
 poetry run test-ci  # With code coverage
 ```
 

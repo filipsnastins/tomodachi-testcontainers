@@ -44,7 +44,7 @@ Rel_U(fakeS3Client, ports, "Implements")
 Rel_D(sftpClient, externalSftp, "Reads files from", "AshyncSSH")
 Rel_D(s3Client, s3Bucket, "Transfers files to ", "aiobotocore")
 
-Rel_U(testcontainers, externalSftp, "Creates SFTP testcontainer")
-Rel_U(testcontainers, s3Bucket, "Creates LocalStack testcontainer")
+Rel_U(testcontainers, externalSftp, "Creates SFTP Testcontainer")
+Rel_U(testcontainers, s3Bucket, "Creates LocalStack Testcontainer")
 
 @enduml

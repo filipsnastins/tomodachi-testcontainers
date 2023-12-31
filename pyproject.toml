@@ -77,6 +77,7 @@ pydantic = "^2.0.2"
 pylint = "^3.0.2"
 pytest-cov = "^4.1.0"
 pytest-env = "^1.0.1"
+pytest-testdox = "^3.1.0"
 pytest-xdist = "^3.5.0"
 ruff = "^0.1.5"
 structlog = "^23.1.0"
@@ -86,6 +87,7 @@ types-requests = "^2.31.0.2"
 
 [tool.poetry.group.docs.dependencies]
 griffe-typingdoc = "^0.2.4"
+mkdocs-glightbox = "^0.3.6"
 mkdocs-material = "^9.4.14"
 mkdocstrings = { extras = ["python"], version = "^0.24.0" }
 
@@ -97,6 +99,7 @@ hooks = "dev:hooks"
 format = "dev:format"
 lint = "dev:lint"
 test = "dev:test"
+test-docs-src = "dev:test_docs_src"
 test-ci = "dev:test_ci"
 
 [tool.black]
@@ -122,7 +125,6 @@ skip = [
 
 [tool.bandit]
 exclude_dirs = [
-    "tests",
     ".git",
     ".ruff_cache",
     ".mypy_cache",
@@ -183,6 +185,7 @@ line-length = 120
 
 [tool.pytest.ini_options]
 log_level = "INFO"
+testpaths = ["tests"]
 env = [
     # Set dummy AWS credentials so that we don't accidentally mutate real infrastructure
     "AWS_REGION=us-east-1",

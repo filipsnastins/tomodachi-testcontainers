@@ -9,6 +9,10 @@
     ContainerDb(relationalDb, "Relational database", "PostgreSQL", "Datastore.")
 !endprocedure
 
+!procedure dynamoDbContainer()
+    ContainerDb(dynamoDb, "DynamoDB key-value database", "DynamoDB", "Datastore.")
+!endprocedure
+
 !procedure externalSftpContainer()
     Container_Ext(externalSftp, "Client SFTP server", "SFTP", "Files provided by a client.")
 !endprocedure

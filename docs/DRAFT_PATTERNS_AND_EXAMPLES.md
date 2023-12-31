@@ -21,13 +21,15 @@ A collection of recipes for testing applications with testcontainers.
 - GraphQL
 - Scheduled jobs
 
+- [ ] Testing Repositories
+
 - Testcontainers Desktop - <https://testcontainers.com/guides/simple-local-development-with-testcontainers-desktop/>
 
 ## Use cases
 
 - [ ] PlantUML-C4 - use icons for technologies
 
-- [ ] SQL databases. For testing SQL, we could use SQLite, but ORMs actually don't ensure that the code is portable between different database versions.
+- [x] SQL databases. For testing SQL, we could use SQLite, but ORMs actually don't ensure that the code is portable between different database versions.
       Test the system with a real database that you're using in production.
 
 - Testing integration with SFTP
@@ -56,7 +58,7 @@ A collection of recipes for testing applications with testcontainers.
 - Pre-pull required docker images in CI
 - Start containers only once, isolate the state with application means
 
-- Running tests in parallel with pytest-xdist
+- [x] Running tests in parallel with pytest-xdist
 
 ## Techniques
 
@@ -70,3 +72,17 @@ A collection of recipes for testing applications with testcontainers.
 - Debugging. Stop the time by placing a breakpoint and inspect containers
 - Attach the debugger
 - Export test coverage
+
+## Table of content
+
+```yaml
+nav:
+  - index.md
+  - Recipes:
+      - recipes/index.md
+      - recipes/testing-databases.md
+      - recipes/testing-repositories.md
+      - recipes/ports-and-adapters.md
+      - recipes/testing-applications.md # How to test your service
+      - recipes/parallelizing-tests.md
+```
