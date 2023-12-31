@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from .domain002 import Customer
+from .domain006 import Customer
 
 
 class CustomerRepository(Protocol):

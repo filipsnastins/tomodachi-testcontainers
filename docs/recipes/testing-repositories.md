@@ -178,20 +178,52 @@ docs_src/testing_repositories/test_repository005.py:tests
 --8<--
 ```
 
+## Implementing a fake Repository for testing
+
+TODO
+
+```py title="adapters/repository.py"
+--8<--
+docs_src/testing_repositories/repository006.py:in_memory_repository
+--8<--
+```
+
 ## Testing other Repository implementations with the same test suite
 
 TODO
 
-## Using Ports & Adapters pattern for decoupling infrastructure components
+```py title="tests/test_repository.py" hl_lines="20 28 33"
+--8<--
+docs_src/testing_repositories/test_repository006.py:fixtures
+--8<--
+```
 
-TODO link to a more general pattern - ports and adapters
+```py title="tests/test_repository.py" hl_lines="1 5 14 20 31"
+from .ports006 import CustomerRepository
+
+
+--8<--
+docs_src/testing_repositories/test_repository006.py:tests
+--8<--
+```
 
 <figure markdown>
-  ![Container Diagram - Application with Relational Database](../architecture/c4/level_2_container/01_app_with_relational_db.png)
+  ![Testing other Repository implementations with the same test suite](../images/testing-multiple-repositories-with-the-same-test-suite.png)
+  <figcaption>Running the same test suite with different pytest fixture implementations</figcaption>
+</figure>
+
+## Using Ports & Adapters pattern for decoupling infrastructure components
+
+TODO
+
+[Isolating and Testing Infrastructure Components with Ports & Adapters Pattern](./ports-and-adapters.md)
+
+<figure markdown>
+  ![Container Diagram - Application with Relational Database](../architecture/c4/level_2_container/02_app_with_dynamodb.png)
 </figure>
 
 <figure markdown>
-  ![Component Diagram - Application with Relational Database](../architecture/c4/level_3_component/01_app_with_relational_db.png)
+  ![Component Diagram - Application with Relational Database](../architecture/c4/level_3_component/02_app_with_dynamodb.png)
 </figure>
 
 ## References

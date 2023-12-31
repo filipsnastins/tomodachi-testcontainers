@@ -43,6 +43,7 @@ theme:
     repo: fontawesome/brands/github-alt
 
 plugins:
+  - glightbox: null
   - search: null
   - mkdocstrings:
       handlers:

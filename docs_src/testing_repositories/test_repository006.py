@@ -7,13 +7,13 @@ import pytest_asyncio
 from types_aiobotocore_dynamodb import DynamoDBClient
 
 from .create_customers_table import create_customers_table
-from .domain002 import (
+from .domain006 import (
     Customer,
     CustomerEmailAlreadyExistsError,
     CustomerIdentifierAlreadyExistsError,
     CustomerNotFoundError,
 )
-from .ports import CustomerRepository
+from .ports006 import CustomerRepository
 from .repository006 import DynamoDBCustomerRepository, InMemoryRepository
 
 

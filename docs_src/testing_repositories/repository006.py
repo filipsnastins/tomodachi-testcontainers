@@ -1,16 +1,19 @@
-# --8<-- [start:dynamodb_repository]
 from typing import List
 
 from types_aiobotocore_dynamodb import DynamoDBClient
 
-from .domain002 import (
+# --8<-- [start:imports]
+from .domain006 import (
     Customer,
     CustomerEmailAlreadyExistsError,
     CustomerIdentifierAlreadyExistsError,
     CustomerNotFoundError,
 )
 
+# --8<-- [end:imports]
 
+
+# --8<-- [start:dynamodb_repository]
 class DynamoDBCustomerRepository:
     def __init__(self, client: DynamoDBClient, table_name: str) -> None:
         self._client = client

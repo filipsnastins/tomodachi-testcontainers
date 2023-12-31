@@ -86,6 +86,7 @@ types-requests = "^2.31.0.2"
 
 [tool.poetry.group.docs.dependencies]
 griffe-typingdoc = "^0.2.4"
+mkdocs-glightbox = "^0.3.6"
 mkdocs-material = "^9.4.14"
 mkdocstrings = { extras = ["python"], version = "^0.24.0" }
 
