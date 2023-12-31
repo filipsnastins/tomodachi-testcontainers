@@ -2467,6 +2467,20 @@ tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
 test = ["covdefaults (>=2.3)", "coverage (>=7.3.2)", "pytest-mock (>=3.12)"]
 
 [[package]]
+name = "pytest-testdox"
+version = "3.1.0"
+description = "A testdox format reporter for pytest"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pytest-testdox-3.1.0.tar.gz", hash = "sha256:f48c49c517f0fb926560b383062db4961112078ec6ca555f91692c661bb5c765"},
+    {file = "pytest_testdox-3.1.0-py2.py3-none-any.whl", hash = "sha256:f3a8f0789d668ccfb60f15aab81fb927b75066cfd19209176166bd7cecae73e6"},
+]
+
+[package.dependencies]
+pytest = ">=4.6.0"
+
+[[package]]
 name = "pytest-xdist"
 version = "3.5.0"
 description = "pytest xdist plugin for distributed testing, most importantly across multiple CPUs"
@@ -3960,4 +3974,4 @@ wiremock = ["wiremock"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "837b782a58fcedfdc3a366d1c23022c5b1c429ddc803b57bd7619825b720738a"
+content-hash = "755ac8cb30ca4695c17babb0f9e2d67afcaa5242115c14415300ecae71fe12a9"
