@@ -1,6 +1,6 @@
 from types_aiobotocore_dynamodb import DynamoDBClient
 
-from .domain import Customer
+from .domain001 import Customer
 
 
 class CustomerNotFoundError(Exception):

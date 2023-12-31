@@ -6,7 +6,7 @@ import pytest_asyncio
 from types_aiobotocore_dynamodb import DynamoDBClient
 
 from .create_customers_table import create_customers_table
-from .dynamodb_repository005 import CustomerNotFoundError, DynamoDBCustomerRepository
+from .repository005 import CustomerNotFoundError, DynamoDBCustomerRepository
 
 
 @pytest_asyncio.fixture()
@@ -17,11 +17,11 @@ async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[Dyn
     await moto_dynamodb_client.delete_table(TableName=table_name)
 
 
-# --8<-- [start:test]
+# --8<-- [start:tests]
 @pytest.mark.asyncio()
 async def test_customer_not_found(repository: DynamoDBCustomerRepository) -> None:
     with pytest.raises(CustomerNotFoundError):
         await repository.get("123456")
 
 
-# --8<-- [end:test]
+# --8<-- [end:tests]

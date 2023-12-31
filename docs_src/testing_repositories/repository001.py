@@ -1,6 +1,6 @@
 from types_aiobotocore_dynamodb import DynamoDBClient
 
-from .domain import Customer
+from .domain001 import Customer
 
 
 class DynamoDBCustomerRepository:
@@ -18,18 +18,3 @@ class DynamoDBCustomerRepository:
                 "Email": {"S": customer.email},
             },
         )
-
-    # --8<-- [start:get]
-    async def get(self, customer_id: str) -> Customer:
-        response = await self._client.get_item(
-            TableName=self._table_name,
-            Key={"PK": {"S": f"CUSTOMER#{customer_id}"}},
-        )
-        item = response["Item"]
-        return Customer(
-            id=item["Id"]["S"],
-            name=item["Name"]["S"],
-            email=item["Email"]["S"],
-        )
-
-    # --8<-- [end:get]

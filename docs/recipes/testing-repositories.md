@@ -36,7 +36,7 @@ with the default constructor (auto-generated with `@dataclass`) or a `create` fa
 The former is used for _object reconstruction_ and the latter for _new object creation_.
 
 ```py title="customers/domain.py", hl_lines="7-9 12"
---8<-- "docs_src/testing_repositories/domain.py"
+--8<-- "docs_src/testing_repositories/domain001.py"
 ```
 
 When you're querying an existing object, e.g., by customer identifier or email address, the object is
@@ -61,8 +61,8 @@ The constructor takes two dependencies - `DynamoDBClient` and `table_name`. Expl
 the Repository will be easy to configure in tests and in the production code, as we'll see in the following sections.
 The `save` method persists a `Customer` object in the database; its implementation is the minimal working version to showcase the example.
 
-```py title="adapters/dynamodb_repository.py" hl_lines="7 11"
---8<-- "docs_src/testing_repositories/dynamodb_repository001.py"
+```py title="adapters/repository.py" hl_lines="7 11"
+--8<-- "docs_src/testing_repositories/repository001.py"
 ```
 
 ## Testing with a production-like database
@@ -89,8 +89,8 @@ the example is using a value with a random `uuid` suffix as a namespace to avoid
 The first test `test_save_customer` creates a new `Customer` object and calls the `save` method to persist it in the database.
 The assertion is missing for now - we'll look into what to assert in the next section.
 
-```py title="tests/test_dynamodb_repository.py" hl_lines="14 17 22"
---8<-- "docs_src/testing_repositories/test_dynamodb_repository001.py"
+```py title="tests/test_repository.py" hl_lines="14 17 22"
+--8<-- "docs_src/testing_repositories/test_repository001.py"
 ```
 
 For the example completeness, the function below creates a new DynamoDB table.
@@ -106,9 +106,9 @@ This approach has a significant drawback - the tests know about the Repository's
 such as how and where the data is stored. As more functionality is added to the Repository, the tests
 will become brittle, lengthy, and difficult to maintain.
 
-```py title="tests/test_dynamodb_repository.py" hl_lines="10-19"
+```py title="tests/test_repository.py" hl_lines="10-19"
 --8<--
-docs_src/testing_repositories/test_dynamodb_repository002.py:test
+docs_src/testing_repositories/test_repository002.py:tests
 --8<--
 ```
 
@@ -120,12 +120,12 @@ which can now change independently without breaking the tests.
 
 The `DynamoDBCustomerRepository.get` reconstructs a customer's object from existing data from the database.
 
-```py title="adapters/dynamodb_repository.py" hl_lines="22"
+```py title="adapters/repository.py" hl_lines="22"
 class DynamoDBCustomerRepository:
     ...
 
 --8<--
-docs_src/testing_repositories/dynamodb_repository003.py:get
+docs_src/testing_repositories/repository003.py:get
 --8<--
 ```
 
@@ -148,33 +148,33 @@ If the Repository has a bug and is not saving the customer's object field, the s
 when trying to access the unsaved field, e.g., `email=item["Email"]["S"]`. In this case, the error handling code
 catching the `KeyError` will always treat it as the "customer not found" case and return misleading results to the application's end user.
 
-```py title="tests/test_dynamodb_repository.py" hl_lines="3"
+```py title="tests/test_repository.py" hl_lines="3"
 --8<--
-docs_src/testing_repositories/test_dynamodb_repository004.py:test
+docs_src/testing_repositories/test_repository004.py:tests
 --8<--
 ```
 
-To hide the implementation detail, we introduce a new _domain exception_ - `CustomerNotFoundError` -
+To hide the exception's implementation details, we introduce a new _domain exception_ - `CustomerNotFoundError` -
 to identify and handle the error unambiguously.
 The domain exception is part of the Repository's public API - when a customer with a given `customer_id` is not found,
 the `CustomerNotFoundError` is raised.
 All Repository's implementations must adhere to this public API or contract, regardless of the underlying database technology.
 
-```py title="adapters/dynamodb_repository.py" hl_lines="9-11"
+```py title="adapters/repository.py" hl_lines="9-11"
 class DynamoDBCustomerRepository:
     ...
 
 --8<--
-docs_src/testing_repositories/dynamodb_repository005.py:get
+docs_src/testing_repositories/repository005.py:get
 --8<--
 ```
 
-```py title="tests/test_dynamodb_repository.py" hl_lines="6"
-from .dynamodb_repository005 import CustomerNotFoundError
+```py title="tests/test_repository.py" hl_lines="6"
+from .repository005 import CustomerNotFoundError
 
 
 --8<--
-docs_src/testing_repositories/test_dynamodb_repository005.py:test
+docs_src/testing_repositories/test_repository005.py:tests
 --8<--
 ```
 
