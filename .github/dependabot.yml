@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: weekly
   - package-ecosystem: docker
-    directory: /
+    directory: /examples
     open-pull-requests-limit: 10
     schedule:
       interval: weekly
