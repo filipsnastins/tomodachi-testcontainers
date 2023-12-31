@@ -72,3 +72,17 @@ A collection of recipes for testing applications with testcontainers.
 - Debugging. Stop the time by placing a breakpoint and inspect containers
 - Attach the debugger
 - Export test coverage
+
+## Table of content
+
+```yaml
+nav:
+  - index.md
+  - Recipes:
+      - recipes/index.md
+      - recipes/testing-databases.md
+      - recipes/testing-repositories.md
+      - recipes/ports-and-adapters.md
+      - recipes/testing-applications.md # How to test your service
+      - recipes/parallelizing-tests.md
+```

@@ -180,23 +180,58 @@ docs_src/testing_repositories/test_repository005.py:tests
 
 ## Implementing a fake Repository for testing
 
-TODO
+The database implementation details obscure the intent of the application's business logic, so we have hidden
+the details behind the Repository's interface - a contract between application's domain layer and persistence layer.
 
-```py title="adapters/repository.py"
+To further ease domain layer testing, instead of using the production `DynamoDBCustomerRepository`,
+we can replace it with an in-memory fake Repository. The fake Repository will store the data in an in-memory dictionary.
+It's unsuitable for real-world use because the data is lost on application shutdown, and the Repository is not scalable.
+However, if the fake Repository behaves the same as the real one, it's a good choice for unit testing, prototyping, and demos.
+There's no database or Testcontainers to manage, and the tests will be very fast.
+
+```py title="adapters/repository.py" hl_lines="2-3"
 --8<--
 docs_src/testing_repositories/repository006.py:in_memory_repository
 --8<--
 ```
 
+The in-memory repository is useful not just for testing; when modeling a complex and unknown domain,
+you can postpone the decision of which database technology to use and focus the development efforts on the problem domain.
+By using the Repository with a clean interface, you'll be able to quickly evolve the domain layer without being slowed down
+by the accidental complexities of a production database - mapping domain objects to the datastore format and back,
+managing schema and data migration, handling infrastructure errors, etc.
+You can better commit to a specific technology when the problem domain is more explored and apparent with how the data is queried and used.
+
+!!! success "Let the problem domain drive your technological choices."
+
+    By focusing the development on the problem domain first and keeping the infrastructure concerns on the periphery,
+    later, you can make informed choices of which specific technologies are better suited for your needs.
+    It's a significant benefit of the broader [Ports & Adapters](./ports-and-adapters.md) pattern -
+    hiding accidental complexity of low-level components.
+    The Ports & Adapters apply to all systems - databases, file stores, external services, message brokers, etc.
+
 ## Testing other Repository implementations with the same test suite
 
-TODO
+To ensure that the in-memory Repository works, we must test it with the same test suite as the production Repository.
+Since the interface is the same and tests are [testing the interface, not the implementation](#test-the-interface-not-the-implementation),
+the test suite doesn't care which Repository it's given, in-memory, DynamoDB, PostgreSQL, AWS S3, etc., as long as the behavior is the same.
+Knowing this property, we could have implemented the in-memory repository and its tests before the DynamoDB version.
+
+To reuse the same test suite for testing multiple Repository versions, we'll use `pytest` parametrized fixtures.
+Any other popular test runner should have a similar concept.
+We'll define two fixtures `dynamodb_repository` and `fake_repository`, and use them in a generic fixture `repository`.
+The `repository` fixture is parametrized - when a test case uses the fixture, it will be run twice -
+once with `dynamodb` and `fake` parameters. Depending on the passed parameter,
+the fixture will return `DynamoDBCustomerRepository` or `InMemoryRepository`.
 
 ```py title="tests/test_repository.py" hl_lines="20 28 33"
 --8<--
 docs_src/testing_repositories/test_repository006.py:fixtures
 --8<--
 ```
+
+The tests use the generic `repository` fixture instead of a specific implementation and are run twice -
+with `DynamoDBCustomerRepository` and `InMemoryRepository`.
 
 ```py title="tests/test_repository.py" hl_lines="1 5 14 20 31"
 from .ports006 import CustomerRepository
@@ -207,23 +242,31 @@ docs_src/testing_repositories/test_repository006.py:tests
 --8<--
 ```
 
+For the type hint, the repository tests use the generic protocol - the "Port" part of the "Ports & Adapters" pattern.
+
+```py title="customers/ports.py"
+--8<-- "docs_src/testing_repositories/ports006.py"
+```
+
 <figure markdown>
   ![Testing other Repository implementations with the same test suite](../images/testing-multiple-repositories-with-the-same-test-suite.png)
   <figcaption>Running the same test suite with different pytest fixture implementations</figcaption>
 </figure>
 
-## Using Ports & Adapters pattern for decoupling infrastructure components
+## Decoupling infrastructure components with Ports & Adapters pattern
 
 TODO
 
-[Isolating and Testing Infrastructure Components with Ports & Adapters Pattern](./ports-and-adapters.md)
+Describe the drawbacks and when it's appropriate to test the implementation details.
+
+[Decoupling Infrastructure Components with Ports & Adapters Pattern](./ports-and-adapters.md)
 
 <figure markdown>
-  ![Container Diagram - Application with Relational Database](../architecture/c4/level_2_container/02_app_with_dynamodb.png)
+  ![Container Diagram - Application with DynamoDB Database](../architecture/c4/level_2_container/02_app_with_dynamodb.png)
 </figure>
 
 <figure markdown>
-  ![Component Diagram - Application with Relational Database](../architecture/c4/level_3_component/02_app_with_dynamodb.png)
+  ![Component Diagram - Application with DynamoDB Database](../architecture/c4/level_3_component/02_app_with_dynamodb.png)
 </figure>
 
 ## References
