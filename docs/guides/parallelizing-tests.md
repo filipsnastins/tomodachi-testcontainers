@@ -44,7 +44,7 @@ It will increase the number of running containers by the number of test workers 
 
 Since test workers are isolated, there shouldn't be any problems with test data leaks between the workers,
 unless they're competing for the same global resources, e.g., writing to files with the same name.
-To fix such problems, separate the resources with unique identifiers:
+To fix such problems, separate the resources with unique identifiers (namespaces):
 [temporary path and file fixtures](https://docs.pytest.org/en/latest/how-to/tmp_path.html) (`tmp_path` and similar fixtures from `pytest`)
 and [unique test run prefixes](https://docs.pytest.org/en/latest/how-to/tmp_path.html)
 (`testrun_uid` fixture from `pytest-xdist`).

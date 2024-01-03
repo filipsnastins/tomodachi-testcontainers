@@ -181,7 +181,7 @@ docs_src/testing_repositories/test_repository005.py:tests
 ## Implementing a fake Repository
 
 The database implementation details obscure the intent of the application's business logic, so we have hidden
-the details behind the Repository's interface - a contract between application's domain layer and persistence layer.
+the details behind the Repository's interface - a contract between the application's domain layer and persistence layer.
 
 To further ease domain layer testing, instead of using the production `DynamoDBCustomerRepository`,
 we can replace it with an in-memory fake Repository. The fake Repository will store the data in an in-memory dictionary.
@@ -252,13 +252,13 @@ For the type hint, the repository tests use the generic Repository's protocol - 
   <figcaption>Running the same test suite with different pytest fixture implementations.</figcaption>
 </figure>
 
-## Decoupling infrastructure components with Ports & Adapters pattern
+## Decoupling and Testing Infrastructure Layer with Ports & Adapters Pattern
 
 This section used the Repository pattern to decouple the persistence layer from the domain layer.
 The Repository pattern is a specific application for another, more general pattern -
 [Ports & Adapters](<https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)>).
 The Ports & Adapters pattern helps decouple all sorts of components, not just databases.
-The following section [Decoupling Infrastructure Components with Ports & Adapters Pattern](./ports-and-adapters.md)
+The following section [Decoupling and Testing Infrastructure Layer with Ports & Adapters Pattern](./ports-and-adapters.md)
 describes in more detail the applications of Ports & Adapters,
 and how Testcontainers help to implement and test the "Adapters" part of the pattern.
 

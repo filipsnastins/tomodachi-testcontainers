@@ -35,6 +35,7 @@ theme:
     - navigation.indexes
     - navigation.path
     - navigation.sections
+    - navigation.tabs
     - navigation.top
     - search.highlight
     - search.suggest
@@ -65,6 +66,7 @@ plugins:
 markdown_extensions:
   - admonition
   - attr_list
+  - def_list
   - md_in_html
   - pymdownx.details
   - pymdownx.highlight:
@@ -75,13 +77,30 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 nav:
-  - index.md
-  - Recipes:
-      - recipes/index.md
-      - recipes/testing-databases.md
-      - recipes/testing-repositories.md
-      - recipes/parallelizing-tests.md
+  - Tomodachi Testcontainers:
+      - index.md
+      - quickstart.md
+      - what-is-testcontainers.md
+      - getting-started.md
+      - installation.md
+      - configuration-options.md
+      - included-testcontainers.md
+      - troubleshooting.md
+      - development.md
+      - resources-and-acknowledgements.md
+  - Guides:
+      - guides/index.md
+      - guides/testing-applications.md
+      - guides/testing-databases.md
+      - guides/testing-repositories.md
+      - guides/ports-and-adapters.md
+      - guides/testing-asynchronous-systems.md
+      - guides/debugging-testcontainer-tests.md
+      - guides/exporting-test-coverage.md
+      - guides/forward-testcontainer-logs-to-pytest.md
+      - guides/parallelizing-tests.md
   - Reference - Code API:
+      - reference/index.md
       - Containers: reference/containers.md
       - Clients: reference/clients.md
       - Pytest:
