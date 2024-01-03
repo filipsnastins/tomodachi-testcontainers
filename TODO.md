@@ -6,9 +6,9 @@
 
 ## Test clients
 
-...
+- [ ] Remove cache from SNSSQSTestClient; make `moto_snssqs_tc` and `localstack_snssqs_tc` fixtures session scoped.
 
-## New testcontainers
+## New Testcontainers
 
 - [ ] Explore HTTP mock/stub servers
   - [ ] <https://github.com/mock-server/mockserver>
@@ -18,30 +18,31 @@
 
 ## New test approaches
 
-- Should not be part of the library, but can be used in the example repo
+- Should not be part of the library but can be used in an example repo:
 
-- [ ] Explore [contract testing](https://github.com/pact-foundation/pact-python) between Orders and Customers services
+- [ ] Explore [contract testing](https://github.com/pact-foundation/pact-python) between Orders and Customer services
 - [ ] Param testing with [Hypothesis](https://hypothesis.readthedocs.io/en/latest/)
 - [ ] BDD with [Behave](https://behave.readthedocs.io/en/latest/) or [pytest-bdd](https://pypi.org/project/pytest-bdd/)
 - [ ] <https://github.com/hamcrest/PyHamcrest>
 
 ## Misc
 
-- [ ] Container lifecycle hooks, e.g. `after_start`, `before_stop`
-- [x] Export coverage: install `coverage` from Poetry `test` dependency group
-  - Add a new Docker image stage `test` with `coverage` installed
-  - [ ] Rewrite code coverage docs section; suggest different ways of starting app in coverage mode
+- [ ] Container lifecycle hooks, e.g., `after_start`, `before_stop`
+- [x] Export coverage: install `coverage` from Poetry `test` dependency group.
+  - [ ] Add a new Docker image stage `test` with `coverage` installed.
+  - [ ] Rewrite the code coverage docs section; suggest different ways of starting the app in coverage mode.
+- [ ] Change environment variable prefix from `TOMODACHI_TESTCONTAINER_` to `TESTCONTAINER_`.
 
 ## Docs
 
 - [ ] Rewrite docs about end-to-end tests.
-      Testcontainer tests described in this repository are not integrated end-to-end tests,
-      but rather isolated, individual microservice integration test.
-- [ ] Use cases, patterns and good practices (examples with C4 diagrams)
+  - Testcontainer tests described in this repository are not integrated end-to-end tests,
+    but rather isolated, individual application's integration test.
+  - <https://bsideup.github.io/posts/spring_boot_in_container> - the term E2E is used here.
+- [ ] Use cases, patterns, and good practices (examples with C4 diagrams).
+- [ ] Rename `recipes` into `guides`.
+- [ ] Move "how to run in CI" guide from <https://github.com/filipsnastins/tomodachi-testcontainers-github-actions>
 
 ## Testing
 
-- [x] Run tests in parallel with `pytest-xdist`
-  - [x] Test in GitHub Actions
-  - [ ] Document in README and recipes
-- [ ] Docker-from-Docker test
+- [ ] Docker-from-Docker test.
