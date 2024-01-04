@@ -72,6 +72,6 @@ async def localstack_ssm_client(localstack_container: LocalStackContainer) -> As
         yield c
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def localstack_snssqs_tc(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient) -> SNSSQSTestClient:
-    return SNSSQSTestClient.create(localstack_sns_client, localstack_sqs_client)
+    return SNSSQSTestClient(localstack_sns_client, localstack_sqs_client)

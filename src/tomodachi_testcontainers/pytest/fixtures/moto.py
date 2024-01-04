@@ -72,6 +72,6 @@ async def moto_ssm_client(moto_container: MotoContainer) -> AsyncGenerator[SSMCl
         yield c
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def moto_snssqs_tc(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> SNSSQSTestClient:
-    return SNSSQSTestClient.create(moto_sns_client, moto_sqs_client)
+    return SNSSQSTestClient(moto_sns_client, moto_sqs_client)
