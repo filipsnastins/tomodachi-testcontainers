@@ -14,16 +14,16 @@ from .common import WebContainer
 
 
 class WireMockContainer(WebContainer):
-    MAPPINGS_DIR: Path = Path("/home/wiremock/mappings/")
-    FILES_DIR: Path = Path("/home/wiremock/__files/")
+    MAPPING_STUBS_DIR: Path = Path("/home/wiremock/mappings/")
+    MAPPING_FILES_DIR: Path = Path("/home/wiremock/__files/")
 
     def __init__(
         self,
-        mapping_stubs: Optional[Path] = None,
-        mapping_files: Optional[Path] = None,
         image: str = "wiremock/wiremock:latest",
         internal_port: int = 8080,
         edge_port: int = 8080,
+        mapping_stubs: Optional[Path] = None,
+        mapping_files: Optional[Path] = None,
         *,
         verbose: bool = False,
         **kwargs: Any,
@@ -42,22 +42,25 @@ class WireMockContainer(WebContainer):
     def start(self) -> "WireMockContainer":
         super().start()
         wait_for_logs(self, "port:", timeout=10.0)
-        self.copy_mappings_to_container()
-        self.copy_mapping_files_to_container()
-        self.reload_mappings()
+        self.load_mappings()
         return self
 
-    def copy_mappings_to_container(self) -> None:
+    def load_mappings(self) -> None:
+        self._copy_mapping_stubs_to_container()
+        self._copy_mapping_files_to_container()
+        self._reload_mappings()
+
+    def _copy_mapping_stubs_to_container(self) -> None:
         if self.mapping_stubs is not None:
             copy_files_to_container(
-                self.get_wrapped_container(), host_path=self.mapping_stubs, container_path=self.MAPPINGS_DIR
+                self.get_wrapped_container(), host_path=self.mapping_stubs, container_path=self.MAPPING_STUBS_DIR
             )
 
-    def copy_mapping_files_to_container(self) -> None:
+    def _copy_mapping_files_to_container(self) -> None:
         if self.mapping_files is not None:
             copy_files_to_container(
-                self.get_wrapped_container(), host_path=self.mapping_files, container_path=self.FILES_DIR
+                self.get_wrapped_container(), host_path=self.mapping_files, container_path=self.MAPPING_FILES_DIR
             )
 
-    def reload_mappings(self) -> None:
+    def _reload_mappings(self) -> None:
         self.exec(["curl", "-X", "POST", f"http://localhost:{self.internal_port}/__admin/mappings/reset"])
