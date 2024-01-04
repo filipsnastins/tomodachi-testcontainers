@@ -1,23 +1,8 @@
-from pathlib import Path
-from typing import Generator, cast
-
 import httpx
 import pytest
 import wiremock.client as wm
-from wiremock.constants import Config as WireMockConfig
 
 from tomodachi_testcontainers import WireMockContainer
-from tomodachi_testcontainers.utils import get_available_port
-
-
-@pytest.fixture(scope="module")
-def wiremock_container() -> Generator[WireMockContainer, None, None]:
-    mapping_stubs = Path(__file__).parent / "test-wiremock-container" / "mappings"
-    mapping_files = Path(__file__).parent / "test-wiremock-container" / "files"
-    with WireMockContainer(mapping_stubs, mapping_files, edge_port=get_available_port(), verbose=True) as container:
-        container = cast(WireMockContainer, container)
-        WireMockConfig.base_url = f"{container.get_external_url()}/__admin/"  # WireMock SDK is optional
-        yield container
 
 
 @pytest.mark.asyncio()
