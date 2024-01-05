@@ -1,0 +1,11 @@
+@startuml
+!include ./container/containers.puml
+
+title Container Diagram - Application with Relational Database
+
+appContainer()
+relationalDbContainer()
+
+Rel_R(app, relationalDb, "Reads from and writes to", "SQLAlchemy")
+
+@enduml

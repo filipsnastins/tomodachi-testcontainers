@@ -1,0 +1,11 @@
+@startuml
+!include ./container/containers.puml
+
+title Container Diagram - Application with DynamoDB Database
+
+appContainer()
+dynamoDbContainer()
+
+Rel_R(app, dynamoDb, "Reads from and writes to", "aiobotocore")
+
+@enduml
