@@ -21,7 +21,7 @@ A collection of recipes for testing applications with testcontainers.
 - GraphQL
 - Scheduled jobs
 
-- [ ] Testing Repositories
+- [x] Testing Repositories
 
 - Testcontainers Desktop - <https://testcontainers.com/guides/simple-local-development-with-testcontainers-desktop/>
 
@@ -66,6 +66,8 @@ A collection of recipes for testing applications with testcontainers.
 
 - Functional/acceptance testing - verifying system behavior by real world examples.
   - Build a facade on top of your application, invent domain specific language
+
+- Testing Honeycomb - <https://engineering.atspotify.com/2018/01/testing-of-microservices/>
 
 ## Misc
 

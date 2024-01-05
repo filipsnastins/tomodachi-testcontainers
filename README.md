@@ -21,7 +21,7 @@ and testing applications built with the [Python Tomodachi framework](https://git
 > — <https://testcontainers.com/>
 
 This library was created to explore and learn Testcontainers. Although initially intended to be used with the Tomodachi framework,
-it works for testing applications built on any other Python framework like Flask, FastAPI, etc.
+it works for testing applications built with any other Python framework like Flask, FastAPI, etc.
 
 ## Documentation
 
@@ -42,6 +42,8 @@ Install with [Poetry](https://python-poetry.org/):
 ```sh
 poetry add --group dev tomodachi-testcontainers
 ```
+
+Find a list of extras in the complete [installation reference](https://filipsnastins.github.io/filipsnastins/tomodachi-testcontainers/installation/).
 
 ## A Simple Example
 

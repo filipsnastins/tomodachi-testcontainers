@@ -79,15 +79,17 @@ markdown_extensions:
 nav:
   - Tomodachi Testcontainers:
       - index.md
-      - quickstart.md
       - what-is-testcontainers.md
-      - getting-started.md
+      - quickstart.md
       - installation.md
+      - features.md
       - configuration-options.md
       - included-testcontainers.md
       - troubleshooting.md
       - development.md
       - resources-and-acknowledgements.md
+  - Getting Started:
+      - getting-started/index.md
   - Guides:
       - guides/index.md
       - guides/testing-applications.md
@@ -95,16 +97,19 @@ nav:
       - guides/testing-repositories.md
       - guides/ports-and-adapters.md
       - guides/testing-asynchronous-systems.md
+      - guides/testing-apps-built-with-other-frameworks.md
       - guides/debugging-testcontainer-tests.md
       - guides/exporting-test-coverage.md
       - guides/forward-testcontainer-logs-to-pytest.md
+      - guides/running-testcontainer-tests-in-ci-cd.md
       - guides/parallelizing-tests.md
   - Reference - Code API:
       - reference/index.md
       - Containers: reference/containers.md
       - Clients: reference/clients.md
       - Pytest:
-          - Fixtures: reference/pytest-fixtures.md
-          - Assertions: reference/pytest-assertions.md
-          - Async Probes: reference/pytest-async-probes.md
+          - reference/pytest/index.md
+          - Fixtures: reference/pytest/fixtures.md
+          - Assertions: reference/pytest/assertions.md
+          - Async Probes: reference/pytest/async-probes.md
       - Utils: reference/utils.md

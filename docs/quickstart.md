@@ -1,5 +1,9 @@
 # Quickstart
 
+!!! info
+
+    See the [Getting Started](./getting-started/) section for a complete walkthrough.
+
 Service examples are in the [examples/](https://github.com/filipsnastins/tomodachi-testcontainers/tree/main/examples) folder;
 their tests written with Testcontainers are in [tests/services/](https://github.com/filipsnastins/tomodachi-testcontainers/tree/main/tests/services).
 

@@ -67,3 +67,5 @@ See an example of how to start `TomodachiContainer` in the debug mode in [tests/
 If using `VScode`, see the [documentation](https://code.visualstudio.com/docs/python/debugging#_debugging-by-attaching-over-a-network-connection)
 of how to attach a remote debugger to a running process over HTTP.
 An example configuration is in the [.vscode/launch.example.json](.vscode/launch.example.json)
+
+## 5. Inspect Testcontainers with Testcontainers Desktop App

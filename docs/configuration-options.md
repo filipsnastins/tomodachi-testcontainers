@@ -46,3 +46,19 @@ Specify a new network name with the `TOMODACHI_TESTCONTAINER_NETWORK` environmen
 The Docker network is not created automatically, so make sure that it exists before running tests.
 
 ⚠️ Make sure that the environment variable is set before running `pytest`.
+
+## Run Testcontainer from pre-built image
+
+If the Tomodachi service Docker image is already built, you can run the container
+by specifying the image ID in the `TOMODACHI_TESTCONTAINER_IMAGE_ID` environment variable.
+
+It is useful when running tests in the deployment pipeline when the image has been already built on the build step.
+Instead of building a new image from scratch for the tests, we want to test the exact same image that
+will be pushed to a Container Registry and deployed to production.
+
+Examples:
+
+- `TOMODACHI_TESTCONTAINER_IMAGE_ID=sha256:56ca9586de1cf25081bb5f070b59b86625b6221bb26d7409a74e6051d7954c92`
+- `TOMODACHI_TESTCONTAINER_IMAGE_ID=mycompany/my-tomodachi-application:1.0.0`
+
+⚠️ Make sure that the environment variable is set before running `pytest`.

@@ -7,6 +7,7 @@
 ## Test clients
 
 - [ ] Remove cache from SNSSQSTestClient; make `moto_snssqs_tc` and `localstack_snssqs_tc` fixtures session scoped.
+- [ ] Make message envelope optional in SNSSQSTestClient.
 
 ## New Testcontainers
 
@@ -25,6 +26,10 @@
 - [ ] BDD with [Behave](https://behave.readthedocs.io/en/latest/) or [pytest-bdd](https://pypi.org/project/pytest-bdd/)
 - [ ] <https://github.com/hamcrest/PyHamcrest>
 
+## Pytest fixtures
+
+- [ ] Add `wiremock_container` fixture
+
 ## Misc
 
 - [ ] Container lifecycle hooks, e.g., `after_start`, `before_stop`
@@ -41,7 +46,8 @@
   - <https://bsideup.github.io/posts/spring_boot_in_container> - the term E2E is used here.
 - [ ] Use cases, patterns, and good practices (examples with C4 diagrams).
 - [ ] Rename `recipes` into `guides`.
-- [ ] Move "how to run in CI" guide from <https://github.com/filipsnastins/tomodachi-testcontainers-github-actions>
+- [ ] Move "how to run in CI" guide from <https://github.com/filipsnastins/tomodachi-testcontainers-github-actions>.
+- [ ] Add Docker image override environment variables to "Included Testcontainers" page.
 
 ## Testing
 

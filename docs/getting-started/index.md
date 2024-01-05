@@ -1,19 +1,6 @@
 # Getting Started
 
-## Quickstart
-
-Service examples are in [examples/](https://github.com/filipsnastins/tomodachi-testcontainers/tree/main/examples) folder.
-Their tests written with Testcontainers are in [tests/services/](https://github.com/filipsnastins/tomodachi-testcontainers/tree/main/tests/services).
-
-For a full list of available testcontainers, see the [Included Testcontainers](./included-testcontainers.md) page,
-[tomodachi_testcontainers](https://github.com/filipsnastins/tomodachi-testcontainers/blob/main/src/tomodachi_testcontainers/__init__.py) module,
-and the official [testcontainers-python](https://github.com/testcontainers/testcontainers-python) library -
-it makes it easy to create new Testcontainers as you go.
-
-For full list of available pytest fixtures check out [tomodachi_testcontainers.pytest](src/tomodachi_testcontainers/pytest/) module,
-and for test clients - [tomodachi_testcontainers.clients](src/tomodachi_testcontainers/clients/) module.
-
-### Testing standalone Tomodachi service
+## Testing standalone Tomodachi service
 
 Starting with a simple service that returns `HTTP 200` on the `GET /health` endpoint.
 
@@ -96,42 +83,6 @@ For inter-container communication, use `tomodachi_container.get_internal_url` in
 
 That's it! 🎉 We have tested that the Docker image can be built and run, and that the service
 is working as expected, all with a Docker container, on the highest test level - end-to-end.
-
-### Change Dockerfile path, build context and build target
-
-If the Dockerfile is not located in the current working directory or you need a different Docker build context,
-specify a new path with the `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH` and `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT`
-environment variables.
-
-Examples:
-
-- `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile.testing`
-- `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples/`
-
-If you have a multi-stage Dockerfile and want to run testcontainer tests against a specific stage, specify the stage name
-with the `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET` environment variable.
-Note that usually want to run tests against the release/production stage, so this environment variable is not needed in most cases,
-as it's the last stage in the Dockerfile.
-
-Example:
-
-- `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET=development`
-
-### Running Tomodachi container from pre-built image
-
-If the Tomodachi service Docker image is already built, you can run the container
-by specifying the image ID in the `TOMODACHI_TESTCONTAINER_IMAGE_ID` environment variable.
-
-It is useful when running tests in the deployment pipeline when the image has been already built on the build step.
-Instead of building a new image from scratch for the tests, we want to test the exact same image that
-will be pushed to a Container Registry and deployed to production.
-
-Examples:
-
-- `TOMODACHI_TESTCONTAINER_IMAGE_ID=sha256:56ca9586de1cf25081bb5f070b59b86625b6221bb26d7409a74e6051d7954c92`
-- `TOMODACHI_TESTCONTAINER_IMAGE_ID=mycompany/my-tomodachi-application:1.0.0`
-
-⚠️ Make sure that the environment variable is set before running `pytest`.
 
 ### Testing Tomodachi service with external dependencies
 
@@ -377,14 +328,3 @@ In case of domain model tests or unit tests, you'd be testing only public method
 and not private methods and attributes.
 Since there're no explicit private methods and attributes in Python, it's important to remember this,
 and use automated code quality assertion tools like `flake8` and `pylint` as a safety net.
-
-## Running Testcontainers in the deployment pipeline
-
-To run Testcontainers in the deployment pipeline, you'll need a container runtime installed
-on the CI/CD server (GitHub Actions, Jenkins etc.). That's pretty much it!
-
-Running Testcontainers in the deployment pipeline shouldn't be much different from running them locally.
-
-For a complete example of how to run Testcontainers in the deployment pipeline, check out
-[tomodachi-testcontainers-github-actions](https://github.com/filipsnastins/tomodachi-testcontainers-github-actions)
-repository.

@@ -1,4 +1,4 @@
-## Forward Testcontainer logs to pytest
+## Forward Testcontainer Logs to pytest
 
 Logs from a testcontainer are forwarded to Python's standard logger as `INFO` logs when
 `tomodachi_testcontainers.DockerContainer` context manager exits.
