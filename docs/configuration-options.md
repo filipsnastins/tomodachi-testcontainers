@@ -36,9 +36,9 @@ Example:
 
 - `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET=development`
 
-## Change default Docker network
+## Change the default Docker network
 
-By default, testcontainers are started in the default `bridge` Docker network.
+By default, Testcontainers are started in the default `bridge` Docker network.
 Sometimes it's useful to start containers in a different network, e.g. a network
 specifically dedicated for running automated tests.
 
@@ -47,7 +47,7 @@ The Docker network is not created automatically, so make sure that it exists bef
 
 ⚠️ Make sure that the environment variable is set before running `pytest`.
 
-## Run Testcontainer from pre-built image
+## Run Testcontainer from the pre-built image
 
 If the Tomodachi service Docker image is already built, you can run the container
 by specifying the image ID in the `TOMODACHI_TESTCONTAINER_IMAGE_ID` environment variable.
@@ -62,3 +62,15 @@ Examples:
 - `TOMODACHI_TESTCONTAINER_IMAGE_ID=mycompany/my-tomodachi-application:1.0.0`
 
 ⚠️ Make sure that the environment variable is set before running `pytest`.
+
+## Override Testcontainers Docker Image
+
+| Container Name | Default Image              |              Image Env Var Override |
+| :------------- | :------------------------- | ----------------------------------: |
+| Moto           | `motoserver/moto:latest`   |       `MOTO_TESTCONTAINER_IMAGE_ID` |
+| LocalStack     | `localstack/localstack:3`  | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
+| Minio          | `minio/minio:latest`       |      `MINIO_TESTCONTAINER_IMAGE_ID` |
+| SFTP           | `atmoz/sftp:latest`        |       `SFTP_TESTCONTAINER_IMAGE_ID` |
+| WireMock       | `wiremock/wiremock:latest` |   `WIREMOCK_TESTCONTAINER_IMAGE_ID` |
+| MySQL          | `mysql:8`                  |      `MYSQL_TESTCONTAINER_IMAGE_ID` |
+| PostgreSQL     | `postgres:16`              |   `POSTGRES_TESTCONTAINER_IMAGE_ID` |

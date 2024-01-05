@@ -1,20 +1,20 @@
 # Included Testcontainers
 
 Below is the list of Testcontainers included in this library.
-Feel free to explore how they're implemented and create your own Testcontainers as needed.
-[Testcontainers-python](https://github.com/testcontainers/testcontainers-python) provides a simple API to make your own Testcontainers.
+Feel free to explore how they're implemented and create your own Testcontainers as needed -
+see [Creating new Testcontainers](./guides/create-new-testcontainers.md)
 
-| Container Name | Default Image                     | Fixture                                                               |
-| :------------- | :-------------------------------- | :-------------------------------------------------------------------- |
-| Tomodachi      | n/a (built from Dockerfile)       | n/a                                                                   |
-| Moto           | `motoserver/moto:latest`          | `moto_container`                                                      |
-| LocalStack     | `localstack/localstack:3`         | `localstack_container`                                                |
-| Minio          | `minio/minio:latest`              | `minio_container`                                                     |
-| DynamoDBAdmin  | `aaronshaf/dynamodb-admin:latest` | n/a (use on demand for exploring data in DynamoDB)                    |
-| SFTP           | `atmoz/sftp:latest`               | `sftp_container`                                                      |
-| WireMock       | `wiremock/wiremock:latest`        | n/a (setup code can't be generalized, copy the fixture from examples) |
-| MySQL          | `mysql:8`                         | `mysql_container`                                                     |
-| PostgreSQL     | `postgres:16`                     | `postgres_container`                                                  |
+| Container Name | Default Image                     | Fixture                |
+| :------------- | :-------------------------------- | :--------------------- |
+| Tomodachi      | n/a                               | n/a                    |
+| Moto           | `motoserver/moto:latest`          | `moto_container`       |
+| LocalStack     | `localstack/localstack:3`         | `localstack_container` |
+| Minio          | `minio/minio:latest`              | `minio_container`      |
+| DynamoDBAdmin  | `aaronshaf/dynamodb-admin:latest` | n/a                    |
+| SFTP           | `atmoz/sftp:latest`               | `sftp_container`       |
+| WireMock       | `wiremock/wiremock:latest`        | `wiremock_container`   |
+| MySQL          | `mysql:8`                         | `mysql_container`      |
+| PostgreSQL     | `postgres:16`                     | `postgres_container`   |
 
 ## Tomodachi
 
