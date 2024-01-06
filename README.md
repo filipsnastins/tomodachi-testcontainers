@@ -47,7 +47,7 @@ Find a list of extras in the complete [installation reference](https://filipsnas
 
 ## A Simple Example
 
-The `Hello, world` Tomodachi service:
+The `hello, world` Tomodachi service:
 
 ```py
 # src/hello.py
@@ -58,7 +58,7 @@ from aiohttp import web
 class Service(tomodachi.Service):
     @tomodachi.http("GET", r"/hello/?")
     async def hello(self, request: web.Request) -> web.Response:
-        name = request.query.get("name", "World")
+        name = request.query.get("name", "world")
         return web.json_response(data={"message": f"Hello, {name}!"})
 ```
 

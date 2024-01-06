@@ -132,3 +132,6 @@ dmypy.json
 
 # ruff
 .ruff_cache/
+
+# Node
+node_modules/

@@ -89,19 +89,20 @@ nav:
       - development.md
       - resources-and-acknowledgements.md
   - Getting Started:
-      - getting-started/index.md
+      - getting-started/testing-simple-app.md
+      - getting-started/testing-app-with-external-dependencies.md
   - Guides:
       - guides/index.md
-      - guides/testing-applications.md
+      - guides/creating-new-testcontainers.md
       - guides/testing-databases.md
       - guides/testing-repositories.md
       - guides/ports-and-adapters.md
       - guides/testing-asynchronous-systems.md
       - guides/testing-apps-built-with-other-frameworks.md
-      - guides/debugging-testcontainer-tests.md
-      - guides/exporting-test-coverage.md
-      - guides/forward-testcontainer-logs-to-pytest.md
       - guides/running-testcontainer-tests-in-ci-cd.md
+      - guides/debugging-testcontainer-tests.md
+      - guides/forward-testcontainer-logs-to-pytest.md
+      - guides/exporting-test-coverage.md
       - guides/parallelizing-tests.md
   - Reference - Code API:
       - reference/index.md

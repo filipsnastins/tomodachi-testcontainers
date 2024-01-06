@@ -1,10 +1,13 @@
 # Configuration Options
 
+TODO
+
 ## Configuration with environment variables
 
-⚠️ Make sure that environment variables are set before running `pytest` -
-e.g. with [pytest-env](https://pypi.org/project/pytest-env/) plugin or
-by setting it in the shell before running `pytest`.
+!!! warning
+
+    Make sure that environment variables are set before running `pytest`, e.g.,
+    with [pytest-env](https://pypi.org/project/pytest-env/) plugin or by setting it in the shell before running `pytest`.
 
 | Environment Variable                           | Description                                                                                                 |
 | :--------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |

@@ -19,19 +19,8 @@ COPY --link pyproject.toml poetry.lock ./
 RUN poetry install
 
 FROM dependencies-base AS dependencies-release
-COPY --link src ./src
+COPY --link . .
 RUN poetry install
-
-FROM dependencies-base AS dev
-RUN poetry install --with dev
-COPY --link . .
-RUN poetry install --with dev
-
-FROM dependencies-base AS test
-RUN poetry install --with test
-COPY --link . .
-RUN poetry install --with test
-USER app
 
 FROM python-base AS release
 COPY --link --from=dependencies-release --chown=app:app /opt/venv /opt/venv

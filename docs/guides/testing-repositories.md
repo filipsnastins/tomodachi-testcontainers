@@ -35,7 +35,7 @@ There are two ways to create a new `Customer` object instance -
 with the default constructor (auto-generated with `@dataclass`) or a `create` factory method.
 The former is used for _object reconstruction_ and the latter for _new object creation_.
 
-```py title="customers/domain.py", hl_lines="7-9 12"
+```py title="customers/domain.py" hl_lines="7-9 12"
 --8<-- "docs_src/testing_repositories/domain001.py"
 ```
 
