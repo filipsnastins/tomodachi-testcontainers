@@ -3974,4 +3974,4 @@ wiremock = ["wiremock"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "755ac8cb30ca4695c17babb0f9e2d67afcaa5242115c14415300ecae71fe12a9"
+content-hash = "25557d704e5f4e2360f67adb8d94cb2f4b96285577948e7a8d47d3b4a966ce2d"

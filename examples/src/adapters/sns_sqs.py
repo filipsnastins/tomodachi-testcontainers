@@ -1,11 +1,12 @@
 import os
 
-from aiobotocore.session import get_session
 from types_aiobotocore_sns import SNSClient
+
+from .aws import session
 
 
 def get_sns_client() -> SNSClient:
-    return get_session().create_client(
+    return session.create_client(
         "sns",
         region_name=os.environ["AWS_REGION"],
         aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),

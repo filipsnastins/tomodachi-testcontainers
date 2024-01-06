@@ -12,14 +12,13 @@ def tomodachi_container(testcontainers_docker_image: str) -> Generator[Tomodachi
     with TomodachiContainer(
         image=testcontainers_docker_image,
         edge_port=get_available_port(),
-    ).with_command("tomodachi run getting_started/hello.py --production") as container:
+    ).with_command("tomodachi run getting_started/hello/app.py --production") as container:
         yield cast(TomodachiContainer, container)
 
 
 # --8<-- [end:tomodachi_container]
 
-
-# --8<-- [start:tests]
+# --8<-- [start:http_client]
 from typing import AsyncGenerator
 
 import httpx
@@ -32,20 +31,4 @@ async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator
         yield client
 
 
-@pytest.mark.asyncio()
-async def test_hello_testcontainers(http_client: httpx.AsyncClient) -> None:
-    response = await http_client.get("/hello", params={"name": "Testcontainers"})
-
-    assert response.status_code == 200
-    assert response.json() == {"message": "Hello, Testcontainers!"}
-
-
-@pytest.mark.asyncio()
-async def test_hello_world(http_client: httpx.AsyncClient) -> None:
-    response = await http_client.get("/hello")
-
-    assert response.status_code == 200
-    assert response.json() == {"message": "Hello, world!"}
-
-
-# --8<-- [end:tests]
+# --8<-- [end:http_client]

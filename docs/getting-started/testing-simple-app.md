@@ -5,8 +5,8 @@
 Let's start with a simple `hello, world` web application.
 The app has one endpoint, `GET /hello`, that greets you with the name given in the query parameter.
 
-```py title="src/hello.py"
---8<-- "docs_src/getting_started/hello.py"
+```py title="src/app.py"
+--8<-- "docs_src/getting_started/hello/app.py"
 ```
 
 We want to test that the application behaves as expected and all its components are configured correctly -
@@ -15,11 +15,11 @@ that starts the application as a Docker container, sends an HTTP request, and as
 
 ## Creating a first Testcontainer
 
-Before writing the test, we need to start the application in a Docker container.
+Before writing the test, we need to start the application in a Docker container. 🐳
 
-```py title="tests/test_hello.py" hl_lines="9 12-13"
+```py title="tests/conftest.py" hl_lines="9 12-13"
 --8<--
-docs_src/getting_started/test_hello001.py:tomodachi_container
+docs_src/getting_started/hello/conftest.py:tomodachi_container
 --8<--
 ```
 
@@ -34,14 +34,14 @@ The `tomodachi_container` fixture is assigned the `session` scope to create the 
 It's a good practice to create Testcontainers only once for better test performance - it takes some time for a Docker container to start,
 and the test suite will become slow if containers are recreated for every test.
 
-## Writing an end-to-end test
+## Writing end-to-end tests
 
 Having the `tomodachi_container` fixture, we can write our first end-to-end test.
 Let's test that the application greets us with `Hello, Testcontainers!` when we provide it the `?name=Testcontainers` parameter.
 
-```py title="tests/test_hello.py"
+```py title="tests/test_app.py"
 --8<--
-docs_src/getting_started/test_hello001.py:test_hello_testcontainers
+docs_src/getting_started/hello/test_app001.py:test_hello_testcontainers
 --8<--
 ```
 
@@ -53,9 +53,9 @@ That's it! We ensured that our application started, all its components were conf
 
 Let's test the default case when the `name` query parameter is not provided.
 
-```py title="tests/test_hello.py"
+```py title="tests/test_app.py"
 --8<--
-docs_src/getting_started/test_hello001.py:test_hello_world
+docs_src/getting_started/hello/test_app001.py:test_hello_world
 --8<--
 ```
 
@@ -88,12 +88,23 @@ docs_src/getting_started/test_hello001.py:test_hello_world
 You might have noticed a duplication in how we configure the `httpx.AsyncClient` in every test.
 It calls for a new fixture. Let's create the `http_client` fixture and refactor the tests.
 
-```py title="tests/test_hello.py" hl_lines="8 14 22"
+```py title="tests/conftest.py" hl_lines="8"
 --8<--
-docs_src/getting_started/test_hello002.py:tests
+docs_src/getting_started/hello/conftest.py:http_client
+--8<--
+```
+
+```py title="tests/test_app.py" hl_lines="6 14"
+--8<--
+docs_src/getting_started/hello/test_app002.py
 --8<--
 ```
 
 Now, the code is a little bit cleaner. A problem with end-to-end tests is that the code can get lengthy as we create more complex test cases.
 It's due to the accidental complexity of the high-level protocols we're working with, e.g., calling HTTP endpoints requires setup and boilerplate code.
 To keep the tests clean, notice such duplications and complexities and refactor the code with fixtures and helper functions.
+
+That's it for the first example! 🎉 We've learned how to launch your application in a temporary Docker container
+and interact with it from the test suite. However, unlike the app in this example, most applications don't exist in isolation.
+They depend on other applications or infrastructure components like databases, file stores, cloud providers, etc.
+In the next section, we'll see how to locally test an application with its external dependencies without deploying it to a real environment.

@@ -91,13 +91,17 @@ nav:
   - Getting Started:
       - getting-started/testing-simple-app.md
       - getting-started/testing-app-with-external-dependencies.md
+      - getting-started/testing-app-with-collaborator-services.md
+      - getting-started/testing-asynchronous-apps.md
+      - getting-started/good-practices-and-dangers-of-e2e-tests.md
+      - getting-started/old.md
   - Guides:
       - guides/index.md
       - guides/creating-new-testcontainers.md
+      - guides/creating-app-facade.md
       - guides/testing-databases.md
       - guides/testing-repositories.md
       - guides/ports-and-adapters.md
-      - guides/testing-asynchronous-systems.md
       - guides/testing-apps-built-with-other-frameworks.md
       - guides/running-testcontainer-tests-in-ci-cd.md
       - guides/debugging-testcontainer-tests.md
