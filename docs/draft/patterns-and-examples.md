@@ -65,4 +65,3 @@
   - Build a facade on top of your application, invent domain specific language
 
 - Testing Honeycomb - <https://engineering.atspotify.com/2018/01/testing-of-microservices/>
-

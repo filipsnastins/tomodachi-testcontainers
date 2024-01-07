@@ -4,4 +4,4 @@ The guides describe more advanced and focused testing approaches with Testcontai
 
 !!! info
 
-    See the [Getting Started](../getting-started/) section if you're just getting started.
+    See the [Getting Started](../getting-started/testing-simple-app.md) section if you're just getting started.

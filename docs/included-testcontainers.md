@@ -2,7 +2,7 @@
 
 Below is the list of Testcontainers included in this library.
 Feel free to explore how they're implemented and create your own Testcontainers as needed -
-see [Creating new Testcontainers](./guides/create-new-testcontainers.md)
+see [Creating new Testcontainers](./guides/creating-new-testcontainers.md)
 
 | Container Name | Default Image                     | Fixture                |
 | :------------- | :-------------------------------- | :--------------------- |

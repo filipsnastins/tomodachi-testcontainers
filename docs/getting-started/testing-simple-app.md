@@ -3,14 +3,14 @@
 ## Creating a simple web application
 
 Let's start with a simple `hello, world` web application.
-The app has one endpoint, `GET /hello`, that greets you with the name given in the query parameter.
+The app has one endpoint, `GET /hello`, that greets you with a name given in a query parameter.
 
 ```py title="src/app.py"
 --8<-- "docs_src/getting_started/hello/app.py"
 ```
 
 We want to test that the application behaves as expected and all its components are configured correctly -
-framework, Docker container, and dependencies. We can achieve that with an _end-to-end (E2E)_ test
+framework, Docker container, and dependencies. We can do that with an _end-to-end (E2E)_ test
 that starts the application as a Docker container, sends an HTTP request, and asserts that the response is correct.
 
 ## Creating a first Testcontainer
@@ -31,13 +31,13 @@ The [`TomodachiContainer`][tomodachi_testcontainers.TomodachiContainer] receives
 and starts the Testcontainer in a context manager. The context manager deletes the Testcontainer on exit.
 
 The `tomodachi_container` fixture is assigned the `session` scope to create the container only once per test session.
-It's a good practice to create Testcontainers only once for better test performance - it takes some time for a Docker container to start,
-and the test suite will become slow if containers are recreated for every test.
+It's a good practice to create Testcontainers only once for performance - it takes some time for a Docker container to start,
+and the test suite will be slow if containers are recreated for every test.
 
 ## Writing end-to-end tests
 
-Having the `tomodachi_container` fixture, we can write our first end-to-end test.
-Let's test that the application greets us with `Hello, Testcontainers!` when we provide it the `?name=Testcontainers` parameter.
+Having the `tomodachi_container` fixture, we can write the first end-to-end test.
+Let's test that the application greets us with `Hello, Testcontainers!` when we provide the `?name=Testcontainers` parameter.
 
 ```py title="tests/test_app.py"
 --8<--
@@ -46,7 +46,7 @@ docs_src/getting_started/hello/test_app001.py:test_hello_testcontainers
 ```
 
 The test configures the [httpx](https://www.python-httpx.org/) HTTP client with the Testcontainer's base URL.
-The `tomodachi_container.get_external_url()` returns a URL for accessing the Docker container from the host machine;
+The `tomodachi_container.get_external_url()` returns a URL for accessing the Docker container from the host machine
 in a format like `http://localhost:1234` (the port is assigned randomly).
 Finally, we send the `GET /hello?name=Testcontainers` request and assert that we received the expected response.
 That's it! We ensured that our application started, all its components were configured correctly and worked as expected.
@@ -76,7 +76,7 @@ docs_src/getting_started/hello/test_app001.py:test_hello_world
     which is necessary for keeping your system secure. Also, we want to test the application's behavior to ensure it delivers the desired outcome.
     So, apart from testing that the application works, we'll verify that it does the right thing.
 
-    Therefore, when testing a single application in isolation, the terms end-to-end and integration tests are fuzzy and often describe the same thing.
+    Therefore, when testing a single application in isolation, the difference between end-to-end and integration tests is fuzzy.
     I'll stick with the end-to-end tests because they better describe the tests we're writing in these guides -
     the tests that exercise the application's public API end-to-end, sending requests and asserting the responses.
 
@@ -101,10 +101,10 @@ docs_src/getting_started/hello/test_app002.py
 ```
 
 Now, the code is a little bit cleaner. A problem with end-to-end tests is that the code can get lengthy as we create more complex test cases.
-It's due to the accidental complexity of the high-level protocols we're working with, e.g., calling HTTP endpoints requires setup and boilerplate code.
-To keep the tests clean, notice such duplications and complexities and refactor the code with fixtures and helper functions.
+It's due to the accidental complexity of the high-level protocols and concepts we're working with, e.g., calling HTTP endpoints requires setup and boilerplate code.
+To keep the tests clean, it's important to notice such duplications and complexities and refactor the code with fixtures and helper functions.
 
-That's it for the first example! 🎉 We've learned how to launch your application in a temporary Docker container
+That's it for the first example! 🎉 We've learned how to launch an application in a temporary Docker container
 and interact with it from the test suite. However, unlike the app in this example, most applications don't exist in isolation.
-They depend on other applications or infrastructure components like databases, file stores, cloud providers, etc.
+They depend on other applications or infrastructure components like databases, file stores, cloud provider services, etc.
 In the next section, we'll see how to locally test an application with its external dependencies without deploying it to a real environment.

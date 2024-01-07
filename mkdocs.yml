@@ -92,8 +92,8 @@ nav:
       - getting-started/testing-simple-app.md
       - getting-started/testing-app-with-external-dependencies.md
       - getting-started/testing-app-with-collaborator-services.md
-      - getting-started/testing-asynchronous-apps.md
-      - getting-started/good-practices-and-dangers-of-e2e-tests.md
+      - getting-started/testing-asynchronous-systems.md
+      - getting-started/benefits-and-dangers-of-e2e-tests.md
       - getting-started/old.md
   - Guides:
       - guides/index.md

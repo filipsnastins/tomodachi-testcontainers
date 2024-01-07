@@ -43,8 +43,7 @@ poetry build
 mkdocs serve
 ```
 
-- Generate C4 diagrams with PlantUML from [docs/architecture/c4](docs/architecture/c4)
-  (get plantuml.jar at <https://plantuml.com/starting>).
+- Generate C4 diagrams with PlantUML (get plantuml.jar at <https://plantuml.com/starting>).
 
 ```sh
 export JAVA_HOME=`/usr/libexec/java_home -v 21`

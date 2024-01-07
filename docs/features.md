@@ -4,7 +4,7 @@
 
 See the list of available Testcontainers at [`tomodachi_testcontainers`][tomodachi_testcontainers].
 Find more Testcontainers in the official [testcontainers-python](https://github.com/testcontainers/testcontainers-python) library.
-See [Creating New Testcontainers](./guides/create-new-testcontainers.md) for adding new Testcontainers.
+See [Creating New Testcontainers](./guides/creating-new-testcontainers.md) for adding new Testcontainers.
 
 ## Pytest fixtures and helpers
 
@@ -22,7 +22,7 @@ Find the complete list of available fixtures at [`tomodachi_testcontainers.pytes
 
 - Get fixtures for interacting with Testcontainers, e.g., `localstack_s3_client`, `moto_dynamodb_client`, etc.
 
-**Async probes** for [testing asynchronous systems](./guides/testing-asynchronous-systems.md) -
+**Async probes** for [testing asynchronous systems](./getting-started/testing-asynchronous-systems) -
 [`tomodachi_testcontainers.pytest.async_probes`][tomodachi_testcontainers.pytest.async_probes].
 Inspired by [Awaitility](http://www.awaitility.org/) and [busypie](https://github.com/rockem/busypie).
 
