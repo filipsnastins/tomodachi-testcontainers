@@ -50,3 +50,9 @@ export JAVA_HOME=`/usr/libexec/java_home -v 21`
 
 java -jar plantuml.jar -DRELATIVE_INCLUDE="." docs/**/*.puml
 ```
+
+- Run PlantUML server.
+
+```sh
+docker run -d -p 8080:8080 plantuml/plantuml-server:jetty
+```

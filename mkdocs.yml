@@ -98,11 +98,11 @@ nav:
   - Guides:
       - guides/index.md
       - guides/creating-new-testcontainers.md
-      - guides/creating-app-facade.md
+      - guides/testing-apps-built-with-other-frameworks.md
       - guides/testing-databases.md
       - guides/testing-repositories.md
       - guides/ports-and-adapters.md
-      - guides/testing-apps-built-with-other-frameworks.md
+      - guides/creating-app-facade.md
       - guides/running-testcontainer-tests-in-ci-cd.md
       - guides/debugging-testcontainer-tests.md
       - guides/forward-testcontainer-logs-to-pytest.md

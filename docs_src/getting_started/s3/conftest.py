@@ -13,7 +13,10 @@ def tomodachi_container(
     testcontainers_docker_image: str, localstack_container: LocalStackContainer
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(image=testcontainers_docker_image, edge_port=get_available_port())
+        TomodachiContainer(
+            image=testcontainers_docker_image,
+            edge_port=get_available_port(),
+        )
         .with_env("AWS_S3_BUCKET_NAME", "autotest-my-bucket")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")

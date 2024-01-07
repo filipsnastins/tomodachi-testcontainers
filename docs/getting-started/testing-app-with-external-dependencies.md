@@ -79,15 +79,139 @@ To make testing only certain parts of your application easy, modularize those co
 
 !!! success
 
-    To achieve [dev/prod parity](https://www.12factor.net/dev-prod-parity),
-    test your application with production-like dependencies with the same configuration.
-    You can run the identical versions of some dependencies locally, e.g., PostgreSQL database or RabbitMQ message broker.
+    Test your application with production-like dependencies with the same configuration for [dev/prod parity](https://www.12factor.net/dev-prod-parity).
 
-    Some dependencies, e.g., a managed cloud provider service, can't be run locally.
+    You can run the identical versions of some dependencies locally, e.g., PostgreSQL database or RabbitMQ message broker.
+    Other dependencies, e.g., a managed cloud provider service, can't be run locally.
     Find an alternative for local development like [LocalStack](https://www.localstack.cloud/) and [Moto](https://docs.getmoto.org/en/latest/)
     AWS cloud emulators.
 
-    If you can't run a dependency locally and no alternatives for local development and testing exist, e.g., Oracle Enterprise Database,
-    resort to testing with a dedicated instance running in a separate test environment, or consult your vendor.
+    If you can't run a dependency locally and no alternatives for local development and testing exist, e.g., for Oracle Enterprise Database,
+    resort to testing with a dedicated instance running in a separate test environment, or consult your software vendor.
 
-## Testing file store application with AWS S3 and LocalStack
+## Example: Testing file store application with AWS S3 and LocalStack
+
+Let's test an example file store application.
+The application provides a simple REST API for storing and retrieving text files.
+For a data store, the application uses AWS S3.
+
+<figure markdown>
+  ![Component Diagram - Application with DynamoDB Database](../architecture/c4/level_2_container/04_file_store_app.png)
+</figure>
+
+### Creating the application
+
+The example app has two endpoints - `POST /file` and `GET /file/<name>`.
+In the backend, the app uses AWS S3 operations `put_object` and `get_object` to store and retrieve files.
+
+```py title="src/app.py" hl_lines="14 22"
+--8<-- "docs_src/getting_started/s3/app.py"
+```
+
+The app is configured with environment variables, following the [12-factor app principle](https://12factor.net/config).
+The required configuration value is `AWS_S3_BUCKET_NAME` for specifying the bucket name for the datastore.
+Other optional values are `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` for credentials and `AWS_S3_ENDPOINT_URL` for overriding the AWS endpoint.
+We'll see how such environment variables make the application testable by substituting the production cloud provider's endpoint with LocalStack.
+
+```py title="src/utils.py"
+--8<-- "docs_src/getting_started/s3/utils.py"
+```
+
+### Configuring Testcontainers
+
+As in the [previous getting started guide](./testing-simple-app.md), the first step for testing is creating and configuring Testcontainer fixtures.
+This example is more involved because the application depends on the external service - AWS cloud.
+Since we don't want to use the real AWS account for automated testing, we'll use a [`LocalStackContainer`][tomodachi_testcontainers.LocalStackContainer].
+We can access it with the [`localstack_container`][tomodachi_testcontainers.pytest.localstack_container] fixture.
+
+Next, we need to configure our application's container with environment variables.
+The important part - we set the environment variable `AWS_S3_ENDPOINT_URL` to the LocalStack URL.
+Now, when the application uses AWS services, it will send requests to the LocalStack instance
+running locally as a Docker container, and not to the real AWS.
+
+!!! Note
+
+    The `localstack_container.get_internal_url()` returns a URL that's accessible only inside the Docker network
+    so that the `LocalStackContainer` and `TomodachiContainer` can communicate with each other.
+
+```py title="tests/conftest.py" hl_lines="13 20-23"
+--8<-- "docs_src/getting_started/s3/conftest.py"
+```
+
+### Testing the application's public API
+
+Let's write a test for storing files. First, we need to create the AWS S3 bucket in a LocalStack environment.
+Tomodachi Testcontainers provides commonly used AWS clients as fixtures, for example, [`localstack_s3_client`][tomodachi_testcontainers.pytest.localstack_s3_client].
+Having the `localstack_s3_client`, we can easily create the `autotest-my-bucket` S3 bucket.
+Next, we request the application to store the text `Hello, world!` in the file `test.txt`. Lastly, we assert that we got a correct response.
+
+```py title="tests/test_app.py"
+--8<-- "docs_src/getting_started/s3/test_app001.py"
+```
+
+The first test worked fine, but we haven't actually tested that the file was stored.
+To verify that, we'd need to query the file and ensure it has the right content.
+An easy way to test that would be to query the S3 bucket and look at what's in there.
+It works; however, it creates a significant problem - we're testing the application's _internal implementation details_.
+Such tests are brittle - changing the inner details of how the files are stored in S3 could break the tests.
+Also, such tests are difficult to read - to write a test, we have to deal with all the mechanics and complexities of the infrastructure.
+
+```py title="tests/test_app.py" hl_lines="15-17"
+--8<-- "docs_src/getting_started/s3/test_app002.py"
+```
+
+To fix the problem, we should test our application using its public API.
+Luckily, this application already has a file retrieval API that suits our needs - `GET /files/<name>`.
+The refactored test has a new name - `test_save_and_get_file` - because now we're storing the file and querying it in the same test.
+
+```py title="tests/test_app.py" hl_lines="7 15-17"
+--8<-- "docs_src/getting_started/s3/test_app003.py"
+```
+
+!!! success "Testing business scenarios, not HTTP endpoints."
+
+    Someone can say this test violates the principle that "one test should test only one thing."
+    However, if we look at the test from the "end-to-end" perspective,
+    it tests a single scenario of storing files that provide value to the application users.
+    That's why the term "end-to-end" fits well - we're not testing a single HTTP endpoint per test
+    but rather a single user's journey that might involve multiple API calls.
+
+### Creating test fixtures and managing test isolation
+
+Let's remove the last implementation details from our tests - AWS S3 bucket creation.
+We'll create a new fixture - `_create_s3_buckets`. The fixture is session-scoped because we need to create the bucket only once per test session.
+
+```py title="tests/conftest.py"
+--8<--
+docs_src/getting_started/s3/test_app004.py:create_s3_buckets
+--8<--
+```
+
+The `tomodachi_container` fixture uses the `_create_s3_buckets` fixture, so the S3 bucket is created before the application container is started.
+
+```py title="tests/conftest.py" hl_lines="5"
+--8<--
+docs_src/getting_started/s3/test_app004.py:tomodachi_container
+--8<--
+    ...
+```
+
+Now tests don't even know that the application is storing files in AWS S3; implementation details are hidden in the test setup fixtures.
+
+```py title="tests/test_app.py"
+--8<--
+docs_src/getting_started/s3/test_app004.py:test_save_and_get_file
+--8<--
+```
+
+For completeness, let's test the error-handling scenario when we try to get a file that doesn't exist.
+
+```py title="tests/test_app.py"
+--8<--
+docs_src/getting_started/s3/test_app004.py:test_file_not_found
+--8<--
+```
+
+## Summary
+
+TODO

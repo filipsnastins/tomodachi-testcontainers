@@ -1,14 +1,6 @@
-# --8<-- [start:tomodachi_container]
-
-from typing import AsyncGenerator, Generator, cast
-
-import httpx
-import pytest
+# --8<-- [start:create_s3_buckets]
 import pytest_asyncio
 from types_aiobotocore_s3 import S3Client
-
-from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -16,10 +8,25 @@ async def _create_s3_buckets(localstack_s3_client: S3Client) -> None:
     await localstack_s3_client.create_bucket(Bucket="autotest-my-bucket")
 
 
+# --8<-- [end:create_s3_buckets]
+
+
+from typing import Generator, cast
+
+import pytest
+
+from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
+from tomodachi_testcontainers.utils import get_available_port
+
+
+# --8<-- [start:tomodachi_container]
 @pytest.fixture(scope="session")
 def tomodachi_container(
-    testcontainers_docker_image: str, localstack_container: LocalStackContainer, _create_s3_buckets: None
+    testcontainers_docker_image: str,
+    localstack_container: LocalStackContainer,
+    _create_s3_buckets: None,
 ) -> Generator[TomodachiContainer, None, None]:
+    # --8<-- [end:tomodachi_container]
     with (
         TomodachiContainer(image=testcontainers_docker_image, edge_port=get_available_port())
         .with_env("AWS_S3_BUCKET_NAME", "autotest-my-bucket")
@@ -31,7 +38,9 @@ def tomodachi_container(
         yield cast(TomodachiContainer, container)
 
 
-# --8<-- [end:tomodachi_container]
+from typing import AsyncGenerator
+
+import httpx
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -41,7 +50,6 @@ async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator
 
 
 # --8<-- [start:test_save_and_get_file]
-
 import uuid
 
 
