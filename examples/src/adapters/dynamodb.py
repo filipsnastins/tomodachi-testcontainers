@@ -1,8 +1,9 @@
 import os
 
 import structlog
-from aiobotocore.session import get_session
 from types_aiobotocore_dynamodb import DynamoDBClient
+
+from .aws import session
 
 logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 
@@ -12,7 +13,7 @@ def get_table_name() -> str:
 
 
 def get_dynamodb_client() -> DynamoDBClient:
-    return get_session().create_client(
+    return session.create_client(
         "dynamodb",
         region_name=os.environ["AWS_REGION"],
         aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),

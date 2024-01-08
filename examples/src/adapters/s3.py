@@ -2,14 +2,15 @@ import os
 
 import structlog
 from adapters.sns_sqs import get_sns_client
-from aiobotocore.session import get_session
 from types_aiobotocore_s3 import S3Client
+
+from .aws import session
 
 logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 
 
 def get_bucket_name() -> str:
-    return os.environ["S3_BUCKET_NAME"]
+    return os.environ["AWS_S3_BUCKET_NAME"]
 
 
 def get_s3_notification_topic_name() -> str:
@@ -17,7 +18,7 @@ def get_s3_notification_topic_name() -> str:
 
 
 def get_s3_client() -> S3Client:
-    return get_session().create_client(
+    return session.create_client(
         "s3",
         aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
         aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),

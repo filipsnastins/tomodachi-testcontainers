@@ -1,7 +1,5 @@
 # End-to-end and integration testing approaches, patterns and examples
 
-A collection of recipes for testing applications with testcontainers.
-
 - Running tests in parallel/isolation. Do not restart tomodachi container between tests,
   but control isolation with the application means (multitenancy);
   <https://softwaregarden.dev/en/posts/testcontainers/parallel-start-with-prepulling/>
@@ -21,7 +19,7 @@ A collection of recipes for testing applications with testcontainers.
 - GraphQL
 - Scheduled jobs
 
-- [ ] Testing Repositories
+- [x] Testing Repositories
 
 - Testcontainers Desktop - <https://testcontainers.com/guides/simple-local-development-with-testcontainers-desktop/>
 
@@ -58,31 +56,12 @@ A collection of recipes for testing applications with testcontainers.
 - Pre-pull required docker images in CI
 - Start containers only once, isolate the state with application means
 
-- [x] Running tests in parallel with pytest-xdist
-
 ## Techniques
 
 - Integration testing - verify that all system components and frameworks are integrated correctly.
 
 - Functional/acceptance testing - verifying system behavior by real world examples.
+
   - Build a facade on top of your application, invent domain specific language
 
-## Misc
-
-- Debugging. Stop the time by placing a breakpoint and inspect containers
-- Attach the debugger
-- Export test coverage
-
-## Table of content
-
-```yaml
-nav:
-  - index.md
-  - Recipes:
-      - recipes/index.md
-      - recipes/testing-databases.md
-      - recipes/testing-repositories.md
-      - recipes/ports-and-adapters.md
-      - recipes/testing-applications.md # How to test your service
-      - recipes/parallelizing-tests.md
-```
+- Testing Honeycomb - <https://engineering.atspotify.com/2018/01/testing-of-microservices/>

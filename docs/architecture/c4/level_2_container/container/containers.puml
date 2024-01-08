@@ -5,6 +5,10 @@
     Container(app, "Application", "Python, tomodachi")
 !endprocedure
 
+!procedure fileStoreAppContainer()
+    Container(fileStoreApp, "File Store Application", "Python, tomodachi", "Provides a text-based file storage service.")
+!endprocedure
+
 !procedure relationalDbContainer()
     ContainerDb(relationalDb, "Relational database", "PostgreSQL", "Datastore.")
 !endprocedure

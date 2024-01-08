@@ -1,3 +1,1 @@
-# Tomodachi Testcontainers
-
-👷 🚧
+--8<-- "README.md"

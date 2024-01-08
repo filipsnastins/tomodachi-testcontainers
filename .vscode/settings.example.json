@@ -1,5 +1,6 @@
 {
   "python.testing.pytestEnabled": true,
+  "black-formatter.args": ["--config", "${workspaceFolder}/pyproject.toml"],
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },

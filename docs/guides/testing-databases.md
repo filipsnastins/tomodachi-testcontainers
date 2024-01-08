@@ -39,7 +39,7 @@ potentially lowering performance and increasing the complexity of the applicatio
 Autotests must give confidence that the application will work in the production environment,
 so development/test/production [environment parity](https://12factor.net/dev-prod-parity) is crucial for reliable automated testing.
 
-!!! success "Use production-like database in tests."
+!!! success "Use production-like database in tests"
 
     Whether your application uses a relational or NoSQL database,
     use the same database technology, version, and configuration in automated tests as in your production environment.
@@ -111,8 +111,8 @@ When using the Repository pattern, the business logic doesn't directly call ORM 
 but does so indirectly through the Repository interface.
 
 To test the business logic without the complexity of the production database, substitute the real Repository with a fake or mock.
-To ensure the data storage layer works, separately test the real Repository implementation with the production database.
-That is described in the next section - [Testing Repositories](./testing-repositories.md).
+To ensure the data storage layer works, separately test the real Repository implementation with the production database;
+it's described in [Testing Repositories](./testing-repositories.md).
 
 To learn more about the Repository pattern use cases,
 check out [cosmicpython book chapter](https://www.cosmicpython.com/book/chapter_02_repository.html) on the topic

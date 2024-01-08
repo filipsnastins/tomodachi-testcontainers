@@ -35,7 +35,7 @@ There are two ways to create a new `Customer` object instance -
 with the default constructor (auto-generated with `@dataclass`) or a `create` factory method.
 The former is used for _object reconstruction_ and the latter for _new object creation_.
 
-```py title="customers/domain.py", hl_lines="7-9 12"
+```py title="customers/domain.py" hl_lines="7-9 12"
 --8<-- "docs_src/testing_repositories/domain001.py"
 ```
 
@@ -79,7 +79,7 @@ We'll get the `DynamoDBClient` from the Tomodachi Testcontainers library with th
 The fixture will automatically start `MotoContainer`. For the `table_name`, any string value will suffice;
 the example is using a value with a random `uuid` suffix as a namespace to avoid table name clashes during tests.
 
-!!! success "Dependency injection increases testability."
+!!! success "Dependency injection increases testability"
 
     Being able to pass a different `DynamoDBClient` to the Repository in tests is powerful -
     it makes the code testable and explicit about its dependencies.
@@ -129,7 +129,7 @@ docs_src/testing_repositories/repository003.py:get
 --8<--
 ```
 
-!!! success "Repository's public API round-trip testing helps to avoid testing implementation details."
+!!! success "Repository's public API round-trip testing helps to avoid testing implementation details"
 
     You can think of the pattern of saving an object and querying it in the same test as a "round-trip" test.
     The same test verifies a complete cycle of a domain object persistence - saved in the datastore and retrieved back.
@@ -181,7 +181,7 @@ docs_src/testing_repositories/test_repository005.py:tests
 ## Implementing a fake Repository
 
 The database implementation details obscure the intent of the application's business logic, so we have hidden
-the details behind the Repository's interface - a contract between application's domain layer and persistence layer.
+the details behind the Repository's interface - a contract between the application's domain layer and persistence layer.
 
 To further ease domain layer testing, instead of using the production `DynamoDBCustomerRepository`,
 we can replace it with an in-memory fake Repository. The fake Repository will store the data in an in-memory dictionary.
@@ -202,7 +202,7 @@ by the accidental complexities of a production database - mapping domain objects
 managing schema and data migration, handling infrastructure errors, etc.
 You can better commit to a specific technology when the problem domain is more explored and apparent with how the data is queried and used.
 
-!!! success "Let the problem domain drive your technological choices."
+!!! success "Let the problem domain drive your technological choices"
 
     By focusing the development on the problem domain first and keeping the infrastructure concerns on the periphery,
     later, you can make informed choices of which specific technologies are better suited for your needs.
@@ -252,13 +252,13 @@ For the type hint, the repository tests use the generic Repository's protocol - 
   <figcaption>Running the same test suite with different pytest fixture implementations.</figcaption>
 </figure>
 
-## Decoupling infrastructure components with Ports & Adapters pattern
+## Decoupling and Testing Infrastructure Layer with Ports & Adapters Pattern
 
 This section used the Repository pattern to decouple the persistence layer from the domain layer.
 The Repository pattern is a specific application for another, more general pattern -
 [Ports & Adapters](<https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)>).
 The Ports & Adapters pattern helps decouple all sorts of components, not just databases.
-The following section [Decoupling Infrastructure Components with Ports & Adapters Pattern](./ports-and-adapters.md)
+The following section [Decoupling and Testing Infrastructure Layer with Ports & Adapters Pattern](./ports-and-adapters.md)
 describes in more detail the applications of Ports & Adapters,
 and how Testcontainers help to implement and test the "Adapters" part of the pattern.
 

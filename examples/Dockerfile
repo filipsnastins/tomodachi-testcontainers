@@ -26,16 +26,14 @@ FROM dependencies-base AS dev
 RUN poetry install --with dev
 COPY --link . .
 RUN poetry install --with dev
-CMD ["tomodachi", "run", "src/healthcheck.py", "--loop", "uvloop"]
 
 FROM dependencies-base AS test
 RUN poetry install --with test
 COPY --link . .
 RUN poetry install --with test
-CMD ["tomodachi", "run", "src/healthcheck.py", "--loop", "uvloop", "--production"]
+USER app
 
 FROM python-base AS release
 COPY --link --from=dependencies-release --chown=app:app /opt/venv /opt/venv
 COPY --link --from=dependencies-release --chown=app:app /app .
 USER app
-CMD ["tomodachi", "run", "src/healthcheck.py", "--loop", "uvloop", "--production"]
