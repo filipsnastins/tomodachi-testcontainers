@@ -4,6 +4,7 @@ from pathlib import Path
 from types import TracebackType
 from typing import Dict, Iterator, Optional, Tuple, Type, cast
 
+from docker.errors import BuildError
 from docker.models.images import Image
 from testcontainers.core.docker_client import DockerClient
 
@@ -55,13 +56,17 @@ class EphemeralDockerImage:
             cmd.extend(["--target", self.target])
         cmd.append(self.context)
 
-        result = subprocess.run(  # nosec: B603
-            cmd,
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=True,
-        )
+        try:
+            result = subprocess.run(  # nosec: B603
+                cmd,
+                shell=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            stderr = e.stderr.decode("utf-8")
+            raise BuildError(f"Failed to build image with Docker BuildKit: {stderr}", stderr) from e
         image_id = result.stdout.decode("utf-8").strip()
         return cast(Image, self._docker_client.client.images.get(image_id))
 

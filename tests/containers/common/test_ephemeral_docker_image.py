@@ -56,6 +56,19 @@ def dockerfile_multi_stage(tmp_path: Path) -> Generator[Path, None, None]:
         yield Path(f.name)
 
 
+@pytest.fixture()
+def dockerfile_invalid(tmp_path: Path) -> Generator[Path, None, None]:
+    with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as f:
+        f.writelines(
+            [
+                "FROM alpine:latest\n",
+                "RUN exit 1\n",
+            ]
+        )
+        f.flush()
+        yield Path(f.name)
+
+
 def test_build_docker_image_and_remove_on_cleanup(
     dockerfile_hello_world: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -110,3 +123,21 @@ def test_explicit_build_target__with_buildkit(
     with EphemeralDockerImage(dockerfile_multi_stage, target=target) as image:
         assert image.attrs
         assert image.attrs.get("Config", {}).get("Env") == ["PATH=", f"TARGET={target}"]
+
+
+def test_build_error_when_dockerfile_is_invalid__with_buildkit(
+    dockerfile_invalid: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("DOCKER_BUILDKIT", "1")
+
+    with pytest.raises(BuildError), EphemeralDockerImage(Path(dockerfile_invalid)):
+        pass
+
+
+def test_build_error_when_dockerfile_is_invalid__without_buildkit(
+    dockerfile_invalid: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("DOCKER_BUILDKIT", raising=False)
+
+    with pytest.raises(BuildError), EphemeralDockerImage(Path(dockerfile_invalid)):
+        pass
