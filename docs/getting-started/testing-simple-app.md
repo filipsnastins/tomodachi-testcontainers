@@ -104,7 +104,12 @@ Now, the code is a little bit cleaner. A problem with end-to-end tests is that t
 It's due to the accidental complexity of the high-level protocols and concepts we're working with, e.g., calling HTTP endpoints requires setup and boilerplate code.
 To keep the tests clean, it's important to notice such duplications and complexities and refactor the code with fixtures and helper functions.
 
-That's it for the first example! 🎉 We've learned how to launch an application in a temporary Docker container
-and interact with it from the test suite. However, unlike the app in this example, most applications don't exist in isolation.
+## Summary
+
+That's it for the first example! 🎉
+
+We've learned how to launch an application in a temporary Docker container and interact with it from the test suite.
+However, unlike the app in this example, most applications don't exist in isolation.
 They depend on other applications or infrastructure components like databases, file stores, cloud provider services, etc.
+
 In the next section, we'll see how to locally test an application with its external dependencies without deploying it to a real environment.

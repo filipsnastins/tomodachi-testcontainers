@@ -39,7 +39,7 @@ potentially lowering performance and increasing the complexity of the applicatio
 Autotests must give confidence that the application will work in the production environment,
 so development/test/production [environment parity](https://12factor.net/dev-prod-parity) is crucial for reliable automated testing.
 
-!!! success "Use production-like database in tests."
+!!! success "Use production-like database in tests"
 
     Whether your application uses a relational or NoSQL database,
     use the same database technology, version, and configuration in automated tests as in your production environment.

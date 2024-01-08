@@ -79,7 +79,7 @@ We'll get the `DynamoDBClient` from the Tomodachi Testcontainers library with th
 The fixture will automatically start `MotoContainer`. For the `table_name`, any string value will suffice;
 the example is using a value with a random `uuid` suffix as a namespace to avoid table name clashes during tests.
 
-!!! success "Dependency injection increases testability."
+!!! success "Dependency injection increases testability"
 
     Being able to pass a different `DynamoDBClient` to the Repository in tests is powerful -
     it makes the code testable and explicit about its dependencies.
@@ -129,7 +129,7 @@ docs_src/testing_repositories/repository003.py:get
 --8<--
 ```
 
-!!! success "Repository's public API round-trip testing helps to avoid testing implementation details."
+!!! success "Repository's public API round-trip testing helps to avoid testing implementation details"
 
     You can think of the pattern of saving an object and querying it in the same test as a "round-trip" test.
     The same test verifies a complete cycle of a domain object persistence - saved in the datastore and retrieved back.
@@ -202,7 +202,7 @@ by the accidental complexities of a production database - mapping domain objects
 managing schema and data migration, handling infrastructure errors, etc.
 You can better commit to a specific technology when the problem domain is more explored and apparent with how the data is queried and used.
 
-!!! success "Let the problem domain drive your technological choices."
+!!! success "Let the problem domain drive your technological choices"
 
     By focusing the development on the problem domain first and keeping the infrastructure concerns on the periphery,
     later, you can make informed choices of which specific technologies are better suited for your needs.

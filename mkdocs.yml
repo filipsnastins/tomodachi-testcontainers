@@ -90,9 +90,10 @@ nav:
       - resources-and-acknowledgements.md
   - Getting Started:
       - getting-started/testing-simple-app.md
-      - getting-started/testing-app-with-external-dependencies.md
+      - getting-started/testing-app-with-backing-services.md
       - getting-started/testing-app-with-collaborator-services.md
       - getting-started/testing-asynchronous-systems.md
+      - getting-started/testing-cronjobs-and-scripts.md
       - getting-started/benefits-and-dangers-of-e2e-tests.md
       - getting-started/old.md
   - Guides:

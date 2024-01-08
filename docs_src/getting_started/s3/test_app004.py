@@ -38,33 +38,20 @@ def tomodachi_container(
         yield cast(TomodachiContainer, container)
 
 
-from typing import AsyncGenerator
-
-import httpx
-
-
-@pytest_asyncio.fixture(scope="session")
-async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
-        yield client
-
-
 # --8<-- [start:test_save_and_get_file]
-import uuid
+import httpx
+import pytest
 
 
-@pytest.mark.parametrize("content", ["Hello, world!", "Multi\nline\nfile"])
 @pytest.mark.asyncio()
-async def test_save_and_get_file(http_client: httpx.AsyncClient, content: str) -> None:
-    filename = f"test-{uuid.uuid4()}.txt"
-
-    response = await http_client.post("/file/", json={"filename": filename, "content": content})
+async def test_save_and_get_file(http_client: httpx.AsyncClient) -> None:
+    response = await http_client.post("/file/", json={"filename": "test.txt", "content": "Hello, world!"})
     assert response.status_code == 200
-    assert response.json() == {"key": filename}
+    assert response.json() == {"key": "test.txt"}
 
-    response = await http_client.get(f"/file/{filename}")
+    response = await http_client.get("/file/test.txt")
     assert response.status_code == 200
-    assert response.json() == {"content": content}
+    assert response.json() == {"content": "Hello, world!"}
 
 
 # --8<-- [end:test_save_and_get_file]
@@ -73,7 +60,7 @@ async def test_save_and_get_file(http_client: httpx.AsyncClient, content: str) -
 # --8<-- [start:test_file_not_found]
 @pytest.mark.asyncio()
 async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
-    response = await http_client.get("/file/not-found.txt")
+    response = await http_client.get("/file/not-exists.txt")
 
     assert response.status_code == 404
     assert response.json() == {"error": "File not found"}
