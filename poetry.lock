@@ -1032,17 +1032,17 @@ files = [
 
 [[package]]
 name = "flake8-literal"
-version = "1.3.0"
+version = "1.4.0"
 description = "Flake8 string literal validation"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "flake8-literal-1.3.0.tar.gz", hash = "sha256:8052fb557d356ee301565a9228b4b41b4820976dc4435bde4bf279a0aeff5831"},
-    {file = "flake8_literal-1.3.0-py3-none-any.whl", hash = "sha256:1579ecdcf9487a71f39b6277dd4bd0fc77766c42e04d05c8dc6f68e2817520ca"},
+    {file = "flake8-literal-1.4.0.tar.gz", hash = "sha256:dbbcac7b871b8b29e1695701a983f9fecb1b1a421911d8bc75fa6343bdca1221"},
+    {file = "flake8_literal-1.4.0-py3-none-any.whl", hash = "sha256:8672260cc05f47fbf278007ba370a6fa7665d226e7349938350d466dd56a63a3"},
 ]
 
 [package.dependencies]
-flake8 = ">=3.8.0,<7.0"
+flake8 = ">=3.8.0,<8.0"
 typing-extensions = ">=3.7.4.2"
 
 [package.extras]
