@@ -204,6 +204,10 @@ env = [
     "TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile",
     "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples",
     "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET=test",
+    # WireMock Testcontainer configuration
+    "WIREMOCK_TESTCONTAINER_MAPPING_STUBS=tests/containers/test-wiremock-container/mappings",
+    "WIREMOCK_TESTCONTAINER_MAPPING_FILES=tests/containers/test-wiremock-container/files",
+    "WIREMOCK_TESTCONTAINER_VERBOSE=1",
 ]
 
 [tool.coverage.run]

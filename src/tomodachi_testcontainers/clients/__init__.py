@@ -1,4 +1,4 @@
-from tomodachi_testcontainers.clients.snssqs import SNSSQSTestClient
+from .snssqs import SNSSQSTestClient
 
 __all__ = [
     "SNSSQSTestClient",
