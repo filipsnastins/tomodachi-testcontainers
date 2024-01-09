@@ -7,13 +7,14 @@ import httpx
 import pytest
 import pytest_asyncio
 from tomodachi.envelope.json_base import JsonBase
+from types_aiobotocore_sns import SNSClient
+from types_aiobotocore_sqs import SQSClient
+
 from tomodachi_testcontainers import MotoContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
-from types_aiobotocore_sns import SNSClient
-from types_aiobotocore_sqs import SQSClient
 
 
 @pytest.fixture(scope="module")

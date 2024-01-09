@@ -1,5 +1,5 @@
 import asyncio
-import contextlib
+from contextlib import closing
 from typing import Iterator
 
 import pytest
@@ -9,5 +9,5 @@ pytest_plugins = ["pytester"]
 
 @pytest.fixture(scope="session")
 def event_loop() -> Iterator[asyncio.AbstractEventLoop]:
-    with contextlib.closing(asyncio.new_event_loop()) as loop:
+    with closing(asyncio.new_event_loop()) as loop:
         yield loop

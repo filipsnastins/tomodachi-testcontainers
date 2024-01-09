@@ -1,4 +1,4 @@
-import contextlib
+from contextlib import suppress
 
 from .common import DockerContainer, EphemeralDockerImage, WebContainer
 from .dynamodb_admin import DynamoDBAdminContainer
@@ -8,16 +8,16 @@ from .moto import MotoContainer
 from .tomodachi import TomodachiContainer
 from .wiremock import WireMockContainer
 
-with contextlib.suppress(ImportError):  # 'db' extra dependency
+with suppress(ImportError):  # 'db' extra dependency
     from .common import DatabaseContainer
 
-with contextlib.suppress(ImportError):  # 'mysql' extra dependency
+with suppress(ImportError):  # 'mysql' extra dependency
     from .mysql import MySQLContainer
 
-with contextlib.suppress(ImportError):  # 'postgres' extra dependency
+with suppress(ImportError):  # 'postgres' extra dependency
     from .postgres import PostgreSQLContainer
 
-with contextlib.suppress(ImportError):  # 'sftp' extra dependency
+with suppress(ImportError):  # 'sftp' extra dependency
     from .sftp import SFTPContainer
 
 __all__ = [

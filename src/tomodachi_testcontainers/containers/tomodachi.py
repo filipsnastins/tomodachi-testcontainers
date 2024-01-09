@@ -1,5 +1,5 @@
-import contextlib
 import os
+from contextlib import suppress
 from pathlib import Path
 from typing import Any, Optional
 
@@ -51,7 +51,7 @@ class TomodachiContainer(WebContainer):
 
     def stop(self) -> None:
         if self._export_coverage:
-            with contextlib.suppress(Exception):
+            with suppress(Exception):
                 self._stop_container_and_copy_coverage_report()
         super().stop()
 

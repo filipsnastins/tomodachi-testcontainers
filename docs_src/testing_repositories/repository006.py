@@ -48,12 +48,12 @@ class DynamoDBCustomerRepository:
                     },
                 ]
             )
-        except self._client.exceptions.TransactionCanceledException as exc:
-            cancellation_reasons = exc.response["CancellationReasons"]
+        except self._client.exceptions.TransactionCanceledException as e:
+            cancellation_reasons = e.response["CancellationReasons"]
             if cancellation_reasons[0]["Code"] == "ConditionalCheckFailed":
-                raise CustomerIdentifierAlreadyExistsError(customer.id) from exc
+                raise CustomerIdentifierAlreadyExistsError(customer.id) from e
             if cancellation_reasons[1]["Code"] == "ConditionalCheckFailed":
-                raise CustomerEmailAlreadyExistsError(customer.email) from exc
+                raise CustomerEmailAlreadyExistsError(customer.email) from e
             raise
 
     async def get(self, customer_id: str) -> Customer:
@@ -89,8 +89,8 @@ class InMemoryRepository:
     async def get(self, customer_id: str) -> Customer:
         try:
             return self.customers[customer_id]
-        except KeyError as exc:
-            raise CustomerNotFoundError(customer_id) from exc
+        except KeyError as e:
+            raise CustomerNotFoundError(customer_id) from e
 
 
 # --8<-- [end:in_memory_repository]

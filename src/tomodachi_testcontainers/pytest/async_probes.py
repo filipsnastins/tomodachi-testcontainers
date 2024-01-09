@@ -1,5 +1,5 @@
 import asyncio
-import contextlib
+from contextlib import suppress
 from typing import Any, Awaitable, Callable, TypeVar, Union, cast, overload
 
 from tenacity import AsyncRetrying, RetryError, retry_unless_exception_type
@@ -77,7 +77,7 @@ async def probe_during_interval(
     Given function can be a regular synchronous function or an asynchronous function.
     """
     result: Any = None
-    with contextlib.suppress(RetryError):
+    with suppress(RetryError):
         async for attempt in AsyncRetrying(
             wait=wait_fixed(probe_interval),
             stop=stop_after_delay(stop_after),

@@ -114,8 +114,8 @@ We [treat all backing services as attachable resources](https://12factor.net/bac
 configuration, such as the `AWS_S3_ENDPOINT_URL`. This approach makes testing and deployment to different environments possible.
 We can use other instances of backing services in different environments, including in automated testing.
 
-```py title="src/utils.py"
---8<-- "docs_src/getting_started/s3/utils.py"
+```py title="src/aws.py"
+--8<-- "docs_src/getting_started/s3/aws.py"
 ```
 
 ### Configuring Testcontainers

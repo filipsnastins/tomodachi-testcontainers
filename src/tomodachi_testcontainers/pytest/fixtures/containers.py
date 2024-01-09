@@ -1,5 +1,5 @@
-import contextlib
 import os
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator
 
@@ -22,7 +22,7 @@ def testcontainers_docker_image() -> Generator[str, None, None]:
             yield image_id
 
 
-@contextlib.contextmanager
+@contextmanager
 def _testcontainers_docker_image(*, remove_image_on_exit: bool) -> Generator[str, None, None]:
     if image_id := os.getenv("TOMODACHI_TESTCONTAINER_IMAGE_ID"):
         yield image_id

@@ -1,7 +1,7 @@
 import abc
-import contextlib
 import logging
 import os
+from contextlib import suppress
 from types import TracebackType
 from typing import Any, Dict, Optional, Type, cast
 
@@ -103,7 +103,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
         return self
 
     def stop(self) -> None:
-        with contextlib.suppress(Exception):
+        with suppress(Exception):
             container = self._container or cast(Container, self.get_docker_client().client.containers.get(self._name))
             container.remove(force=True, v=True)
         self._container = None
@@ -133,10 +133,10 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
                 volumes=self.volumes,
                 **self._kwargs,
             )
-        except Exception as exc:
+        except Exception as e:
             self._logger.exception("Failed to start the container")
-            if isinstance(exc, docker.errors.APIError) and exc.status_code == 409:  # pylint: disable=no-member
-                raise ContainerWithSameNameAlreadyExistsError(self._name) from exc
+            if isinstance(e, docker.errors.APIError) and e.status_code == 409:  # pylint: disable=no-member
+                raise ContainerWithSameNameAlreadyExistsError(self._name) from e
             raise
         else:
             self._logger.info(f"Container started: {self._name}")

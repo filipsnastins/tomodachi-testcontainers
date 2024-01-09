@@ -1,7 +1,7 @@
 import tomodachi
 from aiohttp import web
 
-from .utils import create_s3_client, get_bucket_name
+from .aws import create_s3_client, get_bucket_name
 
 
 class Service(tomodachi.Service):
