@@ -7,14 +7,13 @@ import httpx
 import pytest
 import pytest_asyncio
 from tomodachi.envelope.json_base import JsonBase
-from types_aiobotocore_sns import SNSClient
-from types_aiobotocore_sqs import SQSClient
-
 from tomodachi_testcontainers import MotoContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
+from types_aiobotocore_sns import SNSClient
+from types_aiobotocore_sqs import SQSClient
 
 
 @pytest.fixture(scope="module")
@@ -49,7 +48,7 @@ def service_orders_container(
         .with_env("AWS_SNS_ENDPOINT_URL", moto_container.get_internal_url())
         .with_env("AWS_SQS_ENDPOINT_URL", moto_container.get_internal_url())
         .with_env("AWS_DYNAMODB_ENDPOINT_URL", moto_container.get_internal_url())
-        .with_env("DYNAMODB_TABLE_NAME", "orders")
+        .with_env("DYNAMODB_TABLE_NAME", "autotest-orders")
         .with_command("coverage run -m tomodachi run src/orders.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)

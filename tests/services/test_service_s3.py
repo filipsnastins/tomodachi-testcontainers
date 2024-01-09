@@ -6,15 +6,14 @@ import httpx
 import pytest
 import pytest_asyncio
 from tomodachi.envelope.json_base import JsonBase
-from types_aiobotocore_s3 import S3Client
-from types_aiobotocore_sns import SNSClient
-from types_aiobotocore_sqs import SQSClient
-
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.pytest.assertions import assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
+from types_aiobotocore_s3 import S3Client
+from types_aiobotocore_sns import SNSClient
+from types_aiobotocore_sqs import SQSClient
 
 
 @pytest.fixture(scope="module")
@@ -49,7 +48,7 @@ def service_s3_container(
         .with_env("AWS_SNS_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("AWS_SQS_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("AWS_S3_ENDPOINT_URL", localstack_container.get_internal_url())
-        .with_env("AWS_S3_BUCKET_NAME", "filestore")
+        .with_env("AWS_S3_BUCKET_NAME", "autotest-filestore")
         .with_env("S3_NOTIFICATION_TOPIC_NAME", "s3--upload-notification")
         .with_command("coverage run -m tomodachi run src/s3.py --production")
     ) as container:
@@ -80,7 +79,7 @@ async def test_upload_and_read_file(
     http_client: httpx.AsyncClient, localstack_s3_client: S3Client, snssqs_tc: SNSSQSTestClient
 ) -> None:
     filename = f"{uuid.uuid4()}.txt"
-    await localstack_s3_client.put_object(Bucket="filestore", Key=filename, Body=b"Hello, World!")
+    await localstack_s3_client.put_object(Bucket="autotest-filestore", Key=filename, Body=b"Hello, World!")
 
     response = await http_client.get(f"/file/{filename}")
 
@@ -99,7 +98,7 @@ async def test_upload_and_read_file(
     event = await probe_until(_file_uploaded_event_emitted)
     assert_datetime_within_range(datetime.fromisoformat(event["event_time"]))
     assert event == {
-        "uri": f"s3://filestore/{filename}",
+        "uri": f"s3://autotest-filestore/{filename}",
         "eTag": "65a8e27d8879283831b664bd8b7f0ad4",
         "request_id": event["request_id"],
         "event_time": event["event_time"],

@@ -49,7 +49,7 @@ def service_customers_container(
         .with_env("AWS_SNS_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("AWS_SQS_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("AWS_DYNAMODB_ENDPOINT_URL", localstack_container.get_internal_url())
-        .with_env("DYNAMODB_TABLE_NAME", "customers")
+        .with_env("DYNAMODB_TABLE_NAME", "autotest-customers")
         .with_command("coverage run -m tomodachi run src/customers.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
