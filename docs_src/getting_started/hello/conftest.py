@@ -2,13 +2,14 @@
 from typing import Generator, cast
 
 import pytest
-
 from tomodachi_testcontainers import TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="session")
-def tomodachi_container(testcontainers_docker_image: str) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(
+    testcontainers_docker_image: str,
+) -> Generator[TomodachiContainer, None, None]:
     with TomodachiContainer(
         image=testcontainers_docker_image,
         edge_port=get_available_port(),

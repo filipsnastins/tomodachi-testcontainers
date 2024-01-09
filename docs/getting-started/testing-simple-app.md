@@ -17,7 +17,7 @@ that starts the application as a Docker container, sends an HTTP request, and as
 
 Before writing the test, we need to start the application in a Docker container. 🐳
 
-```py title="tests/conftest.py" hl_lines="9 12-13"
+```py title="tests/conftest.py" hl_lines="10 12-13"
 --8<--
 docs_src/getting_started/hello/conftest.py:tomodachi_container
 --8<--

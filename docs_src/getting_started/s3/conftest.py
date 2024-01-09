@@ -3,14 +3,14 @@ from typing import AsyncGenerator, Generator, cast
 import httpx
 import pytest
 import pytest_asyncio
-
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="session")
 def tomodachi_container(
-    testcontainers_docker_image: str, localstack_container: LocalStackContainer
+    testcontainers_docker_image: str,
+    localstack_container: LocalStackContainer,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
