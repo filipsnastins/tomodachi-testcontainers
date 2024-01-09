@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.13.2 (2024-01-09)
+
+### Fixes
+
+- ([#156](https://github.com/filipsnastins/tomodachi-testcontainers/pull/156))
+  The `EphemeralDockerImage` and `testcontainers_docker_image` fixture will raise the original error message if the Docker build with BuiltKit fails.
+  Previously, the original error was hidden.
+
 ## 0.13.1 (2023-12-19)
 
 ### New features
@@ -16,7 +24,7 @@
 
 - Support Python 3.12
 
-### Bug fixes
+### Fixes
 
 - `DynamoDBAdminContainer`: fix AWS region configuration.
 
@@ -46,7 +54,7 @@
 - Added Minio container - `MinioContainer`
 - Added DynamoDB Admin container - `DynamoDBAdminContainer`
 
-### Bug fixes
+### Fixes
 
 - Set `AWS_DEFAULT_REGION`, `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables on LocalStack container.
 
@@ -57,14 +65,14 @@
 - `LocalStackContainer` - updated base image to `localstack/localstack:3`
 - `PostgreSQLContainer` - updated base image to `postgres:16`
 
-### Bug fixes
+### Fixes
 
 - `DockerContainer`: remove container if startup failed instead of leaving it in stopped state.
 - `MySQLContainer`: add `cryptography` as an extra dependency. Required for `pymysql`.
 
 ## 0.10.3 (2023-11-15)
 
-### Bug fixes
+### Fixes
 
 - Fixed a typo in `pyproject` extra dependencies - `pip install tomodachi-testcontainers[mysql]`
 
@@ -83,14 +91,14 @@
   pip install tomodachi-testcontainers[wiremock]
   ```
 
-### Bug fixes
+### Fixes
 
 - `DockerContainer`: forward container logs to the Python logger only when the `DockerContainer` used as a context manager.
   Otherwise, the logger fails in the `DockerContainer.__del__` method, because the logger instance is already closed.
 
 ## 0.10.1 (2023-11-06)
 
-### Bug fixes
+### Fixes
 
 - `import tomodachi_testcontainers.pytest` was failing with `ImportError` because `MySQL` and `PostgreSQL` fixtures were not
   handled as optional imports.
