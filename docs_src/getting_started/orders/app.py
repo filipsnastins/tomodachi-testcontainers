@@ -16,6 +16,6 @@ class Service(tomodachi.Service):
             )
             return web.json_response(order.to_dict())
         except CustomerCreditCheckFailedError:
-            return web.json_response({"error": "CUSTOMER_CREDIT_CHECK_FAILED"}, status=400)
+            return web.json_response({"error": "CREDIT_CHECK_FAILED"}, status=400)
         except CreditCheckUnavailableError:
             return web.json_response({"error": "CREDIT_CHECK_UNAVAILABLE"}, status=503)
