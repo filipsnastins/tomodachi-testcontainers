@@ -56,12 +56,7 @@ async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get(f"/customer/{customer_id}")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "error": "CUSTOMER_NOT_FOUND",
-        "_links": {
-            "self": {"href": f"/customer/{customer_id}"},
-        },
-    }
+    assert response.json() == {"error": "CUSTOMER_NOT_FOUND"}
 
 
 @pytest.mark.asyncio()
@@ -69,7 +64,6 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
     response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
     customer_id = body["customer_id"]
-    get_customer_link = body["_links"]["self"]["href"]
 
     assert response.status_code == 200
     assert re.match(UUID4_PATTERN, customer_id)
@@ -78,12 +72,9 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
         "name": "John Doe",
         "orders": [],
         "created_at": mock.ANY,
-        "_links": {
-            "self": {"href": f"/customer/{customer_id}"},
-        },
     }
 
-    response = await http_client.get(get_customer_link)
+    response = await http_client.get(f"/customer/{customer_id}")
     body = response.json()
 
     assert response.status_code == 200
@@ -93,9 +84,6 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
         "name": "John Doe",
         "orders": [],
         "created_at": mock.ANY,
-        "_links": {
-            "self": {"href": f"/customer/{customer_id}"},
-        },
     }
 
 
@@ -104,7 +92,6 @@ async def test_register_created_order(http_client: httpx.AsyncClient, localstack
     response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
     customer_id = body["customer_id"]
-    get_customer_link = body["_links"]["self"]["href"]
 
     assert response.status_code == 200
 
@@ -123,7 +110,7 @@ async def test_register_created_order(http_client: httpx.AsyncClient, localstack
         )
 
     async def _new_order_associated_with_customer() -> None:
-        response = await http_client.get(get_customer_link)
+        response = await http_client.get(f"/customer/{customer_id}")
         body = response.json()
 
         assert response.status_code == 200
@@ -136,9 +123,6 @@ async def test_register_created_order(http_client: httpx.AsyncClient, localstack
                 {"order_id": order_ids[1]},
             ],
             "created_at": mock.ANY,
-            "_links": {
-                "self": {"href": f"/customer/{customer_id}"},
-            },
         }
 
     await probe_until(_new_order_associated_with_customer)

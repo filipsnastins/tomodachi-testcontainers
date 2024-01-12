@@ -42,12 +42,7 @@ async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/file/not-exists.txt")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "error": "FILE_NOT_FOUND",
-        "_links": {
-            "self": {"href": "/file/not-exists.txt"},
-        },
-    }
+    assert response.json() == {"error": "FILE_NOT_FOUND"}
 
 
 @pytest.mark.asyncio()
@@ -61,9 +56,4 @@ async def test_upload_and_read_file(http_client: httpx.AsyncClient, userssh_sftp
     response = await http_client.get(f"/file/{filename}")
 
     assert response.status_code == 200
-    assert response.json() == {
-        "content": "Hello, World!",
-        "_links": {
-            "self": {"href": f"/file/{filename}"},
-        },
-    }
+    assert response.json() == {"content": "Hello, World!"}

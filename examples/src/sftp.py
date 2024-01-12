@@ -23,9 +23,6 @@ class Service(tomodachi.Service):
 
     @tomodachi.http("GET", r"/file/(?P<key>[^/]+?)/?")
     async def get_file(self, request: web.Request, key: str) -> web.Response:
-        links = {
-            "_links": {"self": {"href": f"/file/{key}"}},
-        }
         log = logger.bind(key=key)
         async with sftp.create_sftp_client() as sftp_client:
             try:
@@ -35,7 +32,7 @@ class Service(tomodachi.Service):
                     content = content.decode()
             except asyncssh.sftp.SFTPNoSuchFile:
                 log.error("file_not_found")
-                return web.json_response({"error": "FILE_NOT_FOUND", **links}, status=404)
+                return web.json_response({"error": "FILE_NOT_FOUND"}, status=404)
             else:
                 log.info("file_read")
-                return web.json_response({"content": content, **links})
+                return web.json_response({"content": content})

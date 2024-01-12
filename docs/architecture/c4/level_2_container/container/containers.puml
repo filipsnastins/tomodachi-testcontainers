@@ -9,6 +9,14 @@
     Container(fileStoreApp, "File Store Application", "Python, tomodachi", "Provides a text-based file storage service.")
 !endprocedure
 
+!procedure orderAppContainer()
+    Container(orderApp, "Order Management Application", "Python, tomodachi", "Manages order lifecycle.")
+!endprocedure
+
+!procedure creditCheckAppContainer()
+    Container_Ext(creditCheckApp, "Credit Check Application", "", "Keeps track of customer's credit score.")
+!endprocedure
+
 !procedure relationalDbContainer()
     ContainerDb(relationalDb, "Relational database", "PostgreSQL", "Datastore.")
 !endprocedure

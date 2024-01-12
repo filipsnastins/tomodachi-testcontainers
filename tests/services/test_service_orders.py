@@ -56,12 +56,7 @@ async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get(f"/order/{order_id}")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "error": "ORDER_NOT_FOUND",
-        "_links": {
-            "self": {"href": f"/order/{order_id}"},
-        },
-    }
+    assert response.json() == {"error": "ORDER_NOT_FOUND"}
 
 
 @pytest.mark.asyncio()
@@ -72,21 +67,12 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSS
     response = await http_client.post("/order", json={"customer_id": customer_id, "products": products})
     body = response.json()
     order_id = body["order_id"]
-    get_order_link = body["_links"]["self"]["href"]
 
     assert response.status_code == 200
     assert re.match(UUID4_PATTERN, order_id)
-    assert body == {
-        "order_id": order_id,
-        "customer_id": customer_id,
-        "products": products,
-        "created_at": mock.ANY,
-        "_links": {
-            "self": {"href": f"/order/{order_id}"},
-        },
-    }
+    assert body == {"order_id": order_id, "customer_id": customer_id, "products": products, "created_at": mock.ANY}
 
-    response = await http_client.get(get_order_link)
+    response = await http_client.get(f"/order/{order_id}")
     body = response.json()
 
     assert response.status_code == 200
@@ -96,9 +82,6 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSS
         "customer_id": customer_id,
         "products": products,
         "created_at": mock.ANY,
-        "_links": {
-            "self": {"href": f"/order/{order_id}"},
-        },
     }
 
     async def _order_created_event_emitted() -> Dict[str, Any]:

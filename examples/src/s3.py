@@ -34,11 +34,6 @@ class Service(tomodachi.Service):
 
     @tomodachi.http("GET", r"/file/(?P<key>[^/]+?)/?")
     async def get_file(self, request: web.Request, key: str) -> web.Response:
-        links = {
-            "_links": {
-                "self": {"href": f"/file/{key}"},
-            },
-        }
         bucket = s3.get_bucket_name()
         log = logger.bind(bucket=bucket, key=key)
         try:
@@ -46,10 +41,10 @@ class Service(tomodachi.Service):
             content = await s3_object["Body"].read()
         except self._s3_client.exceptions.NoSuchKey:
             log.error("file_not_found")
-            return web.json_response({"error": "FILE_NOT_FOUND", **links}, status=404)
+            return web.json_response({"error": "FILE_NOT_FOUND"}, status=404)
         else:
             log.info("file_read")
-            return web.json_response({"content": content.decode(), **links})
+            return web.json_response({"content": content.decode()})
 
     @tomodachi.aws_sns_sqs(
         "s3--upload-notification",

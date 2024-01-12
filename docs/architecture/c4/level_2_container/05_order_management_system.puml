@@ -1,0 +1,16 @@
+@startuml
+!include ./container/containers.puml
+
+skinparam dpi 120
+
+title Container Diagram - Order Management System
+
+Person(user, "User")
+
+orderAppContainer()
+creditCheckAppContainer()
+
+Rel_R(user, orderApp, "Places new orders", "HTTP, JSON")
+Rel_R(orderApp, creditCheckApp, "Verifies customer's credit for new orders", "HTTP, JSON")
+
+@enduml

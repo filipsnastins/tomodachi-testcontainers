@@ -37,6 +37,10 @@ the customer can't create new orders until the credit is improved, e.g., by payi
 Since credit verification is a complex process, the order management application doesn't implement it;
 instead, it uses an external app - the customer credit check service.
 
+<figure markdown>
+  ![Component Diagram - Order Management System](../architecture/c4/level_2_container/05_order_management_system.png)
+</figure>
+
 We'll use the [WireMock](https://wiremock.org/) HTTP mock server to mock the credit check service's `POST /check-credit` API.
 WireMock is an open-source tool for API mock testing. It can help you to create stable test and development environments,
 isolate yourself from flaky third parties, and simulate APIs that don't exist yet.
@@ -47,8 +51,10 @@ Used together with [Python WireMock SDK](https://github.com/wiremock/python-wire
 !!! warning
 
     Since mocks are configured manually, they might not accurately reflect the behavior of a real system.
-    An application tested only with mocks might not work in the production environment.
-    TODO
+    An application tested only with mocks might not work the same in a production environment.
+    Depending on your use case, consider [verifying your test doubles](https://pythonspeed.com/articles/verified-fakes/)
+    against a real system in a separate test suite or adding [contract tests](https://martinfowler.com/bliki/ContractTest.html).
+    Check out [Pact](https://pact.io/) - a tool for contract testing.
 
 ### Creating the order management application
 
@@ -158,6 +164,8 @@ TODO
 ## Resources
 
 - <https://pythonspeed.com/articles/verified-fakes/>
+- <https://martinfowler.com/bliki/ContractTest.html>
+- <https://pact.io/>
 - <https://wiremock.org/>
 - <https://www.mock-server.com/>
 - <https://vcrpy.readthedocs.io/en/latest/>

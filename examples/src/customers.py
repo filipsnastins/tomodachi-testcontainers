@@ -90,22 +90,10 @@ class Service(tomodachi.Service):
         )
 
         logger.info("customer_created", customer_id=customer.customer_id)
-        return web.json_response(
-            {
-                **customer.to_dict(),
-                "_links": {
-                    "self": {"href": f"/customer/{customer.customer_id}"},
-                },
-            }
-        )
+        return web.json_response({**customer.to_dict()})
 
     @tomodachi.http("GET", r"/customer/(?P<customer_id>[^/]+?)/?")
     async def get_customer(self, request: web.Request, customer_id: str) -> web.Response:
-        links = {
-            "_links": {
-                "self": {"href": f"/customer/{customer_id}"},
-            }
-        }
         response = await self._dynamodb_client.get_item(
             TableName=dynamodb.get_table_name(),
             Key={"PK": {"S": f"CUSTOMER#{customer_id}"}},
@@ -123,7 +111,7 @@ class Service(tomodachi.Service):
             created_at=datetime.fromisoformat(item["CreatedAt"]["S"]),
         )
 
-        return web.json_response({**customer.to_dict(), **links})
+        return web.json_response(customer.to_dict())
 
     @tomodachi.aws_sns_sqs(
         "order--created",

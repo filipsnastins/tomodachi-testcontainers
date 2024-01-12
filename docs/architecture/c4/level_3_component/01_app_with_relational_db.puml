@@ -2,6 +2,8 @@
 !include <C4/C4_Component>
 !include ../level_2_container/container/containers.puml
 
+skinparam dpi 110
+
 title Component Diagram - Application with Relational Database
 
 relationalDbContainer()

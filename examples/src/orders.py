@@ -107,22 +107,10 @@ class Service(tomodachi.Service):
             customer_id=customer_id,
             event_id=event.event_id,
         )
-        return web.json_response(
-            data={
-                **order.to_dict(),
-                "_links": {
-                    "self": {"href": f"/order/{order.order_id}"},
-                },
-            }
-        )
+        return web.json_response(order.to_dict())
 
     @tomodachi.http("GET", r"/order/(?P<order_id>[^/]+?)/?")
     async def get_order(self, request: web.Request, order_id: str) -> web.Response:
-        links = {
-            "_links": {
-                "self": {"href": f"/order/{order_id}"},
-            },
-        }
         response = await self._dynamodb_client.get_item(
             TableName=dynamodb.get_table_name(),
             Key={"PK": {"S": f"ORDER#{order_id}"}},
@@ -139,4 +127,4 @@ class Service(tomodachi.Service):
             created_at=datetime.fromisoformat(item["CreatedAt"]["S"]),
         )
 
-        return web.json_response({**order.to_dict(), **links})
+        return web.json_response(order.to_dict())
