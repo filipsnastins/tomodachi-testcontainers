@@ -7,7 +7,10 @@ from tomodachi_testcontainers.pytest.async_probes import probe_until
 
 
 @pytest.mark.asyncio()
-async def test_register_created_order(http_client: httpx.AsyncClient, localstack_snssqs_tc: SNSSQSTestClient) -> None:
+async def test_register_created_order(
+    http_client: httpx.AsyncClient,
+    localstack_snssqs_tc: SNSSQSTestClient,
+) -> None:
     response = await http_client.post("/customer", json={"name": "John Doe"})
     customer_id = response.json()["customer_id"]
     assert response.status_code == 200

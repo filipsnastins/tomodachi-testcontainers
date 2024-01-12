@@ -100,13 +100,8 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
 
 
 @pytest.mark.asyncio()
-<<<<<<< HEAD
-async def test_register_created_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTestClient) -> None:
-    response = await http_client.post("/customer", json={"name": "John Doe"})
-=======
 async def test_register_created_order(http_client: httpx.AsyncClient, localstack_snssqs_tc: SNSSQSTestClient) -> None:
-    response = await http_client.post("/customers", json={"name": "John Doe"})
->>>>>>> main
+    response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
     customer_id = body["customer_id"]
     get_customer_link = body["_links"]["self"]["href"]
