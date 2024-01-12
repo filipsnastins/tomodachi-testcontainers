@@ -101,7 +101,7 @@ class Service(tomodachi.Service):
         item = response.get("Item")
         if not item:
             logger.error("customer_not_found", customer_id=customer_id)
-            return web.json_response({"error": "CUSTOMER_NOT_FOUND", **links}, status=404)
+            return web.json_response({"error": "CUSTOMER_NOT_FOUND"}, status=404)
 
         orders = item["Orders"]["SS"] if "Orders" in item else []
         customer = Customer(

@@ -118,7 +118,7 @@ class Service(tomodachi.Service):
         item = response.get("Item")
         if not item:
             logger.error("order_not_found", order_id=order_id)
-            return web.json_response({"error": "ORDER_NOT_FOUND", **links}, status=404)
+            return web.json_response({"error": "ORDER_NOT_FOUND"}, status=404)
 
         order = Order(
             order_id=item["OrderId"]["S"],
