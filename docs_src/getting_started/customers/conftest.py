@@ -3,17 +3,10 @@ from typing import AsyncGenerator, Generator, cast
 import httpx
 import pytest
 import pytest_asyncio
-from types_aiobotocore_sns import SNSClient
-from types_aiobotocore_sqs import SQSClient
 
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.utils import get_available_port
-
-
-@pytest.fixture(scope="session")
-def localstack_snssqs_tc(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient) -> SNSSQSTestClient:
-    return SNSSQSTestClient.create(localstack_sns_client, localstack_sqs_client)
 
 
 @pytest_asyncio.fixture(scope="session")

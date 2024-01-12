@@ -8,8 +8,6 @@ import httpx
 import pytest
 import pytest_asyncio
 from tomodachi.envelope.json_base import JsonBase
-from types_aiobotocore_sns import SNSClient
-from types_aiobotocore_sqs import SQSClient
 
 from tomodachi_testcontainers import MotoContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
@@ -18,14 +16,9 @@ from tomodachi_testcontainers.pytest.async_probes import probe_until
 from tomodachi_testcontainers.utils import get_available_port
 
 
-@pytest.fixture(scope="module")
-def snssqs_tc(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> SNSSQSTestClient:
-    return SNSSQSTestClient.create(moto_sns_client, moto_sqs_client)
-
-
 @pytest_asyncio.fixture(scope="module")
-async def _create_topics_and_queues(snssqs_tc: SNSSQSTestClient) -> None:
-    await snssqs_tc.subscribe_to(topic="order--created", queue="order--created")
+async def _create_topics_and_queues(moto_snssqs_tc: SNSSQSTestClient) -> None:
+    await moto_snssqs_tc.subscribe_to(topic="order--created", queue="order--created")
 
 
 @pytest.fixture(scope="module")
@@ -72,7 +65,7 @@ async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_create_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTestClient) -> None:
+async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSSQSTestClient) -> None:
     customer_id = str(uuid.uuid4())
     products: List[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]
 
@@ -109,7 +102,7 @@ async def test_create_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTes
     }
 
     async def _order_created_event_emitted() -> Dict[str, Any]:
-        [event] = await snssqs_tc.receive("order--created", JsonBase, Dict[str, Any])
+        [event] = await moto_snssqs_tc.receive("order--created", JsonBase, Dict[str, Any])
         return event
 
     event = await probe_until(_order_created_event_emitted)

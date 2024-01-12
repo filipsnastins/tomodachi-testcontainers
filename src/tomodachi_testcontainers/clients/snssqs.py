@@ -17,9 +17,7 @@ __all__ = [
 MessageType = TypeVar("MessageType")
 
 TopicARNType = str
-
 QueueARNType = str
-QueueURLType = str
 
 
 class TopicDoesNotExist(Exception):
@@ -57,55 +55,12 @@ class _TomodachiSNSSQSEnvelopeInstance(Protocol):
 TomodachiSNSSQSEnvelope = Union[_TomodachiSNSSQSEnvelopeStatic, _TomodachiSNSSQSEnvelopeInstance]
 
 
-class SNSSQSTestClientCache:
-    def __init__(self) -> None:
-        self.hit_count = 0
-        self._topic_arn: Dict[str, TopicARNType] = {}
-        self._queue_arn: Dict[str, QueueARNType] = {}
-        self._queue_url: Dict[str, QueueURLType] = {}
-
-    def clear(self) -> None:
-        self.hit_count = 0
-        self._topic_arn.clear()
-        self._queue_arn.clear()
-        self._queue_url.clear()
-
-    def save_topic_arn(self, topic: str, arn: TopicARNType) -> None:
-        self._topic_arn[topic] = arn
-
-    def save_queue_arn(self, queue: str, arn: QueueARNType) -> None:
-        self._queue_arn[queue] = arn
-
-    def save_queue_url(self, queue: str, url: QueueURLType) -> None:
-        self._queue_url[queue] = url
-
-    def get_topic_arn(self, topic: str) -> Optional[str]:
-        if arn := self._topic_arn.get(topic):
-            self.hit_count += 1
-        return arn
-
-    def get_queue_arn(self, queue: str) -> Optional[str]:
-        if arn := self._queue_arn.get(queue):
-            self.hit_count += 1
-        return arn
-
-    def get_queue_url(self, queue: str) -> Optional[str]:
-        if url := self._queue_url.get(queue):
-            self.hit_count += 1
-        return url
-
-
 class SNSSQSTestClient:
     """Wraps aiobotocore SNS and SQS clients and provides common methods for testing SNS SQS integrations."""
 
-    def __init__(self, sns_client: SNSClient, sqs_client: SQSClient, cache: SNSSQSTestClientCache) -> None:
+    def __init__(self, sns_client: SNSClient, sqs_client: SQSClient) -> None:
         self._sns_client = sns_client
         self._sqs_client = sqs_client
-        self._cache = cache
-
-    @staticmethod
-    def create(sns_client: SNSClient, sqs_client: SQSClient) -> "SNSSQSTestClient":
-        return SNSSQSTestClient(sns_client, sqs_client, SNSSQSTestClientCache())
 
     async def create_topic(self, topic: str, *, fifo: bool = False) -> TopicARNType:
         with suppress(TopicDoesNotExist):
@@ -119,9 +74,7 @@ class SNSSQSTestClient:
                 }
             )
         create_topic_response = await self._sns_client.create_topic(Name=topic, Attributes=topic_attributes)
-        topic_arn = create_topic_response["TopicArn"]
-        self._cache.save_topic_arn(topic, topic_arn)
-        return topic_arn
+        return create_topic_response["TopicArn"]
 
     async def create_queue(self, queue: str, *, fifo: bool = False) -> QueueARNType:
         with suppress(QueueDoesNotExist):
@@ -136,9 +89,7 @@ class SNSSQSTestClient:
             )
         await self._sqs_client.create_queue(QueueName=queue, Attributes=queue_attributes)
         queue_attributes = await self.get_queue_attributes(queue, attributes=["QueueArn"])
-        queue_arn = queue_attributes["QueueArn"]
-        self._cache.save_queue_arn(queue, queue_arn)
-        return queue_arn
+        return queue_attributes["QueueArn"]
 
     async def subscribe_to(
         self,
@@ -203,13 +154,10 @@ class SNSSQSTestClient:
         await self._sns_client.publish(TopicArn=topic_arn, Message=message, **sns_publish_kwargs)
 
     async def get_topic_arn(self, topic: str) -> str:
-        if topic_arn := self._cache.get_topic_arn(topic):
-            return topic_arn
         list_topics_response = await self._sns_client.list_topics()
         topic_arn = next((v["TopicArn"] for v in list_topics_response["Topics"] if v["TopicArn"].endswith(topic)), None)
         if not topic_arn:
             raise TopicDoesNotExist(topic)
-        self._cache.save_topic_arn(topic, topic_arn)
         return topic_arn
 
     async def get_topic_attributes(self, topic: str) -> Dict[str, str]:
@@ -218,23 +166,15 @@ class SNSSQSTestClient:
         return get_topic_attributes_response["Attributes"]
 
     async def get_queue_arn(self, queue: str) -> str:
-        if queue_arn := self._cache.get_queue_arn(queue):
-            return queue_arn
         attributes = await self.get_queue_attributes(queue, attributes=["QueueArn"])
-        queue_arn = attributes["QueueArn"]
-        self._cache.save_queue_arn(queue, queue_arn)
-        return queue_arn
+        return attributes["QueueArn"]
 
     async def get_queue_url(self, queue: str) -> str:
-        if queue_url := self._cache.get_queue_url(queue):
-            return queue_url
         try:
             get_queue_response = await self._sqs_client.get_queue_url(QueueName=queue)
-            queue_url = get_queue_response["QueueUrl"]
-            self._cache.save_queue_url(queue, queue_url)
-            return queue_url
-        except ClientError as e:
-            raise QueueDoesNotExist(queue) from e
+            return get_queue_response["QueueUrl"]
+        except ClientError as exc:
+            raise QueueDoesNotExist(queue) from exc
 
     async def get_queue_attributes(
         self, queue: str, attributes: List[QueueAttributeFilterType]
