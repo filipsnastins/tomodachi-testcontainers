@@ -26,4 +26,4 @@ class Service(tomodachi.Service):
             content = await s3_object["Body"].read()
             return web.json_response({"content": content.decode()})
         except self._s3_client.exceptions.NoSuchKey:
-            return web.json_response({"error": "File not found"}, status=404)
+            return web.json_response({"error": "FILE_NOT_FOUND"}, status=404)

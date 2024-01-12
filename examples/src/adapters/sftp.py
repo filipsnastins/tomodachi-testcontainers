@@ -6,7 +6,7 @@ import asyncssh
 
 
 @asynccontextmanager
-async def get_sftp_client() -> AsyncGenerator[asyncssh.SFTPClient, None]:
+async def create_sftp_client() -> AsyncGenerator[asyncssh.SFTPClient, None]:
     client_keys = asyncssh.import_private_key(os.getenv("SFTP_PRIVATE_KEY", ""))
     known_hosts = asyncssh.SSHKnownHosts(os.getenv("SFTP_KNOWN_HOST", ""))
     async with asyncssh.connect(

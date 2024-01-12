@@ -17,3 +17,7 @@ There are multiple approaches for managing test isolation:
 
 - Managing test isolation with the application means - the fastest approach, but it might not be feasible in all use cases.
   Most applications have a way of managing their data isolation, e.g., applications that scope what data a logged-in user can see.
+
+TODO
+Django test client can run each test in a database transaction and rollback it on teardown.
+With Testcontainers, we can't interact with the low-level internals of the apps, so we take different approaches.

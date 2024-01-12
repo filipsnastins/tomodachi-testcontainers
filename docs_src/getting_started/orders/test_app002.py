@@ -1,51 +1,15 @@
-# --8<-- [end:mocks]
-import wiremock.client as wm
-
-
-def customer_credit_check_passes(customer_id: str) -> None:
-    mapping = wm.Mapping(
-        request=wm.MappingRequest(
-            method=wm.HttpMethods.POST,
-            url="/credit-check",
-            body_patterns=[{wm.WireMockMatchers.EQUAL_TO_JSON: {"customer_id": customer_id}}],
-        ),
-        response=wm.MappingResponse(
-            status=200,
-            json_body={"status": "CREDIT_CHECK_PASSED"},
-        ),
-    )
-    wm.Mappings.create_mapping(mapping=mapping)
-
-
-def customer_credit_check_fails(customer_id: str) -> None:
-    mapping = wm.Mapping(
-        request=wm.MappingRequest(
-            method=wm.HttpMethods.POST,
-            url="/credit-check",
-            body_patterns=[{wm.WireMockMatchers.EQUAL_TO_JSON: {"customer_id": customer_id}}],
-        ),
-        response=wm.MappingResponse(
-            status=200,
-            json_body={"status": "CREDIT_CHECK_FAILED"},
-        ),
-    )
-    wm.Mappings.create_mapping(mapping=mapping)
-
-
-# --8<-- [end:mocks]
-
-
-# --8<-- [start:tests]
 from unittest import mock
 
 import httpx
 import pytest
 
+from . import credit_check_mocks
+
 
 @pytest.mark.asyncio()
 async def test_order_created_when_credit_check_passed(http_client: httpx.AsyncClient) -> None:
     customer_id = "123456"
-    customer_credit_check_passes(customer_id)
+    credit_check_mocks.customer_credit_check_passes(customer_id)
 
     response = await http_client.post(
         "/order",
@@ -63,7 +27,7 @@ async def test_order_created_when_credit_check_passed(http_client: httpx.AsyncCl
 @pytest.mark.asyncio()
 async def test_order_not_created_when_credit_check_failed(http_client: httpx.AsyncClient) -> None:
     customer_id = "123456"
-    customer_credit_check_fails(customer_id)
+    credit_check_mocks.customer_credit_check_fails(customer_id)
 
     response = await http_client.post(
         "/order",
@@ -74,4 +38,14 @@ async def test_order_not_created_when_credit_check_failed(http_client: httpx.Asy
     assert response.json() == {"error": "CREDIT_CHECK_FAILED"}
 
 
-# --8<-- [end:tests]
+@pytest.mark.asyncio()
+async def test_order_not_created_when_credit_check_service_unavailable(http_client: httpx.AsyncClient) -> None:
+    credit_check_mocks.customer_credit_check_returns_internal_server_error()
+
+    response = await http_client.post(
+        "/order",
+        json={"customer_id": "123456", "product": "MINIMALIST-SPOON"},
+    )
+
+    assert response.status_code == 503
+    assert response.json() == {"error": "CREDIT_CHECK_UNAVAILABLE"}

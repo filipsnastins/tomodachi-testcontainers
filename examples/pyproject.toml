@@ -8,15 +8,14 @@ authors = ["Filips Nastins <nastinsfilips@gmail.com>"]
 python = "^3.11"
 asyncssh = "^2.14.2"
 pydantic = "^2.0.2"
-structlog = "^23.1.0"
-tomodachi = "^0.26.1"
+structlog = "23.2.0" # TODO 23.3.0 doesn't work with tomodachi
+tomodachi = "^0.26.3"
 types-aiobotocore = { extras = [
     "dynamodb",
     "s3",
     "sns",
     "sqs",
 ], version = "^2.5.2" }
-types-aiobotocore-dynamodb = "2.5.2"
 uvloop = "^0.19.0"
 
 [tool.poetry.group.dev]

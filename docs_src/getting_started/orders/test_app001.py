@@ -1,3 +1,4 @@
+# --8<-- [start:test_order_created_when_credit_check_passed]
 from unittest import mock
 
 import httpx
@@ -5,7 +6,6 @@ import pytest
 import wiremock.client as wm
 
 
-# --8<-- [start:test_order_created_when_credit_check_passed]
 @pytest.mark.asyncio()
 async def test_order_created_when_credit_check_passed(http_client: httpx.AsyncClient) -> None:
     mapping = wm.Mapping(

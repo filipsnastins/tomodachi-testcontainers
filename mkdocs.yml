@@ -94,6 +94,7 @@ nav:
       - getting-started/testing-app-with-collaborator-services.md
       - getting-started/testing-asynchronous-systems.md
       - getting-started/testing-cronjobs-and-scripts.md
+      - getting-started/choosing-testing-strategy.md
       - getting-started/benefits-and-dangers-of-e2e-tests.md
       - getting-started/old.md
   - Guides:
@@ -104,6 +105,8 @@ nav:
       - guides/testing-repositories.md
       - guides/ports-and-adapters.md
       - guides/creating-app-facade.md
+      - guides/improving-test-performance.md
+      - guides/managing-test-isolation.md
       - guides/running-testcontainer-tests-in-ci-cd.md
       - guides/debugging-testcontainer-tests.md
       - guides/forward-testcontainer-logs-to-pytest.md

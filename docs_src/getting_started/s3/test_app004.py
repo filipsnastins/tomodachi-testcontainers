@@ -63,7 +63,7 @@ async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/file/not-exists.txt")
 
     assert response.status_code == 404
-    assert response.json() == {"error": "File not found"}
+    assert response.json() == {"error": "FILE_NOT_FOUND"}
 
 
 # --8<-- [end:test_file_not_found]

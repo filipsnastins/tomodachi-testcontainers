@@ -1,10 +1,10 @@
 # Testing Applications with Backing Services
 
-## Running backing services locally
-
 Applications don't live in isolation. They depend on other backing services - databases, file exchanges, cloud provider services, third-party services, etc.
 It makes testing difficult - the test environment must have a lot of things configured for the application to work.
 Remember spending hours setting up a local development environment?
+
+## Running backing services locally
 
 You should be able to run your application's tests on your local machine to get fast feedback about the changes.
 Imagine how the workflow would look if the tests worked only in the deployment pipeline -
@@ -97,7 +97,7 @@ For a data store, the application uses AWS S3.
   ![Component Diagram - Application with DynamoDB Database](../architecture/c4/level_2_container/04_file_store_app.png)
 </figure>
 
-### Creating the application
+### Creating the file store application
 
 The example app has two endpoints - `POST /file` and `GET /file/<name>`.
 In the backend, the app uses AWS S3 operations `put_object` and `get_object` to store and retrieve files.

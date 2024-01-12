@@ -1,0 +1,58 @@
+from typing import AsyncGenerator, Generator, cast
+
+import httpx
+import pytest
+import pytest_asyncio
+from types_aiobotocore_sns import SNSClient
+from types_aiobotocore_sqs import SQSClient
+
+from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
+from tomodachi_testcontainers.clients import SNSSQSTestClient
+from tomodachi_testcontainers.utils import get_available_port
+
+
+@pytest.fixture(scope="session")
+def localstack_snssqs_tc(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient) -> SNSSQSTestClient:
+    return SNSSQSTestClient.create(localstack_sns_client, localstack_sqs_client)
+
+
+@pytest_asyncio.fixture(scope="session")
+async def _create_topics_and_queues(localstack_snssqs_tc: SNSSQSTestClient) -> None:
+    await localstack_snssqs_tc.subscribe_to(topic="customer--created", queue="customer--created")
+    await localstack_snssqs_tc.subscribe_to(topic="order--created", queue="customer--order-created")
+
+
+@pytest_asyncio.fixture(autouse=True)
+async def _purge_queues_on_teardown(localstack_snssqs_tc: SNSSQSTestClient) -> AsyncGenerator[None, None]:
+    yield
+    await localstack_snssqs_tc.purge_queue("customer--created")
+    await localstack_snssqs_tc.purge_queue("customer--order-created")
+
+
+@pytest.fixture(scope="session")
+def tomodachi_container(
+    testcontainers_docker_image: str,
+    localstack_container: LocalStackContainer,
+    _create_topics_and_queues: None,
+) -> Generator[TomodachiContainer, None, None]:
+    with (
+        TomodachiContainer(
+            image=testcontainers_docker_image,
+            edge_port=get_available_port(),
+        )
+        .with_env("AWS_REGION", "us-east-1")
+        .with_env("AWS_ACCESS_KEY_ID", "testing")
+        .with_env("AWS_SECRET_ACCESS_KEY", "testing")
+        .with_env("AWS_SNS_ENDPOINT_URL", localstack_container.get_internal_url())
+        .with_env("AWS_SQS_ENDPOINT_URL", localstack_container.get_internal_url())
+        .with_env("AWS_DYNAMODB_ENDPOINT_URL", localstack_container.get_internal_url())
+        .with_env("DYNAMODB_TABLE_NAME", "autotest-customers")
+        .with_command("tomodachi run getting_started/customers/app.py --production")
+    ) as container:
+        yield cast(TomodachiContainer, container)
+
+
+@pytest_asyncio.fixture(scope="module")
+async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
+        yield client

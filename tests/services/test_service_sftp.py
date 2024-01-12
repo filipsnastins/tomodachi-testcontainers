@@ -43,7 +43,7 @@ async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 404
     assert response.json() == {
-        "error": "File not found",
+        "error": "FILE_NOT_FOUND",
         "_links": {
             "self": {"href": "/file/not-exists.txt"},
         },

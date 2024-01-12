@@ -2,6 +2,7 @@ import re
 import uuid
 from datetime import datetime, timezone
 from typing import AsyncGenerator, Generator, cast
+from unittest import mock
 
 import httpx
 import pytest
@@ -25,12 +26,6 @@ def snssqs_tc(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient
 @pytest_asyncio.fixture(scope="module")
 async def _create_topics_and_queues(snssqs_tc: SNSSQSTestClient) -> None:
     await snssqs_tc.subscribe_to(topic="order--created", queue="customer--order-created")
-
-
-@pytest_asyncio.fixture(autouse=True)
-async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerator[None, None]:
-    yield
-    await snssqs_tc.purge_queue("customer--order-created")
 
 
 @pytest.fixture(scope="module")
@@ -68,7 +63,7 @@ async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 404
     assert response.json() == {
-        "error": "Customer not found",
+        "error": "CUSTOMER_NOT_FOUND",
         "_links": {
             "self": {"href": f"/customer/{customer_id}"},
         },
@@ -77,7 +72,7 @@ async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
 
 @pytest.mark.asyncio()
 async def test_create_customer(http_client: httpx.AsyncClient) -> None:
-    response = await http_client.post("/customers", json={"name": "John Doe"})
+    response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
     customer_id = body["customer_id"]
     get_customer_link = body["_links"]["self"]["href"]
@@ -86,6 +81,9 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
     assert re.match(UUID4_PATTERN, customer_id)
     assert body == {
         "customer_id": customer_id,
+        "name": "John Doe",
+        "orders": [],
+        "created_at": mock.ANY,
         "_links": {
             "self": {"href": f"/customer/{customer_id}"},
         },
@@ -100,7 +98,7 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
         "customer_id": customer_id,
         "name": "John Doe",
         "orders": [],
-        "created_at": body["created_at"],
+        "created_at": mock.ANY,
         "_links": {
             "self": {"href": f"/customer/{customer_id}"},
         },
@@ -109,7 +107,7 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
 
 @pytest.mark.asyncio()
 async def test_register_created_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTestClient) -> None:
-    response = await http_client.post("/customers", json={"name": "John Doe"})
+    response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
     customer_id = body["customer_id"]
     get_customer_link = body["_links"]["self"]["href"]
@@ -143,7 +141,7 @@ async def test_register_created_order(http_client: httpx.AsyncClient, snssqs_tc:
                 {"order_id": order_ids[0]},
                 {"order_id": order_ids[1]},
             ],
-            "created_at": body["created_at"],
+            "created_at": mock.ANY,
             "_links": {
                 "self": {"href": f"/customer/{customer_id}"},
             },

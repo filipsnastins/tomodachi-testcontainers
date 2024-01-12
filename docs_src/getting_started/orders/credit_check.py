@@ -13,7 +13,10 @@ class CreditCheckUnavailableError(Exception):
 
 async def verify_customer_credit(customer_id: str) -> None:
     async with httpx.AsyncClient(base_url=get_credit_check_service_url()) as client:
-        response = await client.post("/credit-check", json={"customer_id": customer_id})
+        response = await client.post(
+            "/credit-check",
+            json={"customer_id": customer_id},
+        )
 
         try:
             response.raise_for_status()

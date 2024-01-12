@@ -9,7 +9,7 @@ The main benefit of Testcontainers is that it allows testing an application with
 production-like external dependencies - databases, message brokers, file stores, HTTP APIs, etc.
 
 For example, let's test a Tomodachi service that uses AWS S3 to store files.
-The `TomodachiServiceS3` has one endpoint `GET /file/<key>` that returns a content of a file stored in AWS S3.
+The `Service` has one endpoint `GET /file/<key>` that returns a content of a file stored in AWS S3.
 
 ```py
 import os
@@ -29,7 +29,7 @@ def get_s3_client() -> S3Client:
     )
 
 
-class TomodachiServiceS3(tomodachi.Service):
+class Service(tomodachi.Service):
     name = "service-s3"
 
     async def _start_service(self) -> None:

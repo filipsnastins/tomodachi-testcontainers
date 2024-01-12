@@ -2,6 +2,7 @@ import re
 import uuid
 from datetime import datetime
 from typing import Any, AsyncGenerator, Dict, Generator, List, cast
+from unittest import mock
 
 import httpx
 import pytest
@@ -25,12 +26,6 @@ def snssqs_tc(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -> SNSSQST
 @pytest_asyncio.fixture(scope="module")
 async def _create_topics_and_queues(snssqs_tc: SNSSQSTestClient) -> None:
     await snssqs_tc.subscribe_to(topic="order--created", queue="order--created")
-
-
-@pytest_asyncio.fixture(autouse=True)
-async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerator[None, None]:
-    yield
-    await snssqs_tc.purge_queue("order--created")
 
 
 @pytest.fixture(scope="module")
@@ -69,7 +64,7 @@ async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 404
     assert response.json() == {
-        "error": "Order not found",
+        "error": "ORDER_NOT_FOUND",
         "_links": {
             "self": {"href": f"/order/{order_id}"},
         },
@@ -81,7 +76,7 @@ async def test_create_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTes
     customer_id = str(uuid.uuid4())
     products: List[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]
 
-    response = await http_client.post("/orders", json={"customer_id": customer_id, "products": products})
+    response = await http_client.post("/order", json={"customer_id": customer_id, "products": products})
     body = response.json()
     order_id = body["order_id"]
     get_order_link = body["_links"]["self"]["href"]
@@ -90,6 +85,9 @@ async def test_create_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTes
     assert re.match(UUID4_PATTERN, order_id)
     assert body == {
         "order_id": order_id,
+        "customer_id": customer_id,
+        "products": products,
+        "created_at": mock.ANY,
         "_links": {
             "self": {"href": f"/order/{order_id}"},
         },
@@ -104,7 +102,7 @@ async def test_create_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTes
         "order_id": order_id,
         "customer_id": customer_id,
         "products": products,
-        "created_at": body["created_at"],
+        "created_at": mock.ANY,
         "_links": {
             "self": {"href": f"/order/{order_id}"},
         },
@@ -121,5 +119,5 @@ async def test_create_order(http_client: httpx.AsyncClient, snssqs_tc: SNSSQSTes
         "order_id": order_id,
         "customer_id": customer_id,
         "products": products,
-        "created_at": event["created_at"],
+        "created_at": mock.ANY,
     }

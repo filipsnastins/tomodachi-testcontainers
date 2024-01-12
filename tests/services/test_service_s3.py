@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import Any, AsyncGenerator, Dict, Generator, cast
+from unittest import mock
 
 import httpx
 import pytest
@@ -25,12 +26,6 @@ def snssqs_tc(localstack_sns_client: SNSClient, localstack_sqs_client: SQSClient
 @pytest_asyncio.fixture(scope="module")
 async def _create_topics_and_queues(snssqs_tc: SNSSQSTestClient) -> None:
     await snssqs_tc.subscribe_to(topic="s3--file-uploaded", queue="s3--file-uploaded")
-
-
-@pytest_asyncio.fixture(autouse=True)
-async def _purge_queues_on_teardown(snssqs_tc: SNSSQSTestClient) -> AsyncGenerator[None, None]:
-    yield
-    await snssqs_tc.purge_queue("s3--file-uploaded")
 
 
 @pytest.fixture(scope="module")
@@ -68,7 +63,7 @@ async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 404
     assert response.json() == {
-        "error": "File not found",
+        "error": "FILE_NOT_FOUND",
         "_links": {
             "self": {"href": "/file/not-exists.txt"},
         },
@@ -101,6 +96,6 @@ async def test_upload_and_read_file(
     assert event == {
         "uri": f"s3://autotest-filestore/{filename}",
         "eTag": "65a8e27d8879283831b664bd8b7f0ad4",
-        "request_id": event["request_id"],
-        "event_time": event["event_time"],
+        "request_id": mock.ANY,
+        "event_time": mock.ANY,
     }

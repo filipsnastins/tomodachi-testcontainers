@@ -38,6 +38,12 @@ Inspired by [Awaitility](http://www.awaitility.org/) and [busypie](https://githu
 - [`SNSSQSTestClient`][tomodachi_testcontainers.clients.SNSSQSTestClient] helps test
   [Tomodachi](https://github.com/kalaspuff/tomodachi) applications that communicate through AWS SNS SQS.
 
+## Logging
+
+Upon Testcontainers' shutdown, their logs are forwarded to Python's logger, making it possible to see what happened inside the containers.
+It's useful for debugging failing tests, especially in a deployment pipeline,
+because containers are immediately deleted when the test run finishes, leaving behind only their logs.
+
 ## Configuration
 
 Most features are configurable with environment variables, e.g., a path to Dockerfile, Testcontainer image versions, etc.

@@ -43,7 +43,7 @@ Install with [Poetry](https://python-poetry.org/):
 poetry add --group dev tomodachi-testcontainers
 ```
 
-Find a list of extras in the complete [installation reference](https://filipsnastins.github.io/filipsnastins/tomodachi-testcontainers/installation/).
+Find a list of extras in the [installation reference](https://filipsnastins.github.io/filipsnastins/tomodachi-testcontainers/installation/).
 
 ## A Simple Example
 

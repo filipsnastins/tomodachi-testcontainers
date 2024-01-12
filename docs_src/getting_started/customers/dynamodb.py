@@ -1,9 +1,7 @@
 import os
+from contextlib import suppress
 
-import structlog
 from types_aiobotocore_dynamodb import DynamoDBClient
-
-logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 
 
 def get_table_name() -> str:
@@ -11,11 +9,9 @@ def get_table_name() -> str:
 
 
 async def create_dynamodb_table(client: DynamoDBClient) -> None:
-    table_name = get_table_name()
-    log = logger.bind(table_name=table_name)
-    try:
+    with suppress(client.exceptions.ResourceInUseException):
         await client.create_table(
-            TableName=table_name,
+            TableName=get_table_name(),
             AttributeDefinitions=[
                 {"AttributeName": "PK", "AttributeType": "S"},
             ],
@@ -23,9 +19,4 @@ async def create_dynamodb_table(client: DynamoDBClient) -> None:
                 {"AttributeName": "PK", "KeyType": "HASH"},
             ],
             BillingMode="PAY_PER_REQUEST",
-            StreamSpecification={"StreamEnabled": True, "StreamViewType": "NEW_IMAGE"},
         )
-    except client.exceptions.ResourceInUseException:
-        log.info("dynamodb_table_already_exists")
-    else:
-        log.info("dynamodb_table_created")

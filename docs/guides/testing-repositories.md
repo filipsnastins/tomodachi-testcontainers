@@ -269,10 +269,9 @@ The diagrams below ([C4](https://c4model.com/)) showcase how the Ports & Adapter
 </figure>
 
 Ports are the interfaces of our infrastructure components; they reside in the domain layer.
-Adapters or Infrastructure layers implement the Ports.
+Adapters or the Infrastructure layer implement the Ports.
 There are two implementations - in-memory Repository and DynamoDB Repository.
-Testcontainers help to test the DynamoDB Repository in a production-like environment by provisioning AWS service mocks -
-LocalStack, Moto, or something else.
+Testcontainers help to test the DynamoDB Repository in a production-like environment by provisioning AWS service mocks, e.g., LocalStack.
 
 The diagram shows that all dependencies (arrows) flow towards the domain layer. It means the domain layer doesn't depend on other
 infrastructure components. It makes the domain layer testable in isolation and makes it easier to understand the code.
