@@ -5,6 +5,8 @@ import pytest
 
 from . import credit_check_mocks
 
+pytestmark = pytest.mark.usefixtures("_reset_wiremock_container_on_teardown")
+
 
 @pytest.mark.asyncio()
 async def test_order_created_when_credit_check_passed(http_client: httpx.AsyncClient) -> None:

@@ -30,3 +30,9 @@ def wiremock_container() -> Generator[WireMockContainer, None, None]:
         if WireMockConfig is not None:
             WireMockConfig.base_url = f"{container.get_external_url()}/__admin/"
         yield container
+
+
+@pytest.fixture()
+def _reset_wiremock_container_on_teardown(wiremock_container: WireMockContainer) -> Generator[None, None, None]:
+    yield
+    wiremock_container.delete_mappings()

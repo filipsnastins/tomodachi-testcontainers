@@ -42,13 +42,19 @@ class WireMockContainer(WebContainer):
     def start(self) -> "WireMockContainer":
         super().start()
         wait_for_logs(self, "port:", timeout=10.0)
-        self.load_mappings()
+        self.load_mappings_from_files()
         return self
 
-    def load_mappings(self) -> None:
+    def load_mappings_from_files(self) -> None:
         self._copy_mapping_stubs_to_container()
         self._copy_mapping_files_to_container()
-        self._reload_mappings()
+        self.reset_mappings()
+
+    def delete_mappings(self) -> None:
+        self.exec(["curl", "-X", "DELETE", f"http://localhost:{self.internal_port}/__admin/mappings"])
+
+    def reset_mappings(self) -> None:
+        self.exec(["curl", "-X", "POST", f"http://localhost:{self.internal_port}/__admin/mappings/reset"])
 
     def _copy_mapping_stubs_to_container(self) -> None:
         if self.mapping_stubs is not None:
@@ -61,6 +67,3 @@ class WireMockContainer(WebContainer):
             copy_files_to_container(
                 self.get_wrapped_container(), host_path=self.mapping_files, container_path=self.MAPPING_FILES_DIR
             )
-
-    def _reload_mappings(self) -> None:
-        self.exec(["curl", "-X", "POST", f"http://localhost:{self.internal_port}/__admin/mappings/reset"])

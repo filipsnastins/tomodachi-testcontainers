@@ -28,7 +28,7 @@ from .fixtures.moto import (
     moto_sqs_client,
     moto_ssm_client,
 )
-from .fixtures.wiremock import wiremock_container
+from .fixtures.wiremock import _reset_wiremock_container_on_teardown, wiremock_container
 
 with suppress(ImportError):  # 'mysql' extra dependency
     from .fixtures.mysql import mysql_container
@@ -45,6 +45,7 @@ pytest.register_assert_rewrite("tomodachi_testcontainers.pytest.assertions")
 
 __all__ = [
     "_reset_moto_container_on_teardown",
+    "_reset_wiremock_container_on_teardown",
     "_restart_localstack_container_on_teardown",
     "localstack_container",
     "localstack_dynamodb_client",

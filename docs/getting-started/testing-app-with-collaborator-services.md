@@ -152,8 +152,10 @@ It's a good idea to extract mock setup code to separate functions and modules.
 ```
 
 Now, the tests are shorter and better express their intent.
+To isolate tests, we can use the `_reset_wiremock_container_on_teardown` fixture to delete all WireMock stub mappings between tests.
+This way, we'll ensure that all tests explicitly configure API mocks for their test scenario and don't depend on previously executed tests.
 
-```py title="tests/test_app.py" hl_lines="6"
+```py title="tests/test_app.py" hl_lines="6 8 14 32 45"
 --8<-- "docs_src/getting_started/orders/test_app002.py"
 ```
 
