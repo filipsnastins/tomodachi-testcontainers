@@ -4,7 +4,7 @@ import wiremock.client as wm
 
 from tomodachi_testcontainers import WireMockContainer
 
-pytestmark = pytest.mark.usefixtures("_reset_wiremock_container_on_teardown")
+pytestmark = pytest.mark.usefixtures("reset_wiremock_container_on_teardown")
 
 
 @pytest.mark.asyncio()
@@ -33,7 +33,7 @@ async def test_wiremock_configured_with_python_wiremock_sdk(wiremock_container: 
 
 
 @pytest.mark.asyncio()
-async def test_wiremock_stub_mappings_deleted_between_tests__reset_wiremock_container_on_teardown_fixture(
+async def test_wiremock_stub_mappings_deleted_between_tests_reset_wiremock_container_on_teardown_fixture(
     wiremock_container: WireMockContainer,
 ) -> None:
     async with httpx.AsyncClient(base_url=wiremock_container.get_external_url()) as client:

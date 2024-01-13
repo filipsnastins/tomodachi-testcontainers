@@ -25,7 +25,10 @@ def moto_container() -> Generator[MotoContainer, None, None]:
 
 
 @pytest.fixture()
-def _reset_moto_container_on_teardown(moto_container: MotoContainer) -> Generator[None, None, None]:
+def reset_moto_container_on_teardown(  # noqa: PT004
+    moto_container: MotoContainer,
+) -> Generator[None, None, None]:
+    """Removes all mocked resources from Moto after each test."""
     yield
     moto_container.reset_moto()
 

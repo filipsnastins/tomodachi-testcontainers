@@ -5,7 +5,7 @@ import pytest
 
 from . import credit_check_mocks
 
-pytestmark = pytest.mark.usefixtures("_reset_wiremock_container_on_teardown")
+pytestmark = pytest.mark.usefixtures("reset_wiremock_container_on_teardown")
 
 
 @pytest.mark.asyncio()

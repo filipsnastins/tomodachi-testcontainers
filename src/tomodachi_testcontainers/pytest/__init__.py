@@ -4,7 +4,6 @@ import pytest
 
 from .fixtures.containers import testcontainers_docker_image
 from .fixtures.localstack import (
-    _restart_localstack_container_on_teardown,
     localstack_container,
     localstack_dynamodb_client,
     localstack_iam_client,
@@ -14,10 +13,10 @@ from .fixtures.localstack import (
     localstack_snssqs_tc,
     localstack_sqs_client,
     localstack_ssm_client,
+    restart_localstack_container_on_teardown,
 )
 from .fixtures.minio import minio_container, minio_s3_client
 from .fixtures.moto import (
-    _reset_moto_container_on_teardown,
     moto_container,
     moto_dynamodb_client,
     moto_iam_client,
@@ -27,8 +26,9 @@ from .fixtures.moto import (
     moto_snssqs_tc,
     moto_sqs_client,
     moto_ssm_client,
+    reset_moto_container_on_teardown,
 )
-from .fixtures.wiremock import _reset_wiremock_container_on_teardown, wiremock_container
+from .fixtures.wiremock import reset_wiremock_container_on_teardown, wiremock_container
 
 with suppress(ImportError):  # 'mysql' extra dependency
     from .fixtures.mysql import mysql_container
@@ -44,9 +44,9 @@ pytest.register_assert_rewrite("tomodachi_testcontainers.pytest.assertions")
 
 
 __all__ = [
-    "_reset_moto_container_on_teardown",
-    "_reset_wiremock_container_on_teardown",
-    "_restart_localstack_container_on_teardown",
+    "reset_moto_container_on_teardown",
+    "reset_wiremock_container_on_teardown",
+    "restart_localstack_container_on_teardown",
     "localstack_container",
     "localstack_dynamodb_client",
     "localstack_iam_client",

@@ -12,7 +12,7 @@ from tests.clients.proto_build.message_pb2 import Person
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExist, TopicDoesNotExist
 
-pytestmark = pytest.mark.usefixtures("_reset_moto_container_on_teardown")
+pytestmark = pytest.mark.usefixtures("reset_moto_container_on_teardown")
 
 
 @pytest.fixture()

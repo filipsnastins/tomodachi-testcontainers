@@ -25,7 +25,10 @@ def localstack_container() -> Generator[LocalStackContainer, None, None]:
 
 
 @pytest.fixture()
-def _restart_localstack_container_on_teardown(localstack_container: LocalStackContainer) -> Generator[None, None, None]:
+def restart_localstack_container_on_teardown(  # noqa: PT004
+    localstack_container: LocalStackContainer,
+) -> Generator[None, None, None]:
+    """Restarts the LocalStack container after each test."""
     yield
     localstack_container.restart()
 

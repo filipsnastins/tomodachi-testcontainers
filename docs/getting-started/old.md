@@ -118,7 +118,7 @@ On `tomodachi_container` fixture teardown, `LocalStack` container is restarted
 to reset its state - delete all S3 buckets and files. This way we can be sure
 that each test starts with a clean state.
 As alternative for calling `restart` method explicitly,
-you can use `_restart_localstack_container_on_teardown` fixture.
+you can use `restart_localstack_container_on_teardown` fixture.
 We avoid flaky tests that depend on the state of the previous test or their execution order,
 and avoid leaking test data from one test to another.
 As a drawback, it takes a more time to restart a container after every test.

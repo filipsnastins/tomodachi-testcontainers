@@ -2,7 +2,15 @@
 
 ## 0.14.0-dev (2024-XX-XX)
 
-...
+### New features
+
+- `WireMockContainer`: adds `wiremock_container` pytest fixture.
+- `WireMockContainer`: adds `reset_wiremock_container_on_teardown` pytest fixture that deletes all WireMock stub mappings after each test.
+
+### Breaking changes
+
+- Removes the leading underscore from `restart_localstack_container_on_teardown` and `reset_moto_container_on_teardown` pytest fixture names.
+- Fixtures `moto_snssqs_tc` and `localstack_snssqs_tc` are now session-scoped (`@pytest.fixture(scope="session")`).
 
 ## 0.13.2 (2024-01-09)
 

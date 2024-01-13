@@ -33,6 +33,9 @@ def wiremock_container() -> Generator[WireMockContainer, None, None]:
 
 
 @pytest.fixture()
-def _reset_wiremock_container_on_teardown(wiremock_container: WireMockContainer) -> Generator[None, None, None]:
+def reset_wiremock_container_on_teardown(  # noqa: PT004
+    wiremock_container: WireMockContainer,
+) -> Generator[None, None, None]:
+    """Deletes all stub mappings from WireMock after each test."""
     yield
     wiremock_container.delete_mappings()
