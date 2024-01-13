@@ -39,7 +39,7 @@ The app has three endpoints:
 - HTTP `GET /customer/<id>` - for querying existing customers.
 - AWS SQS consumer listening for `OrderCreatedEvents` - saves the received Order identifier on an existing customer's object.
 
-```py title="src/app.py" hl_lines="4 22 29-34"
+```py title="src/app.py" hl_lines="4 22 29-35"
 class Service(tomodachi.Service):
     ...
 
@@ -157,11 +157,15 @@ Let's test that our Customer app consumes `OrderCreatedEvents` and associates ne
 Since the message consumer (Customer app) is asynchronous, it takes time for messages to be processed.
 Therefore, using asynchronous probing, we continuously check the system's state until all published messages are consumed.
 
-TODO
+TODO Test DLQ messages
 
 ```py title="tests/test_app.py" hl_lines="21-22 29 37-38 42"
 --8<-- "docs_src/getting_started/customers/test_app004.py"
 ```
+
+## Summary
+
+TODO
 
 ## References
 

@@ -64,6 +64,7 @@ class Service(tomodachi.Service):
         "order--created",
         queue_name="customer--order-created",
         dead_letter_queue_name="customer--order-created--dlq",
+        max_receive_count=1,
         message_envelope=JsonBase,
     )
     async def handle_order_created(self, data: Dict) -> None:
