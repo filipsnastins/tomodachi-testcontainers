@@ -109,7 +109,7 @@ async def test_register_created_order(http_client: httpx.AsyncClient, localstack
             envelope=JsonBase,
         )
 
-    async def _new_order_associated_with_customer() -> None:
+    async def _new_orders_associated_with_customer() -> None:
         response = await http_client.get(f"/customer/{customer_id}")
         body = response.json()
 
@@ -125,4 +125,4 @@ async def test_register_created_order(http_client: httpx.AsyncClient, localstack
             "created_at": mock.ANY,
         }
 
-    await probe_until(_new_order_associated_with_customer)
+    await probe_until(_new_orders_associated_with_customer)

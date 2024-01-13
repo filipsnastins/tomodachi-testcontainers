@@ -26,7 +26,7 @@ async def test_register_created_order(
         )
 
     # Assert
-    async def _new_order_associated_with_customer() -> None:
+    async def _new_orders_associated_with_customer() -> None:
         response = await http_client.get(f"/customer/{customer_id}")
 
         assert response.status_code == 200
@@ -39,4 +39,4 @@ async def test_register_created_order(
             ],
         }
 
-    await probe_until(_new_order_associated_with_customer)
+    await probe_until(_new_orders_associated_with_customer)

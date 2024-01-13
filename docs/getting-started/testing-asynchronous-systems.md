@@ -84,7 +84,7 @@ for easier testing of AWS SNS/SQS pub/sub with the [Tomodachi framework](https:/
     visible to consumers. It takes some time from the moment the message is published until it's visible to consumers.
     Therefore, this test is flaky - no messages might be visible yet, so the test can randomly fail.
 
-```py title="tests/test_app.py" hl_lines="14 16 21"
+```py title="tests/test_app.py" hl_lines="14 17 23"
 --8<-- "docs_src/getting_started/customers/test_app001.py"
 ```
 
@@ -96,7 +96,7 @@ The easiest solution is to sleep for a fixed time between the customer creation 
     This approach will work for just a couple of tests; however, the tests will become slow on a larger scale due to unnecessary waiting.
     For example, in a test suite of 60 test cases, there'll be an additional 60 seconds of waiting.
 
-```py title="tests/test_app.py" hl_lines="21"
+```py title="tests/test_app.py" hl_lines="23"
 --8<-- "docs_src/getting_started/customers/test_app002.py"
 ```
 
@@ -118,7 +118,7 @@ When the probe receives one message from the SQS queue, it's returned from the p
     A probe must contain an assertion that the probe succeeded, e.g., a check that exactly one message is received from the queue.
     In this example, the assertion is the list unpacking operation `[event] = localstack_snssqs_tc.receive(...)`.
 
-```py title="tests/test_app.py" hl_lines="8 20-22 24"
+```py title="tests/test_app.py" hl_lines="8 22-24 26"
 --8<-- "docs_src/getting_started/customers/test_app003.py"
 ```
 
@@ -167,3 +167,6 @@ TODO
 
 - <https://aws.amazon.com/sns/>
 - <https://en.wikipedia.org/wiki/Publish-subscribe_pattern>
+- <http://www.awaitility.org/>
+- <https://github.com/rockem/busypie>
+- <https://github.com/kalaspuff/tomodachi>
