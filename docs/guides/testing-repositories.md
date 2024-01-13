@@ -277,7 +277,7 @@ The diagram shows that all dependencies (arrows) flow towards the domain layer. 
 infrastructure components. It makes the domain layer testable in isolation and makes it easier to understand the code.
 
 <figure markdown>
-  ![Component Diagram - Application with DynamoDB Database](../architecture/c4/level_3_component/02_app_with_dynamodb.png)
+  ![Container Diagram - Application with DynamoDB Database](../architecture/c4/level_3_component/02_app_with_dynamodb.png)
 </figure>
 
 ## References

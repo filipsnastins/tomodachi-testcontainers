@@ -13,12 +13,14 @@ async def test_customer_created_event_emitted(
     http_client: httpx.AsyncClient,
     localstack_snssqs_tc: SNSSQSTestClient,
 ) -> None:
+    # Act
     response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
     customer_id = body["customer_id"]
     assert response.status_code == 200
 
-    await asyncio.sleep(1)  # Wait for the event to be emitted
+    # Assert
+    await asyncio.sleep(1)  # Wait for the message to become visible to consumers
 
     events = await localstack_snssqs_tc.receive("customer--created", JsonBase, Dict[str, str])
     assert len(events) == 1

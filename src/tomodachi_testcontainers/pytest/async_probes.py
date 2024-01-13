@@ -11,7 +11,7 @@ T = TypeVar("T")
 
 @overload
 async def probe_until(
-    f: Callable[[], Awaitable[T]],
+    probe: Callable[[], Awaitable[T]],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
@@ -20,7 +20,7 @@ async def probe_until(
 
 @overload
 async def probe_until(
-    f: Callable[[], T],
+    probe: Callable[[], T],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
@@ -28,7 +28,7 @@ async def probe_until(
 
 
 async def probe_until(
-    f: Union[Callable[[], Awaitable[T]], Callable[[], T]],
+    probe: Union[Callable[[], Awaitable[T]], Callable[[], T]],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
@@ -43,7 +43,7 @@ async def probe_until(
         reraise=True,
     ):
         with attempt:
-            result = f()
+            result = probe()
             if asyncio.iscoroutine(result):
                 result = await result
     return cast(T, result)
@@ -51,7 +51,7 @@ async def probe_until(
 
 @overload
 async def probe_during_interval(
-    f: Callable[[], Awaitable[T]],
+    probe: Callable[[], Awaitable[T]],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
@@ -60,7 +60,7 @@ async def probe_during_interval(
 
 @overload
 async def probe_during_interval(
-    f: Callable[[], T],
+    probe: Callable[[], T],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
@@ -68,7 +68,7 @@ async def probe_during_interval(
 
 
 async def probe_during_interval(
-    f: Callable[[], Union[Awaitable[T], T]],
+    probe: Callable[[], Union[Awaitable[T], T]],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
@@ -85,7 +85,7 @@ async def probe_during_interval(
             reraise=True,
         ):
             with attempt:
-                result = f()
+                result = probe()
                 if asyncio.iscoroutine(result):
                     result = await result
     return cast(T, result)

@@ -13,6 +13,10 @@
     Container(orderApp, "Order Management Application", "Python, tomodachi", "Manages order lifecycle.")
 !endprocedure
 
+!procedure customerAppContainer()
+    Container(customerApp, "Customer Management Application", "Python, tomodachi", "Manages customer lifecycle.")
+!endprocedure
+
 !procedure creditCheckAppContainer()
     Container_Ext(creditCheckApp, "Credit Check Application", "", "Keeps track of customer's credit score.")
 !endprocedure
@@ -31,6 +35,10 @@
 
 !procedure s3BucketContainer()
     Container(s3Bucket, "S3 bucket", "AWS S3", "Internal file storage.")
+!endprocedure
+
+!procedure awsSnsSqsContainer()
+    ContainerQueue(awsSnsSqs, "AWS SNS/SQS message bus", "AWS SNS/SQS", "AWS managed asynchronous message bus.")
 !endprocedure
 
 @enduml

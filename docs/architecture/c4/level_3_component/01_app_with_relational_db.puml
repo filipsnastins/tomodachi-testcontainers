@@ -4,7 +4,7 @@
 
 skinparam dpi 110
 
-title Component Diagram - Application with Relational Database
+title Container Diagram - Application with Relational Database
 
 relationalDbContainer()
 

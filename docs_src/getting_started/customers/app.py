@@ -12,8 +12,6 @@ from .repository import DynamoDBCustomerRepository
 
 
 class Service(tomodachi.Service):
-    name = "service-customers"
-
     options = tomodachi.Options(
         aws_endpoint_urls=tomodachi.Options.AWSEndpointURLs(
             sns=os.getenv("AWS_SNS_ENDPOINT_URL"),
@@ -36,6 +34,7 @@ class Service(tomodachi.Service):
     async def _stop_service(self) -> None:
         await self._dynamodb_client_exit_stack.aclose()
 
+    # --8<-- [start:endpoints]
     @tomodachi.http("POST", r"/customer/?")
     async def create_customer(self, request: web.Request) -> web.Response:
         data = await request.json()
@@ -64,8 +63,11 @@ class Service(tomodachi.Service):
     @tomodachi.aws_sns_sqs(
         "order--created",
         queue_name="customer--order-created",
+        dead_letter_queue_name="customer--order-created--dlq",
         message_envelope=JsonBase,
     )
     async def handle_order_created(self, data: Dict) -> None:
         event = OrderCreatedEvent.from_dict(data)
         await self._repository.add_order(event)
+
+    # --8<-- [end:endpoints]

@@ -5,7 +5,7 @@ skinparam dpi 120
 
 title Container Diagram - Order Management System
 
-Person(user, "User")
+Person(user, "Customer")
 
 orderAppContainer()
 creditCheckAppContainer()

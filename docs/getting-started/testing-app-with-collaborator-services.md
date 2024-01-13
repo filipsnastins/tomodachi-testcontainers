@@ -38,7 +38,7 @@ Since credit verification is a complex process, the order management application
 instead, it uses an external app - the customer credit check service.
 
 <figure markdown>
-  ![Component Diagram - Order Management System](../architecture/c4/level_2_container/05_order_management_system.png)
+  ![Container Diagram - Order Management System](../architecture/c4/level_2_container/05_order_management_system.png)
 </figure>
 
 We'll use the [WireMock](https://wiremock.org/) HTTP mock server to mock the credit check service's `POST /check-credit` API.
@@ -144,7 +144,7 @@ docs_src/getting_started/orders/test_app001.py:test_order_not_created_when_credi
 ### Extracting mock setup functions
 
 Setting up the mocks requires lengthy boilerplate code, even for these simple test examples.
-In the real world, the API mock setup will be tens of code lines configuring nested request/response data structures.
+In the real scenario, the API mock setup will be tens of code lines configuring nested request/response data structures.
 It's a good idea to extract mock setup code to separate functions and modules.
 
 ```py title="tests/credit_check_mocks.py"
@@ -154,7 +154,7 @@ It's a good idea to extract mock setup code to separate functions and modules.
 Now, the tests are shorter and better express their intent.
 To isolate tests, we can use the [`reset_wiremock_container_on_teardown`][tomodachi_testcontainers.pytest.reset_wiremock_container_on_teardown]
 fixture to delete all WireMock stub mappings between tests.
-It ensures that all tests explicitly configure API mocks for their test scenario and don't depend on previously executed tests.
+It ensures that all tests explicitly configure API mocks for their test scenario and don't depend on mocks configured in previously executed tests.
 
 ```py title="tests/test_app.py" hl_lines="6 8 14 32 45"
 --8<-- "docs_src/getting_started/orders/test_app002.py"
@@ -162,7 +162,16 @@ It ensures that all tests explicitly configure API mocks for their test scenario
 
 ## Summary
 
-TODO
+In this guide, we tested an application that directly depends on another system's API.
+Often, it's not feasible to test the application with the real versions of its dependencies,
+so API mocking tools like [WireMock](https://wiremock.org/) allow us to isolate our automated test environments by faking external systems.
+Mocks are a powerful tool because they allow us to control all variables in the test environment.
+Using mocks, we can simulate different external system's behaviors and error-handling scenarios,
+which might be hard or impossible to test with a real version of an external system.
+However, since mocks are configured manually, they don't guarantee that the external system behaves the same in the production environment.
+To ensure that mocks are accurate, consider adding a separate test suite for
+[verifying mocks with a real system](https://pythonspeed.com/articles/verified-fakes/)
+or adding [contract tests](https://martinfowler.com/bliki/ContractTest.html) with tools like [Pact](https://pact.io/).
 
 ## Resources
 

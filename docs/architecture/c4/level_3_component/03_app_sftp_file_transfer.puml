@@ -4,7 +4,7 @@
 
 skinparam dpi 125
 
-title Component Diagram - SFTP File Transfer Application
+title Container Diagram - SFTP File Transfer Application
 
 externalSftpContainer()
 s3BucketContainer()

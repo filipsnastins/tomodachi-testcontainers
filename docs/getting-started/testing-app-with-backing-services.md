@@ -94,7 +94,7 @@ The application provides a simple REST API for storing and retrieving text files
 For a data store, the application uses AWS S3.
 
 <figure markdown>
-  ![Component Diagram - Application with DynamoDB Database](../architecture/c4/level_2_container/04_file_store_app.png)
+  ![Container Diagram - Application with DynamoDB Database](../architecture/c4/level_2_container/04_file_store_app.png)
 </figure>
 
 ### Creating the file store application
