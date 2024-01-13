@@ -36,6 +36,8 @@ def tomodachi_container(
         .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")
+        .with_env("AWS_SQS_MAX_RECEIVE_COUNT", "1")
+        .with_env("AWS_SQS_VISIBILITY_TIMEOUT", "3")
         .with_env("AWS_SNS_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("AWS_SQS_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("AWS_DYNAMODB_ENDPOINT_URL", localstack_container.get_internal_url())

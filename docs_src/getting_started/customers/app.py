@@ -5,6 +5,7 @@ from typing import Dict
 import tomodachi
 from aiohttp import web
 from tomodachi.envelope.json_base import JsonBase
+from tomodachi.transport.aws_sns_sqs import AWSSNSSQSInternalServiceError
 
 from . import aws, dynamodb
 from .domain import Customer, CustomerCreatedEvent, OrderCreatedEvent
@@ -60,15 +61,22 @@ class Service(tomodachi.Service):
             return web.json_response({"error": "CUSTOMER_NOT_FOUND"}, status=404)
         return web.json_response(customer.to_dict())
 
+    # --8<-- [start:handle_order_created]
     @tomodachi.aws_sns_sqs(
         "order--created",
         queue_name="customer--order-created",
         dead_letter_queue_name="customer--order-created--dlq",
-        max_receive_count=1,
+        max_receive_count=int(os.getenv("AWS_SQS_MAX_RECEIVE_COUNT", 3)),
         message_envelope=JsonBase,
+        visibility_timeout=int(os.getenv("AWS_SQS_VISIBILITY_TIMEOUT", 30)),
     )
     async def handle_order_created(self, data: Dict) -> None:
-        event = OrderCreatedEvent.from_dict(data)
-        await self._repository.add_order(event)
+        try:
+            event = OrderCreatedEvent.from_dict(data)
+            await self._repository.add_order(event)
+        except Exception as e:
+            raise AWSSNSSQSInternalServiceError from e
+
+    # --8<-- [end:handle_order_created]
 
     # --8<-- [end:endpoints]

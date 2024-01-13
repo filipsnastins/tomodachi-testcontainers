@@ -288,13 +288,13 @@ crt = ["awscrt (==0.19.17)"]
 
 [[package]]
 name = "botocore-stubs"
-version = "1.34.16"
+version = "1.34.18"
 description = "Type annotations and code completion for botocore"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "botocore_stubs-1.34.16-py3-none-any.whl", hash = "sha256:cd71a578c1d36410e78db39e96b3c90ab88ab2d8079c643b81396c5c8e0c346b"},
-    {file = "botocore_stubs-1.34.16.tar.gz", hash = "sha256:f11369ca8e53c91641390734a4dfce93432e29e5d4d267bcb77ded7d08b18302"},
+    {file = "botocore_stubs-1.34.18-py3-none-any.whl", hash = "sha256:7eb5581410b2cfc920016729e962f7aada6c49ce9926f36dca2a76d7c5c8b9be"},
+    {file = "botocore_stubs-1.34.18.tar.gz", hash = "sha256:c5afa6bb37ca89d7fbdb210913903148566a0f2c60d9aea1256dda76720f1771"},
 ]
 
 [package.dependencies]
@@ -768,13 +768,13 @@ files = [
 
 [[package]]
 name = "pamqp"
-version = "3.2.1"
+version = "3.3.0"
 description = "RabbitMQ Focused AMQP low-level library"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pamqp-3.2.1-py2.py3-none-any.whl", hash = "sha256:15acef752356593ca569d13dfedc8ada9f17deeeb8cec4f7b77825e2b6c7de3e"},
-    {file = "pamqp-3.2.1.tar.gz", hash = "sha256:22550ceb1ca50aafda65873e77e8c1c1b139fb5975e1a09860fae940cf8e970a"},
+    {file = "pamqp-3.3.0-py2.py3-none-any.whl", hash = "sha256:c901a684794157ae39b52cbf700db8c9aae7a470f13528b9d7b4e5f7202f8eb0"},
+    {file = "pamqp-3.3.0.tar.gz", hash = "sha256:40b8795bd4efcf2b0f8821c1de83d12ca16d5760f4507836267fd7a02b06763b"},
 ]
 
 [package.extras]

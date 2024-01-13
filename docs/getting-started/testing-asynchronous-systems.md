@@ -1,8 +1,8 @@
 # Testing Asynchronous Systems
 
-In the [previous section](./testing-app-with-collaborator-services.md), we tested an application that directly depends on another application's HTTP API.
-In that scenario, we mocked the external public API with an HTTP mock server.
-In this section, we'll explore another variation of testing our application that indirectly depends on other services through asynchronous messaging.
+In the [previous section](./testing-app-with-collaborator-services.md), we tested an application that directly depends on another application's HTTP API;
+we mocked its public API with an HTTP mock server.
+This section will explore another scenario - testing an application that depends on other services through asynchronous message bus.
 
 ## Example: Event-Driven Customer Management Application
 
@@ -39,7 +39,7 @@ The app has three endpoints:
 - HTTP `GET /customer/<id>` - for querying existing customers.
 - AWS SQS consumer listening for `OrderCreatedEvents` - saves the received Order identifier on an existing customer's object.
 
-```py title="src/app.py" hl_lines="4 22 29-35"
+```py title="src/app.py" hl_lines="4 22 29-31"
 class Service(tomodachi.Service):
     ...
 
@@ -64,7 +64,7 @@ The Testcontainer's configuration in this example is involved because we must co
   The `_create_topics_and_queues` fixture is used in the `tomodachi_container` fixture to ensure that topics and queues
   are created before the Customer application starts.
 
-```py title="tests/conftest.py" hl_lines="13 18-19 28-29 39-41"
+```py title="tests/conftest.py" hl_lines="13 18-19 28-29"
 --8<-- "docs_src/getting_started/customers/conftest.py"
 ```
 
@@ -77,6 +77,7 @@ First, the test calls the `POST /customer` endpoint and creates a new customer. 
 the test attempts to retrieve a message from the `customer--created`
 queue using the [`SNSSQSTestClient`][tomodachi_testcontainers.clients.SNSSQSTestClient] provided by Tomodachi Testcontainers
 for easier testing of AWS SNS/SQS pub/sub with the [Tomodachi framework](https://github.com/kalaspuff/tomodachi).
+The `SNSSQSTestClient` is accessed with the [`localstack_snssqs_tc`][tomodachi_testcontainers.pytest.localstack_snssqs_tc] fixture.
 
 !!! danger
 
@@ -93,7 +94,7 @@ The easiest solution is to sleep for a fixed time between the customer creation 
 
 !!! danger
 
-    This approach will work for just a couple of tests; however, the tests will become slow on a larger scale due to unnecessary waiting.
+    This approach works; however, tests will become slow on a larger scale due to unnecessary waiting.
     For example, in a test suite of 60 test cases, there'll be an additional 60 seconds of waiting.
 
 ```py title="tests/test_app.py" hl_lines="23"
@@ -102,21 +103,22 @@ The easiest solution is to sleep for a fixed time between the customer creation 
 
 ### Using Asynchronous Probing for testing asynchronous systems
 
-Using asynchronous probing (sampling) is a better approach to sleeping for a fixed time in the tests.
+Using asynchronous probing (sampling) is better than sleeping for a fixed time.
 The idea of asynchronous probing is continuously testing for a condition in short time intervals.
 
 Tomodachi Testcontainers provides a [`probe_until`][tomodachi_testcontainers.pytest.async_probes.probe_until] function for asynchronous probing.
-The `probe_until` receives _a probe function_. The probe is continuously invoked in `probe_interval` until it finishes without exceptions.
-When the `stop_after` timeout is reached, the probing is stopped, and the last probe's exception is raised.
+The `probe_until` receives _a probe function_. The probe is continuously invoked in `probe_interval` (defaults to `0.1 second`) until it finishes without exceptions.
+When the `stop_after` timeout is reached (defaults to `3.0` seconds), the probing is stopped, and the last probe's exception is raised.
 
 In our test, we define the probe function - `_customer_created_event_emitted`. The probe reads messages from the SQS queue
-and expects to find one message. If no messages are returned, the probe will fail with `ValueError` and will be retried after `probe_interval`.
+and expects to find one message. If no messages are returned, the probe will fail with `ValueError` and will be retried in `probe_interval`.
 When the probe receives one message from the SQS queue, it's returned from the probe to the main test body.
 
 !!! note
 
-    A probe must contain an assertion that the probe succeeded, e.g., a check that exactly one message is received from the queue.
+    A probe must contain an assertion, e.g., a check that exactly one message is received from the queue.
     In this example, the assertion is the list unpacking operation `[event] = localstack_snssqs_tc.receive(...)`.
+    It could also be `events = localstack_snssqs_tc.receive(...); assert len(events) == 1`.
 
 ```py title="tests/test_app.py" hl_lines="8 22-24 26"
 --8<-- "docs_src/getting_started/customers/test_app003.py"
@@ -126,8 +128,10 @@ When the probe receives one message from the SQS queue, it's returned from the p
 
     The benefit of asynchronous probing is minimal wait time - as soon as the message is received, the test stops waiting.
     This way, we ensure fast test runtime.
+
     The [`probe_until`][tomodachi_testcontainers.pytest.async_probes.probe_until] is inspired by
-    [Awaitility](https://github.com/awaitility/awaitility) and [busypie](https://github.com/rockem/busypie).
+    [Awaitility](https://github.com/awaitility/awaitility) and [busypie](https://github.com/rockem/busypie) -
+    read more about testing asynchronous systems in their documentation.
 
 ### Probing for no visible effect
 
@@ -154,13 +158,52 @@ Let's test that our Customer app consumes `OrderCreatedEvents` and associates ne
 
 - In the `assert` step, we probe the `GET /customer/<id>` API until two messages are consumed - the two orders are associated with the customer.
 
-Since the message consumer (Customer app) is asynchronous, it takes time for messages to be processed.
+Since the message consumer (Customer app) is asynchronous, it takes time for messages to be picked up and processed.
 Therefore, using asynchronous probing, we continuously check the system's state until all published messages are consumed.
-
-TODO Test DLQ messages
 
 ```py title="tests/test_app.py" hl_lines="21-22 29 37-38 42"
 --8<-- "docs_src/getting_started/customers/test_app004.py"
+```
+
+### Testing error-handling with dead-letter queues
+
+When a consumer cannot process a message, it's a good practice to move it to a
+[dead-letter queue (DLQ)](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
+for further troubleshooting.
+Otherwise, a faulty message can be lost or retried forever.
+
+The `handle_order_created` message consumer is configured to move faulty messages to the `customer--order-created--dlq` DLQ.
+In Tomodachi framework, it's necessary to raise the `AWSSNSSQSInternalServiceError` to retry a message; otherwise, it's deleted from a queue.
+
+In AWS SQS, the [`visibility_timeout`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html)
+specifies when a consumed message becomes visible again to other consumers.
+By default, it's `30 seconds`, so our test would have to wait `30 seconds` to receive a message from the DLQ - it's too long for a single test.
+To speed up the test, in the autotest environment, we set the environment variable `AWS_SQS_VISIBILITY_TIMEOUT` to something smaller, e.g., `3 seconds`,
+and decrease number of retries to `1` with the `AWS_SQS_MAX_RECEIVE_COUNT` environment variable.
+The setting should be no less than the default `30 seconds` in a production environment.
+
+```py title="src/app.py" hl_lines="7-8 10 16-17"
+class Service(tomodachi.Service):
+    ...
+
+--8<--
+docs_src/getting_started/customers/app.py:handle_order_created
+--8<--
+```
+
+Let's test that the `OrderCreatedEvent` message is moved to the DLQ if the given `customer_id` is not found in the customer's database.
+Due to message retries and `visibility_timeout`, we set the async probe's `stop_after` value to a higher value, e.g., `10 seconds`.
+
+```py title="tests/test_app.py" hl_lines="26-28 30-31"
+--8<-- "docs_src/getting_started/customers/test_app005.py"
+```
+
+### Other application tests
+
+For completeness, let's add the customer application's HTTP endpoint tests.
+
+```py title="tests/test_app.py"
+--8<-- "docs_src/getting_started/customers/test_app006.py"
 ```
 
 ## Summary
@@ -174,3 +217,5 @@ TODO
 - <http://www.awaitility.org/>
 - <https://github.com/rockem/busypie>
 - <https://github.com/kalaspuff/tomodachi>
+- <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html>
+- <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html>

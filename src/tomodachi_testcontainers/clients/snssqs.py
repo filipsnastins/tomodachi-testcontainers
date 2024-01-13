@@ -173,8 +173,8 @@ class SNSSQSTestClient:
         try:
             get_queue_response = await self._sqs_client.get_queue_url(QueueName=queue)
             return get_queue_response["QueueUrl"]
-        except ClientError as exc:
-            raise QueueDoesNotExist(queue) from exc
+        except ClientError as e:
+            raise QueueDoesNotExist(queue) from e
 
     async def get_queue_attributes(
         self, queue: str, attributes: List[QueueAttributeFilterType]
