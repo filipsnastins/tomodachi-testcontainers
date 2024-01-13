@@ -144,7 +144,7 @@ There are several ways to test this:
 
 The downside of the second approach is that it introduces extra wait time for the tests; however, sometimes, it's a helpful technique.
 
-## Testing asynchronous message consumers
+### Testing asynchronous message consumers
 
 Let's test that our Customer app consumes `OrderCreatedEvents` and associates new orders with existing customers.
 
