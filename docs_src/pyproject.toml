@@ -27,9 +27,13 @@ pytest-asyncio = "0.21.1"  # https://github.com/pytest-dev/pytest-asyncio/issues
 requests = "^2.31.0"
 types-requests = "^2.31.0"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 log_level = "INFO"
@@ -49,3 +53,7 @@ env = [
     # WireMock Testcontainer configuration
     "WIREMOCK_TESTCONTAINER_VERBOSE=1",
 ]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

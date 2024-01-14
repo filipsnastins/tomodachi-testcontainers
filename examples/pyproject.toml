@@ -32,10 +32,18 @@ optional = true
 debugpy = "^1.8.0"
 pytest-cov = "^4.1.0"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
 
 [tool.coverage.run]
 branch = true
 source = ["src/"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

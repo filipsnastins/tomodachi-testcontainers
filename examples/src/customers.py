@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime, timezone
-from typing import Dict, List
 
 import structlog
 import tomodachi
@@ -17,7 +16,7 @@ logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 class Order(BaseModel):
     order_id: str
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         return {"order_id": self.order_id}
 
 
@@ -27,7 +26,7 @@ class OrderCreatedEvent(BaseModel):
     customer_id: str
 
     @staticmethod
-    def from_dict(event: Dict) -> "OrderCreatedEvent":
+    def from_dict(event: dict) -> "OrderCreatedEvent":
         return OrderCreatedEvent(
             event_id=event["event_id"],
             order_id=event["order_id"],
@@ -38,7 +37,7 @@ class OrderCreatedEvent(BaseModel):
 class Customer(BaseModel):
     customer_id: str
     name: str
-    orders: List[Order]
+    orders: list[Order]
     created_at: datetime
 
     def to_dict(self) -> dict:
@@ -118,7 +117,7 @@ class Service(tomodachi.Service):
         queue_name="customer--order-created",
         message_envelope=JsonBase,
     )
-    async def handle_order_created(self, data: Dict) -> None:
+    async def handle_order_created(self, data: dict) -> None:
         event = OrderCreatedEvent.from_dict(data)
         await self._dynamodb_client.update_item(
             TableName=dynamodb.get_table_name(),

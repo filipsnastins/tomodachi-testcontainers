@@ -1,6 +1,5 @@
 import os
 from contextlib import AsyncExitStack
-from typing import Tuple
 
 from aiobotocore.session import get_session
 from types_aiobotocore_dynamodb import DynamoDBClient
@@ -8,7 +7,7 @@ from types_aiobotocore_dynamodb import DynamoDBClient
 session = get_session()
 
 
-async def create_dynamodb_client() -> Tuple[DynamoDBClient, AsyncExitStack]:
+async def create_dynamodb_client() -> tuple[DynamoDBClient, AsyncExitStack]:
     exit_stack = AsyncExitStack()
     client = await exit_stack.enter_async_context(
         session.create_client(

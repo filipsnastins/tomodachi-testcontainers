@@ -1,6 +1,5 @@
 import os
 import uuid
-from typing import Dict
 
 import tomodachi
 from aiohttp import web
@@ -70,7 +69,7 @@ class Service(tomodachi.Service):
         message_envelope=JsonBase,
         visibility_timeout=int(os.getenv("AWS_SQS_VISIBILITY_TIMEOUT", 30)),
     )
-    async def handle_order_created(self, data: Dict) -> None:
+    async def handle_order_created(self, data: dict) -> None:
         try:
             event = OrderCreatedEvent.from_dict(data)
             await self._repository.add_order(event)

@@ -1,5 +1,4 @@
 import asyncio
-from typing import Dict
 
 import httpx
 import pytest
@@ -22,7 +21,7 @@ async def test_customer_created_event_emitted(
     # Assert
     await asyncio.sleep(1)  # Wait for the message to become visible to consumers
 
-    events = await localstack_snssqs_tc.receive("customer--created", JsonBase, Dict[str, str])
+    events = await localstack_snssqs_tc.receive("customer--created", JsonBase, dict[str, str])
     assert len(events) == 1
     assert events[0] == {
         "customer_id": customer_id,

@@ -85,7 +85,7 @@ The `SNSSQSTestClient` is accessed with the [`localstack_snssqs_tc`][tomodachi_t
     visible to consumers. It takes some time from the moment the message is published until it's visible to consumers.
     Therefore, this test is flaky - no messages might be visible yet, so the test can randomly fail.
 
-```py title="tests/test_app.py" hl_lines="14 17 23"
+```py title="tests/test_app.py" hl_lines="12 15 21"
 --8<-- "docs_src/getting_started/customers/test_app001.py"
 ```
 
@@ -97,7 +97,7 @@ The easiest solution is to sleep for a fixed time between the customer creation 
     This approach works; however, tests will become slow on a larger scale due to unnecessary waiting.
     For example, in a test suite of 60 test cases, there'll be an additional 60 seconds of waiting.
 
-```py title="tests/test_app.py" hl_lines="23"
+```py title="tests/test_app.py" hl_lines="22"
 --8<-- "docs_src/getting_started/customers/test_app002.py"
 ```
 
@@ -120,7 +120,7 @@ When the probe receives one message from the SQS queue, it's returned from the p
     In this example, the assertion is the list unpacking operation `[event] = localstack_snssqs_tc.receive(...)`.
     It could also be `events = localstack_snssqs_tc.receive(...); assert len(events) == 1`.
 
-```py title="tests/test_app.py" hl_lines="8 22-24 26"
+```py title="tests/test_app.py" hl_lines="6 20-22 24"
 --8<-- "docs_src/getting_started/customers/test_app003.py"
 ```
 
@@ -194,7 +194,7 @@ docs_src/getting_started/customers/app.py:handle_order_created
 Let's test that the `OrderCreatedEvent` message is moved to the DLQ if the given `customer_id` is not found in the customer's database.
 Due to message retries and `visibility_timeout`, we set the async probe's `stop_after` value to a higher value, e.g., `10 seconds`.
 
-```py title="tests/test_app.py" hl_lines="26-28 30-31"
+```py title="tests/test_app.py" hl_lines="25-27 29-30"
 --8<-- "docs_src/getting_started/customers/test_app005.py"
 ```
 

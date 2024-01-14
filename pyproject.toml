@@ -9,10 +9,6 @@ readme = "README.md"
 homepage = "https://github.com/filipsnastins/tomodachi-testcontainers"
 repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.poetry.extras]
 db = ["sqlalchemy"]
 mysql = ["sqlalchemy", "pymysql", "cryptography"]
@@ -136,10 +132,6 @@ exclude_dirs = [
     "dist",
 ]
 
-[tool.mypy]
-python_version = "3.8"
-ignore_missing_imports = true
-
 [tool.flake8]
 ignore = ["ANN101", "ANN401", "BLK100", "E231", "E501", "LIT101", "PL123"]
 per-file-ignores = "docs_src/**/*.py:E402"
@@ -187,6 +179,10 @@ exclude = [
 [tool.ruff.extend-per-file-ignores]
 "docs_src/**/*.py" = ["E402"]
 
+[tool.mypy]
+python_version = "3.8"
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 log_level = "INFO"
 testpaths = ["tests"]
@@ -223,3 +219,7 @@ omit = ["docs_src/"]
 skip_covered = true
 show_missing = true
 include_namespace_packages = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

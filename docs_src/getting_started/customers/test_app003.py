@@ -1,5 +1,3 @@
-from typing import Dict
-
 import httpx
 import pytest
 from tomodachi.envelope.json_base import JsonBase
@@ -19,8 +17,8 @@ async def test_customer_created_event_emitted(
     customer_id = body["customer_id"]
 
     # Assert
-    async def _customer_created_event_emitted() -> Dict[str, str]:
-        [event] = await localstack_snssqs_tc.receive("customer--created", JsonBase, Dict[str, str])
+    async def _customer_created_event_emitted() -> dict[str, str]:
+        [event] = await localstack_snssqs_tc.receive("customer--created", JsonBase, dict[str, str])
         return event
 
     event = await probe_until(_customer_created_event_emitted, probe_interval=0.1, stop_after=3.0)

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from types_aiobotocore_dynamodb import DynamoDBClient
 
 from .domain import Customer, Order, OrderCreatedEvent
@@ -32,7 +30,7 @@ class DynamoDBCustomerRepository:
         except self._client.exceptions.ConditionalCheckFailedException:
             raise CustomerIdentifierAlreadyExistsError(customer.customer_id)
 
-    async def get(self, customer_id: str) -> Optional[Customer]:
+    async def get(self, customer_id: str) -> Customer | None:
         response = await self._client.get_item(
             TableName=self._table_name,
             Key={"PK": {"S": f"CUSTOMER#{customer_id}"}},

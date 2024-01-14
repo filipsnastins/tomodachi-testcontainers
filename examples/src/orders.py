@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime, timezone
-from typing import Dict, List
 
 import structlog
 import tomodachi
@@ -17,10 +16,10 @@ logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 class Order(BaseModel):
     order_id: str
     customer_id: str
-    products: List[str]
+    products: list[str]
     created_at: datetime
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         return {
             "order_id": self.order_id,
             "customer_id": self.customer_id,
@@ -33,10 +32,10 @@ class OrderCreatedEvent(BaseModel):
     event_id: str
     order_id: str
     customer_id: str
-    products: List[str]
+    products: list[str]
     created_at: datetime
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         return {
             "event_id": self.event_id,
             "order_id": self.order_id,
@@ -67,7 +66,7 @@ class Service(tomodachi.Service):
     async def create_order(self, request: web.Request) -> web.Response:
         data = await request.json()
         customer_id: str = data["customer_id"]
-        products: List[str] = data["products"]
+        products: list[str] = data["products"]
 
         order = Order(
             order_id=str(uuid.uuid4()),

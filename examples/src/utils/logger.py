@@ -1,13 +1,12 @@
 import logging
 import sys
-from typing import List
 
 import structlog
 from structlog.typing import Processor
 
 
 def configure_logger(log_level: int = logging.INFO) -> None:
-    processors: List[Processor] = [
+    processors: list[Processor] = [
         structlog.contextvars.merge_contextvars,
         structlog.stdlib.filter_by_level,
         structlog.stdlib.add_logger_name,

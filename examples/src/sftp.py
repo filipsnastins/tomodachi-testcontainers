@@ -1,5 +1,3 @@
-from typing import Union
-
 import asyncssh
 import structlog
 import tomodachi
@@ -27,7 +25,7 @@ class Service(tomodachi.Service):
         async with sftp.create_sftp_client() as sftp_client:
             try:
                 f = await sftp_client.open(f"upload/{key}", "r")
-                content: Union[str, bytes] = await f.read()
+                content: str | bytes = await f.read()
                 if isinstance(content, bytes):
                     content = content.decode()
             except asyncssh.sftp.SFTPNoSuchFile:

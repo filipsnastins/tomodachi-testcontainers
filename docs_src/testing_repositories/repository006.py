@@ -1,8 +1,6 @@
-from typing import List
-
+# --8<-- [start:imports]
 from types_aiobotocore_dynamodb import DynamoDBClient
 
-# --8<-- [start:imports]
 from .domain006 import (
     Customer,
     CustomerEmailAlreadyExistsError,
@@ -76,7 +74,7 @@ class DynamoDBCustomerRepository:
 
 # --8<-- [start:in_memory_repository]
 class InMemoryRepository:
-    def __init__(self, customers: List[Customer]) -> None:
+    def __init__(self, customers: list[Customer]) -> None:
         self.customers = {customer.id: customer for customer in customers}
 
     async def save(self, customer: Customer) -> None:

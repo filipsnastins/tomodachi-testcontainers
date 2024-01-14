@@ -1,5 +1,3 @@
-from typing import Dict
-
 import httpx
 import pytest
 from tomodachi.envelope.json_base import JsonBase
@@ -20,7 +18,7 @@ async def test_customer_created_event_emitted(
     assert response.status_code == 200
 
     # Assert
-    events = await localstack_snssqs_tc.receive("customer--created", JsonBase, Dict[str, str])
+    events = await localstack_snssqs_tc.receive("customer--created", JsonBase, dict[str, str])
     assert len(events) == 1
     assert events[0] == {
         "customer_id": customer_id,

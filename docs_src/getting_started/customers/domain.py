@@ -1,12 +1,11 @@
 from dataclasses import dataclass
-from typing import Dict, List
 
 
 @dataclass
 class Order:
     order_id: str
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         return {"order_id": self.order_id}
 
 
@@ -16,7 +15,7 @@ class OrderCreatedEvent:
     customer_id: str
 
     @staticmethod
-    def from_dict(event: Dict) -> "OrderCreatedEvent":
+    def from_dict(event: dict) -> "OrderCreatedEvent":
         return OrderCreatedEvent(
             order_id=event["order_id"],
             customer_id=event["customer_id"],
@@ -27,7 +26,7 @@ class OrderCreatedEvent:
 class Customer:
     customer_id: str
     name: str
-    orders: List[Order]
+    orders: list[Order]
 
     def to_dict(self) -> dict:
         return {

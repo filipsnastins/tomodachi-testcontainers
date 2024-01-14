@@ -1,6 +1,5 @@
 import os
 from contextlib import AsyncExitStack
-from typing import Tuple
 
 from aiobotocore.session import get_session
 from types_aiobotocore_dynamodb import DynamoDBClient
@@ -10,7 +9,7 @@ from types_aiobotocore_sns import SNSClient
 session = get_session()
 
 
-async def create_s3_client() -> Tuple[S3Client, AsyncExitStack]:
+async def create_s3_client() -> tuple[S3Client, AsyncExitStack]:
     exit_stack = AsyncExitStack()
     client = await exit_stack.enter_async_context(
         session.create_client(
@@ -23,7 +22,7 @@ async def create_s3_client() -> Tuple[S3Client, AsyncExitStack]:
     return client, exit_stack
 
 
-async def create_dynamodb_client() -> Tuple[DynamoDBClient, AsyncExitStack]:
+async def create_dynamodb_client() -> tuple[DynamoDBClient, AsyncExitStack]:
     exit_stack = AsyncExitStack()
     client = await exit_stack.enter_async_context(
         session.create_client(
@@ -37,7 +36,7 @@ async def create_dynamodb_client() -> Tuple[DynamoDBClient, AsyncExitStack]:
     return client, exit_stack
 
 
-async def create_sns_client() -> Tuple[SNSClient, AsyncExitStack]:
+async def create_sns_client() -> tuple[SNSClient, AsyncExitStack]:
     exit_stack = AsyncExitStack()
     client = await exit_stack.enter_async_context(
         session.create_client(
