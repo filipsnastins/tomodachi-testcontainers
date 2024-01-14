@@ -13,6 +13,10 @@
     Container(orderApp, "Order Management Application", "Python, tomodachi", "Manages order lifecycle.")
 !endprocedure
 
+!procedure orderAppExtContainer()
+    Container_Ext(orderExtApp, "Order Management Application", "", "Manages order lifecycle.")
+!endprocedure
+
 !procedure customerAppContainer()
     Container(customerApp, "Customer Management Application", "Python, tomodachi", "Manages customer lifecycle.")
 !endprocedure
