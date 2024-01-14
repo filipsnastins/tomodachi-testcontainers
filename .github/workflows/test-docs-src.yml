@@ -12,18 +12,13 @@ jobs:
       POETRY_VIRTUALENVS_CREATE: false
       TESTCONTAINER_DOCKER_NETWORK: tomodachi-testcontainers
       DOCKER_BUILDKIT: 1
-    strategy:
-      max-parallel: 1
-      matrix:
-        python-version: ['3.11']
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.11
 
       - name: Set up Poetry cache for Python dependencies
         uses: actions/cache@v3
