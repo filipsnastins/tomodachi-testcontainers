@@ -208,7 +208,20 @@ For completeness, let's add the customer application's HTTP endpoint tests.
 
 ## Summary
 
-TODO
+Testing asynchronous systems might initially seem complicated due to a different programming and mental mode -
+operations are not performed immediately; they need to be awaited.
+However, testing applications that communicate with other systems through an asynchronous message bus is pretty simple
+because the message bus decouples the applications from each other.
+To test an app in isolation, we should publish messages in the correct format to the message bus
+and wait until the app consumes them and changes its state. There's no need to configure additional mocks or external apps.
+The asynchronous probing technique makes awaiting asynchronous operations easy and fast - it continuously probes the application for a state change.
+
+As with testing apps that communicate with other systems with synchronous APIs
+([Testing Applications with Collaborator Services](./testing-app-with-collaborator-services.md)),
+we can't be sure that the same message format is used in production as we're using for testing.
+It might be necessary to add additional [contract tests](https://martinfowler.com/bliki/ContractTest.html)
+to ensure the correctness of the test message format.
+Pact, a contract testing tool, supports [testing contracts in event-driven systems](https://docs.pact.io/implementation_guides/javascript/docs/messages).
 
 ## References
 
@@ -219,3 +232,4 @@ TODO
 - <https://github.com/kalaspuff/tomodachi>
 - <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html>
 - <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html>
+- <https://docs.pact.io/implementation_guides/javascript/docs/messages>

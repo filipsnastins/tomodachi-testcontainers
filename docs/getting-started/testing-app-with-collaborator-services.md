@@ -168,6 +168,7 @@ so API mocking tools like [WireMock](https://wiremock.org/) allow us to isolate 
 Mocks are a powerful tool because they allow us to control all variables in the test environment.
 Using mocks, we can simulate different external system's behaviors and error-handling scenarios,
 which might be hard or impossible to test with a real version of an external system.
+
 However, since mocks are configured manually, they don't guarantee that the external system behaves the same in the production environment.
 To ensure that mocks are accurate, consider adding a separate test suite for
 [verifying mocks with a real system](https://pythonspeed.com/articles/verified-fakes/)
