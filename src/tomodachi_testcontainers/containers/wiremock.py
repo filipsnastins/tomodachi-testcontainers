@@ -28,7 +28,12 @@ class WireMockContainer(WebContainer):
         verbose: bool = False,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, internal_port=internal_port, edge_port=edge_port, **kwargs)
+        super().__init__(
+            image,
+            internal_port=internal_port,
+            edge_port=edge_port,
+            **kwargs,
+        )
 
         self.mapping_stubs = mapping_stubs
         self.mapping_files = mapping_files

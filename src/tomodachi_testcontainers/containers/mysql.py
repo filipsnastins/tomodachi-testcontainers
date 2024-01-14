@@ -21,7 +21,12 @@ class MySQLContainer(DatabaseContainer):
         database: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, internal_port=internal_port, edge_port=edge_port, **kwargs)
+        super().__init__(
+            image,
+            internal_port=internal_port,
+            edge_port=edge_port,
+            **kwargs,
+        )
 
         self.drivername = drivername or os.getenv("MYSQL_DRIVERNAME") or "mysql+pymysql"
         self.username = username or os.getenv("MYSQL_USER") or "username"

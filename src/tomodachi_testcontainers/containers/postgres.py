@@ -20,7 +20,12 @@ class PostgreSQLContainer(DatabaseContainer):
         database: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, internal_port=internal_port, edge_port=edge_port, **kwargs)
+        super().__init__(
+            image,
+            internal_port=internal_port,
+            edge_port=edge_port,
+            **kwargs,
+        )
 
         self.drivername = drivername or os.getenv("POSTGRES_DRIVERNAME") or "postgresql+psycopg2"
         self.username = username or os.getenv("POSTGRES_USER") or "username"
