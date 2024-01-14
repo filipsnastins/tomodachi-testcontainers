@@ -1,0 +1,50 @@
+name: test-docs-src
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
+      TESTCONTAINER_DOCKER_NETWORK: tomodachi-testcontainers
+      DOCKER_BUILDKIT: 1
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: ['3.11']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up Poetry cache for Python dependencies
+        uses: actions/cache@v3
+        if: startsWith(runner.os, 'Linux')
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: ${{ runner.os }}-poetry-
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | POETRY_HOME="$HOME/.poetry" python - --yes
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+
+      - name: Test Poetry installation
+        run: poetry --version
+
+      - name: Install dependencies
+        run: |
+          poetry install --no-interaction --all-extras --with dev
+          poetry show --tree
+
+      - name: Run tests
+        run: poetry run test-docs-src

@@ -59,4 +59,3 @@ def test_ci() -> None:
         ],
         env={"TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE": "1", **os.environ},
     )
-    check_call(["pytest", "-v", "docs_src"])
