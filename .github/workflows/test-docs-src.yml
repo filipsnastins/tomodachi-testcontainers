@@ -41,5 +41,8 @@ jobs:
           poetry install --no-interaction --all-extras --with dev
           poetry show --tree
 
-      - name: Run tests
+      - name: Create Docker network for running Testcontianers
+        run: docker network create ${{ env.TESTCONTAINER_DOCKER_NETWORK }}
+
+      - name: Run docs_src/ tests
         run: poetry run test-docs-src
