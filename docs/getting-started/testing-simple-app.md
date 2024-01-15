@@ -23,7 +23,7 @@ docs_src/getting_started/hello/conftest.py:tomodachi_container
 --8<--
 ```
 
-The [`testcontainers_docker_image`][tomodachi_testcontainers.pytest.testcontainers_docker_image] fixture builds the Docker image with
+The [`testcontainer_image`][tomodachi_testcontainers.pytest.testcontainer_image] fixture builds the Docker image with
 a [Dockerfile](https://github.com/filipsnastins/tomodachi-testcontainers/blob/main/examples/Dockerfile) from the current working directory,
 and removes the Docker image when all tests finish.
 

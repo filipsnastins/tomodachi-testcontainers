@@ -9,10 +9,10 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture(scope="session")
 def tomodachi_container(
-    testcontainers_docker_image: str,
+    testcontainer_image: str,
 ) -> Generator[TomodachiContainer, None, None]:
     with TomodachiContainer(
-        image=testcontainers_docker_image,
+        image=testcontainer_image,
         edge_port=get_available_port(),
     ).with_command("tomodachi run getting_started/hello/app.py --production") as container:
         yield cast(TomodachiContainer, container)

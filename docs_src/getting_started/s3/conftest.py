@@ -10,12 +10,12 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture(scope="session")
 def tomodachi_container(
-    testcontainers_docker_image: str,
+    testcontainer_image: str,
     localstack_container: LocalStackContainer,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
-            image=testcontainers_docker_image,
+            image=testcontainer_image,
             edge_port=get_available_port(),
         )
         .with_env("AWS_S3_BUCKET_NAME", "autotest-my-bucket")

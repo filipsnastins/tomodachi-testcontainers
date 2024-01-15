@@ -197,9 +197,9 @@ env = [
     # Testcontainers configuration
     "DOCKER_BUILDKIT=1",
     "TESTCONTAINER_DOCKER_NETWORK=tomodachi-testcontainers",
-    "TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile",
-    "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples",
-    "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET=test",
+    "TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile",
+    "TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples",
+    "TESTCONTAINER_DOCKER_BUILD_TARGET=test",
     # WireMock Testcontainer configuration
     "WIREMOCK_TESTCONTAINER_MAPPING_STUBS=tests/containers/test-wiremock-container/mappings",
     "WIREMOCK_TESTCONTAINER_MAPPING_FILES=tests/containers/test-wiremock-container/files",

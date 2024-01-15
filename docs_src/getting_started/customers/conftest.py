@@ -24,13 +24,13 @@ async def _purge_queues_on_teardown(localstack_snssqs_tc: SNSSQSTestClient) -> A
 
 @pytest.fixture(scope="session")
 def tomodachi_container(
-    testcontainers_docker_image: str,
+    testcontainer_image: str,
     localstack_container: LocalStackContainer,
     _create_topics_and_queues: None,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
-            image=testcontainers_docker_image,
+            image=testcontainer_image,
             edge_port=get_available_port(),
         )
         .with_env("AWS_REGION", "us-east-1")

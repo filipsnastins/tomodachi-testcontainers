@@ -62,7 +62,7 @@ class Service(tomodachi.Service):
         return web.json_response(data={"message": f"Hello, {name}!"})
 ```
 
-`testcontainers_docker_image` fixture builds a Docker image with a Dockerfile from the current working directory.
+`testcontainer_image` fixture builds a Docker image with a Dockerfile from the current working directory.
 `tomodachi_container` fixture starts a new Docker container running the `hello` service on an available port.
 `test_hello_testcontainers` sends a `GET /hello?name=Testcontainers` request to the running container.
 
@@ -78,9 +78,9 @@ from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="session")
-def tomodachi_container(testcontainers_docker_image: str) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
     with TomodachiContainer(
-        image=testcontainers_docker_image,
+        image=testcontainer_image,
         edge_port=get_available_port(),
     ).with_command("tomodachi run src/hello.py --production") as container:
         yield cast(TomodachiContainer, container)

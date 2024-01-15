@@ -11,8 +11,8 @@ See [Creating New Testcontainers](./guides/creating-new-testcontainers.md) for a
 **Ready-made pytest fixtures** make testing your applications simple.
 Find the complete list of available fixtures at [`tomodachi_testcontainers.pytest.fixtures`][tomodachi_testcontainers.pytest.fixtures].
 
-- [`testcontainers_docker_image`][tomodachi_testcontainers.pytest.testcontainers_docker_image]
-  fixture automatically builds a Docker image with a Dockerfile from the current working directory.
+- [`testcontainer_image`][tomodachi_testcontainers.pytest.testcontainer_image]
+  fixture builds a Docker image with a Dockerfile from the current working directory.
   It allows you to run the latest version of our application as a Docker container for automated testing.
 
 - Launch commonly used Testcontainers with fixtures, e.g.,

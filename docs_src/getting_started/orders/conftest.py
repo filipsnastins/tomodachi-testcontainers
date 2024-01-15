@@ -10,12 +10,12 @@ from tomodachi_testcontainers.utils import get_available_port
 
 @pytest.fixture(scope="session")
 def tomodachi_container(
-    testcontainers_docker_image: str,
+    testcontainer_image: str,
     wiremock_container: WireMockContainer,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(
-            image=testcontainers_docker_image,
+            image=testcontainer_image,
             edge_port=get_available_port(),
         )
         .with_env("CREDIT_CHECK_SERVICE_URL", wiremock_container.get_internal_url())

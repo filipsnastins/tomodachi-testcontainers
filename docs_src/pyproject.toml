@@ -48,8 +48,8 @@ env = [
     # Testcontainers configuration
     "DOCKER_BUILDKIT=1",
     "TESTCONTAINER_DOCKER_NETWORK=tomodachi-testcontainers",
-    "TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=docs_src/Dockerfile",
-    "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=docs_src",
+    "TESTCONTAINER_DOCKERFILE_PATH=docs_src/Dockerfile",
+    "TESTCONTAINER_DOCKER_BUILD_CONTEXT=docs_src",
     # WireMock Testcontainer configuration
     "WIREMOCK_TESTCONTAINER_VERBOSE=1",
 ]

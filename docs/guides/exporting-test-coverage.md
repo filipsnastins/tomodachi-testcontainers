@@ -22,9 +22,9 @@ from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture()
-def tomodachi_container(testcontainers_docker_image: str) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
     with TomodachiContainer(
-        image=testcontainers_docker_image,
+        image=testcontainer_image,
         edge_port=get_available_port(),
     ).with_command(
         "bash -c 'pip install coverage[toml] && coverage run -m tomodachi run src/healthcheck.py --production'"

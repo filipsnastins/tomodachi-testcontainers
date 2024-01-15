@@ -21,9 +21,9 @@ class FastAPIContainer(WebContainer):
 
 
 @pytest.fixture(scope="session")
-def fastapi_container(testcontainers_docker_image: str) -> Generator[FastAPIContainer, None, None]:
+def fastapi_container(testcontainer_image: str) -> Generator[FastAPIContainer, None, None]:
     with (
-        FastAPIContainer(image=testcontainers_docker_image)
+        FastAPIContainer(image=testcontainer_image)
         .with_env("GREET", "Testcontainers")
         .with_command("uvicorn creating_testcontainers.fastapi_app:app --host 0.0.0.0 --port 8000")
     ) as container:

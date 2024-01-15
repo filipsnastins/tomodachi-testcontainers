@@ -2,7 +2,7 @@ from contextlib import suppress
 
 import pytest
 
-from .fixtures.containers import testcontainers_docker_image
+from .fixtures.containers import testcontainer_image
 from .fixtures.localstack import (
     localstack_container,
     localstack_dynamodb_client,
@@ -70,7 +70,7 @@ __all__ = [
     "mysql_container",
     "postgres_container",
     "sftp_container",
-    "testcontainers_docker_image",
+    "testcontainer_image",
     "userpass_sftp_client",
     "userssh_sftp_client",
     "wiremock_container",

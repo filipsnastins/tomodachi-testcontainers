@@ -22,13 +22,13 @@ from tomodachi_testcontainers.utils import get_available_port
 # --8<-- [start:tomodachi_container]
 @pytest.fixture(scope="session")
 def tomodachi_container(
-    testcontainers_docker_image: str,
+    testcontainer_image: str,
     localstack_container: LocalStackContainer,
     _create_s3_buckets: None,
 ) -> Generator[TomodachiContainer, None, None]:
     # --8<-- [end:tomodachi_container]
     with (
-        TomodachiContainer(image=testcontainers_docker_image, edge_port=get_available_port())
+        TomodachiContainer(image=testcontainer_image, edge_port=get_available_port())
         .with_env("AWS_S3_BUCKET_NAME", "autotest-my-bucket")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")

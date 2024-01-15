@@ -21,9 +21,9 @@ class DjangoContainer(WebContainer):
 
 
 @pytest.fixture(scope="session")
-def django_container(testcontainers_docker_image: str) -> Generator[DjangoContainer, None, None]:
+def django_container(testcontainer_image: str) -> Generator[DjangoContainer, None, None]:
     with (
-        DjangoContainer(image=testcontainers_docker_image)
+        DjangoContainer(image=testcontainer_image)
         .with_env("GREET", "Testcontainers")
         .with_command("python creating_testcontainers/django_app/manage.py runserver 0.0.0.0:8000")
     ) as container:
