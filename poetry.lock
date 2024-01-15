@@ -441,13 +441,13 @@ crt = ["awscrt (==0.19.17)"]
 
 [[package]]
 name = "botocore-stubs"
-version = "1.34.18"
+version = "1.34.19"
 description = "Type annotations and code completion for botocore"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "botocore_stubs-1.34.18-py3-none-any.whl", hash = "sha256:7eb5581410b2cfc920016729e962f7aada6c49ce9926f36dca2a76d7c5c8b9be"},
-    {file = "botocore_stubs-1.34.18.tar.gz", hash = "sha256:c5afa6bb37ca89d7fbdb210913903148566a0f2c60d9aea1256dda76720f1771"},
+    {file = "botocore_stubs-1.34.19-py3-none-any.whl", hash = "sha256:141b6727a7258fc16826f21c7369ca7d38a83848a03ae13fe50c4d1e677a7545"},
+    {file = "botocore_stubs-1.34.19.tar.gz", hash = "sha256:dd1bff75bfe0a64e6704a8d74e80f94a1978d58cb2810f7549fa1c83ac8e458c"},
 ]
 
 [package.dependencies]
@@ -1759,13 +1759,13 @@ files = [
 
 [[package]]
 name = "mkdocs-material"
-version = "9.5.3"
+version = "9.5.4"
 description = "Documentation that simply works"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mkdocs_material-9.5.3-py3-none-any.whl", hash = "sha256:76c93a8525cceb0b395b9cedab3428bf518cf6439adef2b940f1c1574b775d89"},
-    {file = "mkdocs_material-9.5.3.tar.gz", hash = "sha256:5899219f422f0a6de784232d9d40374416302ffae3c160cacc72969fcc1ee372"},
+    {file = "mkdocs_material-9.5.4-py3-none-any.whl", hash = "sha256:efd7cc8ae03296d728da9bd38f4db8b07ab61f9738a0cbd0dfaf2a15a50e7343"},
+    {file = "mkdocs_material-9.5.4.tar.gz", hash = "sha256:3d196ee67fad16b2df1a458d650a8ac1890294eaae368d26cee71bc24ad41c40"},
 ]
 
 [package.dependencies]
@@ -2943,18 +2943,18 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
 name = "structlog"
-version = "23.2.0"
+version = "23.3.0"
 description = "Structured Logging for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "structlog-23.2.0-py3-none-any.whl", hash = "sha256:16a167e87b9fa7fae9a972d5d12805ef90e04857a93eba479d4be3801a6a1482"},
-    {file = "structlog-23.2.0.tar.gz", hash = "sha256:334666b94707f89dbc4c81a22a8ccd34449f0201d5b1ee097a030b577fa8c858"},
+    {file = "structlog-23.3.0-py3-none-any.whl", hash = "sha256:d6922a88ceabef5b13b9eda9c4043624924f60edbb00397f4d193bd754cde60a"},
+    {file = "structlog-23.3.0.tar.gz", hash = "sha256:24b42b914ac6bc4a4e6f716e82ac70d7fb1e8c3b1035a765591953bfc37101a5"},
 ]
 
 [package.extras]
 dev = ["structlog[tests,typing]"]
-docs = ["furo", "myst-parser", "sphinx", "sphinx-notfound-page", "sphinxcontrib-mermaid", "twisted"]
+docs = ["furo", "myst-parser", "sphinx", "sphinx-notfound-page", "sphinxcontrib-mermaid", "sphinxext-opengraph", "twisted"]
 tests = ["freezegun (>=0.2.8)", "pretend", "pytest (>=6.0)", "pytest-asyncio (>=0.17)", "simplejson"]
 typing = ["mypy (>=1.4)", "rich", "twisted"]
 
@@ -3029,13 +3029,13 @@ files = [
 
 [[package]]
 name = "tomodachi"
-version = "0.26.3"
+version = "0.26.4"
 description = "Microservice library on asyncio - HTTP server, websockets, pub/sub messaging for AWS SNS+SQS and RabbitMQ"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "tomodachi-0.26.3-py3-none-any.whl", hash = "sha256:2b16d2a39ca7022105c5f6e5bd129e5c05abaa9c9d58303bebb49d26e6c24dd8"},
-    {file = "tomodachi-0.26.3.tar.gz", hash = "sha256:eac1910ddfdeb2258ded0a9ddafdc80228490cc87c69ca6760798e6f1f6ad0fa"},
+    {file = "tomodachi-0.26.4-py3-none-any.whl", hash = "sha256:ffd42005653e2c7aeb11e5002f5c990146f8098bef1d360bf2b2c169646ee228"},
+    {file = "tomodachi-0.26.4.tar.gz", hash = "sha256:ed8e4aa8aeb6e3db851e209d5be4254e8c2e794d0d35a9b5ea5795418b15d9b8"},
 ]
 
 [package.dependencies]
@@ -3047,7 +3047,7 @@ botocore = ">=1.20.106"
 cchardet = {version = ">=2.1.7", markers = "python_version < \"3.10\""}
 colorama = ">=0.3.9,<0.5.0"
 pytz = "*"
-structlog = ">=21.5.0,<24.0.0"
+structlog = ">=21.5.0,<25.0.0"
 tzlocal = ">=1.4,<6.0"
 
 [package.extras]
@@ -3980,4 +3980,4 @@ wiremock = ["wiremock"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "9504f71eea822c23c0dfe6469664c4d9b442cd135edbe60d219506380c4f5b7a"
+content-hash = "fe60d18f35c6725e525f6952348a4158f6cc9c06c626f9d3806532b8b8245e0d"

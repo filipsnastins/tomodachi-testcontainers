@@ -93,23 +93,23 @@ nav:
       - getting-started/testing-app-with-backing-services.md
       - getting-started/testing-app-with-collaborator-services.md
       - getting-started/testing-asynchronous-systems.md
-      - getting-started/testing-cronjobs-and-scripts.md
+      # - getting-started/testing-cronjobs-and-scripts.md # TODO
       - getting-started/choosing-testing-strategy.md
       - getting-started/benefits-and-dangers-of-e2e-tests.md
-      - getting-started/old.md
+      # - getting-started/old.md # TODO: remove
   - Guides:
       - guides/index.md
       - guides/creating-new-testcontainers.md
       - guides/testing-apps-built-with-other-frameworks.md
       - guides/testing-databases.md
       - guides/testing-repositories.md
-      - guides/ports-and-adapters.md
-      - guides/creating-app-facade.md
-      - guides/improving-test-performance.md
+      # - guides/ports-and-adapters.md # TODO
+      # - guides/creating-app-facade.md # TODO
+      # - guides/improving-test-performance.md # TODO
       - guides/managing-test-isolation.md
-      - guides/running-testcontainer-tests-in-ci-cd.md
-      - guides/debugging-testcontainer-tests.md
-      - guides/forward-testcontainer-logs-to-pytest.md
+      # - guides/running-testcontainer-tests-in-ci-cd.md # TODO
+      - guides/debugging-testcontainers.md
+      - guides/forward-container-logs-to-pytest.md
       - guides/exporting-test-coverage.md
       - guides/parallelizing-tests.md
   - Reference - Code API:

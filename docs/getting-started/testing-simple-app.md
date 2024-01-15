@@ -69,7 +69,7 @@ docs_src/getting_started/hello/test_app001.py:test_hello_world
     The term integration test can refer to tests that exercise a subset of the whole system, e.g., two applications
     working together. Also, it can be used when referring to testing that a single application's internal components are working together correctly.
 
-    In the context of Testcontainers, we're creating **isolated tests for a single application that runs in a controlled environment**.
+    **In the context of Testcontainers, we're creating isolated tests for a single application that runs in a controlled environment**.
     An application consists of multiple sub-components: framework, runtime environment like OS in a Docker container, programming language
     dependencies, third-party packages, etc. Testing that all components are configured correctly and working together gives
     you immediate feedback and eases future maintenance - having such tests helps upgrade dependencies effortlessly,

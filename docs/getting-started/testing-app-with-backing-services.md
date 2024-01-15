@@ -129,7 +129,7 @@ Next, we need to configure our application's container with environment variable
 The important part is setting the environment variable `AWS_S3_ENDPOINT_URL` to the LocalStack URL.
 When the application uses AWS S3, it will send requests to the LocalStack instance running locally as a Docker container and not to the real AWS.
 
-```py title="tests/conftest.py" hl_lines="13 20-23"
+```py title="tests/conftest.py" hl_lines="14 21-24"
 --8<-- "docs_src/getting_started/s3/conftest.py"
 ```
 

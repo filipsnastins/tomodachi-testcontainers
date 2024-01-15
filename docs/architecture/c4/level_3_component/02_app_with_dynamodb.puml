@@ -22,7 +22,7 @@ Boundary(appContainerBoundary, "Application", "Container") {
     Boundary(infrastructureLayer, "Adapters", "Layer") {
         Component(Repository, "In-memory repository", "Python", "Fake in-memory repository for testing and demo purposes.")
 
-        Component_Ext(dynamoDbRepository, "DynamoDB repository", "Python, aiobotocore", "Adapter for DynamoDB database.")
+        Component(dynamoDbRepository, "DynamoDB repository", "Python, aiobotocore", "Adapter for DynamoDB database.")
     }
 }
 
