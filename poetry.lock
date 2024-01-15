@@ -1064,16 +1064,16 @@ flake8 = ">=3.0,<3.2.0 || >3.2.0"
 
 [[package]]
 name = "flake8-picky-parentheses"
-version = "0.5.3"
+version = "0.5.4"
 description = "flake8 plugin to nitpick about parenthesis, brackets, and braces"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "flake8-picky-parentheses-0.5.3.tar.gz", hash = "sha256:35cf8d2e18b268f3837a91d7db777f0d96c28241d6b7216cda879f5a2e60bb3c"},
+    {file = "flake8-picky-parentheses-0.5.4.tar.gz", hash = "sha256:218e122bb0cc512d0ba7b0ffa2c58ebc2a2f81bf23bde884f036f92dc0402884"},
 ]
 
 [package.dependencies]
-flake8 = ">=3.7,<7.0"
+flake8 = ">=3.7,<8.0"
 
 [[package]]
 name = "flake8-plugin-utils"
