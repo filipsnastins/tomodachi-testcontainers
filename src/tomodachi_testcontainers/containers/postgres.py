@@ -20,6 +20,15 @@ class PostgreSQLContainer(DatabaseContainer):
         database: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
+        """PostgreSQL container.
+
+        Configuration environment variables (set on host machine):
+
+        - POSTGRES_DRIVERNAME - defaults to `postgresql+psycopg2`
+        - POSTGRES_USER - defaults to `username`
+        - POSTGRES_PASSWORD - defaults to `password`
+        - POSTGRES_DB - defaults to `db`
+        """
         super().__init__(
             image,
             internal_port=internal_port,

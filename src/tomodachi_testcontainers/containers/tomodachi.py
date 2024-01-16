@@ -22,6 +22,12 @@ class TomodachiContainer(WebContainer):
         export_coverage: bool = False,
         **kwargs: Any,
     ) -> None:
+        """Tomodachi container.
+
+        Configuration environment variables (set on host machine):
+
+        - `TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE` - defaults to `False`
+        """
         super().__init__(
             image=image,
             internal_port=internal_port,

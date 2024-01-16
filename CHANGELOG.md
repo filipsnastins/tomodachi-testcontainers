@@ -9,11 +9,11 @@
 
 ### Breaking changes
 
-- Removes the leading underscore from `restart_localstack_container_on_teardown` and `reset_moto_container_on_teardown` pytest fixture names.
+- Removed the leading underscore from `restart_localstack_container_on_teardown` and `reset_moto_container_on_teardown` pytest fixture names.
 
 - Fixtures `moto_snssqs_tc` and `localstack_snssqs_tc` are now session-scoped (`@pytest.fixture(scope="session")`).
 
-- Fixture `testcontainers_docker_image` renamed to `testcontainer_image`
+- Fixture `testcontainers_docker_image` renamed to `testcontainer_image`.
 
 - Renamed environment variables:
 
@@ -23,6 +23,7 @@
   | `TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH`      | `TESTCONTAINER_DOCKERFILE_PATH`      |
   | `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT` | `TESTCONTAINER_DOCKER_BUILD_CONTEXT` |
   | `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET`  | `TESTCONTAINER_DOCKER_BUILD_TARGET`  |
+  | `TOMODACHI_TESTCONTAINER_IMAGE_ID`             | `TESTCONTAINER_IMAGE_ID`             |
 
 ## 0.13.2 (2024-01-09)
 

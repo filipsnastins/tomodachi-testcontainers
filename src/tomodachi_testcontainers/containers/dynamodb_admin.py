@@ -14,6 +14,12 @@ class DynamoDBAdminContainer(WebContainer):
         region_name: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
+        """DynamoDB Admin container.
+
+        Configuration environment variables (set on host machine):
+
+        - `AWS_REGION` or `AWS_DEFAULT_REGION` - defaults to `us-east-1`
+        """
         super().__init__(
             image=image,
             internal_port=internal_port,
@@ -22,11 +28,12 @@ class DynamoDBAdminContainer(WebContainer):
             **kwargs,
         )
 
-        self.region_name = region_name or os.getenv("AWS_DEFAULT_REGION") or "us-east-1"
+        self.region_name = region_name or os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION") or "us-east-1"
         self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID") or "testing"  # nosec: B105
         self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY") or "testing"  # nosec: B105
 
         self.with_env("AWS_REGION", self.region_name)
+        self.with_env("AWS_DEFAULT_REGION", self.region_name)
         self.with_env("AWS_ACCESS_KEY_ID", self.aws_access_key_id)
         self.with_env("AWS_SECRET_ACCESS_KEY", self.aws_secret_access_key)
 

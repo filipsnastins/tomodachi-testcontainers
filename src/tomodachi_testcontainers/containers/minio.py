@@ -17,6 +17,14 @@ class MinioContainer(WebContainer):
         region_name: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
+        """Minio container.
+
+        Configuration environment variables (set on host machine):
+
+        - `AWS_REGION` or `AWS_DEFAULT_REGION` - defaults to `us-east-1`
+        - `MINIO_ROOT_USER` - defaults to `minioadmin`
+        - `MINIO_ROOT_PASSWORD` - defaults to `minioadmin`
+        """
         super().__init__(
             image,
             internal_port=s3_api_internal_port,
@@ -31,7 +39,7 @@ class MinioContainer(WebContainer):
 
         self.with_bind_ports(console_internal_port, console_edge_port)
 
-        self.region_name = region_name or os.getenv("AWS_DEFAULT_REGION") or "us-east-1"
+        self.region_name = region_name or os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION") or "us-east-1"
         self.minio_root_user = os.getenv("MINIO_ROOT_USER") or "minioadmin"  # nosec: B105
         self.minio_root_password = os.getenv("MINIO_ROOT_PASSWORD") or "minioadmin"  # nosec: B105
 
