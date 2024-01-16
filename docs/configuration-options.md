@@ -75,4 +75,42 @@ Examples:
 
 ## Included Testcontainers configuration
 
-TODO
+Testcontainer configuration can be changed by setting these environment variables on a _host machine_.
+It's handy when you want to change the default configuration of Testcontianers when using their [pytest fixtures](./reference/pytest/fixtures.md).
+
+- [`LocalStackContainer`][tomodachi_testcontainers.LocalStackContainer]
+
+      - `AWS_REGION` or `AWS_DEFAULT_REGION` - defaults to `us-east-1`
+      - `AWS_ACCESS_KEY_ID` - defaults to `testing`
+      - `AWS_SECRET_ACCESS_KEY` - defaults to `testing`
+
+- [`MototContainer`][tomodachi_testcontainers.MotoContainer]
+
+      - `AWS_REGION` or `AWS_DEFAULT_REGION` - defaults to `us-east-1`
+      - `AWS_ACCESS_KEY_ID` - defaults to `testing`
+      - `AWS_SECRET_ACCESS_KEY` - defaults to `testing`
+
+- [`MinioContainer`][tomodachi_testcontainers.MinioContainer]
+
+      - `AWS_REGION` or `AWS_DEFAULT_REGION` - defaults to `us-east-1`
+      - `MINIO_ROOT_USER` - defaults to `minioadmin`
+      - `MINIO_ROOT_PASSWORD` - defaults to `minioadmin`
+
+- [`MySQLContainer`][tomodachi_testcontainers.MySQLContainer]
+
+      - `MYSQL_DRIVERNAME` - defaults to `mysql+pymysql`
+      - `MYSQL_USER` - defaults to `username`
+      - `MYSQL_ROOT_PASSWORD` - defaults to `root`
+      - `MYSQL_PASSWORD` - defaults to `password`
+      - `MYSQL_DATABASE` - defaults to `db`
+
+- [`PostgreSQLContainer`][tomodachi_testcontainers.PostgreSQLContainer]
+
+      - `POSTGRES_DRIVERNAME` - defaults to `postgresql+psycopg2`
+      - `POSTGRES_USER` - defaults to `username`
+      - `POSTGRES_PASSWORD` - defaults to `password`
+      - `POSTGRES_DB` - defaults to `db`
+
+- [`TomodachiContainer`][tomodachi_testcontainers.TomodachiContainer]
+
+      - `TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE` - defaults to `False`
