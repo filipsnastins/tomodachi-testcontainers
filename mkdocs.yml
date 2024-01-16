@@ -96,7 +96,6 @@ nav:
       # - getting-started/testing-cronjobs-and-scripts.md # TODO
       - getting-started/choosing-testing-strategy.md
       - getting-started/benefits-and-dangers-of-e2e-tests.md
-      # - getting-started/old.md # TODO: remove
   - Guides:
       - guides/index.md
       - guides/creating-new-testcontainers.md

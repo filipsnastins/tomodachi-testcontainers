@@ -8,21 +8,21 @@
 
 | Environment Variable                      | Description                                                                |
 | :---------------------------------------- | :------------------------------------------------------------------------- |
-| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID` | Override supported Testcontainer default Docker Image ID.                  |
+| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID` | Override Testcontainer's default Docker Image ID in pytest fixture.        |
 | `DOCKER_BUILDKIT`                         | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit for building Docker images. |
 | `TESTCONTAINER_DOCKER_NETWORK`            | Launch Testcontainers in specified Docker network. Defaults to `bridge`.   |
 
-### Override Default Docker Image
+### Override Default Docker Image in pytest fixtures
 
-| Container Name                                                        | Default Image              | Image Environment Variable Override |
-| :-------------------------------------------------------------------- | :------------------------- | ----------------------------------: |
-| [`MotoContainer`][tomodachi_testcontainers.MotoContainer]             | `motoserver/moto:latest`   |       `MOTO_TESTCONTAINER_IMAGE_ID` |
-| [`LocalStackContainer`][tomodachi_testcontainers.LocalStackContainer] | `localstack/localstack:3`  | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
-| [`MinioContainer`][tomodachi_testcontainers.MinioContainer]           | `minio/minio:latest`       |      `MINIO_TESTCONTAINER_IMAGE_ID` |
-| [`SFTPContainer`][tomodachi_testcontainers.SFTPContainer]             | `atmoz/sftp:latest`        |       `SFTP_TESTCONTAINER_IMAGE_ID` |
-| [`WireMockContainer`][tomodachi_testcontainers.WireMockContainer]     | `wiremock/wiremock:latest` |   `WIREMOCK_TESTCONTAINER_IMAGE_ID` |
-| [`MySQLContainer`][tomodachi_testcontainers.MySQLContainer]           | `mysql:8`                  |      `MYSQL_TESTCONTAINER_IMAGE_ID` |
-| [`PostgreSQLContainer`][tomodachi_testcontainers.PostgreSQLContainer] | `postgres:16`              |   `POSTGRES_TESTCONTAINER_IMAGE_ID` |
+| pytest fixture                                                                 | Default Image              | Image Environment Variable Override |
+| :----------------------------------------------------------------------------- | :------------------------- | ----------------------------------: |
+| [`moto_container`][tomodachi_testcontainers.pytest.moto_container]             | `motoserver/moto:latest`   |       `MOTO_TESTCONTAINER_IMAGE_ID` |
+| [`localstack_container`][tomodachi_testcontainers.pytest.localstack_container] | `localstack/localstack:3`  | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
+| [`minio_container`][tomodachi_testcontainers.pytest.minio_container]           | `minio/minio:latest`       |      `MINIO_TESTCONTAINER_IMAGE_ID` |
+| [`sftp_container`][tomodachi_testcontainers.pytest.sftp_container]             | `atmoz/sftp:latest`        |       `SFTP_TESTCONTAINER_IMAGE_ID` |
+| [`wiremock_container`][tomodachi_testcontainers.pytest.wiremock_container]     | `wiremock/wiremock:latest` |   `WIREMOCK_TESTCONTAINER_IMAGE_ID` |
+| [`mysql_container`][tomodachi_testcontainers.pytest.mysql_container]           | `mysql:8`                  |      `MYSQL_TESTCONTAINER_IMAGE_ID` |
+| [`postgres_container`][tomodachi_testcontainers.pytest.postgres_container]     | `postgres:16`              |   `POSTGRES_TESTCONTAINER_IMAGE_ID` |
 
 ### Change the default Docker network
 
