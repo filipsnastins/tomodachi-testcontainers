@@ -15,13 +15,18 @@ and [test clients](https://github.com/filipsnastins/tomodachi-testcontainers/tre
 for convenient use of Testcontainers with [pytest](https://docs.pytest.org/)
 and testing applications built with the [Python Tomodachi framework](https://github.com/kalaspuff/tomodachi).
 
-> [Testcontainers](https://testcontainers.com/) is an open-source framework for providing throwaway,
+This library was created to explore and learn Testcontainers. Although initially intended to be used with the Tomodachi framework,
+it works for testing applications built with any other Python framework like Flask, FastAPI, etc.
+
+## What is Testcontainers?
+
+> Testcontainers is an open-source framework for providing throwaway,
 > lightweight instances of databases, message brokers, web browsers, or just about anything that can run in a Docker container.
 > It facilitates the use of Docker containers for functional, integration, and end-to-end testing.
 > — <https://testcontainers.com/>
 
-This library was created to explore and learn Testcontainers. Although initially intended to be used with the Tomodachi framework,
-it works for testing applications built with any other Python framework like Flask, FastAPI, etc.
+To learn more about what Testcontainers are and what problems they solve,
+take a look at the Getting Started guide in the official Testcontainers documentation - <https://testcontainers.com/getting-started/>
 
 ## Documentation
 
@@ -62,9 +67,9 @@ class Service(tomodachi.Service):
         return web.json_response(data={"message": f"Hello, {name}!"})
 ```
 
-`testcontainer_image` fixture builds a Docker image with a Dockerfile from the current working directory.
-`tomodachi_container` fixture starts a new Docker container running the `hello` service on an available port.
-`test_hello_testcontainers` sends a `GET /hello?name=Testcontainers` request to the running container.
+- `testcontainer_image` fixture builds a Docker image with a Dockerfile from the current working directory.
+- `tomodachi_container` fixture starts a new Docker container running the `hello` service on an available port.
+- `test_hello_testcontainers` sends a `GET /hello?name=Testcontainers` request to the running container and asserts the response.
 
 ```py
 # tests/test_hello.py

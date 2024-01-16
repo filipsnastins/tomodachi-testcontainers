@@ -16,7 +16,7 @@ from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="module")
-def service_healthcheck_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
     with (
         TomodachiContainer(image=testcontainer_image, edge_port=get_available_port())
         # Bind debugger port.
@@ -32,8 +32,8 @@ def service_healthcheck_container(testcontainer_image: str) -> Generator[Tomodac
 
 
 @pytest_asyncio.fixture(scope="module")
-async def http_client(service_healthcheck_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with httpx.AsyncClient(base_url=service_healthcheck_container.get_external_url()) as client:
+async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 

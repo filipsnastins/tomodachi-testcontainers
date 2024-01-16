@@ -22,7 +22,7 @@ async def _create_topics_and_queues(localstack_snssqs_tc: SNSSQSTestClient) -> N
 
 
 @pytest.fixture(scope="module")
-def service_s3_container(
+def tomodachi_container(
     testcontainer_image: str, localstack_container: LocalStackContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
@@ -46,8 +46,8 @@ def service_s3_container(
 
 
 @pytest_asyncio.fixture(scope="module")
-async def http_client(service_s3_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with httpx.AsyncClient(base_url=service_s3_container.get_external_url()) as client:
+async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 

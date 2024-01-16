@@ -35,9 +35,9 @@
     but rather isolated, individual application's integration test.
   - <https://bsideup.github.io/posts/spring_boot_in_container> - the term E2E is used here.
 - [ ] Use cases, patterns, and good practices (examples with C4 diagrams).
-- [x] Rename `recipes` into `guides`.
 - [ ] Move "how to run in CI" guide from <https://github.com/filipsnastins/tomodachi-testcontainers-github-actions>.
-- [ ] Add Docker image override environment variables to "Included Testcontainers" page.
+- [x] Rename `recipes` into `guides`.
+- [x] Add Docker image override environment variables to "Included Testcontainers" page.
 - [x] In the guides, mention overriding `event_loop` fixture to session scope.
 
 ## Testing

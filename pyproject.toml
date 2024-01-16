@@ -134,7 +134,10 @@ exclude_dirs = [
 
 [tool.flake8]
 ignore = ["ANN101", "ANN401", "BLK100", "E231", "E501", "LIT101", "PL123"]
-per-file-ignores = "docs_src/**/*.py:E402"
+per-file-ignores = [
+    "docs_src/**/*.py:E402",
+    "tests/services/test_service_healthcheck.py:E402",
+]
 literal-inline-quotes = "double"
 literal-multiline-quotes = "double"
 exclude = [
@@ -178,6 +181,7 @@ exclude = [
 
 [tool.ruff.extend-per-file-ignores]
 "docs_src/**/*.py" = ["E402"]
+"tests/services/test_service_healthcheck.py" = ["E402"]
 
 [tool.mypy]
 python_version = "3.8"

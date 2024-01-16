@@ -16,6 +16,7 @@
 
 | pytest fixture                                                                 | Default Image              | Image Environment Variable Override |
 | :----------------------------------------------------------------------------- | :------------------------- | ----------------------------------: |
+| [`testcontainer_image`][tomodachi_testcontainers.pytest.testcontainer_image]   | n/a, built from Dockerfile |            `TESTCONTAINER_IMAGE_ID` |
 | [`moto_container`][tomodachi_testcontainers.pytest.moto_container]             | `motoserver/moto:latest`   |       `MOTO_TESTCONTAINER_IMAGE_ID` |
 | [`localstack_container`][tomodachi_testcontainers.pytest.localstack_container] | `localstack/localstack:3`  | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
 | [`minio_container`][tomodachi_testcontainers.pytest.minio_container]           | `minio/minio:latest`       |      `MINIO_TESTCONTAINER_IMAGE_ID` |
