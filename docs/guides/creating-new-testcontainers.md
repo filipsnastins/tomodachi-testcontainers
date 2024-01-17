@@ -100,6 +100,6 @@ Lastly, the `WebContainer` provides helper methods, e.g.,
 `get_internal_url` and `get_external_url`, for fetching the container's HTTP endpoints.
 See all methods in the [code reference][tomodachi_testcontainers.WebContainer].
 
-```py hl_lines="6 13-15 30"
+```py hl_lines="6 13-15 29"
 --8<-- "docs_src/creating_testcontainers/test_containers003.py"
 ```

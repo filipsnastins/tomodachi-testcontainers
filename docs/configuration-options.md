@@ -120,4 +120,4 @@ It's handy when you want to change the default configuration of Testcontianers w
 
       - `WIREMOCK_TESTCONTAINER_MAPPING_STUBS` - path to WireMock mapping stubs, defaults to `None`
       - `WIREMOCK_TESTCONTAINER_MAPPING_FILES` - path to WireMock mapping files, defaults to `None`
-      - `WIREMOCK_TESTCONTAINER_VERBOSE` - set `1` to start WireMock in verbose mode, defaults to `None`
+      - `WIREMOCK_TESTCONTAINER_VERBOSE` - set to `1` to start WireMock in verbose mode, defaults to `None`
