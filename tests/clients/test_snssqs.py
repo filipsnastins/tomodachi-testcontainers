@@ -10,7 +10,7 @@ from types_aiobotocore_sqs import SQSClient
 
 from tests.clients.proto_build.message_pb2 import Person
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExist, TopicDoesNotExist
+from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExistError, TopicDoesNotExistError
 
 pytestmark = pytest.mark.usefixtures("reset_moto_container_on_teardown")
 
@@ -31,7 +31,7 @@ async def test_no_messages_received(snssqs_test_client: SNSSQSTestClient) -> Non
 
 @pytest.mark.asyncio()
 async def test_publish_fails_if_topic_does_not_exist(snssqs_test_client: SNSSQSTestClient) -> None:
-    with pytest.raises(TopicDoesNotExist, match="topic"):
+    with pytest.raises(TopicDoesNotExistError, match="topic"):
         await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
 
 
@@ -162,13 +162,13 @@ async def test_queue_attribute_getters(snssqs_test_client: SNSSQSTestClient) -> 
 
 @pytest.mark.asyncio()
 async def test_queue_attribute_getters__raise_when_queue_does_not_exist(snssqs_test_client: SNSSQSTestClient) -> None:
-    with pytest.raises(QueueDoesNotExist, match="queue"):
+    with pytest.raises(QueueDoesNotExistError, match="queue"):
         await snssqs_test_client.get_queue_arn("queue")
 
-    with pytest.raises(QueueDoesNotExist, match="queue"):
+    with pytest.raises(QueueDoesNotExistError, match="queue"):
         await snssqs_test_client.get_queue_url("queue")
 
-    with pytest.raises(QueueDoesNotExist, match="queue"):
+    with pytest.raises(QueueDoesNotExistError, match="queue"):
         await snssqs_test_client.get_queue_attributes("queue", attributes=[])
 
 
@@ -185,8 +185,8 @@ async def test_topic_attribute_getters(snssqs_test_client: SNSSQSTestClient) -> 
 
 @pytest.mark.asyncio()
 async def test_topic_attribute_getters__raise_when_topic_does_not_exist(snssqs_test_client: SNSSQSTestClient) -> None:
-    with pytest.raises(TopicDoesNotExist, match="topic"):
+    with pytest.raises(TopicDoesNotExistError, match="topic"):
         await snssqs_test_client.get_topic_arn("topic")
 
-    with pytest.raises(TopicDoesNotExist, match="topic"):
+    with pytest.raises(TopicDoesNotExistError, match="topic"):
         await snssqs_test_client.get_topic_attributes("topic")

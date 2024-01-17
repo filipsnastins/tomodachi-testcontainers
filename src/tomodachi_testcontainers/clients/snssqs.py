@@ -20,11 +20,11 @@ TopicARNType = str
 QueueARNType = str
 
 
-class TopicDoesNotExist(Exception):
+class TopicDoesNotExistError(Exception):
     pass  # pragma: no cover
 
 
-class QueueDoesNotExist(Exception):
+class QueueDoesNotExistError(Exception):
     pass  # pragma: no cover
 
 
@@ -63,7 +63,7 @@ class SNSSQSTestClient:
         self._sqs_client = sqs_client
 
     async def create_topic(self, topic: str, *, fifo: bool = False) -> TopicARNType:
-        with suppress(TopicDoesNotExist):
+        with suppress(TopicDoesNotExistError):
             return await self.get_topic_arn(topic)
         topic_attributes: Dict[str, str] = {}
         if fifo:
@@ -77,7 +77,7 @@ class SNSSQSTestClient:
         return create_topic_response["TopicArn"]
 
     async def create_queue(self, queue: str, *, fifo: bool = False) -> QueueARNType:
-        with suppress(QueueDoesNotExist):
+        with suppress(QueueDoesNotExistError):
             return await self.get_queue_arn(queue)
         queue_attributes: Dict[QueueAttributeNameType, str] = {}
         if fifo:
@@ -157,7 +157,7 @@ class SNSSQSTestClient:
         list_topics_response = await self._sns_client.list_topics()
         topic_arn = next((v["TopicArn"] for v in list_topics_response["Topics"] if v["TopicArn"].endswith(topic)), None)
         if not topic_arn:
-            raise TopicDoesNotExist(topic)
+            raise TopicDoesNotExistError(topic)
         return topic_arn
 
     async def get_topic_attributes(self, topic: str) -> Dict[str, str]:
@@ -174,7 +174,7 @@ class SNSSQSTestClient:
             get_queue_response = await self._sqs_client.get_queue_url(QueueName=queue)
             return get_queue_response["QueueUrl"]
         except ClientError as e:
-            raise QueueDoesNotExist(queue) from e
+            raise QueueDoesNotExistError(queue) from e
 
     async def get_queue_attributes(
         self, queue: str, attributes: List[QueueAttributeFilterType]
