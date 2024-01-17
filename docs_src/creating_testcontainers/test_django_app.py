@@ -4,7 +4,6 @@ import pytest
 import requests
 
 from tomodachi_testcontainers.containers.common import WebContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 class DjangoContainer(WebContainer):
@@ -12,7 +11,6 @@ class DjangoContainer(WebContainer):
         super().__init__(
             image=image,
             internal_port=8000,
-            edge_port=get_available_port(),
             http_healthcheck_path="/health",
         )
 

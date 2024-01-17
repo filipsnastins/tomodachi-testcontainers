@@ -96,7 +96,7 @@ The credit check service's URL is configured with the `CREDIT_CHECK_SERVICE_URL`
 it's set to WireMock's URL, so requests for verifying the customer credit will be sent to
 the WireMock instance running locally in a Docker container.
 
-```py title="tests/conftest.py" hl_lines="13 20"
+```py title="tests/conftest.py" hl_lines="13 17"
 --8<-- "docs_src/getting_started/orders/conftest.py"
 ```
 

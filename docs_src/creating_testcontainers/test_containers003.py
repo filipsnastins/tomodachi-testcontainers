@@ -4,11 +4,10 @@ import pytest
 import requests
 
 from tomodachi_testcontainers import WebContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 class HTTPBinContainer(WebContainer):
-    def __init__(self, internal_port: int = 80, edge_port: int = 8080) -> None:
+    def __init__(self, internal_port: int = 80, edge_port: int | None = None) -> None:
         super().__init__(
             image="kennethreitz/httpbin",
             internal_port=internal_port,
@@ -22,7 +21,7 @@ class HTTPBinContainer(WebContainer):
 
 @pytest.fixture(scope="session")
 def httpbin_container() -> Generator[HTTPBinContainer, None, None]:
-    with HTTPBinContainer(edge_port=get_available_port()) as container:
+    with HTTPBinContainer() as container:
         yield cast(HTTPBinContainer, container)
 
 

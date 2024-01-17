@@ -1,13 +1,14 @@
 """Abstract relational database container."""
 
 import abc
-from typing import Any, NamedTuple
+from typing import Any, NamedTuple, Optional
 
 import sqlalchemy
 from tenacity import Retrying
 from tenacity.stop import stop_after_delay
 from tenacity.wait import wait_fixed
 
+from ...utils import get_available_port
 from .container import DockerContainer
 
 
@@ -35,11 +36,17 @@ class DatabaseContainer(DockerContainer, abc.ABC):
     password: str
     database: str
 
-    def __init__(self, image: str, internal_port: int, edge_port: int, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        image: str,
+        internal_port: int,
+        edge_port: Optional[int] = None,
+        **kwargs: Any,
+    ) -> None:
         super().__init__(image, **kwargs)
         self.internal_port = internal_port
-        self.edge_port = edge_port
-        self.with_bind_ports(internal_port, edge_port)
+        self.edge_port = edge_port or get_available_port()
+        self.with_bind_ports(internal_port, self.edge_port)
 
     def get_internal_url(self) -> DatabaseURL:
         return DatabaseURL(

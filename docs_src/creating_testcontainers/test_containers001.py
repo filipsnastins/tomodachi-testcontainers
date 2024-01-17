@@ -5,8 +5,6 @@ import requests
 from testcontainers.core.container import DockerContainer
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.utils import get_available_port
-
 
 class HTTPBinContainer(DockerContainer):
     def __init__(self, internal_port: int = 80, edge_port: int = 8080) -> None:
@@ -21,7 +19,7 @@ class HTTPBinContainer(DockerContainer):
 
 @pytest.fixture(scope="session")
 def httpbin_container() -> Generator[HTTPBinContainer, None, None]:
-    with HTTPBinContainer(edge_port=get_available_port()) as container:
+    with HTTPBinContainer() as container:
         yield container
 
 

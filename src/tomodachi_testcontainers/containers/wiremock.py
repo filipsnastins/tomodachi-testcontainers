@@ -3,13 +3,13 @@
 Adaptation of https://github.com/wiremock/python-wiremock
 See WireMock usage examples in https://github.com/wiremock/python-wiremock/tree/master/examples
 """
+import os
 from pathlib import Path
 from typing import Any, Optional
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.utils import copy_files_to_container
-
+from ..utils import copy_files_to_container
 from .common import WebContainer
 
 
@@ -21,7 +21,7 @@ class WireMockContainer(WebContainer):
         self,
         image: str = "wiremock/wiremock:latest",
         internal_port: int = 8080,
-        edge_port: int = 8080,
+        edge_port: Optional[int] = None,
         mapping_stubs: Optional[Path] = None,
         mapping_files: Optional[Path] = None,
         *,
@@ -36,10 +36,13 @@ class WireMockContainer(WebContainer):
             **kwargs,
         )
 
-        self.mapping_stubs = mapping_stubs
-        self.mapping_files = mapping_files
+        mapping_stubs_env = os.getenv("WIREMOCK_TESTCONTAINER_MAPPING_STUBS")
+        mapping_files_env = os.getenv("WIREMOCK_TESTCONTAINER_MAPPING_FILES")
 
-        if verbose:
+        self.mapping_stubs = mapping_stubs or Path(mapping_stubs_env) if mapping_stubs_env else None
+        self.mapping_files = mapping_files or Path(mapping_files_env) if mapping_files_env else None
+
+        if verbose or bool(os.getenv("WIREMOCK_TESTCONTAINER_VERBOSE")):
             self.with_command("--verbose")
 
     def log_message_on_container_start(self) -> str:

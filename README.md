@@ -64,11 +64,11 @@ class Service(tomodachi.Service):
     @tomodachi.http("GET", r"/hello/?")
     async def hello(self, request: web.Request) -> web.Response:
         name = request.query.get("name", "world")
-        return web.json_response(data={"message": f"Hello, {name}!"})
+        return web.json_response({"message": f"Hello, {name}!"})
 ```
 
 - `testcontainer_image` fixture builds a Docker image with a Dockerfile from the current working directory.
-- `tomodachi_container` fixture starts a new Docker container running the `hello` service on an available port.
+- `tomodachi_container` fixture starts a new Docker container running the `hello` service on a randomly available port.
 - `test_hello_testcontainers` sends a `GET /hello?name=Testcontainers` request to the running container and asserts the response.
 
 ```py
@@ -79,15 +79,13 @@ import httpx
 import pytest
 
 from tomodachi_testcontainers import TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="session")
 def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
-    with TomodachiContainer(
-        image=testcontainer_image,
-        edge_port=get_available_port(),
-    ).with_command("tomodachi run src/hello.py --production") as container:
+    with TomodachiContainer(testcontainer_image).with_command(
+        "tomodachi run readme/hello.py --production"
+    ) as container:
         yield cast(TomodachiContainer, container)
 
 

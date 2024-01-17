@@ -12,15 +12,14 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
-from tomodachi_testcontainers import LocalStackContainer
-from tomodachi_testcontainers.clients.snssqs import SNSSQSTestClient
-from tomodachi_testcontainers.utils import get_available_port
+from ... import LocalStackContainer
+from ...clients.snssqs import SNSSQSTestClient
 
 
 @pytest.fixture(scope="session")
 def localstack_container() -> Generator[LocalStackContainer, None, None]:
     image = os.getenv("LOCALSTACK_TESTCONTAINER_IMAGE_ID", "localstack/localstack:3")
-    with LocalStackContainer(image=image, edge_port=get_available_port()) as container:
+    with LocalStackContainer(image) as container:
         yield cast(LocalStackContainer, container)
 
 

@@ -5,7 +5,6 @@ import pytest
 import pytest_asyncio
 
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="session")
@@ -14,10 +13,7 @@ def tomodachi_container(
     localstack_container: LocalStackContainer,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(
-            image=testcontainer_image,
-            edge_port=get_available_port(),
-        )
+        TomodachiContainer(testcontainer_image)
         .with_env("AWS_S3_BUCKET_NAME", "autotest-my-bucket")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")

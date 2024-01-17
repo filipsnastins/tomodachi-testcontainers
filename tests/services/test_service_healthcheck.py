@@ -4,15 +4,13 @@ from typing import Generator, cast
 import pytest
 
 from tomodachi_testcontainers import TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="module")
 def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
-    with TomodachiContainer(
-        image=testcontainer_image,
-        edge_port=get_available_port(),
-    ).with_command("coverage run -m tomodachi run src/healthcheck.py --production") as container:
+    with TomodachiContainer(testcontainer_image).with_command(
+        "coverage run -m tomodachi run src/healthcheck.py --production"
+    ) as container:
         yield cast(TomodachiContainer, container)
 
 

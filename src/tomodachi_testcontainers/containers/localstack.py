@@ -3,8 +3,7 @@ from typing import Any, Optional
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.utils import AWSClientConfig
-
+from ..utils import AWSClientConfig
 from .common import WebContainer
 
 
@@ -13,7 +12,7 @@ class LocalStackContainer(WebContainer):
         self,
         image: str = "localstack/localstack:3",
         internal_port: int = 4566,
-        edge_port: int = 4566,
+        edge_port: Optional[int] = None,
         region_name: Optional[str] = None,
         **kwargs: Any,
     ) -> None:

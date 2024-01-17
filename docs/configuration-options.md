@@ -115,3 +115,9 @@ It's handy when you want to change the default configuration of Testcontianers w
 - [`TomodachiContainer`][tomodachi_testcontainers.TomodachiContainer]
 
       - `TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE` - defaults to `False`
+
+- [`WireMockContainer`][tomodachi_testcontainers.WireMockContainer]
+
+      - `WIREMOCK_TESTCONTAINER_MAPPING_STUBS` - path to WireMock mapping stubs, defaults to `None`
+      - `WIREMOCK_TESTCONTAINER_MAPPING_FILES` - path to WireMock mapping files, defaults to `None`
+      - `WIREMOCK_TESTCONTAINER_VERBOSE` - set `1` to start WireMock in verbose mode, defaults to `None`

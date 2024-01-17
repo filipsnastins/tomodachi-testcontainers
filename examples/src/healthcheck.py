@@ -7,4 +7,4 @@ class Service(tomodachi.Service):
 
     @tomodachi.http("GET", r"/health/?")
     async def healthcheck(self, request: web.Request) -> web.Response:
-        return web.json_response(data={"status": "ok"})
+        return web.json_response({"status": "ok"})

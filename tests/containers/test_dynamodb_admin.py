@@ -4,7 +4,6 @@ import httpx
 import pytest
 
 from tomodachi_testcontainers import DynamoDBAdminContainer, MotoContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 # Copy and paste this fixture to your project if you need to do some exploratory testing of the DynamoDB state
@@ -12,7 +11,6 @@ from tomodachi_testcontainers.utils import get_available_port
 def dynamodb_admin_container(moto_container: MotoContainer) -> Generator[DynamoDBAdminContainer, None, None]:
     with DynamoDBAdminContainer(
         dynamo_endpoint=moto_container.get_internal_url(),
-        edge_port=get_available_port(),
     ) as container:
         yield cast(DynamoDBAdminContainer, container)
 

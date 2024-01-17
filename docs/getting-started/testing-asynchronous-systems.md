@@ -64,7 +64,7 @@ The Testcontainer's configuration in this example is involved because we must co
   The `_create_topics_and_queues` fixture is used in the `tomodachi_container` fixture to ensure that topics and queues
   are created before the Customer application starts.
 
-```py title="tests/conftest.py" hl_lines="13 18-19 28-29"
+```py title="tests/conftest.py" hl_lines="12 17-18 27-28"
 --8<-- "docs_src/getting_started/customers/conftest.py"
 ```
 

@@ -13,7 +13,6 @@ from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.pytest.assertions import assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest_asyncio.fixture(scope="module")
@@ -26,11 +25,7 @@ def tomodachi_container(
     testcontainer_image: str, localstack_container: LocalStackContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(
-            image=testcontainer_image,
-            edge_port=get_available_port(),
-            http_healthcheck_path="/health",
-        )
+        TomodachiContainer(testcontainer_image, http_healthcheck_path="/health")
         .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")

@@ -12,15 +12,14 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
-from tomodachi_testcontainers import MotoContainer
-from tomodachi_testcontainers.clients.snssqs import SNSSQSTestClient
-from tomodachi_testcontainers.utils import get_available_port
+from ... import MotoContainer
+from ...clients.snssqs import SNSSQSTestClient
 
 
 @pytest.fixture(scope="session")
 def moto_container() -> Generator[MotoContainer, None, None]:
     image = os.getenv("MOTO_TESTCONTAINER_IMAGE_ID", "motoserver/moto:latest")
-    with MotoContainer(image=image, edge_port=get_available_port()) as container:
+    with MotoContainer(image) as container:
         yield cast(MotoContainer, container)
 
 

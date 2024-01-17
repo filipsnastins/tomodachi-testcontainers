@@ -4,17 +4,13 @@ import httpx
 import pytest
 
 from tomodachi_testcontainers import TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="session")
-def tomodachi_container(
-    testcontainer_image: str,
-) -> Generator[TomodachiContainer, None, None]:
-    with TomodachiContainer(
-        image=testcontainer_image,
-        edge_port=get_available_port(),
-    ).with_command("tomodachi run readme/hello.py --production") as container:
+def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
+    with TomodachiContainer(testcontainer_image).with_command(
+        "tomodachi run readme/hello.py --production"
+    ) as container:
         yield cast(TomodachiContainer, container)
 
 

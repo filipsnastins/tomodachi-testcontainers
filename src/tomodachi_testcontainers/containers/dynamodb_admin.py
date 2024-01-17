@@ -10,7 +10,7 @@ class DynamoDBAdminContainer(WebContainer):
         dynamo_endpoint: str,
         image: str = "aaronshaf/dynamodb-admin:latest",
         internal_port: int = 8001,
-        edge_port: int = 8001,
+        edge_port: Optional[int] = None,
         region_name: Optional[str] = None,
         **kwargs: Any,
     ) -> None:

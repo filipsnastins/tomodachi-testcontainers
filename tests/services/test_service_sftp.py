@@ -8,7 +8,6 @@ import pytest
 import pytest_asyncio
 
 from tomodachi_testcontainers import SFTPContainer, TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="module")
@@ -16,11 +15,7 @@ def tomodachi_container(
     testcontainer_image: str, sftp_container: SFTPContainer
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(
-            image=testcontainer_image,
-            edge_port=get_available_port(),
-            http_healthcheck_path="/health",
-        )
+        TomodachiContainer(testcontainer_image, http_healthcheck_path="/health")
         .with_env("SFTP_HOST", sftp_container.get_internal_conn_details().host)
         .with_env("SFTP_PORT", str(sftp_container.get_internal_conn_details().port))
         .with_env("SFTP_USERNAME", "userssh")

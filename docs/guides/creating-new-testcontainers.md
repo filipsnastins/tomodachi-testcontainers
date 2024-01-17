@@ -22,7 +22,7 @@ New containers are created by defining a new class and inheriting from the `Dock
     has a lot of Testcontainer examples. To learn more about creating and configuring Testcontainers
     in Python, take a look at the library's source code.
 
-```py hl_lines="5-6 11 18"
+```py hl_lines="5-6 10-12 16"
 --8<-- "docs_src/creating_testcontainers/test_containers001.py"
 ```
 
@@ -53,7 +53,7 @@ it logs a custom message when a container starts. It helps to access a Testconta
 Since the container's port is selected randomly for every test run, it's helpful to output an HTTP URL
 to be able to open an app running in the container and interact with it.
 
-```py hl_lines="7-8 16-17"
+```py hl_lines="7-8 14 16-17"
 --8<-- "docs_src/creating_testcontainers/test_containers002.py"
 ```
 
@@ -84,6 +84,11 @@ It works out of the box for web apps that run on a single port.
 Simply provide the `internal_port` and `edge_port`, and `WebContainer` will bind them.
 If you need to bind more ports, bind each port separately with the `with_bind_ports()` method.
 
+!!! note
+
+    If `edge_port` is left as `None`, a random available port on a host machine
+    is selected with [`get_available_port()`][tomodachi_testcontainers.utils.get_available_port].
+
 The `WebContainer` also provides an optional `http_healthcheck_path` param
 similar to the [Docker Healthcheck](https://docs.docker.com/engine/reference/builder/#healthcheck).
 To wait until a web app inside the container has started, the `WebContainer`
@@ -95,6 +100,6 @@ Lastly, the `WebContainer` provides helper methods, e.g.,
 `get_internal_url` and `get_external_url`, for fetching the container's HTTP endpoints.
 See all methods in the [code reference][tomodachi_testcontainers.WebContainer].
 
-```py hl_lines="6 14-16 30"
+```py hl_lines="6 13-15 30"
 --8<-- "docs_src/creating_testcontainers/test_containers003.py"
 ```

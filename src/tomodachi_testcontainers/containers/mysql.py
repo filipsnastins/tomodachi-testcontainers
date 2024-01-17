@@ -13,7 +13,7 @@ class MySQLContainer(DatabaseContainer):
         self,
         image: str = "mysql:8",
         internal_port: int = 3306,
-        edge_port: int = 3306,
+        edge_port: Optional[int] = None,
         drivername: Optional[str] = None,
         username: Optional[str] = None,
         root_password: Optional[str] = None,

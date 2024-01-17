@@ -16,7 +16,6 @@ from typing import Generator, cast
 import pytest
 
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 # --8<-- [start:tomodachi_container]
@@ -28,7 +27,7 @@ def tomodachi_container(
 ) -> Generator[TomodachiContainer, None, None]:
     # --8<-- [end:tomodachi_container]
     with (
-        TomodachiContainer(image=testcontainer_image, edge_port=get_available_port())
+        TomodachiContainer(testcontainer_image)
         .with_env("AWS_S3_BUCKET_NAME", "autotest-my-bucket")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")

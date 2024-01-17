@@ -5,14 +5,13 @@ import asyncssh
 import pytest
 import pytest_asyncio
 
-from tomodachi_testcontainers import SFTPContainer
-from tomodachi_testcontainers.utils import get_available_port
+from ... import SFTPContainer
 
 
 @pytest.fixture(scope="session")
 def sftp_container() -> Generator[SFTPContainer, None, None]:
     image = os.getenv("SFTP_TESTCONTAINER_IMAGE_ID", "atmoz/sftp:latest")
-    with SFTPContainer(image=image, edge_port=get_available_port()) as container:
+    with SFTPContainer(image) as container:
         yield cast(SFTPContainer, container)
 
 

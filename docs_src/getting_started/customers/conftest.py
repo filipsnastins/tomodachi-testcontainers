@@ -6,7 +6,6 @@ import pytest_asyncio
 
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -29,10 +28,7 @@ def tomodachi_container(
     _create_topics_and_queues: None,
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(
-            image=testcontainer_image,
-            edge_port=get_available_port(),
-        )
+        TomodachiContainer(testcontainer_image)
         .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")

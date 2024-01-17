@@ -13,7 +13,7 @@ class PostgreSQLContainer(DatabaseContainer):
         self,
         image: str = "postgres:16",
         internal_port: int = 5432,
-        edge_port: int = 5432,
+        edge_port: Optional[int] = None,
         drivername: Optional[str] = None,
         username: Optional[str] = None,
         password: Optional[str] = None,

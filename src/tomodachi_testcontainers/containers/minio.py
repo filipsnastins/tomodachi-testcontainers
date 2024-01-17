@@ -1,8 +1,7 @@
 import os
 from typing import Any, Optional
 
-from tomodachi_testcontainers.utils import AWSClientConfig
-
+from ..utils import AWSClientConfig, get_available_port
 from .common import WebContainer
 
 
@@ -11,9 +10,9 @@ class MinioContainer(WebContainer):
         self,
         image: str = "minio/minio:latest",
         s3_api_internal_port: int = 9000,
-        s3_api_edge_port: int = 9000,
+        s3_api_edge_port: Optional[int] = None,
         console_internal_port: int = 9001,
-        console_edge_port: int = 9001,
+        console_edge_port: Optional[int] = None,
         region_name: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
@@ -33,11 +32,11 @@ class MinioContainer(WebContainer):
             **kwargs,
         )
         self.s3_api_internal_port = s3_api_internal_port
-        self.s3_api_edge_port = s3_api_edge_port
+        self.s3_api_edge_port = self.edge_port
         self.console_internal_port = console_internal_port
-        self.console_edge_port = console_edge_port
+        self.console_edge_port = console_edge_port or get_available_port()
 
-        self.with_bind_ports(console_internal_port, console_edge_port)
+        self.with_bind_ports(console_internal_port, self.console_edge_port)
 
         self.region_name = region_name or os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION") or "us-east-1"
         self.minio_root_user = os.getenv("MINIO_ROOT_USER") or "minioadmin"  # nosec: B105

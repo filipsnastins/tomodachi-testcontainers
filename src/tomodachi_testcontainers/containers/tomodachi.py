@@ -6,8 +6,7 @@ from typing import Any, Optional
 import shortuuid
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from tomodachi_testcontainers.utils import copy_files_from_container
-
+from ..utils import copy_files_from_container
 from .common import WebContainer
 
 
@@ -16,7 +15,7 @@ class TomodachiContainer(WebContainer):
         self,
         image: str,
         internal_port: int = 9700,
-        edge_port: int = 9700,
+        edge_port: Optional[int] = None,
         http_healthcheck_path: Optional[str] = None,
         *,
         export_coverage: bool = False,

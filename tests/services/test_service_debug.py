@@ -12,13 +12,12 @@ import pytest
 import pytest_asyncio
 
 from tomodachi_testcontainers import TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="module")
 def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(image=testcontainer_image, edge_port=get_available_port())
+        TomodachiContainer(testcontainer_image)
         # Bind debugger port.
         .with_bind_ports(5678, 5678)
         # Explicitly install debugpy. Adding the debugpy to dev dependencies in pyproject will not work

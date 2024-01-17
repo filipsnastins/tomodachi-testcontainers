@@ -64,4 +64,5 @@ is running in a different directory, you might have to re-map the paths with `co
 See [Re-mapping paths](https://coverage.readthedocs.io/en/7.3.2/cmd.html#re-mapping-paths) in the `coverage.py` documentation.
 
 See an example of how the combined test coverage looks at <https://app.codecov.io/gh/filipsnastins/tomodachi-testcontainers>.
-The [examples/](examples/) services are tested only with Testcontainer tests; their coverage is included in the final report.
+The [examples/](https://github.com/filipsnastins/tomodachi-testcontainers/tree/main/examples)
+services are tested only with Testcontainer tests; their coverage is included in the final report.

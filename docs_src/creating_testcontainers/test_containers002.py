@@ -9,9 +9,9 @@ from tomodachi_testcontainers.utils import get_available_port
 
 
 class HTTPBinContainer(DockerContainer):
-    def __init__(self, internal_port: int = 80, edge_port: int = 8080) -> None:
+    def __init__(self, internal_port: int = 80, edge_port: int | None = None) -> None:
         super(HTTPBinContainer, self).__init__(image="kennethreitz/httpbin")
-        self.with_bind_ports(internal_port, edge_port)
+        self.with_bind_ports(internal_port, edge_port or get_available_port())
 
     def log_message_on_container_start(self) -> str:
         return f"HTTPBin container: http://localhost:{self.get_exposed_port(80)}"
@@ -24,7 +24,7 @@ class HTTPBinContainer(DockerContainer):
 
 @pytest.fixture(scope="session")
 def httpbin_container() -> Generator[HTTPBinContainer, None, None]:
-    with HTTPBinContainer(edge_port=get_available_port()) as container:
+    with HTTPBinContainer() as container:
         yield cast(HTTPBinContainer, container)
 
 

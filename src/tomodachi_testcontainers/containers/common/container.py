@@ -11,7 +11,7 @@ import testcontainers.core.container
 from docker.models.containers import Container
 from testcontainers.core.utils import inside_container
 
-from tomodachi_testcontainers.utils import setup_logger
+from ...utils import setup_logger
 
 
 class ContainerWithSameNameAlreadyExistsError(Exception):
