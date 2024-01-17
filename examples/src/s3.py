@@ -7,7 +7,8 @@ import tomodachi
 from aiohttp import web
 from tomodachi.envelope.json_base import JsonBase
 
-from .adapters import aws, config, s3
+from .adapters import aws, s3
+from .adapters.tomodachi import create_tomodachi_options
 from .utils.logger import configure_logger
 
 logger: structlog.stdlib.BoundLogger = structlog.get_logger()
@@ -16,7 +17,7 @@ logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 class Service(tomodachi.Service):
     name = "service-s3"
 
-    options = config.create_tomodachi_options()
+    options = create_tomodachi_options()
 
     async def _start_service(self) -> None:
         configure_logger()

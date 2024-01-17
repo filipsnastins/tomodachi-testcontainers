@@ -10,6 +10,17 @@ from ... import EphemeralDockerImage
 
 @pytest.fixture(scope="session")
 def testcontainer_image() -> Generator[str, None, None]:
+    """Builds a Docker image from a Dockerfile located in the current working directory and returns an image ID.
+
+    The Docker image is removed on test session end.
+
+    Configuration environment variables (set on host machine):
+
+    - `TESTCONTAINER_IMAGE_ID` - use given Image ID for creating a container.
+    - `TESTCONTAINER_DOCKERFILE_PATH` - override path to the Dockerfile for building Docker image.
+    - `TESTCONTAINER_DOCKER_BUILD_CONTEXT` - override Docker build context.
+    - `TESTCONTAINER_DOCKER_BUILD_TARGET` - override Docker build target.
+    """
     # Test are running in parallel with pytest-xdist
     if os.getenv("PYTEST_XDIST_WORKER"):
         # Don't remove the image on teardown because it's used by other pytest-xdist workers at the same time

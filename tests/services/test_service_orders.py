@@ -1,4 +1,3 @@
-import re
 import uuid
 from datetime import datetime
 from typing import Any, AsyncGenerator, Dict, Generator, List, cast
@@ -11,7 +10,7 @@ from tomodachi.envelope.json_base import JsonBase
 
 from tomodachi_testcontainers import MotoContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
+from tomodachi_testcontainers.pytest.assertions import assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 
 
@@ -64,7 +63,7 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSS
     order_id = body["order_id"]
 
     assert response.status_code == 200
-    assert re.match(UUID4_PATTERN, order_id)
+    assert uuid.UUID(order_id)
     assert body == {"order_id": order_id, "customer_id": customer_id, "products": products, "created_at": mock.ANY}
 
     response = await http_client.get(f"/order/{order_id}")

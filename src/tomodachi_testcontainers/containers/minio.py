@@ -6,6 +6,15 @@ from .common import WebContainer
 
 
 class MinioContainer(WebContainer):
+    """Minio container.
+
+    Configuration environment variables (set on host machine):
+
+    - `AWS_REGION` or `AWS_DEFAULT_REGION` - defaults to `us-east-1`
+    - `MINIO_ROOT_USER` - defaults to `minioadmin`
+    - `MINIO_ROOT_PASSWORD` - defaults to `minioadmin`
+    """
+
     def __init__(
         self,
         image: str = "minio/minio:latest",
@@ -16,14 +25,6 @@ class MinioContainer(WebContainer):
         region_name: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        """Minio container.
-
-        Configuration environment variables (set on host machine):
-
-        - `AWS_REGION` or `AWS_DEFAULT_REGION` - defaults to `us-east-1`
-        - `MINIO_ROOT_USER` - defaults to `minioadmin`
-        - `MINIO_ROOT_PASSWORD` - defaults to `minioadmin`
-        """
         super().__init__(
             image,
             internal_port=s3_api_internal_port,

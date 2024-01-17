@@ -28,6 +28,8 @@ class DatabaseURL(NamedTuple):
 
 
 class DatabaseContainer(DockerContainer, abc.ABC):
+    """Abstract class for relational database containers."""
+
     internal_port: int
     edge_port: int
 

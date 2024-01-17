@@ -1,3 +1,7 @@
+"""Asynchronous probes (sampling) for testing asynchronous systems.
+
+Inspired by [Awaitility](https://github.com/awaitility/awaitility) and [busypie](https://github.com/rockem/busypie).
+"""
 import asyncio
 from contextlib import suppress
 from typing import Any, Awaitable, Callable, TypeVar, Union, cast, overload

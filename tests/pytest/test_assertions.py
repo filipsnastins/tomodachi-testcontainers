@@ -1,5 +1,3 @@
-import re
-import uuid
 from datetime import datetime, timedelta, timezone
 from unittest.mock import Mock
 
@@ -7,18 +5,11 @@ import pytest
 
 from tomodachi_testcontainers import DockerContainer
 from tomodachi_testcontainers.pytest.assertions import (
-    UUID4_PATTERN,
     assert_datetime_within_range,
     assert_logs_contain,
     assert_logs_match_line_count,
     assert_logs_not_contain,
 )
-
-
-def test_match_uuid4_pattern() -> None:
-    assert re.match(UUID4_PATTERN, str(uuid.uuid4()))
-
-    assert not re.match(UUID4_PATTERN, "foo")
 
 
 def test_assert_datetime_within_range() -> None:

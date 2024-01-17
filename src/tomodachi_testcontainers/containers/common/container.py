@@ -19,6 +19,8 @@ class ContainerWithSameNameAlreadyExistsError(Exception):
 
 
 class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
+    """Abstract class for generic Docker containers."""
+
     _container: Optional[Container]
     _name: str
     _logger: logging.Logger

@@ -1,4 +1,4 @@
-"""An example of attaching a debugger to a running Tomodachi testcontainer.
+"""An example of attaching a debugger to a running Tomodachi container.
 
 Generally you won't need a debugger in the testcontainer often,
 because you should be able to detect most issues by checking the logs,

@@ -1,4 +1,3 @@
-import re
 import uuid
 from datetime import datetime, timezone
 from typing import AsyncGenerator, Generator, cast
@@ -11,7 +10,7 @@ from tomodachi.envelope.json_base import JsonBase
 
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
+from tomodachi_testcontainers.pytest.assertions import assert_datetime_within_range
 from tomodachi_testcontainers.pytest.async_probes import probe_until
 
 
@@ -61,7 +60,7 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
     customer_id = body["customer_id"]
 
     assert response.status_code == 200
-    assert re.match(UUID4_PATTERN, customer_id)
+    assert uuid.UUID(customer_id)
     assert body == {
         "customer_id": customer_id,
         "name": "John Doe",

@@ -7,7 +7,8 @@ from aiohttp import web
 from pydantic import BaseModel
 from tomodachi.envelope.json_base import JsonBase
 
-from .adapters import aws, config, dynamodb
+from .adapters import aws, dynamodb
+from .adapters.tomodachi import create_tomodachi_options
 from .utils.logger import configure_logger
 
 logger: structlog.stdlib.BoundLogger = structlog.get_logger()
@@ -52,7 +53,7 @@ class Customer(BaseModel):
 class Service(tomodachi.Service):
     name = "service-customers"
 
-    options = config.create_tomodachi_options()
+    options = create_tomodachi_options()
 
     async def _start_service(self) -> None:
         configure_logger()

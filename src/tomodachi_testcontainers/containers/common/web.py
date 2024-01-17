@@ -13,6 +13,8 @@ from .container import DockerContainer
 
 
 class WebContainer(DockerContainer, abc.ABC):
+    """Abstract class for web application containers."""
+
     internal_port: int
     edge_port: int
 

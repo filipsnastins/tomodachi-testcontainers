@@ -28,7 +28,6 @@ class WireMockContainer(WebContainer):
         verbose: bool = False,
         **kwargs: Any,
     ) -> None:
-        """WireMock container."""
         super().__init__(
             image,
             internal_port=internal_port,

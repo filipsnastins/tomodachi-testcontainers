@@ -17,7 +17,6 @@ class SFTPContainer(DockerContainer):
         edge_port: Optional[int] = None,
         **kwargs: Any,
     ) -> None:
-        """SFTP container."""
         super().__init__(image, **kwargs)
         self.internal_port = internal_port
         self.edge_port = edge_port or get_available_port()

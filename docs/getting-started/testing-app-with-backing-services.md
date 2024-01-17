@@ -12,7 +12,7 @@ you had to push changes to version control and wait for the CI server to finish 
 It would create unnecessary friction for integrating automated testing into the development workflow.
 
 That's where Testcontainers are very useful - they automate the creation of the application's dependencies.
-They're run as Docker containers and thrown away when tests finish.
+They're run as Docker containers and are thrown away when tests finish.
 Testcontainers make configuration of your local development environment easy -
 all its components are defined as code in the same repository and created the same way every time you run the tests.
 
@@ -33,13 +33,13 @@ For example, we can run the same versions of databases like PostgreSQL or MongoD
 However, it gets more complicated when an application depends on proprietary software or managed cloud services that can't be run locally,
 for example, AWS S3 file store or AWS SNS/SQS message broker.
 
-When a particular dependency can't be run locally, e.g., because it's a managed cloud provider service like AWS S3, we have ther testing options:
+When a dependency can't be run locally, e.g., because it's a managed cloud provider service like AWS S3, we have other testing options:
 
 - Using a real version of an external service, e.g., testing with a real AWS account.
 - Mocking the interactions with an external service, e.g., with Python's [`unittest.mock`](https://docs.python.org/3/library/unittest.mock.html#module-unittest.mock).
 - Using verified external mocks, e.g., [LocalStack](https://localstack.cloud/) and [Moto](https://docs.getmoto.org/en/latest/), for emulating the AWS cloud.
 
-Using a real AWS account for testing is the most production-like way. The tests must use a dedicated AWS account only for autotests and have
+Using a real AWS account for testing is the most production-like way. Such tests must use a dedicated AWS account only for autotests and have
 safeguards that they're not accidentally connected to a production account. There's a risk of changing production resources if tests are misconfigured.
 Using real services will create additional costs in cloud bills and maintenance time that need to be accounted for.
 Lastly, the tests will be slower because they'll communicate over the external network and might become flaky if multiple test suites are using the same resources simultaneously.
@@ -48,7 +48,7 @@ Ultimately, using the real services shouldn't be your default choice due to the 
 The second option is mocking the interactions with mocks, e.g., [`unittest.mock`](https://docs.python.org/3/library/unittest.mock.html#module-unittest.mock).
 This way, we verify that the code calls external dependency in a way we expect but doesn't verify if the call would succeed in the real environment.
 For example, we can mock calls to the AWS `boto3` client and remove any dependencies on the cloud service from the tests.
-The tests will be fast because because there'll be no network calls. However, they won't ensure that the code will work in the real environment
+The tests will be fast because there'll be no network calls. However, they won't ensure that the code will work in the real environment
 because we might accidentally misconfigure the mocks, and the tests won't notice that.
 Although unit tests are handy because of the low cost and fast runtime, they must be supplemented by other production-like tests.
 
@@ -61,7 +61,7 @@ What matters is that it behaves the same.
 Projects like [LocalStack](https://localstack.cloud/) and [Moto](https://docs.getmoto.org/en/latest/) are web applications
 that emulate AWS cloud - they provide the same API and behavior for _local development and testing_.
 [Similar tools](https://testcontainers.com/modules/?category=cloud) exist for other cloud providers.
-Cloud emulators are tested against a real cloud provider to ensure they behave the same; hence, they're verified mocks.
+Cloud emulators are tested separately against a real cloud provider to ensure they behave the same; hence, they're verified mocks.
 However, they're still not always accurate. You might encounter some corner cases where the mocks didn't catch a problem, and it surfaced only in a real environment.
 Check out [LocalStack feature coverage](https://docs.localstack.cloud/user-guide/aws/feature-coverage/)
 and [Moto supported services](https://docs.getmoto.org/en/latest/docs/services/index.html) for more details.
@@ -72,7 +72,7 @@ That's the route we'll take in the following sections of this guide.
 Lastly, it's worth mentioning that despite testing with verified mocks like LocalStack,
 you might stumble upon unsupported features or inaccurate behavior, or you are working with a critical part of the system where the cost of failure is high.
 For such cases, you might want to consider testing _parts_ of your application with a real external dependency.
-Take all precautions - run such tests only in a deployment pipeline, disable them locally, and always use a separate account dedicated only to automated testing.
+Take all precautions - prefer running such tests only in a deployment pipeline, disable them locally, and always use a separate account dedicated only to automated testing.
 To make testing only certain parts of your application easy, modularize those components, for example, with the [Ports & Adapters pattern](../guides/ports-and-adapters/).
 
 !!! success "Test with production-like dependencies"
@@ -106,7 +106,7 @@ In the backend, the app uses AWS S3 operations `put_object` and `get_object` to 
 --8<-- "docs_src/getting_started/s3/app.py"
 ```
 
-The app is configured with environment variables, following the [12-factor app principle](https://12factor.net/config).
+The app is configured with [environment variables](https://12factor.net/config).
 The required configuration value is `AWS_S3_BUCKET_NAME` for specifying the bucket name for the datastore.
 Other optional values are `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` for credentials and `AWS_S3_ENDPOINT_URL` for overriding the AWS endpoint.
 
@@ -120,7 +120,7 @@ We can use other instances of backing services in different environments, includ
 
 ### Configuring Testcontainers
 
-As in the [previous getting started guide](./testing-simple-app.md), the first step is writing Testcontainer fixtures.
+As in the previous guide - [Testing Simple Application](./testing-simple-app.md), the first step is creating Testcontainer fixtures.
 This example is more involved because the application depends on the external service - AWS cloud.
 Since we don't want to use the real AWS account for automated testing, we'll use a [`LocalStackContainer`][tomodachi_testcontainers.LocalStackContainer].
 We can access it with the [`localstack_container`][tomodachi_testcontainers.pytest.localstack_container] fixture.
@@ -133,10 +133,33 @@ When the application uses AWS S3, it will send requests to the LocalStack instan
 --8<-- "docs_src/getting_started/s3/conftest.py"
 ```
 
-!!! Note
+!!! note
 
     The `localstack_container.get_internal_url()` returns a URL that's accessible only inside the Docker network
     so that the `LocalStackContainer` and `TomodachiContainer` can communicate with each other.
+
+!!! warning "How do I avoid tests from mutating my real infrastructure?"
+
+    When working with AWS mocks, it's important to have safeguards against accidentally mutating real infrastructure.
+
+    On a host machine that's running tests, set AWS environment variables to dummy values, e.g.,
+    by using the [`pytest-env`](https://pypi.org/project/pytest-env/) plugin.
+    In addition, never embed real credentials in the code.
+
+    ```toml
+    [tool.pytest.ini_options]
+    env = [
+        # Set dummy AWS credentials so that we don't accidentally mutate real infrastructure
+        "AWS_REGION=us-east-1",
+        "AWS_DEFAULT_REGION=us-east-1",
+        "AWS_ACCESS_KEY_ID=testing",
+        "AWS_SECRET_ACCESS_KEY=testing",
+        "AWS_SECURITY_TOKEN=testing",
+        "AWS_SESSION_TOKEN=testing",
+    ]
+    ```
+
+    Read more in the [Moto documentation](https://docs.getmoto.org/en/latest/docs/getting_started.html#how-do-i-avoid-tests-from-mutating-my-real-infrastructure).
 
 ### Testing the application's public API
 
@@ -168,9 +191,9 @@ The refactored test has a new name - `test_save_and_get_file` - because now we'r
 --8<-- "docs_src/getting_started/s3/test_app003.py"
 ```
 
-!!! success "Testing business scenarios, not HTTP endpoints"
+!!! success "Testing business scenarios, not individual application's endpoints"
 
-    Someone can say this test violates the principle that "one test should test only one thing."
+    This test might violate the principle that one test should test only one thing.
     However, if we look at the test from the "end-to-end" perspective,
     it tests a single scenario of storing files that provide value to the application users.
     That's why the term "end-to-end" fits well - we're not testing a single HTTP endpoint per test
@@ -210,13 +233,13 @@ docs_src/getting_started/s3/test_app004.py:test_file_not_found
 
 In this guide, we tested the application that depends on external backing services like databases or cloud provider services.
 We tested the application with production-like dependencies to build confidence that it will work the same way in production.
-By treating backing services as attachable resources, we replaced a dependency on the AWS cloud with LocalStack Testcontainer for testing.
+By treating backing services as attachable resources, we replaced a dependency on the AWS cloud with the LocalStack container for testing.
 Also, we run the test suite locally, giving us faster feedback about the changes and improving the development experience,
 contrary to the tests running only in a deployment pipeline or dedicated test environment.
 All we need for running tests locally with Testcontainers is a container runtime.
 Finally, we made the tests robust by testing only the application's public API rather than internal implementation details.
 
-The next section explores testing an application that depends on another local or third-party application.
+The following section explores testing an application that depends on another local or third-party application.
 
 ## Resources
 

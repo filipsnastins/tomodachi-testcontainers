@@ -9,6 +9,17 @@ from .common import DatabaseContainer
 
 
 class MySQLContainer(DatabaseContainer):
+    """MySQL container.
+
+    Configuration environment variables (set on host machine):
+
+    - `MYSQL_DRIVERNAME` - defaults to `mysql+pymysql`
+    - `MYSQL_USER` - defaults to `username`
+    - `MYSQL_ROOT_PASSWORD` - defaults to `root`
+    - `MYSQL_PASSWORD` - defaults to `password`
+    - `MYSQL_DATABASE` - defaults to `db`
+    """
+
     def __init__(
         self,
         image: str = "mysql:8",
@@ -21,16 +32,6 @@ class MySQLContainer(DatabaseContainer):
         database: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        """MySQL container.
-
-        Configuration environment variables (set on host machine):
-
-        - `MYSQL_DRIVERNAME` - defaults to `mysql+pymysql`
-        - `MYSQL_USER` - defaults to `username`
-        - `MYSQL_ROOT_PASSWORD` - defaults to `root`
-        - `MYSQL_PASSWORD` - defaults to `password`
-        - `MYSQL_DATABASE` - defaults to `db`
-        """
         super().__init__(
             image,
             internal_port=internal_port,

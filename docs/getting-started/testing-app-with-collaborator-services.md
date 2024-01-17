@@ -3,9 +3,9 @@
 In the previous section, we explored [testing applications that depend on backing services](./testing-app-with-backing-services.md) like databases or cloud providers.
 This section focuses on another type of external dependency - collaborator services.
 
-A collaborator service is another application or a third-party service that our application depends on.
-They might be developed in-house or be off-the-shelf software.
-Collaborator services provide a valuable behavior and expose it through an API such as REST, GraphQL, gRPC, asynchronous messaging, etc.
+A collaborator service is another application or a third-party service that our application directly depends on.
+They might be developed in-house, running as off-the-shelf software, or a third-party service in an external network.
+Collaborator services provide a valuable behavior and expose it through an API such as REST.
 For example, when building a financial system, we might use an external application to obtain currency conversion rates or process credit card payments.
 
 In automated testing, it's often not feasible to use the real versions of external applications -
@@ -44,7 +44,7 @@ instead, it uses an external app - the customer credit check service.
 We'll use the [WireMock](https://wiremock.org/) HTTP mock server to mock the credit check service's `POST /check-credit` API.
 WireMock is an open-source tool for API mock testing. It can help you to create stable test and development environments,
 isolate yourself from flaky third parties, and simulate APIs that don't exist yet.
-Tomodachi Testcontainer provides a [WireMockContainer][tomodachi_testcontainers.WireMockContainer]
+Tomodachi Testcontainers provides a [WireMockContainer][tomodachi_testcontainers.WireMockContainer]
 and [wiremock_container][tomodachi_testcontainers.pytest.wiremock_container] fixture.
 Used together with [Python WireMock SDK](https://github.com/wiremock/python-wiremock), creating API mocks is easy.
 
@@ -91,10 +91,11 @@ If the credit verification status is not `CREDIT_CHECK_PASSED`, the `CustomerCre
 
 ### Configuring Testcontainers
 
-To start the `WireMockContainer`, we'll use the `wiremock_container` fixture.
+To start the [`WireMockContainer`][tomodachi_testcontainers.WireMockContainer],
+we'll use the [`wiremock_container`][tomodachi_testcontainers.pytest.wiremock_container] fixture.
 The credit check service's URL is configured with the `CREDIT_CHECK_SERVICE_URL` environment variable -
 it's set to WireMock's URL, so requests for verifying the customer credit will be sent to
-the WireMock instance running locally in a Docker container.
+the WireMock instance running locally in a container.
 
 ```py title="tests/conftest.py" hl_lines="13 17"
 --8<-- "docs_src/getting_started/orders/conftest.py"
@@ -103,15 +104,17 @@ the WireMock instance running locally in a Docker container.
 ### Writing end-to-end tests
 
 In the first test, we'll test a successful order creation when the customer's credit check passes.
+
 Before testing the order management application, we need to configure the `POST /check-check` API in WireMock.
-To easily configure WireMock, we'll use Python WireMock SDK.
+To easily configure WireMock, we'll use [Python WireMock SDK](https://github.com/wiremock/python-wiremock).
 Install it from extras with `pip install tomodachi-testcontainers[wiremock]` or `pip install wiremock`.
-The `wiremock_container` fixture automatically configures the SDK to communicate with the WireMock server if the [WireMock extra is installed](../installation.md).
+The [`wiremock_container`][tomodachi_testcontainers.pytest.wiremock_container]
+fixture automatically configures the SDK to communicate with the WireMock server if the [WireMock extra is installed](../installation.md).
 
 The mock setup code configures WireMock to return JSON body `{"status": "CREDIT_CHECK_PASSED"}` when it receives
 a `POST` request to the endpoint `/credit-check`, and the request body is `{"customer_id": "123456"}`.
 After sending the `POST /order` request to the order service, we receive a successful response indicating that the order has been created.
-The order services successfully called WireMock, which returned the fake credit check service's response!
+The order service successfully called WireMock, which returned the fake credit check service's response!
 
 ```py title="tests/test_app.py" hl_lines="11 16 21"
 --8<--
@@ -129,9 +132,9 @@ docs_src/getting_started/orders/test_app001.py:test_order_not_created_when_credi
 --8<--
 ```
 
-The last example tests the scenario when the credit verification service responds with an Internal Server Error.
+The last example tests the scenario when the credit verification service responds with an `Internal Server Error`.
 This error scenario is very hard to simulate when testing with a real version of the external application.
-Using mocks, you control the environment and all its variables.
+Using mocks, you control the environment and its behavior.
 In this test, the WireMock is configured to return `HTTP 500` with the `Internal Server Error` response;
 the order management service returns `HTTP 503` and `{"error": "CREDIT_CHECK_UNAVAILABLE"}`.
 
@@ -143,7 +146,7 @@ docs_src/getting_started/orders/test_app001.py:test_order_not_created_when_credi
 
 ### Extracting mock setup functions
 
-Setting up the mocks requires lengthy boilerplate code, even for these simple test examples.
+Setting up the mocks requires lengthy boilerplate code, even for these simple examples.
 In the real scenario, the API mock setup will be tens of code lines configuring nested request/response data structures.
 It's a good idea to extract mock setup code to separate functions and modules.
 

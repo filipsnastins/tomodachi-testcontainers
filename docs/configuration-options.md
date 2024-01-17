@@ -36,10 +36,10 @@ The Docker network is not created automatically, so ensure it exists before runn
 
 | Environment Variable                 | Description                                                |
 | :----------------------------------- | :--------------------------------------------------------- |
+| `TESTCONTAINER_IMAGE_ID`             | Use given Image ID for creating a container.               |
 | `TESTCONTAINER_DOCKERFILE_PATH`      | Override path to the Dockerfile for building Docker image. |
 | `TESTCONTAINER_DOCKER_BUILD_CONTEXT` | Override Docker build context.                             |
 | `TESTCONTAINER_DOCKER_BUILD_TARGET`  | Override Docker build target.                              |
-| `TESTCONTAINER_IMAGE_ID`             | Use given Image ID for creating a container.               |
 
 ### Change the Dockerfile path, build context, and build target
 

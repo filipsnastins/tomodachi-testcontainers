@@ -8,6 +8,15 @@ from .common import WebContainer
 
 
 class LocalStackContainer(WebContainer):
+    """LocalStack container.
+
+    Configuration environment variables (set on host machine):
+
+    - `AWS_REGION` or `AWS_DEFAULT_REGION` - defaults to `us-east-1`
+    - `AWS_ACCESS_KEY_ID` - defaults to `testing`
+    - `AWS_SECRET_ACCESS_KEY` - defaults to `testing`
+    """
+
     def __init__(
         self,
         image: str = "localstack/localstack:3",
@@ -16,14 +25,6 @@ class LocalStackContainer(WebContainer):
         region_name: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        """LocalStack container.
-
-        Configuration environment variables (set on host machine):
-
-        - `AWS_REGION` or `AWS_DEFAULT_REGION` - defaults to `us-east-1`
-        - `AWS_ACCESS_KEY_ID` - defaults to `testing`
-        - `AWS_SECRET_ACCESS_KEY` - defaults to `testing`
-        """
         super().__init__(
             image,
             internal_port=internal_port,

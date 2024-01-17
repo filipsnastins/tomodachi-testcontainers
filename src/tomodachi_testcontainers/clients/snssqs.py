@@ -56,7 +56,7 @@ TomodachiSNSSQSEnvelope = Union[_TomodachiSNSSQSEnvelopeStatic, _TomodachiSNSSQS
 
 
 class SNSSQSTestClient:
-    """Wraps aiobotocore SNS and SQS clients and provides common methods for testing SNS SQS integrations."""
+    """Provides common methods for testing AWS SNS/SQS interactions with Tomodachi framework."""
 
     def __init__(self, sns_client: SNSClient, sqs_client: SQSClient) -> None:
         self._sns_client = sns_client

@@ -23,11 +23,11 @@
 ## Misc
 
 - [ ] Container lifecycle hooks, e.g., `after_start`, `before_stop`
+- [ ] Rename `tomodachi_testcontainers.pytest` module to `tomodachi_testcontainers.testing`
 
 ## Docs
 
-- [ ] Docstrings
-- [ ] Rewrite - <https://github.com/filipsnastins/tomodachi-testcontainers/pull/155>
+- [ ] Documentation rewrite - <https://github.com/filipsnastins/tomodachi-testcontainers/pull/155>
 
 ## Testing
 

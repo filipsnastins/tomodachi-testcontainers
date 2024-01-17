@@ -27,11 +27,11 @@ The [`testcontainer_image`][tomodachi_testcontainers.pytest.testcontainer_image]
 a [Dockerfile](https://github.com/filipsnastins/tomodachi-testcontainers/blob/main/examples/Dockerfile) from the current working directory,
 and removes the Docker image when all tests finish.
 
-The [`TomodachiContainer`][tomodachi_testcontainers.TomodachiContainer] receives the built image ID and a randomly available port as input arguments
-and starts the Testcontainer in a context manager. The context manager deletes the Testcontainer on exit.
+The [`TomodachiContainer`][tomodachi_testcontainers.TomodachiContainer] receives the built image ID
+and starts the Testcontainer in a context manager on a random available port. The context manager deletes the Testcontainer on exit.
 
 The `tomodachi_container` fixture is assigned the `session` scope to create the container only once per test session.
-It's a good practice to create Testcontainers only once for performance - it takes some time for a Docker container to start,
+It's a good practice to create Testcontainers only once for better performance - it takes some time for a Docker container to start,
 and the test suite will be slow if containers are recreated for every test.
 
 ## Writing end-to-end tests
@@ -112,7 +112,7 @@ docs_src/getting_started/hello/test_app002.py
 --8<--
 ```
 
-Now, the code is a little bit cleaner. A problem with end-to-end tests is that the code can get lengthy as we create more complex test cases.
+The code is a little bit cleaner. A problem with end-to-end tests is that the code can get lengthy as we create more complex test cases.
 It's due to the accidental complexity of the high-level protocols and concepts we're working with, e.g., calling HTTP endpoints requires setup and boilerplate code.
 To keep the tests clean, it's important to notice such duplications and complexities and refactor the code with fixtures and helper functions.
 
