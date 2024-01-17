@@ -1,6 +1,6 @@
 import pytest
 
-from tomodachi_testcontainers.pytest.async_probes import probe_during_interval, probe_until
+from tomodachi_testcontainers.async_probes import probe_during_interval, probe_until
 
 
 class TestProbeUntil:

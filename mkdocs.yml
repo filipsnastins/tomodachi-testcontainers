@@ -104,7 +104,7 @@ nav:
       # - guides/ports-and-adapters.md # TODO
       # - guides/creating-app-facade.md # TODO
       # - guides/improving-test-performance.md # TODO
-      - guides/managing-test-isolation.md
+      # - guides/managing-test-isolation.md # TODO
       # - guides/running-testcontainer-tests-in-ci-cd.md # TODO
       - guides/debugging-testcontainers.md
       - guides/forward-container-logs-to-pytest.md
@@ -114,9 +114,7 @@ nav:
       - reference/index.md
       - Containers: reference/containers.md
       - Clients: reference/clients.md
-      - Pytest:
-          - reference/pytest/index.md
-          - Fixtures: reference/pytest/fixtures.md
-          - Assertions: reference/pytest/assertions.md
-          - Async Probes: reference/pytest/async-probes.md
+      - Fixtures: reference/fixtures.md
+      - Assertions: reference/assertions.md
+      - Async Probes: reference/async-probes.md
       - Utils: reference/utils.md

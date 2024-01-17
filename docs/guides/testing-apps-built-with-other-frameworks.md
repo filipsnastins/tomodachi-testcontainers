@@ -2,7 +2,7 @@
 
 With Testcontainers, you can test any app running in a container.
 
-Using the [`testcontainer_image`][tomodachi_testcontainers.pytest.testcontainer_image] pytest fixture,
+Using the [`testcontainer_image`][tomodachi_testcontainers.fixtures.testcontainer_image] pytest fixture,
 you can build a Docker image with Dockerfile from a current working directory.
 Then, you can use the built Docker image ID to start a new container.
 To learn how to create your new Testcontainers, see the previous guide - [Creating new Testcontainers](./creating-new-testcontainers.md).

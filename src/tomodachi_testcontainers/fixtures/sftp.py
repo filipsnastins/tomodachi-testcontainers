@@ -5,7 +5,7 @@ import asyncssh
 import pytest
 import pytest_asyncio
 
-from ... import SFTPContainer
+from .. import SFTPContainer
 
 
 @pytest.fixture(scope="session")

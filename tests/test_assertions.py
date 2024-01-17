@@ -2,9 +2,8 @@ from datetime import datetime, timedelta, timezone
 from unittest.mock import Mock
 
 import pytest
-
 from tomodachi_testcontainers import DockerContainer
-from tomodachi_testcontainers.pytest.assertions import (
+from tomodachi_testcontainers.assertions import (
     assert_datetime_within_range,
     assert_logs_contain,
     assert_logs_match_line_count,

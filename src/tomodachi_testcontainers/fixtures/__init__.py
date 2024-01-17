@@ -1,9 +1,8 @@
+"""pytest fixtures."""
 from contextlib import suppress
 
-import pytest
-
-from .fixtures.containers import testcontainer_image
-from .fixtures.localstack import (
+from .containers import testcontainer_image
+from .localstack import (
     localstack_container,
     localstack_dynamodb_client,
     localstack_iam_client,
@@ -15,8 +14,8 @@ from .fixtures.localstack import (
     localstack_ssm_client,
     restart_localstack_container_on_teardown,
 )
-from .fixtures.minio import minio_container, minio_s3_client
-from .fixtures.moto import (
+from .minio import minio_container, minio_s3_client
+from .moto import (
     moto_container,
     moto_dynamodb_client,
     moto_iam_client,
@@ -28,19 +27,16 @@ from .fixtures.moto import (
     moto_ssm_client,
     reset_moto_container_on_teardown,
 )
-from .fixtures.wiremock import reset_wiremock_container_on_teardown, wiremock_container
+from .wiremock import reset_wiremock_container_on_teardown, wiremock_container
 
 with suppress(ImportError):  # 'mysql' extra dependency
-    from .fixtures.mysql import mysql_container
+    from .mysql import mysql_container
 
 with suppress(ImportError):  # 'postgres' extra dependency
-    from .fixtures.postgres import postgres_container
+    from .postgres import postgres_container
 
 with suppress(ImportError):  # 'sftp' extra dependency
-    from .fixtures.sftp import sftp_container, userpass_sftp_client, userssh_sftp_client
-
-
-pytest.register_assert_rewrite("tomodachi_testcontainers.pytest.assertions")
+    from .sftp import sftp_container, userpass_sftp_client, userssh_sftp_client
 
 
 __all__ = [

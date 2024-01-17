@@ -1,5 +1,7 @@
 from contextlib import suppress
 
+import pytest
+
 from .containers.common import DockerContainer, EphemeralDockerImage, WebContainer
 from .containers.dynamodb_admin import DynamoDBAdminContainer
 from .containers.localstack import LocalStackContainer
@@ -35,3 +37,5 @@ __all__ = [
     "WebContainer",
     "WireMockContainer",
 ]
+
+pytest.register_assert_rewrite("tomodachi_testcontainers.assertions")

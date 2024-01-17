@@ -3,7 +3,7 @@ from typing import Generator, cast
 
 import pytest
 
-from ... import WireMockContainer
+from .. import WireMockContainer
 
 try:
     from wiremock.constants import Config as WireMockConfig

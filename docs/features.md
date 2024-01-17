@@ -9,25 +9,25 @@ See [Creating New Testcontainers](./guides/creating-new-testcontainers.md) for a
 ## Pytest fixtures and helpers
 
 **Ready-made pytest fixtures** make testing your applications simple.
-Find the complete list of available fixtures at [`tomodachi_testcontainers.pytest.fixtures`][tomodachi_testcontainers.pytest.fixtures].
+Find the complete list of available fixtures at [`tomodachi_testcontainers.fixtures`][tomodachi_testcontainers.fixtures].
 
-- [`testcontainer_image`][tomodachi_testcontainers.pytest.testcontainer_image]
+- [`testcontainer_image`][tomodachi_testcontainers.fixtures.testcontainer_image]
   fixture builds a Docker image with a Dockerfile from the current working directory.
   It allows you to run the latest version of our application as a Docker container for automated testing.
 
 - Launch commonly used Testcontainers with fixtures, e.g.,
-  [`localstack_container`][tomodachi_testcontainers.pytest.localstack_container],
-  [`postgres_container`][tomodachi_testcontainers.pytest.postgres_container],
+  [`localstack_container`][tomodachi_testcontainers.fixtures.localstack_container],
+  [`postgres_container`][tomodachi_testcontainers.fixtures.postgres_container],
   etc.
 
 - Get fixtures for interacting with Testcontainers, e.g., `localstack_s3_client`, `moto_dynamodb_client`, etc.
 
 **Async probes** for [testing asynchronous systems](./getting-started/testing-asynchronous-systems) -
-[`tomodachi_testcontainers.pytest.async_probes`][tomodachi_testcontainers.pytest.async_probes].
+[`tomodachi_testcontainers.async_probes`][tomodachi_testcontainers.async_probes].
 Inspired by [Awaitility](http://www.awaitility.org/) and [busypie](https://github.com/rockem/busypie).
 
 **Assertion helpers** for common test cases like asserting for logs in a Docker container -
-[`tomodachi_testcontainers.pytest.assertions`][tomodachi_testcontainers.pytest.assertions].
+[`tomodachi_testcontainers.assertions`][tomodachi_testcontainers.assertions].
 
 **Utility functions** in [`tomodachi_testcontainers.utils`][tomodachi_testcontainers.utils] for easier working with Testcontainers.
 

@@ -3,7 +3,7 @@ from typing import Generator, cast
 
 import pytest
 
-from ... import PostgreSQLContainer
+from .. import PostgreSQLContainer
 
 
 @pytest.fixture(scope="session")

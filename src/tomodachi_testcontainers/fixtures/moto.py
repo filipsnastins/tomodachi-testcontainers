@@ -12,8 +12,8 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
-from ... import MotoContainer
-from ...clients.snssqs import SNSSQSTestClient
+from .. import MotoContainer
+from ..clients.snssqs import SNSSQSTestClient
 
 
 @pytest.fixture(scope="session")

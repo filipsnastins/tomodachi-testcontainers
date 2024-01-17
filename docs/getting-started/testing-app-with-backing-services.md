@@ -123,7 +123,7 @@ We can use other instances of backing services in different environments, includ
 As in the previous guide - [Testing Simple Application](./testing-simple-app.md), the first step is creating Testcontainer fixtures.
 This example is more involved because the application depends on the external service - AWS cloud.
 Since we don't want to use the real AWS account for automated testing, we'll use a [`LocalStackContainer`][tomodachi_testcontainers.LocalStackContainer].
-We can access it with the [`localstack_container`][tomodachi_testcontainers.pytest.localstack_container] fixture.
+We can access it with the [`localstack_container`][tomodachi_testcontainers.fixtures.localstack_container] fixture.
 
 Next, we need to configure our application's container with environment variables.
 The important part is setting the environment variable `AWS_S3_ENDPOINT_URL` to the LocalStack URL.
@@ -164,7 +164,7 @@ When the application uses AWS S3, it will send requests to the LocalStack instan
 ### Testing the application's public API
 
 Let's write a test for storing files. First, we need to create the AWS S3 bucket in a LocalStack environment.
-Tomodachi Testcontainers provides fixtures for commonly used AWS clients, for example, [`localstack_s3_client`][tomodachi_testcontainers.pytest.localstack_s3_client].
+Tomodachi Testcontainers provides fixtures for commonly used AWS clients, for example, [`localstack_s3_client`][tomodachi_testcontainers.fixtures.localstack_s3_client].
 Having the `localstack_s3_client`, we can easily create the `autotest-my-bucket` S3 bucket.
 Next, we request the application to store the text `Hello, world!` in the file `test.txt`. Lastly, we assert that we got a correct response.
 

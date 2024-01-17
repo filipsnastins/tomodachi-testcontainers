@@ -3,7 +3,7 @@ from typing import Generator, cast
 
 import pytest
 
-from ... import MySQLContainer
+from .. import MySQLContainer
 
 
 @pytest.fixture(scope="session")

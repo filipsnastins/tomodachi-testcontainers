@@ -6,7 +6,7 @@ import pytest_asyncio
 from aiobotocore.session import get_session
 from types_aiobotocore_s3 import S3Client
 
-from ... import MinioContainer
+from .. import MinioContainer
 
 
 @pytest.fixture(scope="session")

@@ -6,8 +6,8 @@ import pytest
 import shortuuid
 
 from tomodachi_testcontainers import DockerContainer
+from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.containers.common.container import ContainerWithSameNameAlreadyExistsError
-from tomodachi_testcontainers.pytest.async_probes import probe_until
 
 
 class WorkingContainer(DockerContainer):

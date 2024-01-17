@@ -5,7 +5,7 @@ from typing import Generator
 
 import pytest
 
-from ... import EphemeralDockerImage
+from .. import EphemeralDockerImage
 
 
 @pytest.fixture(scope="session")

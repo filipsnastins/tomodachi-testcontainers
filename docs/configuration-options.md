@@ -14,16 +14,16 @@
 
 ### Override Default Docker Image in pytest fixtures
 
-| pytest fixture                                                                 | Default Image              | Image Environment Variable Override |
-| :----------------------------------------------------------------------------- | :------------------------- | ----------------------------------: |
-| [`testcontainer_image`][tomodachi_testcontainers.pytest.testcontainer_image]   | n/a, built from Dockerfile |            `TESTCONTAINER_IMAGE_ID` |
-| [`moto_container`][tomodachi_testcontainers.pytest.moto_container]             | `motoserver/moto:latest`   |       `MOTO_TESTCONTAINER_IMAGE_ID` |
-| [`localstack_container`][tomodachi_testcontainers.pytest.localstack_container] | `localstack/localstack:3`  | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
-| [`minio_container`][tomodachi_testcontainers.pytest.minio_container]           | `minio/minio:latest`       |      `MINIO_TESTCONTAINER_IMAGE_ID` |
-| [`sftp_container`][tomodachi_testcontainers.pytest.sftp_container]             | `atmoz/sftp:latest`        |       `SFTP_TESTCONTAINER_IMAGE_ID` |
-| [`wiremock_container`][tomodachi_testcontainers.pytest.wiremock_container]     | `wiremock/wiremock:latest` |   `WIREMOCK_TESTCONTAINER_IMAGE_ID` |
-| [`mysql_container`][tomodachi_testcontainers.pytest.mysql_container]           | `mysql:8`                  |      `MYSQL_TESTCONTAINER_IMAGE_ID` |
-| [`postgres_container`][tomodachi_testcontainers.pytest.postgres_container]     | `postgres:16`              |   `POSTGRES_TESTCONTAINER_IMAGE_ID` |
+| pytest fixture                                                                   | Default Image              | Image Environment Variable Override |
+| :------------------------------------------------------------------------------- | :------------------------- | ----------------------------------: |
+| [`testcontainer_image`][tomodachi_testcontainers.fixtures.testcontainer_image]   | n/a, built from Dockerfile |            `TESTCONTAINER_IMAGE_ID` |
+| [`moto_container`][tomodachi_testcontainers.fixtures.moto_container]             | `motoserver/moto:latest`   |       `MOTO_TESTCONTAINER_IMAGE_ID` |
+| [`localstack_container`][tomodachi_testcontainers.fixtures.localstack_container] | `localstack/localstack:3`  | `LOCALSTACK_TESTCONTAINER_IMAGE_ID` |
+| [`minio_container`][tomodachi_testcontainers.fixtures.minio_container]           | `minio/minio:latest`       |      `MINIO_TESTCONTAINER_IMAGE_ID` |
+| [`sftp_container`][tomodachi_testcontainers.fixtures.sftp_container]             | `atmoz/sftp:latest`        |       `SFTP_TESTCONTAINER_IMAGE_ID` |
+| [`wiremock_container`][tomodachi_testcontainers.fixtures.wiremock_container]     | `wiremock/wiremock:latest` |   `WIREMOCK_TESTCONTAINER_IMAGE_ID` |
+| [`mysql_container`][tomodachi_testcontainers.fixtures.mysql_container]           | `mysql:8`                  |      `MYSQL_TESTCONTAINER_IMAGE_ID` |
+| [`postgres_container`][tomodachi_testcontainers.fixtures.postgres_container]     | `postgres:16`              |   `POSTGRES_TESTCONTAINER_IMAGE_ID` |
 
 ### Change the default Docker network
 
@@ -32,7 +32,7 @@ Sometimes, starting containers in a different network is useful, e.g., to isolat
 Specify a new network name with the `TESTCONTAINER_DOCKER_NETWORK` environment variable.
 The Docker network is not created automatically, so ensure it exists before running tests.
 
-## [`testcontainer_image`][tomodachi_testcontainers.pytest.testcontainer_image] fixture configuration
+## [`testcontainer_image`][tomodachi_testcontainers.fixtures.testcontainer_image] fixture configuration
 
 | Environment Variable                 | Description                                                |
 | :----------------------------------- | :--------------------------------------------------------- |
@@ -77,7 +77,7 @@ Examples:
 ## Included Testcontainers configuration
 
 Testcontainer configuration can be changed by setting these environment variables on a _host machine_.
-It's handy when you want to change the default configuration of Testcontianers when using their [pytest fixtures](./reference/pytest/fixtures.md).
+It's handy when you want to change the default configuration of Testcontianers when using their [pytest fixtures](./reference/fixtures.md).
 
 - [`LocalStackContainer`][tomodachi_testcontainers.LocalStackContainer]
 

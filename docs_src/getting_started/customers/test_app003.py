@@ -2,8 +2,8 @@ import httpx
 import pytest
 from tomodachi.envelope.json_base import JsonBase
 
+from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.pytest.async_probes import probe_until
 
 
 @pytest.mark.asyncio()

@@ -23,7 +23,6 @@
 ## Misc
 
 - [ ] Container lifecycle hooks, e.g., `after_start`, `before_stop`
-- [ ] Rename `tomodachi_testcontainers.pytest` module to `tomodachi_testcontainers.testing`
 
 ## Docs
 

@@ -77,7 +77,7 @@ First, the test calls the `POST /customer` endpoint and creates a new customer. 
 the test attempts to retrieve a message from the `customer--created`
 queue using the [`SNSSQSTestClient`][tomodachi_testcontainers.clients.SNSSQSTestClient] provided by Tomodachi Testcontainers
 for easier testing of AWS SNS/SQS pub/sub with the [Tomodachi framework](https://github.com/kalaspuff/tomodachi).
-The `SNSSQSTestClient` is accessed with the [`localstack_snssqs_tc`][tomodachi_testcontainers.pytest.localstack_snssqs_tc] fixture.
+The `SNSSQSTestClient` is accessed with the [`localstack_snssqs_tc`][tomodachi_testcontainers.fixtures.localstack_snssqs_tc] fixture.
 
 !!! danger
 
@@ -106,7 +106,7 @@ The easiest solution is to sleep for a fixed time between the customer creation 
 Using asynchronous probing (sampling) is better than sleeping for a fixed time.
 The idea of asynchronous probing is continuously testing for a condition in short time intervals.
 
-Tomodachi Testcontainers provides a [`probe_until`][tomodachi_testcontainers.pytest.async_probes.probe_until] function for asynchronous probing.
+Tomodachi Testcontainers provides a [`probe_until`][tomodachi_testcontainers.async_probes.probe_until] function for asynchronous probing.
 The `probe_until` receives _a probe function_. The probe is continuously invoked in `probe_interval` (defaults to `0.1 second`) until it finishes without exceptions.
 When the `stop_after` timeout is reached (defaults to `3.0` seconds), the probing is stopped, and the last probe's exception is raised.
 
@@ -129,7 +129,7 @@ When the probe receives one message from the SQS queue, it's returned from the p
     The benefit of asynchronous probing is minimal wait time - as soon as the message is received, the test stops waiting.
     This way, we ensure fast test runtime.
 
-    The [`probe_until`][tomodachi_testcontainers.pytest.async_probes.probe_until] is inspired by
+    The [`probe_until`][tomodachi_testcontainers.async_probes.probe_until] is inspired by
     [Awaitility](https://github.com/awaitility/awaitility) and [busypie](https://github.com/rockem/busypie) -
     read more about testing asynchronous systems in their documentation.
 
@@ -143,7 +143,7 @@ There are several ways to test this:
 
 - Publish two duplicate messages and probe that exactly one outcome message has been published.
 - Publish a single message and assert that an outcome message has been published. Then, publish the duplicate
-  message and [`probe_during_interval`][tomodachi_testcontainers.pytest.async_probes.probe_during_interval]
+  message and [`probe_during_interval`][tomodachi_testcontainers.async_probes.probe_during_interval]
   that the outcome message is not published for, e.g., `3` seconds.
 
 The downside of the second approach is that it introduces extra wait time for the tests; however, sometimes, it's a helpful technique.

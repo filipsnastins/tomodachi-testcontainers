@@ -50,7 +50,9 @@ jobs:
         run: |
           poetry run python -c "import tomodachi_testcontainers"
           poetry run python -c "import tomodachi_testcontainers.clients"
-          poetry run python -c "import tomodachi_testcontainers.pytest"
+          poetry run python -c "import tomodachi_testcontainers.fixtures"
+          poetry run python -c "import tomodachi_testcontainers.assertions"
+          poetry run python -c "import tomodachi_testcontainers.async_probes"
           poetry run python -c "import tomodachi_testcontainers.utils"
 
       - name: Install dependencies - dev and extas

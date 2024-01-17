@@ -13,5 +13,5 @@ For a complete list of available Testcontainers, see:
 - [tomodachi_testcontainers.containers](https://github.com/filipsnastins/tomodachi-testcontainers/blob/main/src/tomodachi_testcontainers/containers) module.
 - Official [testcontainers-python](https://github.com/testcontainers/testcontainers-python) library.
 
-Find available `pytest` fixtures in the [tomodachi_testcontainers.pytest](https://github.com/filipsnastins/tomodachi-testcontainers/tree/main/src/tomodachi_testcontainers/pytest) module
+Find available `pytest` fixtures in the [tomodachi_testcontainers.fixtures](https://github.com/filipsnastins/tomodachi-testcontainers/tree/main/src/tomodachi_testcontainers/fixtures) module
 and test clients in the [tomodachi_testcontainers.clients](https://github.com/filipsnastins/tomodachi-testcontainers/tree/main/src/tomodachi_testcontainers/clients) module.

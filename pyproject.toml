@@ -88,7 +88,7 @@ mkdocs-material = "^9.4.14"
 mkdocstrings = { extras = ["python"], version = "^0.24.0" }
 
 [tool.poetry.plugins."pytest11"]
-tomodachi_testcontainers = "tomodachi_testcontainers.pytest"
+tomodachi_testcontainers = "tomodachi_testcontainers.fixtures"
 
 [tool.poetry.scripts]
 hooks = "dev:hooks"

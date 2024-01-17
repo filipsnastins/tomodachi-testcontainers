@@ -45,7 +45,7 @@ We'll use the [WireMock](https://wiremock.org/) HTTP mock server to mock the cre
 WireMock is an open-source tool for API mock testing. It can help you to create stable test and development environments,
 isolate yourself from flaky third parties, and simulate APIs that don't exist yet.
 Tomodachi Testcontainers provides a [WireMockContainer][tomodachi_testcontainers.WireMockContainer]
-and [wiremock_container][tomodachi_testcontainers.pytest.wiremock_container] fixture.
+and [wiremock_container][tomodachi_testcontainers.fixtures.wiremock_container] fixture.
 Used together with [Python WireMock SDK](https://github.com/wiremock/python-wiremock), creating API mocks is easy.
 
 !!! warning
@@ -92,7 +92,7 @@ If the credit verification status is not `CREDIT_CHECK_PASSED`, the `CustomerCre
 ### Configuring Testcontainers
 
 To start the [`WireMockContainer`][tomodachi_testcontainers.WireMockContainer],
-we'll use the [`wiremock_container`][tomodachi_testcontainers.pytest.wiremock_container] fixture.
+we'll use the [`wiremock_container`][tomodachi_testcontainers.fixtures.wiremock_container] fixture.
 The credit check service's URL is configured with the `CREDIT_CHECK_SERVICE_URL` environment variable -
 it's set to WireMock's URL, so requests for verifying the customer credit will be sent to
 the WireMock instance running locally in a container.
@@ -108,7 +108,7 @@ In the first test, we'll test a successful order creation when the customer's cr
 Before testing the order management application, we need to configure the `POST /check-check` API in WireMock.
 To easily configure WireMock, we'll use [Python WireMock SDK](https://github.com/wiremock/python-wiremock).
 Install it from extras with `pip install tomodachi-testcontainers[wiremock]` or `pip install wiremock`.
-The [`wiremock_container`][tomodachi_testcontainers.pytest.wiremock_container]
+The [`wiremock_container`][tomodachi_testcontainers.fixtures.wiremock_container]
 fixture automatically configures the SDK to communicate with the WireMock server if the [WireMock extra is installed](../installation.md).
 
 The mock setup code configures WireMock to return JSON body `{"status": "CREDIT_CHECK_PASSED"}` when it receives
@@ -155,7 +155,7 @@ It's a good idea to extract mock setup code to separate functions and modules.
 ```
 
 Now, the tests are shorter and better express their intent.
-To isolate tests, we can use the [`reset_wiremock_container_on_teardown`][tomodachi_testcontainers.pytest.reset_wiremock_container_on_teardown]
+To isolate tests, we can use the [`reset_wiremock_container_on_teardown`][tomodachi_testcontainers.fixtures.reset_wiremock_container_on_teardown]
 fixture to delete all WireMock stub mappings between tests.
 It ensures that all tests explicitly configure API mocks for their test scenario and don't depend on mocks configured in previously executed tests.
 
