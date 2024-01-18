@@ -3043,13 +3043,13 @@ files = [
 
 [[package]]
 name = "tomodachi"
-version = "0.26.3"
+version = "0.26.4"
 description = "Microservice library on asyncio - HTTP server, websockets, pub/sub messaging for AWS SNS+SQS and RabbitMQ"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "tomodachi-0.26.3-py3-none-any.whl", hash = "sha256:2b16d2a39ca7022105c5f6e5bd129e5c05abaa9c9d58303bebb49d26e6c24dd8"},
-    {file = "tomodachi-0.26.3.tar.gz", hash = "sha256:eac1910ddfdeb2258ded0a9ddafdc80228490cc87c69ca6760798e6f1f6ad0fa"},
+    {file = "tomodachi-0.26.4-py3-none-any.whl", hash = "sha256:ffd42005653e2c7aeb11e5002f5c990146f8098bef1d360bf2b2c169646ee228"},
+    {file = "tomodachi-0.26.4.tar.gz", hash = "sha256:ed8e4aa8aeb6e3db851e209d5be4254e8c2e794d0d35a9b5ea5795418b15d9b8"},
 ]
 
 [package.dependencies]
@@ -3061,7 +3061,7 @@ botocore = ">=1.20.106"
 cchardet = {version = ">=2.1.7", markers = "python_version < \"3.10\""}
 colorama = ">=0.3.9,<0.5.0"
 pytz = "*"
-structlog = ">=21.5.0,<24.0.0"
+structlog = ">=21.5.0,<25.0.0"
 tzlocal = ">=1.4,<6.0"
 
 [package.extras]
