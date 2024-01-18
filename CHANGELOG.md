@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.14.0-dev (2024-XX-XX)
+## 0.15.0-dev (2024-XX-XX)
 
 ### New features
 
@@ -34,6 +34,19 @@
   | `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT` | `TESTCONTAINER_DOCKER_BUILD_CONTEXT` |
   | `TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET`  | `TESTCONTAINER_DOCKER_BUILD_TARGET`  |
   | `TOMODACHI_TESTCONTAINER_IMAGE_ID`             | `TESTCONTAINER_IMAGE_ID`             |
+
+## 0.14.0 (2024-01-18)
+
+### New features
+
+- ([#169](https://github.com/filipsnastins/tomodachi-testcontainers/pull/169))
+  `clients.SNSSQSTestClient`: new `send` method for sending messages to SQS queues.
+
+### Breaking changes
+
+- ([#169](https://github.com/filipsnastins/tomodachi-testcontainers/pull/169))
+  `clients.SNSSQSTestClient`: removed redundant `fifo` argument from `create_queue`, `create_topic`, and `subscribe_to` method;
+  relying on the `queue_name` and `topic_name` to end with `.fifo` suffix instead.
 
 ## 0.13.2 (2024-01-09)
 

@@ -38,11 +38,11 @@ async def test_publish_fails_if_topic_does_not_exist(snssqs_test_client: SNSSQST
 @pytest.mark.asyncio()
 async def test_publish_and_receive_messages(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
+
     await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
     await snssqs_test_client.publish("topic", {"message": "2"}, JsonBase)
 
     messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
-
     assert messages == [{"message": "1"}, {"message": "2"}]
 
 
@@ -73,7 +73,7 @@ async def test_publish_and_receive_with_message_attributes(snssqs_test_client: S
 
 @pytest.mark.asyncio()
 async def test_publish_and_receive_with_fifo(snssqs_test_client: SNSSQSTestClient) -> None:
-    await snssqs_test_client.subscribe_to(topic="topic.fifo", queue="queue.fifo", fifo=True)
+    await snssqs_test_client.subscribe_to(topic="topic.fifo", queue="queue.fifo")
 
     await snssqs_test_client.publish(
         "topic.fifo", {"message": "1"}, JsonBase, message_deduplication_id="123456", message_group_id="123456"
@@ -83,6 +83,53 @@ async def test_publish_and_receive_with_fifo(snssqs_test_client: SNSSQSTestClien
     )
 
     messages = await snssqs_test_client.receive("queue.fifo", JsonBase, Dict[str, str])
+    assert messages == [{"message": "1"}]
+
+
+@pytest.mark.asyncio()
+async def test_send_fails_if_queue_does_not_exist(snssqs_test_client: SNSSQSTestClient) -> None:
+    with pytest.raises(QueueDoesNotExistError, match="queue"):
+        await snssqs_test_client.send("queue", {"message": "1"}, JsonBase)
+
+
+@pytest.mark.asyncio()
+async def test_send_and_receive_message(snssqs_test_client: SNSSQSTestClient) -> None:
+    await snssqs_test_client.create_queue("queue")
+
+    await snssqs_test_client.send("queue", {"message": "1"}, JsonBase)
+    await snssqs_test_client.send("queue", {"message": "2"}, JsonBase)
+
+    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
+    assert messages == [{"message": "1"}, {"message": "2"}]
+
+
+@pytest.mark.asyncio()
+async def test_send_and_receive_message_with_fifo(snssqs_test_client: SNSSQSTestClient) -> None:
+    await snssqs_test_client.create_queue("queue.fifo")
+
+    await snssqs_test_client.send(
+        "queue.fifo", {"message": "1"}, JsonBase, message_deduplication_id="123456", message_group_id="123456"
+    )
+    await snssqs_test_client.send(
+        "queue.fifo", {"message": "2"}, JsonBase, message_deduplication_id="123456", message_group_id="123456"
+    )
+
+    messages = await snssqs_test_client.receive("queue.fifo", JsonBase, Dict[str, str])
+    assert messages == [{"message": "1"}]
+
+
+@pytest.mark.asyncio()
+async def test_send_and_receive_messages_with_attributes(snssqs_test_client: SNSSQSTestClient) -> None:
+    await snssqs_test_client.create_queue("queue")
+
+    await snssqs_test_client.send(
+        "queue",
+        {"message": "1"},
+        JsonBase,
+        message_attributes={"MyMessageAttribute": {"DataType": "String", "StringValue": "test-value"}},
+    )
+
+    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
     assert messages == [{"message": "1"}]
 
 
@@ -135,11 +182,8 @@ async def test_purge_queue(snssqs_test_client: SNSSQSTestClient) -> None:
 
 @pytest.mark.asyncio()
 async def test_subscribe_to_creates_fifo_queue_and_topic(snssqs_test_client: SNSSQSTestClient) -> None:
-    await snssqs_test_client.subscribe_to(
-        topic="topic.fifo",
-        queue="queue.fifo",
-        fifo=True,
-    )
+    await snssqs_test_client.subscribe_to(topic="topic.fifo", queue="queue.fifo")
+
     queue_attributes = await snssqs_test_client.get_queue_attributes("queue.fifo", attributes=["FifoQueue"])
     assert queue_attributes["FifoQueue"] == "true"
 

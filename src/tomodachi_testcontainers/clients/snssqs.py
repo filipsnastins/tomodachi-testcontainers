@@ -6,9 +6,10 @@ from typing import Any, Dict, List, Optional, Protocol, Type, TypeVar, Union
 from botocore.exceptions import ClientError
 from google.protobuf.message import Message
 from types_aiobotocore_sns import SNSClient
-from types_aiobotocore_sns.type_defs import MessageAttributeValueTypeDef
+from types_aiobotocore_sns.type_defs import MessageAttributeValueTypeDef as SNSMessageAttributeValueTypeDef
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_sqs.literals import QueueAttributeFilterType, QueueAttributeNameType
+from types_aiobotocore_sqs.type_defs import MessageAttributeValueTypeDef as SQSMessageAttributeValueTypeDef
 
 __all__ = [
     "SNSSQSTestClient",
@@ -62,11 +63,11 @@ class SNSSQSTestClient:
         self._sns_client = sns_client
         self._sqs_client = sqs_client
 
-    async def create_topic(self, topic: str, *, fifo: bool = False) -> TopicARNType:
+    async def create_topic(self, topic: str) -> TopicARNType:
         with suppress(TopicDoesNotExistError):
             return await self.get_topic_arn(topic)
         topic_attributes: Dict[str, str] = {}
-        if fifo:
+        if topic.endswith(".fifo"):
             topic_attributes.update(
                 {
                     "FifoTopic": "true",
@@ -76,11 +77,11 @@ class SNSSQSTestClient:
         create_topic_response = await self._sns_client.create_topic(Name=topic, Attributes=topic_attributes)
         return create_topic_response["TopicArn"]
 
-    async def create_queue(self, queue: str, *, fifo: bool = False) -> QueueARNType:
+    async def create_queue(self, queue: str) -> QueueARNType:
         with suppress(QueueDoesNotExistError):
             return await self.get_queue_arn(queue)
         queue_attributes: Dict[QueueAttributeNameType, str] = {}
-        if fifo:
+        if queue.endswith(".fifo"):
             queue_attributes.update(
                 {
                     "FifoQueue": "true",
@@ -96,12 +97,10 @@ class SNSSQSTestClient:
         topic: str,
         queue: str,
         subscribe_attributes: Optional[Dict[str, str]] = None,
-        *,
-        fifo: bool = False,
     ) -> None:
         """Subscribe a SQS queue to a SNS topic; create the topic and queue if they don't exist."""
-        topic_arn = await self.create_topic(topic, fifo=fifo)
-        queue_arn = await self.create_queue(queue, fifo=fifo)
+        topic_arn = await self.create_topic(topic)
+        queue_arn = await self.create_queue(queue)
         await self._sns_client.subscribe(
             TopicArn=topic_arn,
             Protocol="sqs",
@@ -127,7 +126,10 @@ class SNSSQSTestClient:
 
         parsed_messages: List[MessageType] = []
         for received_message in received_messages:
-            payload = json.loads(received_message["Body"])["Message"]
+            try:
+                payload = json.loads(received_message["Body"])["Message"]
+            except (KeyError, json.JSONDecodeError):
+                payload = received_message["Body"]
             parsed_message = await envelope.parse_message(payload=payload, proto_class=proto_class)
             parsed_messages.append(parsed_message[0]["data"])
             await self._sqs_client.delete_message(QueueUrl=queue_url, ReceiptHandle=received_message["ReceiptHandle"])
@@ -138,7 +140,7 @@ class SNSSQSTestClient:
         topic: str,
         data: Any,
         envelope: TomodachiSNSSQSEnvelope,
-        message_attributes: Optional[Dict[str, MessageAttributeValueTypeDef]] = None,
+        message_attributes: Optional[Dict[str, SNSMessageAttributeValueTypeDef]] = None,
         message_deduplication_id: Optional[str] = None,
         message_group_id: Optional[str] = None,
     ) -> None:
@@ -152,6 +154,26 @@ class SNSSQSTestClient:
         if message_group_id:
             sns_publish_kwargs["MessageGroupId"] = message_group_id
         await self._sns_client.publish(TopicArn=topic_arn, Message=message, **sns_publish_kwargs)
+
+    async def send(
+        self,
+        queue: str,
+        data: Any,
+        envelope: TomodachiSNSSQSEnvelope,
+        message_attributes: Optional[Dict[str, SQSMessageAttributeValueTypeDef]] = None,
+        message_deduplication_id: Optional[str] = None,
+        message_group_id: Optional[str] = None,
+    ) -> None:
+        queue_url = await self.get_queue_url(queue)
+        message = await envelope.build_message(service={}, topic="", data=data)
+        sqs_send_kwargs: Dict[str, Any] = {}
+        if message_attributes:
+            sqs_send_kwargs["MessageAttributes"] = message_attributes
+        if message_deduplication_id:
+            sqs_send_kwargs["MessageDeduplicationId"] = message_deduplication_id
+        if message_group_id:
+            sqs_send_kwargs["MessageGroupId"] = message_group_id
+        await self._sqs_client.send_message(QueueUrl=queue_url, MessageBody=message, **sqs_send_kwargs)
 
     async def get_topic_arn(self, topic: str) -> str:
         list_topics_response = await self._sns_client.list_topics()
