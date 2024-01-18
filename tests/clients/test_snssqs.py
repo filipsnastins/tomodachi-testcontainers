@@ -5,12 +5,12 @@ from typing import Dict
 import pytest
 from tomodachi.envelope.json_base import JsonBase
 from tomodachi.envelope.protobuf_base import ProtobufBase
+from tomodachi_testcontainers.clients import SNSSQSTestClient
+from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExist, TopicDoesNotExist
 from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 
 from tests.clients.proto_build.message_pb2 import Person
-from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExist, TopicDoesNotExist
 
 pytestmark = pytest.mark.usefixtures("_reset_moto_container_on_teardown")
 
@@ -115,6 +115,21 @@ async def test_send_and_receive_message_with_fifo(snssqs_test_client: SNSSQSTest
     )
 
     messages = await snssqs_test_client.receive("queue.fifo", JsonBase, Dict[str, str])
+    assert messages == [{"message": "1"}]
+
+
+@pytest.mark.asyncio()
+async def test_send_and_receive_messages_with_attributes(snssqs_test_client: SNSSQSTestClient) -> None:
+    await snssqs_test_client.create_queue("queue")
+
+    await snssqs_test_client.send(
+        "queue",
+        {"message": "1"},
+        JsonBase,
+        message_attributes={"MyMessageAttribute": {"DataType": "String", "StringValue": "test-value"}},
+    )
+
+    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
     assert messages == [{"message": "1"}]
 
 
