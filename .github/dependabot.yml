@@ -9,8 +9,25 @@ updates:
     open-pull-requests-limit: 10
     schedule:
       interval: weekly
+  # examples
+  - package-ecosystem: pip
+    directory: /examples
+    open-pull-requests-limit: 10
+    schedule:
+      interval: weekly
   - package-ecosystem: docker
     directory: /examples
+    open-pull-requests-limit: 10
+    schedule:
+      interval: weekly
+  # docs_src
+  - package-ecosystem: pip
+    directory: /docs_src
+    open-pull-requests-limit: 10
+    schedule:
+      interval: weekly
+  - package-ecosystem: docker
+    directory: /docs_src
     open-pull-requests-limit: 10
     schedule:
       interval: weekly
