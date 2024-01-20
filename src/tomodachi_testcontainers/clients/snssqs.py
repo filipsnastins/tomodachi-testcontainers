@@ -109,8 +109,13 @@ class SNSSQSTestClient:
         )
 
     async def receive(
-        self, queue: str, envelope: TomodachiSNSSQSEnvelope, message_type: Type[MessageType], max_messages: int = 10
+        self,
+        queue: str,
+        envelope: TomodachiSNSSQSEnvelope,
+        message_type: Type[MessageType],
+        max_messages: int = 10,
     ) -> List[MessageType]:
+        """Receive messages from SQS queue."""
         queue_url = await self.get_queue_url(queue)
         received_messages_response = await self._sqs_client.receive_message(
             QueueUrl=queue_url, MaxNumberOfMessages=max_messages
@@ -144,6 +149,7 @@ class SNSSQSTestClient:
         message_deduplication_id: Optional[str] = None,
         message_group_id: Optional[str] = None,
     ) -> None:
+        """Publish message to SNS topic."""
         topic_arn = await self.get_topic_arn(topic)
         message = await envelope.build_message(service={}, topic=topic, data=data)
         sns_publish_kwargs: Dict[str, Any] = {}
@@ -164,6 +170,7 @@ class SNSSQSTestClient:
         message_deduplication_id: Optional[str] = None,
         message_group_id: Optional[str] = None,
     ) -> None:
+        """Send message to SQS queue."""
         queue_url = await self.get_queue_url(queue)
         message = await envelope.build_message(service={}, topic="", data=data)
         sqs_send_kwargs: Dict[str, Any] = {}
@@ -208,5 +215,6 @@ class SNSSQSTestClient:
         return get_queue_attributes_response["Attributes"]
 
     async def purge_queue(self, queue: str) -> None:
+        """Delete all messages from SQS queue."""
         queue_url = await self.get_queue_url(queue)
         await self._sqs_client.purge_queue(QueueUrl=queue_url)

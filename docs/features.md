@@ -22,7 +22,7 @@ Find the complete list of available fixtures at [`tomodachi_testcontainers.fixtu
 
 - Get fixtures for interacting with Testcontainers, e.g., `localstack_s3_client`, `moto_dynamodb_client`, etc.
 
-**Async probes** for [testing asynchronous systems](./getting-started/testing-asynchronous-systems) -
+**Async probes** for [testing asynchronous systems](getting-started/testing-asynchronous-systems.md) -
 [`tomodachi_testcontainers.async_probes`][tomodachi_testcontainers.async_probes].
 Inspired by [Awaitility](http://www.awaitility.org/) and [busypie](https://github.com/rockem/busypie).
 

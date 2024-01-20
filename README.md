@@ -16,7 +16,7 @@ for convenient use of Testcontainers with [pytest](https://docs.pytest.org/)
 and testing applications built with the [Python Tomodachi framework](https://github.com/kalaspuff/tomodachi).
 
 This library was created to explore and learn Testcontainers. Although initially intended to be used with the Tomodachi framework,
-it works for testing applications built with any other Python framework like Flask, FastAPI, etc.
+it works for testing applications built with any other Python framework like Flask, FastAPI, Django, etc.
 
 ## What is Testcontainers?
 

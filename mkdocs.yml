@@ -93,8 +93,7 @@ nav:
       - getting-started/testing-app-with-collaborator-services.md
       - getting-started/testing-asynchronous-systems.md
       # - getting-started/testing-cronjobs-and-scripts.md # TODO
-      - getting-started/choosing-testing-strategy.md
-      - getting-started/benefits-and-dangers-of-e2e-tests.md
+      - getting-started/applying-e2e-tests-with-testcontainers.md
   - Guides:
       - guides/index.md
       - guides/creating-new-testcontainers.md

@@ -73,7 +73,7 @@ Lastly, it's worth mentioning that despite testing with verified mocks like Loca
 you might stumble upon unsupported features or inaccurate behavior, or you are working with a critical part of the system where the cost of failure is high.
 For such cases, you might want to consider testing _parts_ of your application with a real external dependency.
 Take all precautions - prefer running such tests only in a deployment pipeline, disable them locally, and always use a separate account dedicated only to automated testing.
-To make testing only certain parts of your application easy, modularize those components, for example, with the [Ports & Adapters pattern](../guides/ports-and-adapters/).
+To make testing only certain parts of your application easy, modularize those components, for example, with the [Ports & Adapters pattern](../guides/ports-and-adapters.md).
 
 !!! success "Test with production-like dependencies"
 
@@ -197,7 +197,7 @@ The refactored test has a new name - `test_save_and_get_file` - because now we'r
     However, if we look at the test from the "end-to-end" perspective,
     it tests a single scenario of storing files that provide value to the application users.
     That's why the term "end-to-end" fits well - we're not testing a single HTTP endpoint per test
-    but rather a single user's journey that might involve multiple API calls.
+    but rather a single user's journey that involves multiple API calls.
 
 ### Creating test fixtures
 

@@ -1,3 +1,0 @@
-# Choosing Testing Strategy
-
-TODO

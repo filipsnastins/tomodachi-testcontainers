@@ -26,7 +26,12 @@
 
 ## Docs
 
-- [ ] Documentation rewrite - <https://github.com/filipsnastins/tomodachi-testcontainers/pull/155>
+- [ ] getting-started/testing-cronjobs-and-scripts.md
+- [ ] guides/ports-and-adapters.md
+- [ ] guides/creating-app-facade.md
+- [ ] guides/improving-test-performance.md
+- [ ] guides/managing-test-isolation.md
+- [ ] guides/running-testcontainer-tests-in-ci-cd.md
 
 ## Testing
 
