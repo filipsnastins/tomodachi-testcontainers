@@ -15,8 +15,8 @@ Testcontainers are a tool for creating an isolated, controlled, and production-l
 without the disadvantages of depending on complex and shared staging environments.
 With Testcontainers, we can test an application in a production-like environment, building confidence that the application will work for real users.
 
-Since such end-to-end tests tend to be lengthy to write and sometimes tricky to set up,
-e.g., when an application has a lot of external dependencies, you need to make a conscious choice about how many such tests you want to have.
+Since such end-to-end tests tend to be lengthy to write and sometimes tricky to set up, e.g., when an application has a lot of external dependencies.
+You need to make a conscious choice about how many such tests you want to have.
 There's no correct answer here, so let's look at different approaches and their benefits and disadvantages.
 
 ## Using end-to-end tests to ensure correct integration of the system's components
@@ -50,14 +50,14 @@ exercising the whole system and simulating a realistic user's journey. Focus on 
 
 ## Using end-to-end tests as a base for the system's test strategy
 
-[Test Pyramid](https://martinfowler.com/bliki/TestPyramid.html) is a famous application testing strategy - most tests are isolated unit tests,
-fewer tests are integration/service tests, and the least amount of tests are end-to-end/UI tests.
-This approach is often used in testing monolithic applications.
+[Test Pyramid](https://martinfowler.com/bliki/TestPyramid.html) is a famous way of thinking about testing -
+most tests are isolated unit tests, fewer tests are integration/service tests, and the least amount of tests are end-to-end/UI tests.
+This approach is often used when testing monolithic applications.
 
 When using more service-oriented architectures like microservices, individual applications are smaller,
 so the forces behind the Test Pyramid change - there's less need to segregate tests in unit/integration/end-to-end because the amount of tests is also smaller.
 Testing Honeycomb proposed at Spotify is a different mental model for thinking about testing microservices.
-Read the full article - [Testing of Microservices at Spotify Engineering Blog](https://engineering.atspotify.com/2018/01/testing-of-microservices/).
+Read the full article - [Testing of Microservices](https://engineering.atspotify.com/2018/01/testing-of-microservices/) on Spotify Engineering Blog.
 
 It's important to remember not to get caught up in the debates between different testing shapes and the correct number of test types.
 Focus on the value of the tests - that the system does what users want (user-focused tests) and does it right (developer-focused tests).
@@ -66,12 +66,12 @@ Read up [On the Diverse And Fantastical Shapes of Testing](https://martinfowler.
 ## Next Steps
 
 I hope that this introduction to Testcontainers and end-to-end tests was useful.
-It wasn't meant to be an exhaustive guide to automated testing,
-so I'll leave some valuable and free resources about application testing for further reading:
+It wasn't meant to be an exhaustive guide to automated testing, so I'll leave some valuable and free resources about application testing for further reading:
 
 - [Testing for Software Engineers](https://testing.mikaelvesavuori.se/) by Mikael Vesavuori.
-- [Architecture Patterns with Python](https://www.cosmicpython.com/) Harry Percival and Bob Gregory.
+- [Architecture Patterns with Python](https://www.cosmicpython.com/) by Harry Percival and Bob Gregory.
 - [Test-Driven Development with Python](https://www.obeythetestinggoat.com/) by Harry Percival.
+- [Software Testing Guide](https://martinfowler.com/testing/) by Martin Fowler.
 
 If you want to continue exploring Testcontainers, check out the [Guides](../guides/index.md) section
 and the official [Testcontainers site](https://testcontainers.com/). 👋
