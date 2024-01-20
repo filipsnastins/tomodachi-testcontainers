@@ -73,5 +73,5 @@ so I'll leave some valuable and free resources about application testing for fur
 - [Architecture Patterns with Python](https://www.cosmicpython.com/) Harry Percival and Bob Gregory.
 - [Test-Driven Development with Python](https://www.obeythetestinggoat.com/) by Harry Percival.
 
-If you want to continue exploring Testcontainers, check out the [Guides](../guides/) section
+If you want to continue exploring Testcontainers, check out the [Guides](../guides/index.md) section
 and the official [Testcontainers site](https://testcontainers.com/). 👋
