@@ -8,15 +8,14 @@ authors = ["Filips Nastins <nastinsfilips@gmail.com>"]
 python = "^3.11"
 asyncssh = "^2.14.2"
 pydantic = "^2.0.2"
-structlog = "^23.1.0"
-tomodachi = "^0.26.1"
+structlog = "^23.3.0"
+tomodachi = "^0.26.4"
 types-aiobotocore = { extras = [
     "dynamodb",
     "s3",
     "sns",
     "sqs",
 ], version = "^2.5.2" }
-types-aiobotocore-dynamodb = "2.5.2"
 uvloop = "^0.19.0"
 
 [tool.poetry.group.dev]
@@ -33,10 +32,18 @@ optional = true
 debugpy = "^1.8.0"
 pytest-cov = "^4.1.0"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
 
 [tool.coverage.run]
 branch = true
 source = ["src/"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,65 +1,51 @@
 import json
-import os
 import urllib.parse
 from datetime import datetime, timezone
 
 import structlog
 import tomodachi
-from adapters import s3
 from aiohttp import web
 from tomodachi.envelope.json_base import JsonBase
-from utils.logger import configure_logger
+
+from .adapters import aws, s3
+from .adapters.tomodachi import create_tomodachi_options
+from .utils.logger import configure_logger
 
 logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 
 
-class TomodachiServiceS3(tomodachi.Service):
+class Service(tomodachi.Service):
     name = "service-s3"
 
-    options = tomodachi.Options(
-        aws_endpoint_urls=tomodachi.Options.AWSEndpointURLs(
-            sns=os.getenv("AWS_SNS_ENDPOINT_URL"),
-            sqs=os.getenv("AWS_SQS_ENDPOINT_URL"),
-        ),
-        http=tomodachi.Options.HTTP(
-            content_type="application/json; charset=utf-8",
-        ),
-        aws_sns_sqs=tomodachi.Options.AWSSNSSQS(
-            region_name=os.environ["AWS_REGION"],
-            aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-            aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
-            topic_prefix=os.getenv("AWS_SNS_TOPIC_PREFIX", ""),
-            queue_name_prefix=os.getenv("AWS_SQS_QUEUE_NAME_PREFIX", ""),
-        ),
-    )
+    options = create_tomodachi_options()
 
     async def _start_service(self) -> None:
         configure_logger()
-        await s3.create_s3_bucket()
+        self._s3_client, self._s3_client_exit_stack = await aws.create_s3_client()
+        self._sns_client, self._sns_client_exit_stack = await aws.create_sns_client()
+        await s3.create_s3_bucket(self._s3_client, self._sns_client)
+
+    async def _stop_service(self) -> None:
+        await self._s3_client_exit_stack.aclose()
+        await self._sns_client_exit_stack.aclose()
 
     @tomodachi.http("GET", r"/health/?")
     async def healthcheck(self, request: web.Request) -> web.Response:
-        return web.json_response(data={"status": "ok"})
+        return web.json_response({"status": "ok"})
 
     @tomodachi.http("GET", r"/file/(?P<key>[^/]+?)/?")
     async def get_file(self, request: web.Request, key: str) -> web.Response:
-        links = {
-            "_links": {
-                "self": {"href": f"/file/{key}"},
-            },
-        }
         bucket = s3.get_bucket_name()
         log = logger.bind(bucket=bucket, key=key)
-        async with s3.get_s3_client() as s3_client:
-            try:
-                s3_object = await s3_client.get_object(Bucket=bucket, Key=key)
-                content = await s3_object["Body"].read()
-            except s3_client.exceptions.NoSuchKey:
-                log.error("file_not_found")
-                return web.json_response({"error": "File not found", **links}, status=404)
-            else:
-                log.info("file_read")
-                return web.json_response({"content": content.decode(), **links})
+        try:
+            s3_object = await self._s3_client.get_object(Bucket=bucket, Key=key)
+            content = await s3_object["Body"].read()
+        except self._s3_client.exceptions.NoSuchKey:
+            log.error("file_not_found")
+            return web.json_response({"error": "FILE_NOT_FOUND"}, status=404)
+        else:
+            log.info("file_read")
+            return web.json_response({"content": content.decode()})
 
     @tomodachi.aws_sns_sqs(
         "s3--upload-notification",

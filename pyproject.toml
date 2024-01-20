@@ -9,10 +9,6 @@ readme = "README.md"
 homepage = "https://github.com/filipsnastins/tomodachi-testcontainers"
 repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.poetry.extras]
 db = ["sqlalchemy"]
 mysql = ["sqlalchemy", "pymysql", "cryptography"]
@@ -29,7 +25,7 @@ protobuf = "^4.0"
 psycopg2 = { version = "^2.9.9", optional = true }
 pymysql = { version = "^1.1.0", optional = true }
 pytest = "^7.1.2"
-pytest-asyncio = "^0.21.1"
+pytest-asyncio = "0.21.1" # https://github.com/pytest-dev/pytest-asyncio/issues/706
 requests = "^2.31.0"
 shortuuid = "^1.0.11"
 sqlalchemy = { version = ">=1.3,<3", optional = true }
@@ -80,8 +76,8 @@ pytest-env = "^1.0.1"
 pytest-testdox = "^3.1.0"
 pytest-xdist = "^3.5.0"
 ruff = "^0.1.5"
-structlog = "^23.1.0"
-tomodachi = "^0.26.0"
+structlog = "^23.3.0"
+tomodachi = "^0.26.4"
 types-protobuf = "^4.23.0.2"
 types-requests = "^2.31.0.2"
 
@@ -92,7 +88,7 @@ mkdocs-material = "^9.4.14"
 mkdocstrings = { extras = ["python"], version = "^0.24.0" }
 
 [tool.poetry.plugins."pytest11"]
-tomodachi_testcontainers = "tomodachi_testcontainers.pytest"
+tomodachi_testcontainers = "tomodachi_testcontainers.fixtures"
 
 [tool.poetry.scripts]
 hooks = "dev:hooks"
@@ -136,12 +132,12 @@ exclude_dirs = [
     "dist",
 ]
 
-[tool.mypy]
-python_version = "3.8"
-ignore_missing_imports = true
-
 [tool.flake8]
 ignore = ["ANN101", "ANN401", "BLK100", "E231", "E501", "LIT101", "PL123"]
+per-file-ignores = [
+    "docs_src/**/*.py:E402",
+    "tests/services/test_service_healthcheck.py:E402",
+]
 literal-inline-quotes = "double"
 literal-multiline-quotes = "double"
 exclude = [
@@ -158,6 +154,7 @@ exclude = [
 
 [tool.ruff]
 target-version = "py38"
+line-length = 120
 exclude = [
     ".bzr",
     ".direnv",
@@ -181,7 +178,14 @@ exclude = [
     "node_modules",
     "venv",
 ]
-line-length = 120
+
+[tool.ruff.extend-per-file-ignores]
+"docs_src/**/*.py" = ["E402"]
+"tests/services/test_service_healthcheck.py" = ["E402"]
+
+[tool.mypy]
+python_version = "3.8"
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 log_level = "INFO"
@@ -197,9 +201,9 @@ env = [
     # Testcontainers configuration
     "DOCKER_BUILDKIT=1",
     "TESTCONTAINER_DOCKER_NETWORK=tomodachi-testcontainers",
-    "TOMODACHI_TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile",
-    "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples",
-    "TOMODACHI_TESTCONTAINER_DOCKER_BUILD_TARGET=test",
+    "TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile",
+    "TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples",
+    "TESTCONTAINER_DOCKER_BUILD_TARGET=test",
     # WireMock Testcontainer configuration
     "WIREMOCK_TESTCONTAINER_MAPPING_STUBS=tests/containers/test-wiremock-container/mappings",
     "WIREMOCK_TESTCONTAINER_MAPPING_FILES=tests/containers/test-wiremock-container/files",
@@ -215,6 +219,11 @@ source = ["src/", "tests/"]
 source = ["examples/", "src/", "/app"]
 
 [tool.coverage.report]
+omit = ["docs_src/"]
 skip_covered = true
 show_missing = true
 include_namespace_packages = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

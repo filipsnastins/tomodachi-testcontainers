@@ -1,8 +1,6 @@
-from typing import List
-
+# --8<-- [start:imports]
 from types_aiobotocore_dynamodb import DynamoDBClient
 
-# --8<-- [start:imports]
 from .domain006 import (
     Customer,
     CustomerEmailAlreadyExistsError,
@@ -48,12 +46,12 @@ class DynamoDBCustomerRepository:
                     },
                 ]
             )
-        except self._client.exceptions.TransactionCanceledException as exc:
-            cancellation_reasons = exc.response["CancellationReasons"]
+        except self._client.exceptions.TransactionCanceledException as e:
+            cancellation_reasons = e.response["CancellationReasons"]
             if cancellation_reasons[0]["Code"] == "ConditionalCheckFailed":
-                raise CustomerIdentifierAlreadyExistsError(customer.id) from exc
+                raise CustomerIdentifierAlreadyExistsError(customer.id) from e
             if cancellation_reasons[1]["Code"] == "ConditionalCheckFailed":
-                raise CustomerEmailAlreadyExistsError(customer.email) from exc
+                raise CustomerEmailAlreadyExistsError(customer.email) from e
             raise
 
     async def get(self, customer_id: str) -> Customer:
@@ -76,7 +74,7 @@ class DynamoDBCustomerRepository:
 
 # --8<-- [start:in_memory_repository]
 class InMemoryRepository:
-    def __init__(self, customers: List[Customer]) -> None:
+    def __init__(self, customers: list[Customer]) -> None:
         self.customers = {customer.id: customer for customer in customers}
 
     async def save(self, customer: Customer) -> None:
@@ -89,8 +87,8 @@ class InMemoryRepository:
     async def get(self, customer_id: str) -> Customer:
         try:
             return self.customers[customer_id]
-        except KeyError as exc:
-            raise CustomerNotFoundError(customer_id) from exc
+        except KeyError as e:
+            raise CustomerNotFoundError(customer_id) from e
 
 
 # --8<-- [end:in_memory_repository]

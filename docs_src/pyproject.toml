@@ -1,0 +1,59 @@
+[tool.poetry]
+name = "src"
+version = "0.0.0"
+description = ""
+authors = ["Filips Nastins <nastinsfilips@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.1"
+fastapi = "^0.109.0"
+flask = "^3.0.0"
+httpx = "^0.26.0"
+structlog = "^23.3.0"
+tomodachi = "^0.26.4"
+types-aiobotocore = { extras = [
+    "dynamodb",
+    "s3",
+    "sns",
+    "sqs",
+], version = "^2.5.2" }
+uvicorn = "^0.25.0"
+uvloop = "^0.19.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+pytest-asyncio = "0.21.1"  # https://github.com/pytest-dev/pytest-asyncio/issues/706
+requests = "^2.31.0"
+types-requests = "^2.31.0"
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+log_level = "INFO"
+env = [
+    # Set dummy AWS credentials so that we don't accidentally mutate real infrastructure
+    "AWS_REGION=us-east-1",
+    "AWS_DEFAULT_REGION=us-east-1",
+    "AWS_ACCESS_KEY_ID=testing",
+    "AWS_SECRET_ACCESS_KEY=testing",
+    "AWS_SECURITY_TOKEN=testing",
+    "AWS_SESSION_TOKEN=testing",
+    # Testcontainers configuration
+    "DOCKER_BUILDKIT=1",
+    "TESTCONTAINER_DOCKER_NETWORK=tomodachi-testcontainers",
+    "TESTCONTAINER_DOCKERFILE_PATH=docs_src/Dockerfile",
+    "TESTCONTAINER_DOCKER_BUILD_CONTEXT=docs_src",
+    # WireMock Testcontainer configuration
+    "WIREMOCK_TESTCONTAINER_VERBOSE=1",
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

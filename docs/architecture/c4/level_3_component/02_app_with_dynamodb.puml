@@ -2,7 +2,9 @@
 !include <C4/C4_Component>
 !include ../level_2_container/container/containers.puml
 
-title Component Diagram - Application with DynamoDB Database
+skinparam dpi 110
+
+title Container Diagram - Application with DynamoDB Database
 
 dynamoDbContainer()
 
@@ -20,7 +22,7 @@ Boundary(appContainerBoundary, "Application", "Container") {
     Boundary(infrastructureLayer, "Adapters", "Layer") {
         Component(Repository, "In-memory repository", "Python", "Fake in-memory repository for testing and demo purposes.")
 
-        Component_Ext(dynamoDbRepository, "DynamoDB repository", "Python, aiobotocore", "Adapter for DynamoDB database.")
+        Component(dynamoDbRepository, "DynamoDB repository", "Python, aiobotocore", "Adapter for DynamoDB database.")
     }
 }
 

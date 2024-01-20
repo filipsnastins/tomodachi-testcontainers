@@ -1,25 +1,30 @@
-from typing import AsyncGenerator, Generator, cast
+# --8<-- [start:tomodachi_container]
+from typing import Generator, cast
 
-import httpx
 import pytest
-import pytest_asyncio
 
 from tomodachi_testcontainers import TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="module")
-def service_healthcheck_container(testcontainers_docker_image: str) -> Generator[TomodachiContainer, None, None]:
-    with TomodachiContainer(
-        image=testcontainers_docker_image,
-        edge_port=get_available_port(),
-    ).with_command("coverage run -m tomodachi run src/healthcheck.py --production") as container:
+def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
+    with TomodachiContainer(testcontainer_image).with_command(
+        "coverage run -m tomodachi run src/healthcheck.py --production"
+    ) as container:
         yield cast(TomodachiContainer, container)
 
 
+# --8<-- [end:tomodachi_container]
+
+from typing import AsyncGenerator
+
+import httpx
+import pytest_asyncio
+
+
 @pytest_asyncio.fixture(scope="module")
-async def http_client(service_healthcheck_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with httpx.AsyncClient(base_url=service_healthcheck_container.get_external_url()) as client:
+async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 

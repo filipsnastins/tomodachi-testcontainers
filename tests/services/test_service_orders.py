@@ -1,7 +1,7 @@
-import re
 import uuid
 from datetime import datetime
 from typing import Any, AsyncGenerator, Dict, Generator, List, cast
+from unittest import mock
 
 import httpx
 import pytest
@@ -9,10 +9,9 @@ import pytest_asyncio
 from tomodachi.envelope.json_base import JsonBase
 
 from tomodachi_testcontainers import MotoContainer, TomodachiContainer
+from tomodachi_testcontainers.assertions import assert_datetime_within_range
+from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
-from tomodachi_testcontainers.pytest.async_probes import probe_until
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest_asyncio.fixture(scope="module")
@@ -21,22 +20,18 @@ async def _create_topics_and_queues(moto_snssqs_tc: SNSSQSTestClient) -> None:
 
 
 @pytest.fixture(scope="module")
-def service_orders_container(
-    testcontainers_docker_image: str, moto_container: MotoContainer, _create_topics_and_queues: None
+def tomodachi_container(
+    testcontainer_image: str, moto_container: MotoContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(
-            image=testcontainers_docker_image,
-            edge_port=get_available_port(),
-            http_healthcheck_path="/health",
-        )
+        TomodachiContainer(testcontainer_image, http_healthcheck_path="/health")
         .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")
         .with_env("AWS_SNS_ENDPOINT_URL", moto_container.get_internal_url())
         .with_env("AWS_SQS_ENDPOINT_URL", moto_container.get_internal_url())
         .with_env("AWS_DYNAMODB_ENDPOINT_URL", moto_container.get_internal_url())
-        .with_env("DYNAMODB_TABLE_NAME", "orders")
+        .with_env("DYNAMODB_TABLE_NAME", "autotest-orders")
         .with_command("coverage run -m tomodachi run src/orders.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
@@ -44,8 +39,8 @@ def service_orders_container(
 
 
 @pytest_asyncio.fixture(scope="module")
-async def http_client(service_orders_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with httpx.AsyncClient(base_url=service_orders_container.get_external_url()) as client:
+async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 
@@ -55,12 +50,7 @@ async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get(f"/order/{order_id}")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "error": "Order not found",
-        "_links": {
-            "self": {"href": f"/order/{order_id}"},
-        },
-    }
+    assert response.json() == {"error": "ORDER_NOT_FOUND"}
 
 
 @pytest.mark.asyncio()
@@ -68,21 +58,15 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSS
     customer_id = str(uuid.uuid4())
     products: List[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]
 
-    response = await http_client.post("/orders", json={"customer_id": customer_id, "products": products})
+    response = await http_client.post("/order", json={"customer_id": customer_id, "products": products})
     body = response.json()
     order_id = body["order_id"]
-    get_order_link = body["_links"]["self"]["href"]
 
     assert response.status_code == 200
-    assert re.match(UUID4_PATTERN, order_id)
-    assert body == {
-        "order_id": order_id,
-        "_links": {
-            "self": {"href": f"/order/{order_id}"},
-        },
-    }
+    assert uuid.UUID(order_id)
+    assert body == {"order_id": order_id, "customer_id": customer_id, "products": products, "created_at": mock.ANY}
 
-    response = await http_client.get(get_order_link)
+    response = await http_client.get(f"/order/{order_id}")
     body = response.json()
 
     assert response.status_code == 200
@@ -91,10 +75,7 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSS
         "order_id": order_id,
         "customer_id": customer_id,
         "products": products,
-        "created_at": body["created_at"],
-        "_links": {
-            "self": {"href": f"/order/{order_id}"},
-        },
+        "created_at": mock.ANY,
     }
 
     async def _order_created_event_emitted() -> Dict[str, Any]:
@@ -108,5 +89,5 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSS
         "order_id": order_id,
         "customer_id": customer_id,
         "products": products,
-        "created_at": event["created_at"],
+        "created_at": mock.ANY,
     }

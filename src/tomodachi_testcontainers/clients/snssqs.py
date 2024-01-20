@@ -21,11 +21,11 @@ TopicARNType = str
 QueueARNType = str
 
 
-class TopicDoesNotExist(Exception):
+class TopicDoesNotExistError(Exception):
     pass  # pragma: no cover
 
 
-class QueueDoesNotExist(Exception):
+class QueueDoesNotExistError(Exception):
     pass  # pragma: no cover
 
 
@@ -57,14 +57,14 @@ TomodachiSNSSQSEnvelope = Union[_TomodachiSNSSQSEnvelopeStatic, _TomodachiSNSSQS
 
 
 class SNSSQSTestClient:
-    """Wraps aiobotocore SNS and SQS clients and provides common methods for testing SNS SQS integrations."""
+    """Provides common methods for testing AWS SNS/SQS interactions with Tomodachi framework."""
 
     def __init__(self, sns_client: SNSClient, sqs_client: SQSClient) -> None:
         self._sns_client = sns_client
         self._sqs_client = sqs_client
 
     async def create_topic(self, topic: str) -> TopicARNType:
-        with suppress(TopicDoesNotExist):
+        with suppress(TopicDoesNotExistError):
             return await self.get_topic_arn(topic)
         topic_attributes: Dict[str, str] = {}
         if topic.endswith(".fifo"):
@@ -78,7 +78,7 @@ class SNSSQSTestClient:
         return create_topic_response["TopicArn"]
 
     async def create_queue(self, queue: str) -> QueueARNType:
-        with suppress(QueueDoesNotExist):
+        with suppress(QueueDoesNotExistError):
             return await self.get_queue_arn(queue)
         queue_attributes: Dict[QueueAttributeNameType, str] = {}
         if queue.endswith(".fifo"):
@@ -109,8 +109,13 @@ class SNSSQSTestClient:
         )
 
     async def receive(
-        self, queue: str, envelope: TomodachiSNSSQSEnvelope, message_type: Type[MessageType], max_messages: int = 10
+        self,
+        queue: str,
+        envelope: TomodachiSNSSQSEnvelope,
+        message_type: Type[MessageType],
+        max_messages: int = 10,
     ) -> List[MessageType]:
+        """Receive messages from SQS queue."""
         queue_url = await self.get_queue_url(queue)
         received_messages_response = await self._sqs_client.receive_message(
             QueueUrl=queue_url, MaxNumberOfMessages=max_messages
@@ -144,6 +149,7 @@ class SNSSQSTestClient:
         message_deduplication_id: Optional[str] = None,
         message_group_id: Optional[str] = None,
     ) -> None:
+        """Publish message to SNS topic."""
         topic_arn = await self.get_topic_arn(topic)
         message = await envelope.build_message(service={}, topic=topic, data=data)
         sns_publish_kwargs: Dict[str, Any] = {}
@@ -164,6 +170,7 @@ class SNSSQSTestClient:
         message_deduplication_id: Optional[str] = None,
         message_group_id: Optional[str] = None,
     ) -> None:
+        """Send message to SQS queue."""
         queue_url = await self.get_queue_url(queue)
         message = await envelope.build_message(service={}, topic="", data=data)
         sqs_send_kwargs: Dict[str, Any] = {}
@@ -179,7 +186,7 @@ class SNSSQSTestClient:
         list_topics_response = await self._sns_client.list_topics()
         topic_arn = next((v["TopicArn"] for v in list_topics_response["Topics"] if v["TopicArn"].endswith(topic)), None)
         if not topic_arn:
-            raise TopicDoesNotExist(topic)
+            raise TopicDoesNotExistError(topic)
         return topic_arn
 
     async def get_topic_attributes(self, topic: str) -> Dict[str, str]:
@@ -195,8 +202,8 @@ class SNSSQSTestClient:
         try:
             get_queue_response = await self._sqs_client.get_queue_url(QueueName=queue)
             return get_queue_response["QueueUrl"]
-        except ClientError as exc:
-            raise QueueDoesNotExist(queue) from exc
+        except ClientError as e:
+            raise QueueDoesNotExistError(queue) from e
 
     async def get_queue_attributes(
         self, queue: str, attributes: List[QueueAttributeFilterType]
@@ -208,5 +215,6 @@ class SNSSQSTestClient:
         return get_queue_attributes_response["Attributes"]
 
     async def purge_queue(self, queue: str) -> None:
+        """Delete all messages from SQS queue."""
         queue_url = await self.get_queue_url(queue)
         await self._sqs_client.purge_queue(QueueUrl=queue_url)

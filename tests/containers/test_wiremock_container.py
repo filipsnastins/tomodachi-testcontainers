@@ -4,6 +4,8 @@ import wiremock.client as wm
 
 from tomodachi_testcontainers import WireMockContainer
 
+pytestmark = pytest.mark.usefixtures("reset_wiremock_container_on_teardown")
+
 
 @pytest.mark.asyncio()
 async def test_wiremock_configured_from_mapping_files(wiremock_container: WireMockContainer) -> None:
@@ -28,3 +30,13 @@ async def test_wiremock_configured_with_python_wiremock_sdk(wiremock_container: 
 
     assert response.status_code == 200
     assert response.json() == {"message": "Mapping created by WireMock SDK!"}
+
+
+@pytest.mark.asyncio()
+async def test_wiremock_stub_mappings_deleted_between_tests_reset_wiremock_container_on_teardown_fixture(
+    wiremock_container: WireMockContainer,
+) -> None:
+    async with httpx.AsyncClient(base_url=wiremock_container.get_external_url()) as client:
+        response = await client.get("/test-wiremock-sdk")  # URL from previous test
+
+    assert response.status_code == 404

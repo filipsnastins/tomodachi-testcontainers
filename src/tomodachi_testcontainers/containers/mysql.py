@@ -9,11 +9,22 @@ from .common import DatabaseContainer
 
 
 class MySQLContainer(DatabaseContainer):
+    """MySQL container.
+
+    Configuration environment variables (set on host machine):
+
+    - `MYSQL_DRIVERNAME` - defaults to `mysql+pymysql`
+    - `MYSQL_USER` - defaults to `username`
+    - `MYSQL_ROOT_PASSWORD` - defaults to `root`
+    - `MYSQL_PASSWORD` - defaults to `password`
+    - `MYSQL_DATABASE` - defaults to `db`
+    """
+
     def __init__(
         self,
         image: str = "mysql:8",
         internal_port: int = 3306,
-        edge_port: int = 3306,
+        edge_port: Optional[int] = None,
         drivername: Optional[str] = None,
         username: Optional[str] = None,
         root_password: Optional[str] = None,
@@ -21,7 +32,12 @@ class MySQLContainer(DatabaseContainer):
         database: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, internal_port=internal_port, edge_port=edge_port, **kwargs)
+        super().__init__(
+            image,
+            internal_port=internal_port,
+            edge_port=edge_port,
+            **kwargs,
+        )
 
         self.drivername = drivername or os.getenv("MYSQL_DRIVERNAME") or "mysql+pymysql"
         self.username = username or os.getenv("MYSQL_USER") or "username"

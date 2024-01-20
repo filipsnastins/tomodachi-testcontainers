@@ -142,3 +142,6 @@ secrets/
 # VSCode
 .vscode/*
 !.vscode/*.example.json
+
+# Node
+node_modules/

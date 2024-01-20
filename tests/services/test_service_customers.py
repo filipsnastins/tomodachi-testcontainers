@@ -1,7 +1,7 @@
-import re
 import uuid
 from datetime import datetime, timezone
 from typing import AsyncGenerator, Generator, cast
+from unittest import mock
 
 import httpx
 import pytest
@@ -9,10 +9,9 @@ import pytest_asyncio
 from tomodachi.envelope.json_base import JsonBase
 
 from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
+from tomodachi_testcontainers.assertions import assert_datetime_within_range
+from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.pytest.assertions import UUID4_PATTERN, assert_datetime_within_range
-from tomodachi_testcontainers.pytest.async_probes import probe_until
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest_asyncio.fixture(scope="module")
@@ -21,22 +20,18 @@ async def _create_topics_and_queues(localstack_snssqs_tc: SNSSQSTestClient) -> N
 
 
 @pytest.fixture(scope="module")
-def service_customers_container(
-    testcontainers_docker_image: str, localstack_container: LocalStackContainer, _create_topics_and_queues: None
+def tomodachi_container(
+    testcontainer_image: str, localstack_container: LocalStackContainer, _create_topics_and_queues: None
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(
-            image=testcontainers_docker_image,
-            edge_port=get_available_port(),
-            http_healthcheck_path="/health",
-        )
+        TomodachiContainer(testcontainer_image, http_healthcheck_path="/health")
         .with_env("AWS_REGION", "us-east-1")
         .with_env("AWS_ACCESS_KEY_ID", "testing")
         .with_env("AWS_SECRET_ACCESS_KEY", "testing")
         .with_env("AWS_SNS_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("AWS_SQS_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_env("AWS_DYNAMODB_ENDPOINT_URL", localstack_container.get_internal_url())
-        .with_env("DYNAMODB_TABLE_NAME", "customers")
+        .with_env("DYNAMODB_TABLE_NAME", "autotest-customers")
         .with_command("coverage run -m tomodachi run src/customers.py --production")
     ) as container:
         yield cast(TomodachiContainer, container)
@@ -44,8 +39,8 @@ def service_customers_container(
 
 
 @pytest_asyncio.fixture(scope="module")
-async def http_client(service_customers_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with httpx.AsyncClient(base_url=service_customers_container.get_external_url()) as client:
+async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 
@@ -55,31 +50,25 @@ async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get(f"/customer/{customer_id}")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "error": "Customer not found",
-        "_links": {
-            "self": {"href": f"/customer/{customer_id}"},
-        },
-    }
+    assert response.json() == {"error": "CUSTOMER_NOT_FOUND"}
 
 
 @pytest.mark.asyncio()
 async def test_create_customer(http_client: httpx.AsyncClient) -> None:
-    response = await http_client.post("/customers", json={"name": "John Doe"})
+    response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
     customer_id = body["customer_id"]
-    get_customer_link = body["_links"]["self"]["href"]
 
     assert response.status_code == 200
-    assert re.match(UUID4_PATTERN, customer_id)
+    assert uuid.UUID(customer_id)
     assert body == {
         "customer_id": customer_id,
-        "_links": {
-            "self": {"href": f"/customer/{customer_id}"},
-        },
+        "name": "John Doe",
+        "orders": [],
+        "created_at": mock.ANY,
     }
 
-    response = await http_client.get(get_customer_link)
+    response = await http_client.get(f"/customer/{customer_id}")
     body = response.json()
 
     assert response.status_code == 200
@@ -88,19 +77,15 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
         "customer_id": customer_id,
         "name": "John Doe",
         "orders": [],
-        "created_at": body["created_at"],
-        "_links": {
-            "self": {"href": f"/customer/{customer_id}"},
-        },
+        "created_at": mock.ANY,
     }
 
 
 @pytest.mark.asyncio()
 async def test_register_created_order(http_client: httpx.AsyncClient, localstack_snssqs_tc: SNSSQSTestClient) -> None:
-    response = await http_client.post("/customers", json={"name": "John Doe"})
+    response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
     customer_id = body["customer_id"]
-    get_customer_link = body["_links"]["self"]["href"]
 
     assert response.status_code == 200
 
@@ -118,8 +103,8 @@ async def test_register_created_order(http_client: httpx.AsyncClient, localstack
             envelope=JsonBase,
         )
 
-    async def _new_order_associated_with_customer() -> None:
-        response = await http_client.get(get_customer_link)
+    async def _new_orders_associated_with_customer() -> None:
+        response = await http_client.get(f"/customer/{customer_id}")
         body = response.json()
 
         assert response.status_code == 200
@@ -131,10 +116,7 @@ async def test_register_created_order(http_client: httpx.AsyncClient, localstack
                 {"order_id": order_ids[0]},
                 {"order_id": order_ids[1]},
             ],
-            "created_at": body["created_at"],
-            "_links": {
-                "self": {"href": f"/customer/{customer_id}"},
-            },
+            "created_at": mock.ANY,
         }
 
-    await probe_until(_new_order_associated_with_customer)
+    await probe_until(_new_orders_associated_with_customer)

@@ -9,18 +9,33 @@ from .common import DatabaseContainer
 
 
 class PostgreSQLContainer(DatabaseContainer):
+    """PostgreSQL container.
+
+    Configuration environment variables (set on host machine):
+
+    - `POSTGRES_DRIVERNAME` - defaults to `postgresql+psycopg2`
+    - `POSTGRES_USER` - defaults to `username`
+    - `POSTGRES_PASSWORD` - defaults to `password`
+    - `POSTGRES_DB` - defaults to `db`
+    """
+
     def __init__(
         self,
         image: str = "postgres:16",
         internal_port: int = 5432,
-        edge_port: int = 5432,
+        edge_port: Optional[int] = None,
         drivername: Optional[str] = None,
         username: Optional[str] = None,
         password: Optional[str] = None,
         database: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, internal_port=internal_port, edge_port=edge_port, **kwargs)
+        super().__init__(
+            image,
+            internal_port=internal_port,
+            edge_port=edge_port,
+            **kwargs,
+        )
 
         self.drivername = drivername or os.getenv("POSTGRES_DRIVERNAME") or "postgresql+psycopg2"
         self.username = username or os.getenv("POSTGRES_USER") or "username"

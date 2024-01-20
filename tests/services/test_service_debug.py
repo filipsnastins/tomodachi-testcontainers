@@ -1,4 +1,4 @@
-"""An example of attaching a debugger to a running Tomodachi testcontainer.
+"""An example of attaching a debugger to a running Tomodachi container.
 
 Generally you won't need a debugger in the testcontainer often,
 because you should be able to detect most issues by checking the logs,
@@ -12,13 +12,12 @@ import pytest
 import pytest_asyncio
 
 from tomodachi_testcontainers import TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="module")
-def service_healthcheck_container(testcontainers_docker_image: str) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(image=testcontainers_docker_image, edge_port=get_available_port())
+        TomodachiContainer(testcontainer_image)
         # Bind debugger port.
         .with_bind_ports(5678, 5678)
         # Explicitly install debugpy. Adding the debugpy to dev dependencies in pyproject will not work
@@ -32,8 +31,8 @@ def service_healthcheck_container(testcontainers_docker_image: str) -> Generator
 
 
 @pytest_asyncio.fixture(scope="module")
-async def http_client(service_healthcheck_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with httpx.AsyncClient(base_url=service_healthcheck_container.get_external_url()) as client:
+async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 

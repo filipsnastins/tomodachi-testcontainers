@@ -8,19 +8,14 @@ import pytest
 import pytest_asyncio
 
 from tomodachi_testcontainers import SFTPContainer, TomodachiContainer
-from tomodachi_testcontainers.utils import get_available_port
 
 
 @pytest.fixture(scope="module")
-def service_sftp_container(
-    testcontainers_docker_image: str, sftp_container: SFTPContainer
+def tomodachi_container(
+    testcontainer_image: str, sftp_container: SFTPContainer
 ) -> Generator[TomodachiContainer, None, None]:
     with (
-        TomodachiContainer(
-            image=testcontainers_docker_image,
-            edge_port=get_available_port(),
-            http_healthcheck_path="/health",
-        )
+        TomodachiContainer(testcontainer_image, http_healthcheck_path="/health")
         .with_env("SFTP_HOST", sftp_container.get_internal_conn_details().host)
         .with_env("SFTP_PORT", str(sftp_container.get_internal_conn_details().port))
         .with_env("SFTP_USERNAME", "userssh")
@@ -32,8 +27,8 @@ def service_sftp_container(
 
 
 @pytest_asyncio.fixture(scope="module")
-async def http_client(service_sftp_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with httpx.AsyncClient(base_url=service_sftp_container.get_external_url()) as client:
+async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 
@@ -42,12 +37,7 @@ async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/file/not-exists.txt")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "error": "File not found",
-        "_links": {
-            "self": {"href": "/file/not-exists.txt"},
-        },
-    }
+    assert response.json() == {"error": "FILE_NOT_FOUND"}
 
 
 @pytest.mark.asyncio()
@@ -61,9 +51,4 @@ async def test_upload_and_read_file(http_client: httpx.AsyncClient, userssh_sftp
     response = await http_client.get(f"/file/{filename}")
 
     assert response.status_code == 200
-    assert response.json() == {
-        "content": "Hello, World!",
-        "_links": {
-            "self": {"href": f"/file/{filename}"},
-        },
-    }
+    assert response.json() == {"content": "Hello, World!"}

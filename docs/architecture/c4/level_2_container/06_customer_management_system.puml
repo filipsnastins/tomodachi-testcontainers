@@ -1,0 +1,26 @@
+@startuml
+!include ./container/containers.puml
+
+skinparam dpi 120
+
+title Container Diagram - Customer Management System
+
+Person(user, "Customer")
+
+Boundary(customerAppBoundary, "Customer Management Application", "Container") {
+    customerAppContainer()
+    dynamoDbContainer()
+}
+
+orderAppExtContainer()
+awsSnsSqsContainer()
+
+Rel(user, customerApp, "Creates a new user account", "HTTP, JSON")
+Rel(user, orderExtApp, "Places new orders", "HTTP, JSON")
+
+Rel(customerApp, dynamoDb, "Reads and stores customer information", "aiobotocore")
+Rel(customerApp, awsSnsSqs, "Receives and publishes events", "aiobotocore, JSON")
+
+Rel(orderExtApp, awsSnsSqs, "Receives and publishes events", "aiobotocore, JSON")
+
+@enduml

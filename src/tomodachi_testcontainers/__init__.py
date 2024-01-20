@@ -1,4 +1,6 @@
-import contextlib
+from contextlib import suppress
+
+import pytest
 
 from .containers.common import DockerContainer, EphemeralDockerImage, WebContainer
 from .containers.dynamodb_admin import DynamoDBAdminContainer
@@ -8,16 +10,16 @@ from .containers.moto import MotoContainer
 from .containers.tomodachi import TomodachiContainer
 from .containers.wiremock import WireMockContainer
 
-with contextlib.suppress(ImportError):  # 'db' extra dependency
+with suppress(ImportError):  # 'db' extra dependency
     from .containers.common import DatabaseContainer
 
-with contextlib.suppress(ImportError):  # 'mysql' extra dependency
+with suppress(ImportError):  # 'mysql' extra dependency
     from .containers.mysql import MySQLContainer
 
-with contextlib.suppress(ImportError):  # 'postgres' extra dependency
+with suppress(ImportError):  # 'postgres' extra dependency
     from .containers.postgres import PostgreSQLContainer
 
-with contextlib.suppress(ImportError):  # 'sftp' extra dependency
+with suppress(ImportError):  # 'sftp' extra dependency
     from .containers.sftp import SFTPContainer
 
 __all__ = [
@@ -35,3 +37,5 @@ __all__ = [
     "WebContainer",
     "WireMockContainer",
 ]
+
+pytest.register_assert_rewrite("tomodachi_testcontainers.assertions")

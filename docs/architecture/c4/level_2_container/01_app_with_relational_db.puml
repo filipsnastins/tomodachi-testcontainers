@@ -1,6 +1,8 @@
 @startuml
 !include ./container/containers.puml
 
+skinparam dpi 120
+
 title Container Diagram - Application with Relational Database
 
 appContainer()

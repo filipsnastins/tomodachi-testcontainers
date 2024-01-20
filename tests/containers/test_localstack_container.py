@@ -14,7 +14,7 @@ async def test_localstack_container_starts(localstack_container: LocalStackConta
 
 
 @pytest.mark.asyncio()
-async def test_create_aws_resources_and_restart_localstack_container(
+async def test_create_aws_resources_andrestart_localstack_container(
     localstack_container: LocalStackContainer, localstack_sns_client: SNSClient
 ) -> None:
     await localstack_sns_client.create_topic(Name="test-topic")

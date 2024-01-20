@@ -8,10 +8,13 @@ from tenacity import Retrying
 from tenacity.stop import stop_after_delay
 from tenacity.wait import wait_fixed
 
+from ...utils import get_available_port
 from .container import DockerContainer
 
 
 class WebContainer(DockerContainer, abc.ABC):
+    """Abstract class for web application containers."""
+
     internal_port: int
     edge_port: int
 
@@ -19,15 +22,15 @@ class WebContainer(DockerContainer, abc.ABC):
         self,
         image: str,
         internal_port: int,
-        edge_port: int,
+        edge_port: Optional[int] = None,
         http_healthcheck_path: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(image, **kwargs)
         self.internal_port = internal_port
-        self.edge_port = edge_port
+        self.edge_port = edge_port or get_available_port()
         self.http_healthcheck_path = http_healthcheck_path
-        self.with_bind_ports(internal_port, edge_port)
+        self.with_bind_ports(internal_port, self.edge_port)
 
     def get_internal_url(self) -> str:
         ip = self.get_container_internal_ip()
