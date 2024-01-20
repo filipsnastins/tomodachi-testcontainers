@@ -18,14 +18,16 @@ def assert_logs_contain(container: DockerContainer, contains: str) -> None:
     for log in stdout_and_stderr_logs:
         if contains in log.decode():
             return
-    raise AssertionError(f"Expected logs to contain: '{contains}'; logs: {stdout_and_stderr_logs}")
+    raise AssertionError(f"Expected logs to contain: '{contains}'; logs: {stdout_and_stderr_logs}")  # noqa: E702
 
 
 def assert_logs_not_contain(container: DockerContainer, contains: str) -> None:
     stdout_and_stderr_logs = cast(Tuple[bytes, bytes], container.get_logs())
     for log in stdout_and_stderr_logs:
         if contains in log.decode():
-            raise AssertionError(f"Expected logs not to contain: '{contains}'; logs: {stdout_and_stderr_logs}")
+            raise AssertionError(
+                f"Expected logs not to contain: '{contains}'; logs: {stdout_and_stderr_logs}"
+            )  # noqa: E702
 
 
 def assert_logs_match_line_count(container: DockerContainer, contains: str, count: int) -> None:
@@ -34,7 +36,7 @@ def assert_logs_match_line_count(container: DockerContainer, contains: str, coun
     stdout_and_stderr_logs = "\n".join([stdout_logs.decode(), stderr_logs.decode()])
 
     matched_lines = [log for log in stdout_and_stderr_logs.splitlines() if contains in log]
-    error_msg = (
+    error_msg = (  # noqa: E702
         f"Expected '{contains}' to be contained in {count} lines, found {len(matched_lines)} lines"
         f"; logs: {stdout_and_stderr_logs}"
     )
