@@ -38,10 +38,10 @@ class WireMockContainer(WebContainer):
         mapping_stubs_env = os.getenv("WIREMOCK_TESTCONTAINER_MAPPING_STUBS")
         mapping_files_env = os.getenv("WIREMOCK_TESTCONTAINER_MAPPING_FILES")
 
-        self.mapping_stubs = mapping_stubs or Path(mapping_stubs_env) if mapping_stubs_env else None
-        self.mapping_files = mapping_files or Path(mapping_files_env) if mapping_files_env else None
+        self.mapping_stubs = mapping_stubs or (Path(mapping_stubs_env) if mapping_stubs_env else None)
+        self.mapping_files = mapping_files or (Path(mapping_files_env) if mapping_files_env else None)
 
-        if verbose or bool(os.getenv("WIREMOCK_TESTCONTAINER_VERBOSE")):
+        if verbose or os.getenv("WIREMOCK_TESTCONTAINER_VERBOSE"):
             self.with_command("--verbose")
 
     def log_message_on_container_start(self) -> str:
