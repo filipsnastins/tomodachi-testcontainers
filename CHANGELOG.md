@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 (2024-01-23)
+
+- ([#179](https://github.com/filipsnastins/tomodachi-testcontainers/pull/179))
+  `WireMockContainer`: fixed `mapping_stubs` and `mapping_files` argument precedence over environment variables.
+
+### Fixes
+
 ## 1.0.0 (2024-01-20) 🎉
 
 ### New features
