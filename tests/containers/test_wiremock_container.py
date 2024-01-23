@@ -47,8 +47,9 @@ async def test_wiremock_stub_mappings_deleted_between_tests_reset_wiremock_conta
 
 @pytest.mark.asyncio()
 async def test_custom_wiremock_container_configured_from_mapping_files(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("WIREMOCK_TESTCONTAINER_MAPPING_STUBS", "")
-    monkeypatch.setenv("WIREMOCK_TESTCONTAINER_MAPPING_FILES", "")
+    monkeypatch.delenv("WIREMOCK_TESTCONTAINER_MAPPING_STUBS", raising=False)
+    monkeypatch.delenv("WIREMOCK_TESTCONTAINER_MAPPING_FILES", raising=False)
+    monkeypatch.delenv("WIREMOCK_TESTCONTAINER_VERBOSE", raising=False)
     mapping_stubs = Path(__file__).parent / "test-wiremock-container" / "mappings"
     mapping_files = Path(__file__).parent / "test-wiremock-container" / "files"
 
