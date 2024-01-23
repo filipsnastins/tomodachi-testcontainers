@@ -1,30 +1,11 @@
 from pathlib import Path
-from typing import Generator, cast
+from typing import cast
 
 import httpx
 import pytest
 import wiremock.client as wm
 
 from tomodachi_testcontainers import WireMockContainer
-
-
-@pytest.fixture(scope="session")
-def custom_wiremock_container() -> Generator[WireMockContainer, None, None]:
-    mapping_stubs = Path(__file__).parent / "test-wiremock-container" / "mappings"
-    mapping_files = Path(__file__).parent / "test-wiremock-container" / "files"
-    with WireMockContainer(mapping_stubs=mapping_stubs, mapping_files=mapping_files) as container:
-        yield cast(WireMockContainer, container)
-
-
-@pytest.mark.asyncio()
-async def test_custom_wiremock_container_configured_from_mapping_files(
-    custom_wiremock_container: WireMockContainer,
-) -> None:
-    async with httpx.AsyncClient(base_url=custom_wiremock_container.get_external_url()) as client:
-        response = await client.get("/test-mapping-files")
-
-    assert response.status_code == 200
-    assert response.json() == {"message": "Hello from mapping files!"}
 
 
 @pytest.mark.asyncio()
@@ -62,3 +43,20 @@ async def test_wiremock_stub_mappings_deleted_between_tests_reset_wiremock_conta
         response = await client.get("/test-wiremock-sdk")  # URL from previous test
 
     assert response.status_code == 404
+
+
+@pytest.mark.asyncio()
+async def test_custom_wiremock_container_configured_from_mapping_files(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("WIREMOCK_TESTCONTAINER_MAPPING_STUBS", "")
+    monkeypatch.setenv("WIREMOCK_TESTCONTAINER_MAPPING_FILES", "")
+    mapping_stubs = Path(__file__).parent / "test-wiremock-container" / "mappings"
+    mapping_files = Path(__file__).parent / "test-wiremock-container" / "files"
+
+    with WireMockContainer(mapping_stubs=mapping_stubs, mapping_files=mapping_files) as container:
+        container = cast(WireMockContainer, container)
+
+        async with httpx.AsyncClient(base_url=container.get_external_url()) as client:
+            response = await client.get("/test-mapping-files")
+
+    assert response.status_code == 200
+    assert response.json() == {"message": "Hello from mapping files!"}
