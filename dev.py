@@ -8,9 +8,6 @@ def hooks() -> None:
 
 
 def format() -> None:
-    check_call(["ruff", "check", "--fix", "."])
-    check_call(["black", "."])
-    check_call(["isort", "."])
     check_call(
         [
             "autoflake",
@@ -22,6 +19,9 @@ def format() -> None:
             ".",
         ]
     )
+    check_call(["ruff", "check", "--fix", "."])
+    check_call(["black", "."])
+    check_call(["isort", "."])
 
 
 def lint() -> None:

@@ -71,7 +71,12 @@ async def test_publish_and_receive_with_message_attributes(snssqs_test_client: S
     )
 
     messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
-    assert messages == [SQSMessage({"message": "1"})]
+    assert messages == [
+        SQSMessage(
+            payload={"message": "1"},
+            message_attributes={"MyMessageAttribute": {"Type": "String", "Value": "will-be-included"}},
+        )
+    ]
 
 
 @pytest.mark.asyncio()
@@ -133,7 +138,12 @@ async def test_send_and_receive_messages_with_attributes(snssqs_test_client: SNS
     )
 
     messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
-    assert messages == [SQSMessage({"message": "1"})]
+    assert messages == [
+        SQSMessage(
+            payload={"message": "1"},
+            message_attributes={"MyMessageAttribute": {"DataType": "String", "StringValue": "test-value"}},
+        )
+    ]
 
 
 @pytest.mark.asyncio()
