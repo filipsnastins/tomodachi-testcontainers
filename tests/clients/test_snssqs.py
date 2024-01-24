@@ -10,7 +10,7 @@ from types_aiobotocore_sqs import SQSClient
 
 from tests.clients.proto_build.message_pb2 import Person
 from tomodachi_testcontainers.clients import SNSSQSTestClient
-from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExistError, TopicDoesNotExistError
+from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExistError, SQSMessage, TopicDoesNotExistError
 
 pytestmark = pytest.mark.usefixtures("reset_moto_container_on_teardown")
 
@@ -43,7 +43,10 @@ async def test_publish_and_receive_messages(snssqs_test_client: SNSSQSTestClient
     await snssqs_test_client.publish("topic", {"message": "2"}, JsonBase)
 
     messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
-    assert messages == [{"message": "1"}, {"message": "2"}]
+    assert messages == [
+        SQSMessage({"message": "1"}),
+        SQSMessage({"message": "2"}),
+    ]
 
 
 @pytest.mark.asyncio()
@@ -68,7 +71,7 @@ async def test_publish_and_receive_with_message_attributes(snssqs_test_client: S
     )
 
     messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
-    assert messages == [{"message": "1"}]
+    assert messages == [SQSMessage({"message": "1"})]
 
 
 @pytest.mark.asyncio()
@@ -83,7 +86,7 @@ async def test_publish_and_receive_with_fifo(snssqs_test_client: SNSSQSTestClien
     )
 
     messages = await snssqs_test_client.receive("queue.fifo", JsonBase, Dict[str, str])
-    assert messages == [{"message": "1"}]
+    assert messages == [SQSMessage({"message": "1"})]
 
 
 @pytest.mark.asyncio()
@@ -100,7 +103,7 @@ async def test_send_and_receive_message(snssqs_test_client: SNSSQSTestClient) ->
     await snssqs_test_client.send("queue", {"message": "2"}, JsonBase)
 
     messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
-    assert messages == [{"message": "1"}, {"message": "2"}]
+    assert messages == [SQSMessage({"message": "1"}), SQSMessage({"message": "2"})]
 
 
 @pytest.mark.asyncio()
@@ -115,7 +118,7 @@ async def test_send_and_receive_message_with_fifo(snssqs_test_client: SNSSQSTest
     )
 
     messages = await snssqs_test_client.receive("queue.fifo", JsonBase, Dict[str, str])
-    assert messages == [{"message": "1"}]
+    assert messages == [SQSMessage({"message": "1"})]
 
 
 @pytest.mark.asyncio()
@@ -130,7 +133,7 @@ async def test_send_and_receive_messages_with_attributes(snssqs_test_client: SNS
     )
 
     messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
-    assert messages == [{"message": "1"}]
+    assert messages == [SQSMessage({"message": "1"})]
 
 
 @pytest.mark.asyncio()
@@ -153,10 +156,10 @@ async def test_receive_max_receive_messages(snssqs_test_client: SNSSQSTestClient
     await snssqs_test_client.publish("topic", {"message": "2"}, JsonBase)
 
     messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str], max_messages=1)
-    assert messages == [{"message": "1"}]
+    assert messages == [SQSMessage({"message": "1"})]
 
     messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str], max_messages=1)
-    assert messages == [{"message": "2"}]
+    assert messages == [SQSMessage({"message": "2"})]
 
 
 @pytest.mark.asyncio()
@@ -166,7 +169,7 @@ async def test_publish_and_receive_protobuf_message(snssqs_test_client: SNSSQSTe
 
     messages = await snssqs_test_client.receive("queue", ProtobufBase, Person)
 
-    assert messages == [Person(id="123456", name="John Doe")]
+    assert messages == [SQSMessage(Person(id="123456", name="John Doe"))]
 
 
 @pytest.mark.asyncio()

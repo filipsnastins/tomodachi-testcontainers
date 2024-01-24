@@ -1,7 +1,8 @@
 import inspect
 import json
 from contextlib import suppress
-from typing import Any, Dict, List, Optional, Protocol, Type, TypeVar, Union
+from dataclasses import dataclass, field
+from typing import Any, Dict, Generic, List, Optional, Protocol, Type, TypeVar, Union
 
 from botocore.exceptions import ClientError
 from google.protobuf.message import Message
@@ -19,6 +20,12 @@ MessageType = TypeVar("MessageType")
 
 TopicARNType = str
 QueueARNType = str
+
+
+@dataclass
+class SQSMessage(Generic[MessageType]):
+    payload: MessageType
+    message_attributes: Dict[str, Any] = field(default_factory=dict)
 
 
 class TopicDoesNotExistError(Exception):
@@ -114,7 +121,7 @@ class SNSSQSTestClient:
         envelope: TomodachiSNSSQSEnvelope,
         message_type: Type[MessageType],
         max_messages: int = 10,
-    ) -> List[MessageType]:
+    ) -> List[SQSMessage[MessageType]]:
         """Receive messages from SQS queue."""
         queue_url = await self.get_queue_url(queue)
         received_messages_response = await self._sqs_client.receive_message(
@@ -129,14 +136,14 @@ class SNSSQSTestClient:
         else:
             proto_class = None
 
-        parsed_messages: List[MessageType] = []
+        parsed_messages: List[SQSMessage[MessageType]] = []
         for received_message in received_messages:
             try:
                 payload = json.loads(received_message["Body"])["Message"]
             except (KeyError, json.JSONDecodeError):
                 payload = received_message["Body"]
             parsed_message = await envelope.parse_message(payload=payload, proto_class=proto_class)
-            parsed_messages.append(parsed_message[0]["data"])
+            parsed_messages.append(SQSMessage(payload=parsed_message[0]["data"], message_attributes={}))
             await self._sqs_client.delete_message(QueueUrl=queue_url, ReceiptHandle=received_message["ReceiptHandle"])
         return parsed_messages
 
