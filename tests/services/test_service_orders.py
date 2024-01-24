@@ -80,7 +80,7 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSS
 
     async def _order_created_event_emitted() -> Dict[str, Any]:
         [event] = await moto_snssqs_tc.receive("order--created", JsonBase, Dict[str, Any])
-        return event
+        return event.payload
 
     event = await probe_until(_order_created_event_emitted)
     assert_datetime_within_range(datetime.fromisoformat(event["created_at"]))

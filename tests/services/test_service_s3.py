@@ -68,7 +68,7 @@ async def test_upload_and_read_file(
 
     async def _file_uploaded_event_emitted() -> Dict[str, Any]:
         [event] = await localstack_snssqs_tc.receive("s3--file-uploaded", JsonBase, Dict[str, Any])
-        return event
+        return event.payload
 
     event = await probe_until(_file_uploaded_event_emitted)
     assert_datetime_within_range(datetime.fromisoformat(event["event_time"]))
