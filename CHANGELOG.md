@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 (2024-01-25)
+
+### New features
+
+- ([#180](https://github.com/filipsnastins/tomodachi-testcontainers/pull/180))
+  `clients.SNSSQSTestClient`: `SNSSQSTestClient.receive` now returns message attributes.
+  The returned message is now wrapped in a `SQSMessage` dataclass, containing the `payload` and `message_attributes` fields.
+  It's a small breaking change for clients that use the `receive` method, because the message's payload is now wrapped in the `payload` attribute.
+
 ## 1.0.1 (2024-01-23)
 
 ### Fixes
