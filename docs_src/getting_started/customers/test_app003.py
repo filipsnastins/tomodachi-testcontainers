@@ -19,7 +19,7 @@ async def test_customer_created_event_emitted(
     # Assert
     async def _customer_created_event_emitted() -> dict[str, str]:
         [event] = await localstack_snssqs_tc.receive("customer--created", JsonBase, dict[str, str])
-        return event
+        return event.payload
 
     event = await probe_until(_customer_created_event_emitted, probe_interval=0.1, stop_after=3.0)
     assert event == {

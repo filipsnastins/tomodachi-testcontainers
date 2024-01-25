@@ -1,7 +1,8 @@
 import inspect
 import json
 from contextlib import suppress
-from typing import Any, Dict, List, Optional, Protocol, Type, TypeVar, Union
+from dataclasses import dataclass, field
+from typing import Any, Dict, Generic, List, Optional, Protocol, Type, TypeVar, Union
 
 from botocore.exceptions import ClientError
 from google.protobuf.message import Message
@@ -10,6 +11,7 @@ from types_aiobotocore_sns.type_defs import MessageAttributeValueTypeDef as SNSM
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_sqs.literals import QueueAttributeFilterType, QueueAttributeNameType
 from types_aiobotocore_sqs.type_defs import MessageAttributeValueTypeDef as SQSMessageAttributeValueTypeDef
+from types_aiobotocore_sqs.type_defs import MessageTypeDef as SQSMessageTypeDef
 
 __all__ = [
     "SNSSQSTestClient",
@@ -19,6 +21,12 @@ MessageType = TypeVar("MessageType")
 
 TopicARNType = str
 QueueARNType = str
+
+
+@dataclass
+class SQSMessage(Generic[MessageType]):
+    payload: MessageType
+    message_attributes: Dict[str, Any] = field(default_factory=dict)
 
 
 class TopicDoesNotExistError(Exception):
@@ -114,31 +122,19 @@ class SNSSQSTestClient:
         envelope: TomodachiSNSSQSEnvelope,
         message_type: Type[MessageType],
         max_messages: int = 10,
-    ) -> List[MessageType]:
+    ) -> List[SQSMessage[MessageType]]:
         """Receive messages from SQS queue."""
         queue_url = await self.get_queue_url(queue)
         received_messages_response = await self._sqs_client.receive_message(
-            QueueUrl=queue_url, MaxNumberOfMessages=max_messages
+            QueueUrl=queue_url, MaxNumberOfMessages=max_messages, MessageAttributeNames=["All"]
         )
-        received_messages = received_messages_response.get("Messages")
-        if not received_messages:
-            return []
-
-        if inspect.isclass(message_type) and issubclass(message_type, Message):
-            proto_class = message_type
-        else:
-            proto_class = None
-
-        parsed_messages: List[MessageType] = []
-        for received_message in received_messages:
-            try:
-                payload = json.loads(received_message["Body"])["Message"]
-            except (KeyError, json.JSONDecodeError):
-                payload = received_message["Body"]
-            parsed_message = await envelope.parse_message(payload=payload, proto_class=proto_class)
-            parsed_messages.append(parsed_message[0]["data"])
+        sqs_messages: List[SQSMessage[MessageType]] = []
+        for received_message in received_messages_response.get("Messages", []):
+            payload = await self._parse_received_message_payload(envelope, message_type, received_message)
+            message_attributes = self._parse_received_message_attributes(received_message)
+            sqs_messages.append(SQSMessage(payload, message_attributes))
             await self._sqs_client.delete_message(QueueUrl=queue_url, ReceiptHandle=received_message["ReceiptHandle"])
-        return parsed_messages
+        return sqs_messages
 
     async def publish(
         self,
@@ -218,3 +214,30 @@ class SNSSQSTestClient:
         """Delete all messages from SQS queue."""
         queue_url = await self.get_queue_url(queue)
         await self._sqs_client.purge_queue(QueueUrl=queue_url)
+
+    async def _parse_received_message_payload(
+        self, envelope: TomodachiSNSSQSEnvelope, message_type: Type[MessageType], received_message: SQSMessageTypeDef
+    ) -> MessageType:
+        try:
+            # When received from SNS, the message is wrapped in a JSON object with a "Message" key
+            payload = json.loads(received_message["Body"])["Message"]
+        except (KeyError, json.JSONDecodeError):
+            # When received from SQS, the message is the "Body" key
+            payload = received_message["Body"]
+
+        if inspect.isclass(message_type) and issubclass(message_type, Message):
+            proto_class = message_type
+        else:
+            proto_class = None
+
+        parsed_message, *_ = await envelope.parse_message(payload=payload, proto_class=proto_class)
+        return parsed_message["data"]
+
+    def _parse_received_message_attributes(self, received_message: SQSMessageTypeDef) -> Dict[str, Any]:
+        # When received from SNS, the message attributes are added to the "Body" key by tomodachi framework
+        with suppress(KeyError, json.JSONDecodeError):
+            return json.loads(received_message["Body"])["MessageAttributes"]
+        # When received from SQS, the message attributes are in the "MessageAttributes" key
+        if message_attributes := received_message.get("MessageAttributes"):
+            return message_attributes
+        return {}

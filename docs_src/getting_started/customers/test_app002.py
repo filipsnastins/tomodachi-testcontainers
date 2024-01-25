@@ -23,7 +23,7 @@ async def test_customer_created_event_emitted(
 
     events = await localstack_snssqs_tc.receive("customer--created", JsonBase, dict[str, str])
     assert len(events) == 1
-    assert events[0] == {
+    assert events[0].payload == {
         "customer_id": customer_id,
         "name": "John Doe",
     }
