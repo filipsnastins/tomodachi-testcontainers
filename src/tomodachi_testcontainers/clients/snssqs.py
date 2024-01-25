@@ -234,10 +234,10 @@ class SNSSQSTestClient:
         return parsed_message["data"]
 
     def _parse_received_message_attributes(self, received_message: SQSMessageTypeDef) -> Dict[str, Any]:
+        # When received from SNS, the message attributes are added to the "Body" key by tomodachi framework
+        with suppress(KeyError, json.JSONDecodeError):
+            return json.loads(received_message["Body"])["MessageAttributes"]
         # When received from SQS, the message attributes are in the "MessageAttributes" key
         if message_attributes := received_message.get("MessageAttributes"):
             return message_attributes
-        # When received from SNS, the message attributes are added by tomodachi to the "Body" key
-        with suppress(KeyError, json.JSONDecodeError):
-            return json.loads(received_message["Body"])["MessageAttributes"]
         return {}
