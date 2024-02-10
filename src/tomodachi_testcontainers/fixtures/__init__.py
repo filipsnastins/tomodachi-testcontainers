@@ -1,4 +1,5 @@
 """pytest fixtures."""
+
 from contextlib import suppress
 
 from .containers import testcontainer_image

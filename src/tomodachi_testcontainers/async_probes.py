@@ -2,6 +2,7 @@
 
 Inspired by [Awaitility](https://github.com/awaitility/awaitility) and [busypie](https://github.com/rockem/busypie).
 """
+
 import asyncio
 from contextlib import suppress
 from typing import Any, Awaitable, Callable, TypeVar, Union, cast, overload
@@ -18,8 +19,7 @@ async def probe_until(
     probe: Callable[[], Awaitable[T]],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
-) -> T:
-    ...  # pragma: no cover
+) -> T: ...  # pragma: no cover
 
 
 @overload
@@ -27,8 +27,7 @@ async def probe_until(
     probe: Callable[[], T],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
-) -> T:
-    ...  # pragma: no cover
+) -> T: ...  # pragma: no cover
 
 
 async def probe_until(
@@ -58,8 +57,7 @@ async def probe_during_interval(
     probe: Callable[[], Awaitable[T]],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
-) -> T:
-    ...  # pragma: no cover
+) -> T: ...  # pragma: no cover
 
 
 @overload
@@ -67,8 +65,7 @@ async def probe_during_interval(
     probe: Callable[[], T],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
-) -> T:
-    ...  # pragma: no cover
+) -> T: ...  # pragma: no cover
 
 
 async def probe_during_interval(

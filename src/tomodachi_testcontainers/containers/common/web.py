@@ -1,4 +1,5 @@
 """Abstract web container for services that expose HTTP port."""
+
 import abc
 import urllib.parse
 from typing import Any, Optional

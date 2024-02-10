@@ -3,6 +3,7 @@
 Adaptation of https://github.com/wiremock/python-wiremock
 See WireMock usage examples in https://github.com/wiremock/python-wiremock/tree/master/examples
 """
+
 import os
 from pathlib import Path
 from typing import Any, Optional

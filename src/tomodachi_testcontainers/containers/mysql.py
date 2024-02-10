@@ -2,6 +2,7 @@
 
 Adaptation of https://github.com/testcontainers/testcontainers-python/tree/main/mysql
 """
+
 import os
 from typing import Any, Optional
 
