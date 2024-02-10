@@ -188,7 +188,7 @@ exclude = [
     "venv",
 ]
 
-[tool.ruff.extend-per-file-ignores]
+[tool.ruff.lint.extend-per-file-ignores]
 "docs_src/**/*.py" = ["E402"]
 "tests/services/test_service_healthcheck.py" = ["E402"]
 
