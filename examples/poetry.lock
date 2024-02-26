@@ -1065,18 +1065,18 @@ typing = ["mypy (>=1.4)", "rich", "twisted"]
 
 [[package]]
 name = "tomodachi"
-version = "0.26.4"
+version = "0.27.0"
 description = "Microservice library on asyncio - HTTP server, websockets, pub/sub messaging for AWS SNS+SQS and RabbitMQ"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "tomodachi-0.26.4-py3-none-any.whl", hash = "sha256:ffd42005653e2c7aeb11e5002f5c990146f8098bef1d360bf2b2c169646ee228"},
-    {file = "tomodachi-0.26.4.tar.gz", hash = "sha256:ed8e4aa8aeb6e3db851e209d5be4254e8c2e794d0d35a9b5ea5795418b15d9b8"},
+    {file = "tomodachi-0.27.0-py3-none-any.whl", hash = "sha256:f9dab85de44827c622a0cbd0e21fd7d67b4384f1b7a47cca4ec7517dff4e35d0"},
+    {file = "tomodachi-0.27.0.tar.gz", hash = "sha256:0a420893d8d7c34f1660a2f00e7c16461305b44543457f52350b1dee03b872dc"},
 ]
 
 [package.dependencies]
 aioamqp = ">=0.13.0,<0.16.0"
-aiobotocore = ">=1.3.0,<2.10.0"
+aiobotocore = ">=1.3.0,<2.12.0"
 aiohttp = ">=3.7.0,<3.10.0"
 asahi = ">=0.1,<0.3"
 botocore = ">=1.20.106"
@@ -1851,4 +1851,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "07bb3f9c091a8e2214bd7e696c9abe185424fa05165cb06108e886cbe2762dd1"
+content-hash = "6d86e514b44d4897591d51d2bb5437e76d0c1283726754e7a1d373a95f526151"
