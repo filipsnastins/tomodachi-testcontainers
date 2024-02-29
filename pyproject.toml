@@ -142,10 +142,6 @@ ignore = [
     "LIT101",
     "PL123",
 ]
-per-file-ignores = [
-    "docs_src/**/*.py:E402",
-    "tests/services/test_service_healthcheck.py:E402",
-]
 literal-inline-quotes = "double"
 literal-multiline-quotes = "double"
 exclude = [
@@ -158,6 +154,11 @@ exclude = [
     "__pycache__",
     "build",
     "dist",
+]
+extend-exclude = ["tests/clients/proto"]
+per-file-ignores = [
+    "docs_src/**/*.py:E402",
+    "tests/services/test_service_healthcheck.py:E402",
 ]
 
 [tool.ruff]
@@ -186,6 +187,7 @@ exclude = [
     "node_modules",
     "venv",
 ]
+extend-exclude = ["tests/clients/proto"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "docs_src/**/*.py" = ["E402"]
