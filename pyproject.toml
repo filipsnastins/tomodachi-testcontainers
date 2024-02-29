@@ -224,6 +224,7 @@ env = [
 branch = true
 relative_files = true
 source = ["src/", "tests/"]
+omit = ["tests/clients/proto/*"]
 
 [tool.coverage.paths]
 source = ["examples/", "src/", "/app"]
