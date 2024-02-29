@@ -2148,7 +2148,7 @@ files = [
 name = "psycopg"
 version = "3.1.18"
 description = "PostgreSQL database adapter for Python"
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "psycopg-3.1.18-py3-none-any.whl", hash = "sha256:4d5a0a5a8590906daa58ebd5f3cfc34091377354a1acced269dd10faf55da60e"},
@@ -3981,11 +3981,11 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [extras]
 db = ["sqlalchemy"]
 mysql = ["cryptography", "pymysql", "sqlalchemy"]
-postgres = ["sqlalchemy"]
+postgres = ["psycopg", "sqlalchemy"]
 sftp = ["asyncssh"]
 wiremock = ["wiremock"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "0c93eb0ebc6f08ce57d3c6f95db56cbbf24097122a4e1c3478998827a86fde44"
+content-hash = "f5821f2c5d64c1965ce795c3394262332220850306b39c8b68eada40695ec570"
