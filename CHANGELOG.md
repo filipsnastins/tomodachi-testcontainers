@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1 (2024-02-29)
+
+### New features
+
+- ([#234](https://github.com/filipsnastins/tomodachi-testcontainers/pull/234))
+  `clients.SNSSQSTestClient`: supports SQS messaging introduced in tomodachi [0.27](https://github.com/kalaspuff/tomodachi/releases/tag/0.27.0).
+
 ## 1.1.0 (2024-01-25)
 
 ### New features
