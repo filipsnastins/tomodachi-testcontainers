@@ -15,6 +15,9 @@ from types_aiobotocore_sqs.type_defs import MessageTypeDef as SQSMessageTypeDef
 
 __all__ = [
     "SNSSQSTestClient",
+    "SQSMessage",
+    "TopicDoesNotExistError",
+    "QueueDoesNotExistError",
 ]
 
 MessageType = TypeVar("MessageType")
