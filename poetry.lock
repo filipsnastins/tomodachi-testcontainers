@@ -16,24 +16,24 @@ pamqp = ">=3.1.0"
 
 [[package]]
 name = "aiobotocore"
-version = "2.9.1"
+version = "2.11.2"
 description = "Async client for aws services using botocore and aiohttp"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "aiobotocore-2.9.1-py3-none-any.whl", hash = "sha256:4f8f4074069c115c7558edf1c6e4f78c997fcfb805974e3fe1a8a8442cb923b3"},
-    {file = "aiobotocore-2.9.1.tar.gz", hash = "sha256:24daf4f1ce86e2fb5aee146cdc944736ef76791635ec3a9b6f3d5755b1ac3c46"},
+    {file = "aiobotocore-2.11.2-py3-none-any.whl", hash = "sha256:487fede588040bfa3a43df945275c28c1c73ca75bf705295adb9fbadd2e89be7"},
+    {file = "aiobotocore-2.11.2.tar.gz", hash = "sha256:6dd7352248e3523019c5a54a395d2b1c31080697fc80a9ad2672de4eec8c7abd"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.7.4.post0,<4.0.0"
 aioitertools = ">=0.5.1,<1.0.0"
-botocore = ">=1.33.2,<1.33.14"
+botocore = ">=1.33.2,<1.34.35"
 wrapt = ">=1.10.10,<2.0.0"
 
 [package.extras]
-awscli = ["awscli (>=1.31.2,<1.31.14)"]
-boto3 = ["boto3 (>=1.33.2,<1.33.14)"]
+awscli = ["awscli (>=1.31.2,<1.32.35)"]
+boto3 = ["boto3 (>=1.33.2,<1.34.35)"]
 
 [[package]]
 name = "aiohttp"
