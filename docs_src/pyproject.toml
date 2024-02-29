@@ -11,7 +11,7 @@ fastapi = "^0.109.0"
 flask = "^3.0.1"
 httpx = "^0.26.0"
 structlog = "^24.1.0"
-tomodachi = "^0.26.4"
+tomodachi = "^0.27.0"
 types-aiobotocore = { extras = [
     "dynamodb",
     "s3",
