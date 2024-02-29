@@ -14,7 +14,7 @@ class PostgreSQLContainer(DatabaseContainer):
 
     Configuration environment variables (set on host machine):
 
-    - `POSTGRES_DRIVERNAME` - defaults to `postgresql+psycopg2`
+    - `POSTGRES_DRIVERNAME` - defaults to `postgresql+psycopg`
     - `POSTGRES_USER` - defaults to `username`
     - `POSTGRES_PASSWORD` - defaults to `password`
     - `POSTGRES_DB` - defaults to `db`
@@ -38,7 +38,7 @@ class PostgreSQLContainer(DatabaseContainer):
             **kwargs,
         )
 
-        self.drivername = drivername or os.getenv("POSTGRES_DRIVERNAME") or "postgresql+psycopg2"
+        self.drivername = drivername or os.getenv("POSTGRES_DRIVERNAME") or "postgresql+psycopg"
         self.username = username or os.getenv("POSTGRES_USER") or "username"
         self.password = password or os.getenv("POSTGRES_PASSWORD") or "password"
         self.database = database or os.getenv("POSTGRES_DB") or "db"
