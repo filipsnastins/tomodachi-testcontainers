@@ -1089,19 +1089,6 @@ files = [
 flake8 = ">=3.0,<3.2.0 || >3.2.0"
 
 [[package]]
-name = "flake8-picky-parentheses"
-version = "0.5.4"
-description = "flake8 plugin to nitpick about parenthesis, brackets, and braces"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "flake8-picky-parentheses-0.5.4.tar.gz", hash = "sha256:218e122bb0cc512d0ba7b0ffa2c58ebc2a2f81bf23bde884f036f92dc0402884"},
-]
-
-[package.dependencies]
-flake8 = ">=3.7,<8.0"
-
-[[package]]
 name = "flake8-plugin-utils"
 version = "1.3.3"
 description = "The package provides base classes and utils for flake8 plugin writing"
@@ -3988,4 +3975,4 @@ wiremock = ["wiremock"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "f5821f2c5d64c1965ce795c3394262332220850306b39c8b68eada40695ec570"
+content-hash = "16bea35978fa0933db198b3a387ee3838b9c6e677303e2f49ec247378066b00e"
