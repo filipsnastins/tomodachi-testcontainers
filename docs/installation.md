@@ -21,7 +21,7 @@ pip install tomodachi-testcontainers[db]
 # MySQLContainer, SQLAlchemy and pymysql
 pip install tomodachi-testcontainers[mysql]
 
-# PostgreSQLContainer, SQLAlchemy and psycopg2
+# PostgreSQLContainer, SQLAlchemy and psycopg
 pip install tomodachi-testcontainers[postgres]
 
 # SFTPContainer and asyncssh

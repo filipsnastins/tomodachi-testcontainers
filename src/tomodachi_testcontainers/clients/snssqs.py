@@ -15,6 +15,9 @@ from types_aiobotocore_sqs.type_defs import MessageTypeDef as SQSMessageTypeDef
 
 __all__ = [
     "SNSSQSTestClient",
+    "SQSMessage",
+    "TopicDoesNotExistError",
+    "QueueDoesNotExistError",
 ]
 
 MessageType = TypeVar("MessageType")
@@ -174,7 +177,9 @@ class SNSSQSTestClient:
             sqs_send_kwargs["MessageDeduplicationId"] = message_deduplication_id
         if message_group_id:
             sqs_send_kwargs["MessageGroupId"] = message_group_id
-        await self._sqs_client.send_message(QueueUrl=queue_url, MessageBody=message, **sqs_send_kwargs)
+        await self._sqs_client.send_message(
+            QueueUrl=queue_url, MessageBody=json.dumps({"Message": message}), **sqs_send_kwargs
+        )
 
     async def get_topic_arn(self, topic: str) -> str:
         list_topics_response = await self._sns_client.list_topics()
@@ -216,17 +221,10 @@ class SNSSQSTestClient:
     async def _parse_received_message_payload(
         self, envelope: TomodachiSNSSQSEnvelope, message_type: Type[MessageType], received_message: SQSMessageTypeDef
     ) -> MessageType:
-        try:
-            # When received from SNS, the message is wrapped in a JSON object with a "Message" key
-            payload = json.loads(received_message["Body"])["Message"]
-        except (KeyError, json.JSONDecodeError):
-            # When received from SQS, the message is the "Body" key
-            payload = received_message["Body"]
+        payload = json.loads(received_message["Body"])["Message"]
 
-        if inspect.isclass(message_type) and issubclass(message_type, Message):
-            proto_class = message_type
-        else:
-            proto_class = None
+        is_proto_message = inspect.isclass(message_type) and issubclass(message_type, Message)
+        proto_class = message_type if is_proto_message else None
 
         parsed_message, *_ = await envelope.parse_message(payload=payload, proto_class=proto_class)
         return parsed_message["data"]

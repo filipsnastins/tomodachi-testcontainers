@@ -107,7 +107,7 @@ It's handy when you want to change the default configuration of Testcontianers w
 
 - [`PostgreSQLContainer`][tomodachi_testcontainers.PostgreSQLContainer]
 
-      - `POSTGRES_DRIVERNAME` - defaults to `postgresql+psycopg2`
+      - `POSTGRES_DRIVERNAME` - defaults to `postgresql+psycopg`
       - `POSTGRES_USER` - defaults to `username`
       - `POSTGRES_PASSWORD` - defaults to `password`
       - `POSTGRES_DB` - defaults to `db`
