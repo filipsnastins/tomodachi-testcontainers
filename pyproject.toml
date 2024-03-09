@@ -17,7 +17,7 @@ sftp = ["asyncssh"]
 wiremock = ["wiremock"]
 
 [tool.poetry.dependencies]
-python = "^3.8.1"
+python = "^3.9"
 aiobotocore = "^2.4.2"
 asyncssh = { version = "^2.13.2", optional = true }
 cryptography = { version = ">=41,<43", optional = true }
@@ -30,7 +30,7 @@ requests = "^2.31.0"
 shortuuid = "^1.0.11"
 sqlalchemy = { version = ">=1.3,<3", optional = true }
 tenacity = "^8.2.2"
-testcontainers = "^3.7.1"
+testcontainers = ">=3.7.1,<5.0.0"
 types-aiobotocore = { extras = [
     "dynamodb",
     "iam",
@@ -99,7 +99,7 @@ test-ci = "dev:test_ci"
 
 [tool.black]
 line-length = 120
-target-version = ['py38', 'py39', 'py310', 'py311']
+target-version = ['py39', 'py310', 'py311']
 include = '\.pyi?$'
 exclude = '\.git/|\.mypy_cache/|\.venv/|\.pytest_cache/|\.vscode/|__pycache__/|build/|dist/'
 
@@ -162,7 +162,7 @@ per-file-ignores = [
 ]
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py39"
 line-length = 120
 exclude = [
     ".bzr",
@@ -194,7 +194,7 @@ extend-exclude = ["tests/clients/proto"]
 "tests/services/test_service_healthcheck.py" = ["E402"]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
