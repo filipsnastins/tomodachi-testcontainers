@@ -82,11 +82,14 @@ class TestContainerStartupAndCleanup:
     def test_container_removed_on_failed_startup(self) -> None:
         container_name = shortuuid.uuid()
 
-        with pytest.raises(
-            docker.errors.APIError,
-            match=r'unable to start container process: exec: "foo": executable file not found in \$PATH',
-        ), WorkingContainer().with_name(container_name).with_command("foo"):
-            pass
+        with (
+            pytest.raises(
+                docker.errors.APIError,
+                match=r'unable to start container process: exec: "foo": executable file not found in \$PATH',
+            ),
+            WorkingContainer().with_name(container_name).with_command("foo"),
+        ):
+            pass  # pragma: no cover
 
         with pytest.raises(docker.errors.NotFound):
             docker.from_env().containers.get(container_name)
@@ -105,14 +108,17 @@ class TestContainerStartupAndCleanup:
         original_container = WorkingContainer().with_name(container_name).with_env("ORIGINAL_CONTAINER", "true").start()
         atexit.register(original_container.stop)
 
-        with pytest.raises(
-            ContainerWithSameNameAlreadyExistsError,
-            match=container_name,
-        ), WorkingContainer().with_name(container_name):
-            pass
+        with (
+            pytest.raises(
+                ContainerWithSameNameAlreadyExistsError,
+                match=container_name,
+            ),
+            WorkingContainer().with_name(container_name),
+        ):
+            pass  # pragma: no cover
 
-        result = original_container.exec("sh -c 'echo $ORIGINAL_CONTAINER'")
-        assert result.output == b"true\n"
+        _, output = original_container.exec("sh -c 'echo $ORIGINAL_CONTAINER'")
+        assert output == b"true\n"
 
 
 class TestLogging:
@@ -126,7 +132,7 @@ class TestLogging:
 
     def test_container_logs_are_forwarded_on_failed_healthcheck(self, capsys: pytest.CaptureFixture) -> None:
         with pytest.raises(RuntimeError), FailingHealthcheckContainer():
-            pass
+            pass  # pragma: no cover
 
         stderr = str(capsys.readouterr().err)
         assert "--- Logging error ---" not in stderr

@@ -17,16 +17,18 @@ from tomodachi_testcontainers import DockerContainer, TomodachiContainer
 @pytest.fixture(scope="module")
 def tomodachi_container(testcontainer_image: str) -> Generator[DockerContainer, None, None]:
     with (
-        TomodachiContainer(testcontainer_image)
-        # Bind debugger port.
-        .with_bind_ports(5678, 5678)
-        # Explicitly install debugpy. Adding the debugpy to dev dependencies in pyproject will not work
-        # because the image is using the 'release' target which doesn't include dev dependencies.
-        # Adding the debugpy to production dependencies is not recommended.
-        .with_command(
-            'bash -c "pip install debugpy; python -m debugpy --listen 0.0.0.0:5678 -m tomodachi run src/healthcheck.py --production"'  # pylint: disable=line-too-long
-        )
-    ) as container:
+        (
+            TomodachiContainer(testcontainer_image)
+            # Bind debugger port.
+            .with_bind_ports(5678, 5678)
+            # Explicitly install debugpy. Adding the debugpy to dev dependencies in pyproject will not work
+            # because the image is using the 'release' target which doesn't include dev dependencies.
+            # Adding the debugpy to production dependencies is not recommended.
+            .with_command(
+                'bash -c "pip install debugpy; python -m debugpy --listen 0.0.0.0:5678 -m tomodachi run src/healthcheck.py --production"'  # pylint: disable=line-too-long
+            )
+        ) as container
+    ):
         yield container
 
 
