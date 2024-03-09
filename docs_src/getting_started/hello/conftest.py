@@ -1,17 +1,17 @@
 # --8<-- [start:tomodachi_container]
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 
-from tomodachi_testcontainers import TomodachiContainer
+from tomodachi_testcontainers import DockerContainer, TomodachiContainer
 
 
 @pytest.fixture(scope="session")
-def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainer_image: str) -> Generator[DockerContainer, None, None]:
     with TomodachiContainer(testcontainer_image).with_command(
         "tomodachi run getting_started/hello/app.py --production"
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
 
 
 # --8<-- [end:tomodachi_container]

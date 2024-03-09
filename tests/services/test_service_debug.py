@@ -5,17 +5,17 @@ because you should be able to detect most issues by checking the logs,
 in the same way as you would to when investigating an issue in a production environment.
 """
 
-from typing import AsyncGenerator, Generator, cast
+from typing import AsyncGenerator, Generator
 
 import httpx
 import pytest
 import pytest_asyncio
 
-from tomodachi_testcontainers import TomodachiContainer
+from tomodachi_testcontainers import DockerContainer, TomodachiContainer
 
 
 @pytest.fixture(scope="module")
-def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainer_image: str) -> Generator[DockerContainer, None, None]:
     with (
         TomodachiContainer(testcontainer_image)
         # Bind debugger port.
@@ -27,7 +27,7 @@ def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContaine
             'bash -c "pip install debugpy; python -m debugpy --listen 0.0.0.0:5678 -m tomodachi run src/healthcheck.py --production"'  # pylint: disable=line-too-long
         )
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
 
 
 @pytest_asyncio.fixture(scope="module")

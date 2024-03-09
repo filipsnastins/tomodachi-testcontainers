@@ -1,13 +1,13 @@
 import os
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 
-from .. import MySQLContainer
+from .. import DockerContainer, MySQLContainer
 
 
 @pytest.fixture(scope="session")
-def mysql_container() -> Generator[MySQLContainer, None, None]:
+def mysql_container() -> Generator[DockerContainer, None, None]:
     image = os.getenv("MYSQL_TESTCONTAINER_IMAGE_ID", "mysql:8")
     with MySQLContainer(image) as container:
-        yield cast(MySQLContainer, container)
+        yield container

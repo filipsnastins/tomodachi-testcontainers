@@ -1,5 +1,5 @@
 import os
-from typing import AsyncGenerator, Generator, cast
+from typing import AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
@@ -12,15 +12,15 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
-from .. import LocalStackContainer
+from .. import DockerContainer, LocalStackContainer
 from ..clients.snssqs import SNSSQSTestClient
 
 
 @pytest.fixture(scope="session")
-def localstack_container() -> Generator[LocalStackContainer, None, None]:
+def localstack_container() -> Generator[DockerContainer, None, None]:
     image = os.getenv("LOCALSTACK_TESTCONTAINER_IMAGE_ID", "localstack/localstack:3")
     with LocalStackContainer(image) as container:
-        yield cast(LocalStackContainer, container)
+        yield container
 
 
 @pytest.fixture()

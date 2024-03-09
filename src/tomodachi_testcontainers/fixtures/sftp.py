@@ -1,18 +1,20 @@
 import os
-from typing import AsyncGenerator, Generator, cast
+from typing import AsyncGenerator, Generator
 
 import asyncssh
 import pytest
 import pytest_asyncio
 
+from tomodachi_testcontainers import DockerContainer
+
 from .. import SFTPContainer
 
 
 @pytest.fixture(scope="session")
-def sftp_container() -> Generator[SFTPContainer, None, None]:
+def sftp_container() -> Generator[DockerContainer, None, None]:
     image = os.getenv("SFTP_TESTCONTAINER_IMAGE_ID", "atmoz/sftp:latest")
     with SFTPContainer(image) as container:
-        yield cast(SFTPContainer, container)
+        yield container
 
 
 @pytest_asyncio.fixture(scope="session")

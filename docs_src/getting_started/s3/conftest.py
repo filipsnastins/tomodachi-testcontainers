@@ -1,17 +1,17 @@
-from typing import AsyncGenerator, Generator, cast
+from typing import AsyncGenerator, Generator
 
 import httpx
 import pytest
 import pytest_asyncio
 
-from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
+from tomodachi_testcontainers import DockerContainer, LocalStackContainer, TomodachiContainer
 
 
 @pytest.fixture(scope="session")
 def tomodachi_container(
     testcontainer_image: str,
     localstack_container: LocalStackContainer,
-) -> Generator[TomodachiContainer, None, None]:
+) -> Generator[DockerContainer, None, None]:
     with (
         TomodachiContainer(testcontainer_image)
         .with_env("AWS_S3_BUCKET_NAME", "autotest-my-bucket")
@@ -20,7 +20,7 @@ def tomodachi_container(
         .with_env("AWS_S3_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_command("tomodachi run getting_started/s3/app.py --production")
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
 
 
 @pytest_asyncio.fixture(scope="session")

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 
@@ -16,9 +16,9 @@ class AlpineContainer(DockerContainer):
 
 
 @pytest.fixture(scope="module")
-def alpine_container() -> Generator[AlpineContainer, None, None]:
+def alpine_container() -> Generator[DockerContainer, None, None]:
     with AlpineContainer().with_command("sleep infinity") as container:
-        yield cast(AlpineContainer, container)
+        yield container
 
 
 def test_copy_from_container(alpine_container: AlpineContainer, tmpdir: Path) -> None:

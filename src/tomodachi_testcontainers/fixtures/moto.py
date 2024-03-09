@@ -1,5 +1,5 @@
 import os
-from typing import AsyncGenerator, Generator, cast
+from typing import AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
@@ -12,15 +12,15 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
-from .. import MotoContainer
+from .. import DockerContainer, MotoContainer
 from ..clients.snssqs import SNSSQSTestClient
 
 
 @pytest.fixture(scope="session")
-def moto_container() -> Generator[MotoContainer, None, None]:
+def moto_container() -> Generator[DockerContainer, None, None]:
     image = os.getenv("MOTO_TESTCONTAINER_IMAGE_ID", "motoserver/moto:latest")
     with MotoContainer(image) as container:
-        yield cast(MotoContainer, container)
+        yield container
 
 
 @pytest.fixture()

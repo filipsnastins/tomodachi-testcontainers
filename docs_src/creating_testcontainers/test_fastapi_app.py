@@ -1,9 +1,9 @@
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 import requests
 
-from tomodachi_testcontainers.containers.common import WebContainer
+from tomodachi_testcontainers import DockerContainer, WebContainer
 
 
 class FastAPIContainer(WebContainer):
@@ -19,13 +19,13 @@ class FastAPIContainer(WebContainer):
 
 
 @pytest.fixture(scope="session")
-def fastapi_container(testcontainer_image: str) -> Generator[FastAPIContainer, None, None]:
+def fastapi_container(testcontainer_image: str) -> Generator[DockerContainer, None, None]:
     with (
-        FastAPIContainer(image=testcontainer_image)
+        FastAPIContainer(testcontainer_image)
         .with_env("GREET", "Testcontainers")
         .with_command("uvicorn creating_testcontainers.fastapi_app:app --host 0.0.0.0 --port 8000")
     ) as container:
-        yield cast(FastAPIContainer, container)
+        yield container
 
 
 def test_greetings_from_fastapi(fastapi_container: FastAPIContainer) -> None:

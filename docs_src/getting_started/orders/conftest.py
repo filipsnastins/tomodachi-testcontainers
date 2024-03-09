@@ -1,23 +1,23 @@
-from typing import AsyncGenerator, Generator, cast
+from typing import AsyncGenerator, Generator
 
 import httpx
 import pytest
 import pytest_asyncio
 
-from tomodachi_testcontainers import TomodachiContainer, WireMockContainer
+from tomodachi_testcontainers import DockerContainer, TomodachiContainer, WireMockContainer
 
 
 @pytest.fixture(scope="session")
 def tomodachi_container(
     testcontainer_image: str,
     wiremock_container: WireMockContainer,
-) -> Generator[TomodachiContainer, None, None]:
+) -> Generator[DockerContainer, None, None]:
     with (
         TomodachiContainer(testcontainer_image)
         .with_env("CREDIT_CHECK_SERVICE_URL", wiremock_container.get_internal_url())
         .with_command("tomodachi run getting_started/orders/app.py --production")
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
 
 
 @pytest_asyncio.fixture(scope="session")

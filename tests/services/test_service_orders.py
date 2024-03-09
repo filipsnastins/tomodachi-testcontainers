@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any, AsyncGenerator, Dict, Generator, List, cast
+from typing import Any, AsyncGenerator, Dict, Generator, List
 from unittest import mock
 
 import httpx
@@ -8,7 +8,7 @@ import pytest
 import pytest_asyncio
 from tomodachi.envelope.json_base import JsonBase
 
-from tomodachi_testcontainers import MotoContainer, TomodachiContainer
+from tomodachi_testcontainers import DockerContainer, MotoContainer, TomodachiContainer
 from tomodachi_testcontainers.assertions import assert_datetime_within_range
 from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.clients import SNSSQSTestClient
@@ -22,7 +22,7 @@ async def _create_topics_and_queues(moto_snssqs_tc: SNSSQSTestClient) -> None:
 @pytest.fixture(scope="module")
 def tomodachi_container(
     testcontainer_image: str, moto_container: MotoContainer, _create_topics_and_queues: None
-) -> Generator[TomodachiContainer, None, None]:
+) -> Generator[DockerContainer, None, None]:
     with (
         TomodachiContainer(testcontainer_image, http_healthcheck_path="/health")
         .with_env("AWS_REGION", "us-east-1")
@@ -34,7 +34,7 @@ def tomodachi_container(
         .with_env("DYNAMODB_TABLE_NAME", "autotest-orders")
         .with_command("coverage run -m tomodachi run src/orders.py --production")
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
     moto_container.reset_moto()
 
 

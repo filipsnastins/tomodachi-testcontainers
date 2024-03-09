@@ -1,4 +1,4 @@
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 import requests
@@ -23,9 +23,9 @@ class HTTPBinContainer(DockerContainer):
 
 
 @pytest.fixture(scope="session")
-def httpbin_container() -> Generator[HTTPBinContainer, None, None]:
+def httpbin_container() -> Generator[DockerContainer, None, None]:
     with HTTPBinContainer() as container:
-        yield cast(HTTPBinContainer, container)
+        yield container
 
 
 def test_httpbin_container_started(httpbin_container: HTTPBinContainer) -> None:

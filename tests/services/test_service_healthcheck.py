@@ -1,17 +1,17 @@
 # --8<-- [start:tomodachi_container]
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 
-from tomodachi_testcontainers import TomodachiContainer
+from tomodachi_testcontainers import DockerContainer, TomodachiContainer
 
 
 @pytest.fixture(scope="module")
-def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainer_image: str) -> Generator[DockerContainer, None, None]:
     with TomodachiContainer(testcontainer_image).with_command(
         "coverage run -m tomodachi run src/healthcheck.py --production"
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
 
 
 # --8<-- [end:tomodachi_container]

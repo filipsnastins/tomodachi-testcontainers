@@ -1,10 +1,10 @@
-from typing import AsyncGenerator, Generator, cast
+from typing import AsyncGenerator, Generator
 
 import httpx
 import pytest
 import pytest_asyncio
 
-from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
+from tomodachi_testcontainers import DockerContainer, LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 
 
@@ -26,7 +26,7 @@ def tomodachi_container(
     testcontainer_image: str,
     localstack_container: LocalStackContainer,
     _create_topics_and_queues: None,
-) -> Generator[TomodachiContainer, None, None]:
+) -> Generator[DockerContainer, None, None]:
     with (
         TomodachiContainer(testcontainer_image)
         .with_env("AWS_REGION", "us-east-1")
@@ -40,7 +40,7 @@ def tomodachi_container(
         .with_env("DYNAMODB_TABLE_NAME", "autotest-customers")
         .with_command("tomodachi run getting_started/customers/app.py --production")
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
 
 
 @pytest_asyncio.fixture(scope="module")

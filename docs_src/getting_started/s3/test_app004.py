@@ -11,11 +11,11 @@ async def _create_s3_buckets(localstack_s3_client: S3Client) -> None:
 # --8<-- [end:create_s3_buckets]
 
 
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 
-from tomodachi_testcontainers import LocalStackContainer, TomodachiContainer
+from tomodachi_testcontainers import DockerContainer, LocalStackContainer, TomodachiContainer
 
 
 # --8<-- [start:tomodachi_container]
@@ -24,7 +24,7 @@ def tomodachi_container(
     testcontainer_image: str,
     localstack_container: LocalStackContainer,
     _create_s3_buckets: None,
-) -> Generator[TomodachiContainer, None, None]:
+) -> Generator[DockerContainer, None, None]:
     # --8<-- [end:tomodachi_container]
     with (
         TomodachiContainer(testcontainer_image)
@@ -34,7 +34,7 @@ def tomodachi_container(
         .with_env("AWS_S3_ENDPOINT_URL", localstack_container.get_internal_url())
         .with_command("tomodachi run getting_started/s3/app.py --production")
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
 
 
 # --8<-- [start:test_save_and_get_file]

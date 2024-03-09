@@ -1,8 +1,8 @@
 import pytest
 from sqlalchemy.exc import OperationalError
 
+from tomodachi_testcontainers import MySQLContainer
 from tomodachi_testcontainers.containers.common.database import DatabaseURL, wait_for_database_healthcheck
-from tomodachi_testcontainers.containers.mysql import MySQLContainer
 from tomodachi_testcontainers.utils import get_available_port
 
 

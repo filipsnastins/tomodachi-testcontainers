@@ -73,20 +73,20 @@ class Service(tomodachi.Service):
 
 ```py
 # tests/test_hello.py
-from typing import Generator, cast
+from typing import Generator
 
 import httpx
 import pytest
 
-from tomodachi_testcontainers import TomodachiContainer
+from tomodachi_testcontainers import DockerContainer, TomodachiContainer
 
 
 @pytest.fixture(scope="session")
-def tomodachi_container(testcontainer_image: str) -> Generator[TomodachiContainer, None, None]:
+def tomodachi_container(testcontainer_image: str) -> Generator[DockerContainer, None, None]:
     with TomodachiContainer(testcontainer_image).with_command(
         "tomodachi run readme/hello.py --production"
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
 
 
 @pytest.mark.asyncio()

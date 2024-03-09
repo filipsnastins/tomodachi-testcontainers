@@ -1,9 +1,9 @@
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 import requests
 
-from tomodachi_testcontainers.containers.common import WebContainer
+from tomodachi_testcontainers import DockerContainer, WebContainer
 
 
 class DjangoContainer(WebContainer):
@@ -19,13 +19,13 @@ class DjangoContainer(WebContainer):
 
 
 @pytest.fixture(scope="session")
-def django_container(testcontainer_image: str) -> Generator[DjangoContainer, None, None]:
+def django_container(testcontainer_image: str) -> Generator[DockerContainer, None, None]:
     with (
-        DjangoContainer(image=testcontainer_image)
+        DjangoContainer(testcontainer_image)
         .with_env("GREET", "Testcontainers")
         .with_command("python creating_testcontainers/django_app/manage.py runserver 0.0.0.0:8000")
     ) as container:
-        yield cast(DjangoContainer, container)
+        yield container
 
 
 def test_greetings_from_django(django_container: DjangoContainer) -> None:

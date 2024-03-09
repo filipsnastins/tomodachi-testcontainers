@@ -1,19 +1,19 @@
 import tempfile
 import uuid
-from typing import AsyncGenerator, Generator, cast
+from typing import AsyncGenerator, Generator
 
 import asyncssh
 import httpx
 import pytest
 import pytest_asyncio
 
-from tomodachi_testcontainers import SFTPContainer, TomodachiContainer
+from tomodachi_testcontainers import DockerContainer, SFTPContainer, TomodachiContainer
 
 
 @pytest.fixture(scope="module")
 def tomodachi_container(
     testcontainer_image: str, sftp_container: SFTPContainer
-) -> Generator[TomodachiContainer, None, None]:
+) -> Generator[DockerContainer, None, None]:
     with (
         TomodachiContainer(testcontainer_image, http_healthcheck_path="/health")
         .with_env("SFTP_HOST", sftp_container.get_internal_conn_details().host)
@@ -23,7 +23,7 @@ def tomodachi_container(
         .with_env("SFTP_KNOWN_HOST", sftp_container.get_internal_known_host())
         .with_command("coverage run -m tomodachi run src/sftp.py --production")
     ) as container:
-        yield cast(TomodachiContainer, container)
+        yield container
 
 
 @pytest_asyncio.fixture(scope="module")

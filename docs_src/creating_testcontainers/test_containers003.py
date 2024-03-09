@@ -1,9 +1,9 @@
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 import requests
 
-from tomodachi_testcontainers import WebContainer
+from tomodachi_testcontainers import DockerContainer, WebContainer
 
 
 class HTTPBinContainer(WebContainer):
@@ -20,9 +20,9 @@ class HTTPBinContainer(WebContainer):
 
 
 @pytest.fixture(scope="session")
-def httpbin_container() -> Generator[HTTPBinContainer, None, None]:
+def httpbin_container() -> Generator[DockerContainer, None, None]:
     with HTTPBinContainer() as container:
-        yield cast(HTTPBinContainer, container)
+        yield container
 
 
 def test_httpbin_container_started(httpbin_container: HTTPBinContainer) -> None:

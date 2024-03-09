@@ -1,9 +1,9 @@
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 import requests
 
-from tomodachi_testcontainers.containers.common import WebContainer
+from tomodachi_testcontainers import DockerContainer, WebContainer
 
 
 class FlaskContainer(WebContainer):
@@ -19,13 +19,13 @@ class FlaskContainer(WebContainer):
 
 
 @pytest.fixture(scope="session")
-def flask_container(testcontainer_image: str) -> Generator[FlaskContainer, None, None]:
+def flask_container(testcontainer_image: str) -> Generator[DockerContainer, None, None]:
     with (
         FlaskContainer(image=testcontainer_image)
         .with_env("GREET", "Testcontainers")
         .with_command("flask --app creating_testcontainers/flask_app.py run --host 0.0.0.0 --port 5000")
     ) as container:
-        yield cast(FlaskContainer, container)
+        yield container
 
 
 def test_greetings_from_flask(flask_container: FlaskContainer) -> None:

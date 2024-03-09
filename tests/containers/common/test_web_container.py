@@ -1,9 +1,9 @@
-from typing import Generator, cast
+from typing import Generator
 
 import pytest
 from requests.exceptions import ConnectionError
 
-from tomodachi_testcontainers import WebContainer
+from tomodachi_testcontainers import DockerContainer, WebContainer
 from tomodachi_testcontainers.containers.common.web import wait_for_http_healthcheck
 from tomodachi_testcontainers.utils import get_available_port
 
@@ -17,9 +17,9 @@ class HTTPBinContainer(WebContainer):
 
 
 @pytest.fixture(scope="module")
-def httpbin_container() -> Generator[HTTPBinContainer, None, None]:
+def httpbin_container() -> Generator[DockerContainer, None, None]:
     with HTTPBinContainer() as container:
-        yield cast(HTTPBinContainer, container)
+        yield container
 
 
 def test_no_connection_to_host() -> None:
