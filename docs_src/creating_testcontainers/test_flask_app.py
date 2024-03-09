@@ -21,7 +21,7 @@ class FlaskContainer(WebContainer):
 @pytest.fixture(scope="session")
 def flask_container(testcontainer_image: str) -> Generator[DockerContainer, None, None]:
     with (
-        FlaskContainer(image=testcontainer_image)
+        FlaskContainer(testcontainer_image)
         .with_env("GREET", "Testcontainers")
         .with_command("flask --app creating_testcontainers/flask_app.py run --host 0.0.0.0 --port 5000")
     ) as container:
