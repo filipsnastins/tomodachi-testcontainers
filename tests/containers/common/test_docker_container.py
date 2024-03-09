@@ -89,7 +89,7 @@ class TestContainerStartupAndCleanup:
             ),
             WorkingContainer().with_name(container_name).with_command("foo"),
         ):
-            pass
+            pass  # pragma: no cover
 
         with pytest.raises(docker.errors.NotFound):
             docker.from_env().containers.get(container_name)
