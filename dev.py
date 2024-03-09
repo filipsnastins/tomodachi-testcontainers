@@ -4,14 +4,12 @@ from subprocess import check_call
 
 
 def hooks() -> None:
-    check_call(["poetry", "run", "pre-commit", "run", "--all-files"])
+    check_call(["pre-commit", "run", "--all-files"])
 
 
 def format() -> None:
     check_call(
         [
-            "poetry",
-            "run",
             "autoflake",
             "--in-place",
             "--recursive",
@@ -21,35 +19,33 @@ def format() -> None:
             ".",
         ]
     )
-    check_call(["poetry", "run", "ruff", "check", "--fix", "."])
-    check_call(["poetry", "run", "black", "."])
-    check_call(["poetry", "run", "isort", "."])
+    check_call(["ruff", "check", "--fix", "."])
+    check_call(["black", "."])
+    check_call(["isort", "."])
 
 
 def lint() -> None:
-    check_call(["poetry", "run", "ruff", "check", "."])
-    check_call(["poetry", "run", "flake8", "."])
-    check_call(["poetry", "run", "pylint", "src/tomodachi_testcontainers", "tests"])
-    check_call(["poetry", "run", "mypy", "src", "tests"])
-    check_call(["poetry", "run", "mypy", "--config", "examples/pyproject.toml", "examples"])
-    check_call(["poetry", "run", "mypy", "--config", "docs_src/pyproject.toml", "docs_src"])
-    check_call(["poetry", "run", "bandit", "-r", "src", "examples"])
+    check_call(["ruff", "check", "."])
+    check_call(["flake8", "."])
+    check_call(["pylint", "src/tomodachi_testcontainers", "tests"])
+    check_call(["mypy", "src", "tests"])
+    check_call(["mypy", "--config", "examples/pyproject.toml", "examples"])
+    check_call(["mypy", "--config", "docs_src/pyproject.toml", "docs_src"])
+    check_call(["bandit", "-r", "src", "examples"])
 
 
 def test() -> None:
-    check_call(["poetry", "run", "pytest", "-v"])
+    check_call(["pytest", "-v"])
 
 
 def test_docs_src() -> None:
-    check_call(["poetry", "run", "pytest", "-v", "docs_src"])
+    check_call(["pytest", "-v", "docs_src"])
 
 
 def test_ci() -> None:
-    check_call(["poetry", "run", "coverage", "erase"])
+    check_call(["coverage", "erase"])
     check_call(
         [
-            "poetry",
-            "run",
             "pytest",
             "--cov",
             "--cov-append",
