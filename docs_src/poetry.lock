@@ -1206,7 +1206,6 @@ types-aiobotocore-dynamodb = {version = ">=2.12.0,<2.13.0", optional = true, mar
 types-aiobotocore-s3 = {version = ">=2.12.0,<2.13.0", optional = true, markers = "extra == \"s3\""}
 types-aiobotocore-sns = {version = ">=2.12.0,<2.13.0", optional = true, markers = "extra == \"sns\""}
 types-aiobotocore-sqs = {version = ">=2.12.0,<2.13.0", optional = true, markers = "extra == \"sqs\""}
-typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.12\""}
 
 [package.extras]
 accessanalyzer = ["types-aiobotocore-accessanalyzer (>=2.12.0,<2.13.0)"]
@@ -1603,9 +1602,6 @@ files = [
     {file = "types_aiobotocore_dynamodb-2.12.1-py3-none-any.whl", hash = "sha256:d499c9b5184377b1455a1d57e313cbaa22e36db384a1c4b28ac2f67fea2e8e17"},
 ]
 
-[package.dependencies]
-typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.12\""}
-
 [[package]]
 name = "types-aiobotocore-s3"
 version = "2.12.1"
@@ -1616,9 +1612,6 @@ files = [
     {file = "types-aiobotocore-s3-2.12.1.tar.gz", hash = "sha256:b076e0bd26d40f9e67438eae7ef3e99e0cc2b743b8cc820377c1655c7f13185f"},
     {file = "types_aiobotocore_s3-2.12.1-py3-none-any.whl", hash = "sha256:c1311c9bd063d02ee0f8eed2389b6a78147bfdf5b08107e91b849b97391a90b1"},
 ]
-
-[package.dependencies]
-typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.12\""}
 
 [[package]]
 name = "types-aiobotocore-sns"
@@ -1631,9 +1624,6 @@ files = [
     {file = "types_aiobotocore_sns-2.12.1-py3-none-any.whl", hash = "sha256:b360adbb505808cf88095e428899b2333ff36caa9fa7db2826ccf715ffb9816c"},
 ]
 
-[package.dependencies]
-typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.12\""}
-
 [[package]]
 name = "types-aiobotocore-sqs"
 version = "2.12.1"
@@ -1644,9 +1634,6 @@ files = [
     {file = "types-aiobotocore-sqs-2.12.1.tar.gz", hash = "sha256:075d3a8428727bb9da5dae95bde7dc7c3202235ad4d537792bbcf13fdbc0a1f5"},
     {file = "types_aiobotocore_sqs-2.12.1-py3-none-any.whl", hash = "sha256:2bfe4ff6d7bd300b1fc499b5774488d210af48e6b44632eb848a01fa32e0d81d"},
 ]
-
-[package.dependencies]
-typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.12\""}
 
 [[package]]
 name = "types-awscrt"
@@ -1992,5 +1979,5 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.11"
-content-hash = "c34a8ff0023d4e7314dbec0ada4a5329045fae0cc678e8da5e0e2958b61b1396"
+python-versions = "^3.12"
+content-hash = "c4d50b869b9587b8285131520032ee63b47369641c4bdaab6c50af7d3f2ab283"

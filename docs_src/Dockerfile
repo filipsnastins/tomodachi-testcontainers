@@ -1,4 +1,4 @@
-FROM python:3.11.4-slim-buster AS python-base
+FROM python:3.12.2-slim-bullseye AS python-base
 WORKDIR /app
 ARG VIRTUAL_ENV=/opt/venv
 RUN addgroup --gid 1001 app && adduser --uid 1000 --gid 1001 app
@@ -9,8 +9,8 @@ ENV VIRTUAL_ENV=$VIRTUAL_ENV \
   PYTHONPATH=/app/src:$PYTHONPATH
 
 FROM python-base AS dependencies-base
-ARG PIP_VERSION=23.3.1
-ARG POETRY_VERSION=1.7.1
+ARG PIP_VERSION=24.0
+ARG POETRY_VERSION=1.8.2
 RUN python -m pip install --no-cache-dir -U \
   "pip==$PIP_VERSION" \
   "poetry==$POETRY_VERSION" && \
