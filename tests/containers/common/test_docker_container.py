@@ -115,7 +115,7 @@ class TestContainerStartupAndCleanup:
             ),
             WorkingContainer().with_name(container_name),
         ):
-            pass
+            pass  # pragma: no cover
 
         _, output = original_container.exec("sh -c 'echo $ORIGINAL_CONTAINER'")
         assert output == b"true\n"
@@ -132,7 +132,7 @@ class TestLogging:
 
     def test_container_logs_are_forwarded_on_failed_healthcheck(self, capsys: pytest.CaptureFixture) -> None:
         with pytest.raises(RuntimeError), FailingHealthcheckContainer():
-            pass
+            pass  # pragma: no cover
 
         stderr = str(capsys.readouterr().err)
         assert "--- Logging error ---" not in stderr
