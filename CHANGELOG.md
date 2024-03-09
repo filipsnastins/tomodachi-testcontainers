@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.2 (2024-03-09)
+
+### Maintenance
+
+- ([#242](https://github.com/filipsnastins/tomodachi-testcontainers/pull/242))
+  Drop Python 3.8 support.
+- ([#242](https://github.com/filipsnastins/tomodachi-testcontainers/pull/242))
+  Update [testcontainers-python](https://github.com/testcontainers/testcontainers-python) to `4.0.0`.
+
 ## 1.1.1 (2024-02-29)
 
 ### New features
