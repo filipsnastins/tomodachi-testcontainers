@@ -1,0 +1,13 @@
+@startuml
+!include ./container/containers.puml
+
+title Container Diagram - SFTP File Transfer Application
+
+appContainer()
+externalSftpContainer()
+s3BucketContainer()
+
+Rel_L(app, externalSftp, "Reads files from", "AsyncSSH")
+Rel_R(app, s3Bucket, "Transfers files to", "aiobotocore")
+
+@enduml

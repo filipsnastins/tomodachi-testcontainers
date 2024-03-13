@@ -1,0 +1,50 @@
+@startuml
+!include <C4/C4_Component>
+!include ../level_2_container/container/containers.puml
+
+skinparam dpi 125
+
+title Container Diagram - SFTP File Transfer Application
+
+externalSftpContainer()
+s3BucketContainer()
+
+Boundary(appContainerBoundary, "Application", "Container") {
+    Boundary(serviceLayer, "Service", "Layer") {
+        Component(useCases, "Use cases", "Python", "Application use cases (services).")
+    }
+
+    Boundary(domainLayer, "Domain", "Layer") {
+        Component(domain, "Domain", "Python", "Application domain objects.")
+
+        Component(ports, "Ports", "Python, typing.Protocol", "Ports protocol.")
+    }
+
+    Boundary(infrastructureLayer, "Adapters", "Layer") {
+        Component_Ext(sftpClient, "SFTP client", "Python, AsyncSSH", "Adapter for SFTP file operations.")
+
+        Component_Ext(s3Client, "S3 client", "Python, aiobotocore", "Adapter for S3 file operations.")
+
+        Component(fakeSftpClient, "In-memory SFTP client", "Python", "Fake for testing and demo purposes.")
+
+        Component(fakeS3Client, "In-memory S3 client", "Python", "Fake for testing and demo purposes.")
+    }
+}
+
+Component(testcontainers, "Testcontainers", "Python, pytest", "Testcontainers library.")
+
+Rel_D(useCases, ports, "Uses")
+Rel_D(useCases, domain, "Uses")
+
+Rel_U(sftpClient, ports, "Implements")
+Rel_U(s3Client, ports, "Implements")
+Rel_U(fakeSftpClient, ports, "Implements")
+Rel_U(fakeS3Client, ports, "Implements")
+
+Rel_D(sftpClient, externalSftp, "Reads files from", "AshyncSSH")
+Rel_D(s3Client, s3Bucket, "Transfers files to ", "aiobotocore")
+
+Rel_U(testcontainers, externalSftp, "Creates SFTP Testcontainer")
+Rel_U(testcontainers, s3Bucket, "Creates LocalStack Testcontainer")
+
+@enduml
