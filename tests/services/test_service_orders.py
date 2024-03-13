@@ -35,7 +35,6 @@ def tomodachi_container(
         .with_command("coverage run -m tomodachi run src/orders.py --production")
     ) as container:
         yield container
-    moto_container.reset_moto()
 
 
 @pytest_asyncio.fixture(scope="module")

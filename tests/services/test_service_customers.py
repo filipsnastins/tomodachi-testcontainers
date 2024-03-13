@@ -35,7 +35,6 @@ def tomodachi_container(
         .with_command("coverage run -m tomodachi run src/customers.py --production")
     ) as container:
         yield container
-    localstack_container.restart()
 
 
 @pytest_asyncio.fixture(scope="module")
