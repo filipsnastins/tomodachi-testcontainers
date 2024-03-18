@@ -2893,13 +2893,13 @@ doc = ["reno", "sphinx", "tornado (>=4.5)"]
 
 [[package]]
 name = "testcontainers"
-version = "4.0.0"
+version = "4.0.1"
 description = "Python library for throwaway instances of anything that can run in a Docker container"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "testcontainers-4.0.0-py3-none-any.whl", hash = "sha256:9fa72e7d07344b91fa97884145d8ed1205b9bafb433ef4739653bf70ebb61e2c"},
-    {file = "testcontainers-4.0.0.tar.gz", hash = "sha256:33b83f3e78b2eee3b122bdf86d7b2867c7b31e088a19a456e527934280e7d5da"},
+    {file = "testcontainers-4.0.1-py3-none-any.whl", hash = "sha256:0359c1391124d594caeb96f0adddbf16fd07aeec8cea5bbc00f9c44a140e3b25"},
+    {file = "testcontainers-4.0.1.tar.gz", hash = "sha256:2c91b1fd8fc9901a08054206f1df108cb07685fc30232e6332ee12f292a17ea1"},
 ]
 
 [package.dependencies]
@@ -2923,7 +2923,6 @@ mysql = ["pymysql[rsa]", "sqlalchemy"]
 neo4j = ["neo4j"]
 opensearch = ["opensearch-py"]
 oracle = ["cx_Oracle", "sqlalchemy"]
-postgres = ["psycopg2-binary", "sqlalchemy"]
 rabbitmq = ["pika"]
 redis = ["redis"]
 selenium = ["selenium"]
