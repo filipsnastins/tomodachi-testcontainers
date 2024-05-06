@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.3 (2024-05-06)
+
+### Maintenance
+
+- Bump pytest-asyncio to [0.21.2](https://github.com/pytest-dev/pytest-asyncio/releases/tag/v0.21.2) to resolve the compatibility issue with pytest 8.2.0.
+
 ## 1.1.2 (2024-03-09)
 
 ### Maintenance
