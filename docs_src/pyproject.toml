@@ -7,7 +7,7 @@ authors = ["Filips Nastins <nastinsfilips@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.0.1"
-fastapi = "^0.110.0"
+fastapi = "^0.110.3"
 flask = "^3.0.1"
 httpx = "^0.27.0"
 structlog = "^24.1.0"
