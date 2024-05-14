@@ -10,7 +10,7 @@ def test_moto_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
             import os
 
 
-            os.environ["MOTO_TESTCONTAINER_IMAGE_ID"] = "motoserver/moto:4.1.0"
+            os.environ["MOTO_TESTCONTAINER_IMAGE_ID"] = "motoserver/moto:5.0.6"
             """
         )
     )
@@ -22,7 +22,7 @@ def test_moto_image_name_set_from_envvar(pytester: pytest.Pytester) -> None:
 
 
             def test_moto_image_name_set_from_envvar(moto_container: MotoContainer) -> None:
-                assert moto_container.image == "motoserver/moto:4.1.0"
+                assert moto_container.image == "motoserver/moto:5.0.6"
             """
         )
     )
