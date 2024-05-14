@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.1 (2024-05-14)
+
+### Maintenance
+
+- ([#306](https://github.com/filipsnastins/tomodachi-testcontainers/pull/306))
+  Bump `[testcontainers-python](https://github.com/testcontainers/testcontainers-python)` to `4.4.1`.
+
 ## 1.2.0 (2024-05-14)
 
 ### New features
