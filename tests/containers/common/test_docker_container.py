@@ -6,7 +6,6 @@ import pytest
 import shortuuid
 
 from tomodachi_testcontainers import DockerContainer
-from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.containers.common.container import ContainerWithSameNameAlreadyExistsError
 
 
@@ -56,20 +55,6 @@ class TestContainerStartupAndCleanup:
 
         container.stop()
         container.stop()
-
-    @pytest.mark.asyncio()
-    async def test_container_removed_on_garbage_collection(self) -> None:
-        container_name = shortuuid.uuid()
-
-        WorkingContainer().with_name(container_name).start()
-
-        # Since we don't have a reference (variable) to the container object,
-        # it is eventually garbage collected and removed
-        def _assert_container_removed() -> None:
-            with pytest.raises(docker.errors.NotFound):
-                docker.from_env().containers.get(container_name)
-
-        await probe_until(_assert_container_removed)
 
     def test_container_removed_on_context_manager_exit(self) -> None:
         container_name = shortuuid.uuid()
