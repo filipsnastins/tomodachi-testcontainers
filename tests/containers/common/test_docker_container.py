@@ -11,8 +11,8 @@ from tomodachi_testcontainers.containers.common.container import ContainerWithSa
 
 
 class WorkingContainer(DockerContainer):
-    def __init__(self) -> None:
-        super().__init__(image="alpine:latest")
+    def __init__(self, disable_logging: bool = False) -> None:
+        super().__init__(image="alpine:latest", disable_logging=disable_logging)
         self.with_command("sleep infinity")
 
     def log_message_on_container_start(self) -> str:
@@ -20,8 +20,8 @@ class WorkingContainer(DockerContainer):
 
 
 class FailingHealthcheckContainer(DockerContainer):
-    def __init__(self) -> None:
-        super().__init__(image="alpine:latest")
+    def __init__(self, disable_logging: bool = False) -> None:
+        super().__init__(image="alpine:latest", disable_logging=disable_logging)
         self.with_command("sleep infinity")
 
     def log_message_on_container_start(self) -> str:
@@ -154,3 +154,18 @@ class TestLogging:
 
         stderr = str(capsys.readouterr().err)
         assert "WorkingContainer (my-container-name): Working container started" in stderr
+
+    def test_disable_logging_on_container_exit_without_errors(self, capsys: pytest.CaptureFixture) -> None:
+        with WorkingContainer(disable_logging=True) as container:
+            container.exec("sh -c 'echo \"my log message\" >> /proc/1/fd/1'")
+
+        stderr = str(capsys.readouterr().err)
+        assert "my log message" not in stderr
+
+    def test_disable_logging_ignored_when_container_fails_on_startup(self, capsys: pytest.CaptureFixture) -> None:
+        with pytest.raises(RuntimeError), FailingHealthcheckContainer(disable_logging=True):
+            pass  # pragma: no cover
+
+        stderr = str(capsys.readouterr().err)
+        assert "--- Logging error ---" not in stderr
+        assert "container healthcheck failed" in stderr

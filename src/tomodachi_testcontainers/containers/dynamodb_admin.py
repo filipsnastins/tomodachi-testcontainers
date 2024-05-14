@@ -19,6 +19,7 @@ class DynamoDBAdminContainer(WebContainer):
         internal_port: int = 8001,
         edge_port: Optional[int] = None,
         region_name: Optional[str] = None,
+        disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init__(
@@ -26,6 +27,7 @@ class DynamoDBAdminContainer(WebContainer):
             internal_port=internal_port,
             edge_port=edge_port,
             http_healthcheck_path="/",
+            disable_logging=disable_logging,
             **kwargs,
         )
 

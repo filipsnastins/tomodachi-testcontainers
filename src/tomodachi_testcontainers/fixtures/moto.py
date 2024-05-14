@@ -19,7 +19,9 @@ from ..clients.snssqs import SNSSQSTestClient
 @pytest.fixture(scope="session")
 def moto_container() -> Generator[DockerContainer, None, None]:
     image = os.getenv("MOTO_TESTCONTAINER_IMAGE_ID", "motoserver/moto:latest")
-    with MotoContainer(image) as container:
+    disable_logging = bool(os.getenv("MOTO_TESTCONTAINER_DISABLE_LOGGING")) or False
+
+    with MotoContainer(image, disable_logging=disable_logging) as container:
         yield container
 
 

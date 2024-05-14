@@ -27,12 +27,14 @@ class WireMockContainer(WebContainer):
         mapping_files: Optional[Path] = None,
         *,
         verbose: bool = False,
+        disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init__(
             image,
             internal_port=internal_port,
             edge_port=edge_port,
+            disable_logging=disable_logging,
             **kwargs,
         )
 

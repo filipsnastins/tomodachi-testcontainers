@@ -214,6 +214,10 @@ env = [
     "TESTCONTAINER_DOCKERFILE_PATH=examples/Dockerfile",
     "TESTCONTAINER_DOCKER_BUILD_CONTEXT=examples",
     "TESTCONTAINER_DOCKER_BUILD_TARGET=test",
+    # LocalStack Testcontainer configuration
+    "LOCALSTACK_TESTCONTAINER_DISABLE_LOGGING=1",
+    # Moto Testcontainer configuration
+    "MOTO_TESTCONTAINER_DISABLE_LOGGING=1",
     # WireMock Testcontainer configuration
     "WIREMOCK_TESTCONTAINER_MAPPING_STUBS=tests/containers/test-wiremock-container/mappings",
     "WIREMOCK_TESTCONTAINER_MAPPING_FILES=tests/containers/test-wiremock-container/files",

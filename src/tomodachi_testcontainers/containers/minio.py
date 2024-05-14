@@ -23,6 +23,7 @@ class MinioContainer(WebContainer):
         console_internal_port: int = 9001,
         console_edge_port: Optional[int] = None,
         region_name: Optional[str] = None,
+        disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init__(
@@ -30,6 +31,7 @@ class MinioContainer(WebContainer):
             internal_port=s3_api_internal_port,
             edge_port=s3_api_edge_port,
             http_healthcheck_path="/minio/health/live",
+            disable_logging=disable_logging,
             **kwargs,
         )
         self.s3_api_internal_port = s3_api_internal_port

@@ -25,9 +25,10 @@ class WebContainer(DockerContainer, abc.ABC):
         internal_port: int,
         edge_port: Optional[int] = None,
         http_healthcheck_path: Optional[str] = None,
+        disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, **kwargs)
+        super().__init__(image, disable_logging=disable_logging, **kwargs)
         self.internal_port = internal_port
         self.edge_port = edge_port or get_available_port()
         self.http_healthcheck_path = http_healthcheck_path

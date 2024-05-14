@@ -29,12 +29,14 @@ class PostgreSQLContainer(DatabaseContainer):
         username: Optional[str] = None,
         password: Optional[str] = None,
         database: Optional[str] = None,
+        disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init__(
             image,
             internal_port=internal_port,
             edge_port=edge_port,
+            disable_logging=disable_logging,
             **kwargs,
         )
 
