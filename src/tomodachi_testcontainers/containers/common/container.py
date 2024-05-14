@@ -55,34 +55,6 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     def log_message_on_container_start(self) -> str:
         """Returns a message that will be logged when the container starts."""
 
-    def with_env(self, key: str, value: str) -> "DockerContainer":
-        super().with_env(key, value)
-        return self
-
-    def with_bind_ports(self, container: int, host: Optional[int] = None) -> "DockerContainer":
-        super().with_bind_ports(container, host)  # type: ignore
-        return self
-
-    def with_exposed_ports(self, *ports: int) -> "DockerContainer":
-        super().with_exposed_ports(*ports)
-        return self
-
-    def with_kwargs(self, **kwargs: Any) -> "DockerContainer":
-        super().with_kwargs(**kwargs)
-        return self
-
-    def with_command(self, command: str) -> "DockerContainer":
-        super().with_command(command)
-        return self
-
-    def with_name(self, name: str) -> "DockerContainer":
-        super().with_name(name)
-        return self
-
-    def with_volume_mapping(self, host: str, container: str, mode: str = "ro") -> "DockerContainer":
-        super().with_volume_mapping(host, container, mode)
-        return self
-
     def get_container_host_ip(self) -> str:
         host = self.get_docker_client().host()
         if not host:
