@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0 (2024-05-14)
+
+### New features
+
+- ([#305](https://github.com/filipsnastins/tomodachi-testcontainers/pull/305))
+  Adds `<CONTAINER-NAME>_TESTCONTAINER_DISABLE_LOGGING` environment variable
+  to selectively disable logging capture and forwarding for specific containers.
+  The use case is that some containers, like Moto, output logs that are not immediately useful for debugging.
+  Example usage: `MOTO_TESTCONTAINER_DISABLE_LOGGING=1`.
+
 ## 1.1.3 (2024-05-06)
 
 ### Maintenance
