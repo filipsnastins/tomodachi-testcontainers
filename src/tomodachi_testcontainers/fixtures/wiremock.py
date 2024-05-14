@@ -14,7 +14,7 @@ except ImportError:
 @pytest.fixture(scope="session")
 def wiremock_container() -> Generator[WireMockContainer, None, None]:
     image = os.getenv("WIREMOCK_TESTCONTAINER_IMAGE_ID", "wiremock/wiremock:latest")
-    disable_logging = bool(os.getenv("WIREMOCK_TESTCONTAINER_DISABLE_LOGGING", False))
+    disable_logging = bool(os.getenv("WIREMOCK_TESTCONTAINER_DISABLE_LOGGING")) or False
 
     with WireMockContainer(image, disable_logging=disable_logging) as container:
         container = cast(WireMockContainer, container)

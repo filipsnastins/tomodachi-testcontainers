@@ -13,7 +13,7 @@ from .. import SFTPContainer
 @pytest.fixture(scope="session")
 def sftp_container() -> Generator[DockerContainer, None, None]:
     image = os.getenv("SFTP_TESTCONTAINER_IMAGE_ID", "atmoz/sftp:latest")
-    disable_logging = bool(os.getenv("SFTP_TESTCONTAINER_DISABLE_LOGGING", False))
+    disable_logging = bool(os.getenv("SFTP_TESTCONTAINER_DISABLE_LOGGING")) or False
 
     with SFTPContainer(image, disable_logging=disable_logging) as container:
         yield container

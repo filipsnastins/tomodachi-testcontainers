@@ -19,7 +19,7 @@ from ..clients.snssqs import SNSSQSTestClient
 @pytest.fixture(scope="session")
 def localstack_container() -> Generator[DockerContainer, None, None]:
     image = os.getenv("LOCALSTACK_TESTCONTAINER_IMAGE_ID", "localstack/localstack:3")
-    disable_logging = bool(os.getenv("LOCALSTACK_TESTCONTAINER_DISABLE_LOGGING", False))
+    disable_logging = bool(os.getenv("LOCALSTACK_TESTCONTAINER_DISABLE_LOGGING")) or False
 
     with LocalStackContainer(image, disable_logging=disable_logging) as container:
         yield container

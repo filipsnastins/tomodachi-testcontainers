@@ -12,7 +12,7 @@ from .. import DockerContainer, MinioContainer
 @pytest.fixture(scope="session")
 def minio_container() -> Generator[DockerContainer, None, None]:
     image = os.getenv("MINIO_TESTCONTAINER_IMAGE_ID", "minio/minio:latest")
-    disable_logging = bool(os.getenv("MINIO_TESTCONTAINER_DISABLE_LOGGING", False))
+    disable_logging = bool(os.getenv("MINIO_TESTCONTAINER_DISABLE_LOGGING")) or False
 
     with MinioContainer(image, disable_logging=disable_logging) as container:
         yield container
