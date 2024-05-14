@@ -6,11 +6,12 @@
 
 ## General configuration options
 
-| Environment Variable                      | Description                                                                |
-| :---------------------------------------- | :------------------------------------------------------------------------- |
-| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID` | Override Testcontainer's default Docker Image ID in pytest fixture.        |
-| `DOCKER_BUILDKIT`                         | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit for building Docker images. |
-| `TESTCONTAINER_DOCKER_NETWORK`            | Launch Testcontainers in specified Docker network. Defaults to `bridge`.   |
+| Environment Variable                             | Description                                                                |
+| :----------------------------------------------- | :------------------------------------------------------------------------- |
+| `<CONTAINER-NAME>_TESTCONTAINER_IMAGE_ID`        | Override Testcontainer's default Docker Image ID in pytest fixture.        |
+| `DOCKER_BUILDKIT`                                | Set `DOCKER_BUILDKIT=1` to use Docker BuildKit for building Docker images. |
+| `TESTCONTAINER_DOCKER_NETWORK`                   | Launch Testcontainers in specified Docker network. Defaults to `bridge`.   |
+| `<CONTAINER-NAME>_TESTCONTAINER_DISABLE_LOGGING` | Disables log forwarding to stdout for given container.                     |
 
 ### Override Default Docker Image in pytest fixtures
 
