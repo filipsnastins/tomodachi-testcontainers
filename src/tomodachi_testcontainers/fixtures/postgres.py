@@ -11,5 +11,7 @@ from .. import PostgreSQLContainer
 @pytest.fixture(scope="session")
 def postgres_container() -> Generator[DockerContainer, None, None]:
     image = os.getenv("POSTGRES_TESTCONTAINER_IMAGE_ID", "postgres:16")
-    with PostgreSQLContainer(image) as container:
+    disable_logging = bool(os.getenv("POSTGRES_TESTCONTAINER_DISABLE_LOGGING", False))
+
+    with PostgreSQLContainer(image, disable_logging=disable_logging) as container:
         yield container
