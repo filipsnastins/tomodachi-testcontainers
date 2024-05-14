@@ -26,6 +26,7 @@ class TomodachiContainer(WebContainer):
         http_healthcheck_path: Optional[str] = None,
         *,
         export_coverage: bool = False,
+        disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init__(
@@ -33,6 +34,7 @@ class TomodachiContainer(WebContainer):
             internal_port=internal_port,
             edge_port=edge_port,
             http_healthcheck_path=http_healthcheck_path,
+            disable_logging=disable_logging,
             **kwargs,
         )
         self._export_coverage = export_coverage or bool(os.getenv("TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE"))

@@ -43,9 +43,10 @@ class DatabaseContainer(DockerContainer, abc.ABC):
         image: str,
         internal_port: int,
         edge_port: Optional[int] = None,
+        disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, **kwargs)
+        super().__init__(image, disable_logging=disable_logging, **kwargs)
         self.internal_port = internal_port
         self.edge_port = edge_port or get_available_port()
         self.with_bind_ports(internal_port, self.edge_port)

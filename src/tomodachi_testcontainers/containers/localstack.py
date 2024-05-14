@@ -23,6 +23,7 @@ class LocalStackContainer(WebContainer):
         internal_port: int = 4566,
         edge_port: Optional[int] = None,
         region_name: Optional[str] = None,
+        disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init__(
@@ -30,6 +31,7 @@ class LocalStackContainer(WebContainer):
             internal_port=internal_port,
             edge_port=edge_port,
             http_healthcheck_path="/_localstack/health",
+            disable_logging=disable_logging,
             **kwargs,
         )
 

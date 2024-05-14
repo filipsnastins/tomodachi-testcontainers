@@ -1,3 +1,4 @@
+import os
 from typing import Any, NamedTuple, Optional
 
 import asyncssh
@@ -15,9 +16,10 @@ class SFTPContainer(DockerContainer):
         image: str = "atmoz/sftp:latest",
         internal_port: int = 22,
         edge_port: Optional[int] = None,
+        disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
-        super().__init__(image, **kwargs)
+        super().__init__(image, disable_logging=disable_logging, **kwargs)
         self.internal_port = internal_port
         self.edge_port = edge_port or get_available_port()
         self.with_bind_ports(self.internal_port, self.edge_port)

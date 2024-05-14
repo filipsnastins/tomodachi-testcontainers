@@ -25,10 +25,14 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     _name: str
     _logger: logging.Logger
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, disable_logging: bool = False, **kwargs: Any) -> None:
         self._set_container_network()
+
         super().__init__(*args, **kwargs, network=self.network)
+
         self._set_default_container_name()
+
+        self._disable_logging = disable_logging
 
     def __enter__(self) -> "DockerContainer":
         try:
@@ -43,7 +47,8 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     def __exit__(
         self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
     ) -> None:
-        self._forward_container_logs_to_logger()
+        if not self._disable_logging:
+            self._forward_container_logs_to_logger()
         self.stop()
 
     @abc.abstractmethod
