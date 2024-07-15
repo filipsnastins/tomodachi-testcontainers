@@ -49,6 +49,7 @@ jobs:
         run: |
           poetry run python -c "import tomodachi_testcontainers"
           poetry run python -c "import tomodachi_testcontainers.clients"
+          poetry run python -c "import tomodachi_testcontainers.containers"
           poetry run python -c "import tomodachi_testcontainers.fixtures"
           poetry run python -c "import tomodachi_testcontainers.assertions"
           poetry run python -c "import tomodachi_testcontainers.async_probes"
@@ -63,13 +64,13 @@ jobs:
         run: poetry build
 
       - name: Run commit hooks
-        run: SKIP=test poetry run hooks
+        run: SKIP=test make hooks
 
       - name: Create Docker network for running Testcontianers
         run: docker network create ${{ env.TESTCONTAINER_DOCKER_NETWORK }}
 
       - name: Run tests
-        run: poetry run test-ci
+        run: make test-ci
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4

@@ -13,22 +13,22 @@ pre-commit install
 ```sh
 docker network create tomodachi-testcontainers
 
-poetry run test  # Run tests during development
-poetry run test-docs-src  # Test documentation code examples
-poetry run test-ci  # Run all tests with code coverage
+make test  # Run tests during development
+make test-docs-src  # Test documentation code examples
+make test-ci  # Run all tests with code coverage
 ```
 
 - Format and lint code.
 
 ```sh
-poetry run format
-poetry run lint
+make format
+make lint
 ```
 
 - Run all commit hooks at once.
 
 ```sh
-poetry run hooks
+make hooks
 ```
 
 - Build package release.

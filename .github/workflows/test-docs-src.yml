@@ -44,4 +44,4 @@ jobs:
         run: docker network create ${{ env.TESTCONTAINER_DOCKER_NETWORK }}
 
       - name: Run docs_src/ tests
-        run: poetry run test-docs-src
+        run: make test-docs-src

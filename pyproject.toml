@@ -89,17 +89,9 @@ mkdocstrings = { extras = ["python"], version = "^0.24.0" }
 [tool.poetry.plugins."pytest11"]
 tomodachi_testcontainers = "tomodachi_testcontainers.fixtures"
 
-[tool.poetry.scripts]
-hooks = "dev:hooks"
-format = "dev:format"
-lint = "dev:lint"
-test = "dev:test"
-test-docs-src = "dev:test_docs_src"
-test-ci = "dev:test_ci"
-
 [tool.black]
 line-length = 120
-target-version = ['py39', 'py310', 'py311']
+target-version = ['py39', 'py310', 'py311', 'py312']
 include = '\.pyi?$'
 exclude = '\.git/|\.mypy_cache/|\.venv/|\.pytest_cache/|\.vscode/|__pycache__/|build/|dist/'
 
