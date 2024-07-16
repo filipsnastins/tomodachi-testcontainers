@@ -56,12 +56,10 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
         """Returns a message that will be logged when the container starts."""
 
     def get_container_host_ip(self) -> str:
-        host = self.get_docker_client().host()
-        if not host:
+        if not (host := self.get_docker_client().host()):
             return "localhost"
         if inside_container() and not os.getenv("DOCKER_HOST"):
-            gateway_ip = self.get_container_gateway_ip()
-            if gateway_ip == host:
+            if (gateway_ip := self.get_container_gateway_ip()) == host:
                 return self.get_container_internal_ip()
             return gateway_ip
         return host

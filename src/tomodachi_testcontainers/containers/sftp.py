@@ -55,7 +55,7 @@ class SFTPContainer(DockerContainer):
 
     def get_known_hosts(self) -> asyncssh.SSHKnownHosts:
         known_hosts = asyncssh.SSHKnownHosts()
-        for known_host in [self.get_internal_known_host(), self.get_external_known_host()]:
+        for known_host in (self.get_internal_known_host(), self.get_external_known_host()):
             known_hosts.load(known_host)
         return known_hosts
 
