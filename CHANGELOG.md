@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.2 (2024-07-16)
+
+### Maintenance
+
+- Development scripts moved from the Poetry scripts to Makefile.
+  Unnecessary development scripts are no longer packaged as part of the library.
+- Dependency updates.
+- Extended `pylint` config and added `pydocstringformatter` linter.
+
 ## 1.2.1 (2024-05-14)
 
 ### Maintenance
