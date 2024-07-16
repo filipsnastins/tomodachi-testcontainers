@@ -1428,21 +1428,21 @@ typing = ["mypy (>=1.4)", "rich", "twisted"]
 
 [[package]]
 name = "tomodachi"
-version = "0.27.0"
+version = "0.27.2"
 description = "Microservice library on asyncio - HTTP server, websockets, pub/sub messaging for AWS SNS+SQS and RabbitMQ"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "tomodachi-0.27.0-py3-none-any.whl", hash = "sha256:f9dab85de44827c622a0cbd0e21fd7d67b4384f1b7a47cca4ec7517dff4e35d0"},
-    {file = "tomodachi-0.27.0.tar.gz", hash = "sha256:0a420893d8d7c34f1660a2f00e7c16461305b44543457f52350b1dee03b872dc"},
+    {file = "tomodachi-0.27.2-py3-none-any.whl", hash = "sha256:976b088bab49676f12330ef35fcdfa8714f21168ac3c001aaec5ac757696d1c9"},
+    {file = "tomodachi-0.27.2.tar.gz", hash = "sha256:27a27a4b79224ffc9fad56e926fd68a6a77071465fe67802a8238c27b859cd02"},
 ]
 
 [package.dependencies]
 aioamqp = ">=0.13.0,<0.16.0"
-aiobotocore = ">=1.3.0,<2.12.0"
+aiobotocore = ">=2.0.0,<3.0.0"
 aiohttp = ">=3.7.0,<3.10.0"
 asahi = ">=0.1,<0.3"
-botocore = ">=1.20.106"
+botocore = ">=1.22.8"
 colorama = ">=0.3.9,<0.5.0"
 pytz = "*"
 structlog = ">=21.5.0,<25.0.0"
@@ -2444,4 +2444,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "dc6d00a8650b8e4d0903882e48f9309c4bead28c0e0d27d3bacd22354452c97f"
+content-hash = "a273053cf5798b0b3fbedd19770b59caa172158f2272bb861a4d52959556bd18"
