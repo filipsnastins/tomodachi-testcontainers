@@ -10,7 +10,7 @@ from tomodachi_testcontainers.utils import get_available_port
 
 class HTTPBinContainer(DockerContainer):
     def __init__(self, internal_port: int = 80, edge_port: int | None = None) -> None:
-        super(HTTPBinContainer, self).__init__(image="kennethreitz/httpbin")
+        super().__init__(image="kennethreitz/httpbin")
         self.with_bind_ports(internal_port, edge_port or get_available_port())
 
     def log_message_on_container_start(self) -> str:
