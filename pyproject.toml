@@ -68,6 +68,7 @@ isort = "^5.12.0"
 mypy = "^1.4.1"
 pre-commit = "^3.3.3"
 pydantic = "^2.0.2"
+pydocstringformatter = "^0.7.3"
 pylint = { version = "^3.0.2", extras = ["spelling"] }
 pytest-cov = ">=4.1,<6.0"
 pytest-env = "^1.0.1"
@@ -183,6 +184,23 @@ extend-exclude = ["tests/clients/proto"]
 [tool.ruff.lint.extend-per-file-ignores]
 "docs_src/**/*.py" = ["E402"]
 "tests/services/test_service_healthcheck.py" = ["E402"]
+
+[tool.pydocstringformatter]
+write = true
+strip-whitespaces = true
+split-summary-body = false
+numpydoc-section-hyphen-length = false
+exclude = [
+    "**/.git/**",
+    "**/.ruff_cache/**",
+    "**/.mypy_cache/**",
+    "**/.venv/**",
+    "**/.pytest_cache/**",
+    "**/.vscode/**",
+    "**/__pycache__/**",
+    "**/build/**",
+    "**/dist/**",
+]
 
 [tool.mypy]
 python_version = "3.9"

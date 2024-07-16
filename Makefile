@@ -18,6 +18,7 @@ lint:
 	mypy --config examples/pyproject.toml examples
 	mypy --config docs_src/pyproject.toml docs_src
 	bandit -r src examples
+	pydocstringformatter --style=pep257 --style=numpydoc .
 
 .PHONY: test
 test:

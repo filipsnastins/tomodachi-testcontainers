@@ -1,4 +1,4 @@
-"""pytest fixtures."""
+"""Pytest fixtures."""
 
 from contextlib import suppress
 

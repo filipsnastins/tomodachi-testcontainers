@@ -2250,6 +2250,20 @@ files = [
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
+name = "pydocstringformatter"
+version = "0.7.3"
+description = "A tool to automatically format Python docstrings that tries to follow recommendations from PEP 8 and PEP 257."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pydocstringformatter-0.7.3-py3-none-any.whl", hash = "sha256:3654f52c49fc729b49712d1e7c49384dfd253bdffeda4939e79dab31491c563f"},
+    {file = "pydocstringformatter-0.7.3.tar.gz", hash = "sha256:dfcc07bec1706803d563275e282ef9e629b02dc19983ec6778d07a9f500bb62b"},
+]
+
+[package.dependencies]
+tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
+
+[[package]]
 name = "pyenchant"
 version = "3.2.2"
 description = "Python bindings for the Enchant spellchecking system"
@@ -3931,4 +3945,4 @@ wiremock = ["wiremock"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "c549b89c09d679fd81339f81775249daa0100000b1d650bd22a78be4bb346de3"
+content-hash = "f1e7f1c575fd2fdc437013a92a17b01bb5bffd93412a3961832245a5aae0f005"
