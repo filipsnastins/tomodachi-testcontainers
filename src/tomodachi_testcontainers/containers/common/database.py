@@ -20,11 +20,11 @@ class DatabaseURL(NamedTuple):
     port: int
     database: str
 
-    def __repr__(self) -> str:
-        return self.to_str()
-
-    def to_str(self) -> str:
+    def __str__(self) -> str:
         return f"{self.drivername}://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}"
+
+    def to_str(self) -> str:  # Keeping the method for backward compatibility
+        return str(self)
 
 
 class DatabaseContainer(DockerContainer, abc.ABC):
@@ -80,6 +80,6 @@ class DatabaseContainer(DockerContainer, abc.ABC):
 def wait_for_database_healthcheck(url: DatabaseURL, timeout: float = 20.0, interval: float = 0.5) -> None:
     for attempt in Retrying(stop=stop_after_delay(timeout), wait=wait_fixed(interval), reraise=True):
         with attempt:
-            engine = sqlalchemy.create_engine(url.to_str())
+            engine = sqlalchemy.create_engine(str(url))
             with engine.connect() as conn:
                 conn.execute(sqlalchemy.text("SELECT 1;"))
