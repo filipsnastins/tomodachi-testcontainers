@@ -36,7 +36,7 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=
+load-plugins=pylint.extensions.code_style
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -83,6 +83,7 @@ disable=arguments-differ,
         too-many-instance-attributes,
         unspecified-encoding,
         unused-argument,
+        used-before-assignment,
         wrong-import-order,
         wrong-import-position
 
