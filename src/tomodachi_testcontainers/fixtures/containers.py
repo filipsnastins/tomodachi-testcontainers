@@ -27,8 +27,8 @@ def testcontainer_image() -> Generator[str, None, None]:
             dockerfile=(Path(v) if (v := os.getenv("TESTCONTAINER_DOCKERFILE_PATH")) else None),
             context=(Path(v) if (v := os.getenv("TESTCONTAINER_DOCKER_BUILD_CONTEXT")) else None),
             target=os.getenv("TESTCONTAINER_DOCKER_BUILD_TARGET"),
-            # Don't remove the image on teardown because it's used by other pytest-xdist workers in parallel.
+            # Don't remove the image on teardown if it's used by other pytest-xdist workers in parallel.
             # The image will be eventually removed by the 'master' worker that exits last.
-            remove_image_on_exit=bool(os.getenv("PYTEST_XDIST_WORKER")),
+            remove_image_on_exit=not os.getenv("PYTEST_XDIST_WORKER"),
         ) as image:
             yield str(image.id)
