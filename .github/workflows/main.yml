@@ -64,13 +64,13 @@ jobs:
         run: poetry build
 
       - name: Run commit hooks
-        run: SKIP=test make hooks
+        run: SKIP=test poetry run make hooks
 
       - name: Create Docker network for running Testcontianers
         run: docker network create ${{ env.TESTCONTAINER_DOCKER_NETWORK }}
 
       - name: Run tests
-        run: make test-ci
+        run: poetry run make test-ci
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
