@@ -6,7 +6,7 @@ from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_customer_created_event_emitted(
     http_client: httpx.AsyncClient,
     localstack_snssqs_tc: SNSSQSTestClient,

@@ -25,7 +25,7 @@ def moto_container() -> Generator[DockerContainer, None, None]:
         yield container
 
 
-@pytest.fixture()
+@pytest.fixture
 def reset_moto_container_on_teardown(moto_container: MotoContainer) -> Generator[None, None, None]:  # noqa: PT004
     """Removes all mocked resources from Moto after each test without restarting the container."""
     yield

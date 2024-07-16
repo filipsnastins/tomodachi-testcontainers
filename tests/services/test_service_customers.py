@@ -43,7 +43,7 @@ async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator
         yield client
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
     customer_id = uuid.uuid4()
     response = await http_client.get(f"/customer/{customer_id}")
@@ -52,7 +52,7 @@ async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
     assert response.json() == {"error": "CUSTOMER_NOT_FOUND"}
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create_customer(http_client: httpx.AsyncClient) -> None:
     response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
@@ -80,7 +80,7 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
     }
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_register_created_order(http_client: httpx.AsyncClient, localstack_snssqs_tc: SNSSQSTestClient) -> None:
     response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()

@@ -43,7 +43,7 @@ async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator
         yield client
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
     order_id = str(uuid.uuid4())
     response = await http_client.get(f"/order/{order_id}")
@@ -52,7 +52,7 @@ async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
     assert response.json() == {"error": "ORDER_NOT_FOUND"}
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSSQSTestClient) -> None:
     customer_id = str(uuid.uuid4())
     products: List[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]

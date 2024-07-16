@@ -5,7 +5,7 @@ from types_aiobotocore_sns import SNSClient
 from tomodachi_testcontainers import LocalStackContainer
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_localstack_container_starts(localstack_container: LocalStackContainer) -> None:
     async with httpx.AsyncClient(base_url=localstack_container.get_external_url()) as client:
         response = await client.get("/_localstack/health")
@@ -13,7 +13,7 @@ async def test_localstack_container_starts(localstack_container: LocalStackConta
         assert response.status_code == 200
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create_aws_resources_andrestart_localstack_container(
     localstack_container: LocalStackContainer, localstack_sns_client: SNSClient
 ) -> None:

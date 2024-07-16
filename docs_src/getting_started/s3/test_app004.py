@@ -42,7 +42,7 @@ import httpx
 import pytest
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_save_and_get_file(http_client: httpx.AsyncClient) -> None:
     response = await http_client.post("/file/", json={"filename": "test.txt", "content": "Hello, world!"})
     assert response.status_code == 200
@@ -57,7 +57,7 @@ async def test_save_and_get_file(http_client: httpx.AsyncClient) -> None:
 
 
 # --8<-- [start:test_file_not_found]
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/file/not-exists.txt")
 

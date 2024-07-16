@@ -6,7 +6,7 @@ from tomodachi_testcontainers.clients import SNSSQSTestClient
 
 
 @pytest.mark.xfail(reason="CustomerCreatedEvent is emitted asynchronously")
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_customer_created_event_emitted(
     http_client: httpx.AsyncClient,
     localstack_snssqs_tc: SNSSQSTestClient,

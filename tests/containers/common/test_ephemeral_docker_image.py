@@ -9,7 +9,7 @@ from tomodachi_testcontainers import EphemeralDockerImage
 from tomodachi_testcontainers.utils import get_docker_image
 
 
-@pytest.fixture()
+@pytest.fixture
 def dockerfile_hello_world(tmp_path: Path) -> Generator[Path, None, None]:
     with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as f:
         f.writelines(
@@ -22,7 +22,7 @@ def dockerfile_hello_world(tmp_path: Path) -> Generator[Path, None, None]:
         yield Path(f.name)
 
 
-@pytest.fixture()
+@pytest.fixture
 def dockerfile_buildkit(tmp_path: Path) -> Generator[Path, None, None]:
     with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as f:
         f.writelines(
@@ -36,7 +36,7 @@ def dockerfile_buildkit(tmp_path: Path) -> Generator[Path, None, None]:
         yield Path(f.name)
 
 
-@pytest.fixture()
+@pytest.fixture
 def dockerfile_multi_stage(tmp_path: Path) -> Generator[Path, None, None]:
     with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as f:
         f.writelines(
@@ -56,7 +56,7 @@ def dockerfile_multi_stage(tmp_path: Path) -> Generator[Path, None, None]:
         yield Path(f.name)
 
 
-@pytest.fixture()
+@pytest.fixture
 def dockerfile_invalid(tmp_path: Path) -> Generator[Path, None, None]:
     with tempfile.NamedTemporaryFile(mode="wt", encoding="utf-8", dir=tmp_path) as f:
         f.writelines(

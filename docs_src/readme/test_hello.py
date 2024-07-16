@@ -14,7 +14,7 @@ def tomodachi_container(testcontainer_image: str) -> Generator[DockerContainer, 
         yield container
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_hello_testcontainers(tomodachi_container: TomodachiContainer) -> None:
     async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         response = await client.get("/hello", params={"name": "Testcontainers"})

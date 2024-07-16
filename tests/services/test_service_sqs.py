@@ -24,7 +24,7 @@ def tomodachi_container(
         yield container
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_send_sqs_message(
     tomodachi_container: TomodachiContainer, localstack_snssqs_tc: SNSSQSTestClient
 ) -> None:

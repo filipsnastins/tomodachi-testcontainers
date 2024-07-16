@@ -5,7 +5,7 @@ import httpx
 import pytest
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
     customer_id = uuid.uuid4()
     response = await http_client.get(f"/customer/{customer_id}")
@@ -14,7 +14,7 @@ async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
     assert response.json() == {"error": "CUSTOMER_NOT_FOUND"}
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_created_and_get_customer(http_client: httpx.AsyncClient) -> None:
     response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()

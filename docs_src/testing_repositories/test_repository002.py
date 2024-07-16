@@ -19,7 +19,7 @@ async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[Dyn
 
 
 # --8<-- [start:tests]
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_save_customer(repository: DynamoDBCustomerRepository, moto_dynamodb_client: DynamoDBClient) -> None:
     # Arrange
     customer = Customer.create(name="John Doe", email="john.doe@example.com")

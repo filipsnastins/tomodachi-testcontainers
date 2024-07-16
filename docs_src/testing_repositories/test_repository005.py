@@ -18,7 +18,7 @@ async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[Dyn
 
 
 # --8<-- [start:tests]
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_customer_not_found(repository: DynamoDBCustomerRepository) -> None:
     with pytest.raises(CustomerNotFoundError):
         await repository.get("123456")

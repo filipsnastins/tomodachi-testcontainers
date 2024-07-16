@@ -25,7 +25,7 @@ def localstack_container() -> Generator[DockerContainer, None, None]:
         yield container
 
 
-@pytest.fixture()
+@pytest.fixture
 def restart_localstack_container_on_teardown(  # noqa: PT004
     localstack_container: LocalStackContainer,
 ) -> Generator[None, None, None]:

@@ -28,7 +28,7 @@ async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator
         yield client
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_healthcheck_passes(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/health")
 

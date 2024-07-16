@@ -8,7 +8,7 @@ import wiremock.client as wm
 from tomodachi_testcontainers import WireMockContainer
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_wiremock_configured_from_environment_variables(wiremock_container: WireMockContainer) -> None:
     async with httpx.AsyncClient(base_url=wiremock_container.get_external_url()) as client:
         response = await client.get("/test-mapping-files")
@@ -17,7 +17,7 @@ async def test_wiremock_configured_from_environment_variables(wiremock_container
     assert response.json() == {"message": "Hello from mapping files!"}
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_wiremock_configured_with_python_wiremock_sdk(
     wiremock_container: WireMockContainer, reset_wiremock_container_on_teardown: None
 ) -> None:
@@ -35,7 +35,7 @@ async def test_wiremock_configured_with_python_wiremock_sdk(
     assert response.json() == {"message": "Mapping created by WireMock SDK!"}
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_wiremock_stub_mappings_deleted_between_tests_reset_wiremock_container_on_teardown_fixture(
     wiremock_container: WireMockContainer, reset_wiremock_container_on_teardown: None
 ) -> None:
@@ -45,7 +45,7 @@ async def test_wiremock_stub_mappings_deleted_between_tests_reset_wiremock_conta
     assert response.status_code == 404
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_custom_wiremock_container_configured_from_mapping_files(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("WIREMOCK_TESTCONTAINER_MAPPING_STUBS", raising=False)
     monkeypatch.delenv("WIREMOCK_TESTCONTAINER_MAPPING_FILES", raising=False)

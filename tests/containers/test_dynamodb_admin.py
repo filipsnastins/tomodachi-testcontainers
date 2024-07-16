@@ -15,7 +15,7 @@ def dynamodb_admin_container(moto_container: MotoContainer) -> Generator[DockerC
         yield container
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_dynamodb_admin_container_starts(dynamodb_admin_container: DynamoDBAdminContainer) -> None:
     async with httpx.AsyncClient(base_url=dynamodb_admin_container.get_external_url()) as client:
         response = await client.get("/")

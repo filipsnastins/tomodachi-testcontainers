@@ -8,7 +8,7 @@ from tomodachi_testcontainers.clients import SNSSQSTestClient
 
 
 @pytest.mark.usefixtures("tomodachi_container")
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_customer_not_found_for_newly_created_order(localstack_snssqs_tc: SNSSQSTestClient) -> None:
     # Arrange
     customer_id = str(uuid.uuid4())

@@ -38,7 +38,7 @@ async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator
         yield client
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_healthcheck_passes(http_client: httpx.AsyncClient) -> None:
     # To start the debugging, place a breakpoint in the test and in the production code.
     # If using VSCode, run the test in the debugger and then attach the remote debugger on container port 5678.

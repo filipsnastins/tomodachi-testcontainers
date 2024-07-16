@@ -23,7 +23,7 @@ def wiremock_container() -> Generator[WireMockContainer, None, None]:
         yield container
 
 
-@pytest.fixture()
+@pytest.fixture
 def reset_wiremock_container_on_teardown(  # noqa: PT004
     wiremock_container: WireMockContainer,
 ) -> Generator[None, None, None]:

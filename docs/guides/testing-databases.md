@@ -61,7 +61,7 @@ from tomodachi_testcontainers import PostgreSQLContainer
 
 from my_project import create_app
 
-@pytest.fixture()
+@pytest.fixture
 def app(monkeypatch: pytest.MonkeyPatch, postgres_container: PostgreSQLContainer) -> Flask:
     monkeypatch.setenv("DATABASE_URL", str(postgres_container.get_external_url()))
     return create_app()

@@ -4,7 +4,7 @@ from tomodachi_testcontainers.async_probes import probe_during_interval, probe_u
 
 
 class TestProbeUntil:
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_fails_and_reraises_exception(self) -> None:
         def _f() -> None:
             raise ValueError("Something went wrong")
@@ -12,7 +12,7 @@ class TestProbeUntil:
         with pytest.raises(ValueError, match="Something went wrong"):
             await probe_until(_f, probe_interval=0.1, stop_after=0.3)
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_passes(self) -> None:
         def _f() -> bool:
             return True
@@ -21,7 +21,7 @@ class TestProbeUntil:
 
         assert result is True
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_with_asynchronous_function(self) -> None:
         async def _f() -> bool:
             return True
@@ -30,7 +30,7 @@ class TestProbeUntil:
 
         assert result is True
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_with_lambda_returning_coroutine(self) -> None:
         async def _f() -> bool:
             return True
@@ -41,7 +41,7 @@ class TestProbeUntil:
 
         assert result is True
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_recovers_after_failure(self) -> None:
         attempts = [False, False, True]
 
@@ -50,7 +50,7 @@ class TestProbeUntil:
 
         await probe_until(_f, probe_interval=0.1, stop_after=0.3)
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_timeout_reached(self) -> None:
         attempts = [False, False, False, False, True]
 
@@ -62,7 +62,7 @@ class TestProbeUntil:
 
 
 class TestProbeDuringInterval:
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_runs_until_timeout_reached_and_passes(self) -> None:
         attempts = [True, True, True, True]
         attempt = len(attempts)
@@ -78,7 +78,7 @@ class TestProbeDuringInterval:
 
         assert result is True
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_with_asynchronous_function(self) -> None:
         async def _f() -> bool:
             return True
@@ -87,7 +87,7 @@ class TestProbeDuringInterval:
 
         assert result is True
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_with_lambda_returning_coroutine(self) -> None:
         async def _f() -> bool:
             return True
@@ -98,7 +98,7 @@ class TestProbeDuringInterval:
 
         assert result is True
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_fails_with_assertion_error(self) -> None:
         attempts = [True, True, False, True]
 
@@ -108,7 +108,7 @@ class TestProbeDuringInterval:
         with pytest.raises(AssertionError, match="assert False"):
             await probe_during_interval(_f, probe_interval=0.1, stop_after=0.5)
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_fails_with_other_exceptions(self) -> None:
         attempts = [True, True, False, True]
 
