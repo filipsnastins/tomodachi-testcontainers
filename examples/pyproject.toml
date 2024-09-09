@@ -7,7 +7,7 @@ authors = ["Filips Nastins <nastinsfilips@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.12"
 asyncssh = "^2.15.0"
-pydantic = "^2.8.2"
+pydantic = "^2.9.0"
 structlog = "^24.4.0"
 tomodachi = "^0.27.2"
 types-aiobotocore = { extras = [
