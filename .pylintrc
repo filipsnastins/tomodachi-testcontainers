@@ -36,7 +36,12 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=pylint.extensions.code_style
+load-plugins=pylint.extensions.code_style,
+             pylint.extensions.check_elif,
+             pylint.extensions.comparison_placement,
+             pylint.extensions.consider_ternary_expression,
+             pylint.extensions.overlapping_exceptions,
+             pylint.extensions.private_import
 
 # Pickle collected data for later comparisons.
 persistent=yes
