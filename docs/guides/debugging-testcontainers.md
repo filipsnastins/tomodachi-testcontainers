@@ -32,7 +32,7 @@ import httpx
 import pytest
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_healthcheck_passes(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/health")
 
