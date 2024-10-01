@@ -25,7 +25,7 @@ protobuf = ">=4,<6"
 psycopg = { version = "^3.1.18", optional = true }
 pymysql = { version = "^1.1.0", optional = true }
 pytest = ">=7.1.2,<9.0.0"
-pytest-asyncio = "~0.21.1" # https://github.com/pytest-dev/pytest-asyncio/issues/706
+pytest-asyncio = "^0.24.0"
 requests = "^2.31.0"
 shortuuid = "^1.0.11"
 sqlalchemy = { version = ">=1.3,<3", optional = true }
@@ -209,6 +209,8 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 log_level = "INFO"
 testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "session"
+asyncio_mode = "strict"
 env = [
     # Set dummy AWS credentials so that we don't accidentally mutate real infrastructure
     "AWS_REGION=us-east-1",
