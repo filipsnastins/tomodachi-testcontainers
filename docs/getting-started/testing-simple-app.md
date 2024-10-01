@@ -94,16 +94,6 @@ docs_src/getting_started/hello/conftest.py:http_client
 --8<--
 ```
 
-The `http_client` is an asynchronous fixture decorated with [`pytest-asyncio`](https://github.com/pytest-dev/pytest-asyncio).
-Since the fixture is session-scoped, we need to redefine the `pytest-asyncio` built-in `event_loop` fixture to be session-scoped too.
-Paste this code to your root `conftest.py`.
-
-```py title="tests/conftest.py"
---8<--
-docs_src/conftest.py
---8<--
-```
-
 Now, tests are using the `http_client` fixture.
 
 ```py title="tests/test_app.py" hl_lines="6 14"
