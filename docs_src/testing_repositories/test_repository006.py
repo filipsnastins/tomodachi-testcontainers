@@ -17,7 +17,7 @@ from .ports006 import CustomerRepository
 from .repository006 import DynamoDBCustomerRepository, InMemoryRepository
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(loop_scope="session")
 async def dynamodb_repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[DynamoDBCustomerRepository, None]:
     table_name = f"autotest-{uuid.uuid4()}-customers"
     await create_customers_table(moto_dynamodb_client, table_name)
@@ -48,7 +48,7 @@ def repository(
 
 
 # --8<-- [start:tests]
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_save_customer(repository: CustomerRepository) -> None:
     customer = Customer.create(name="John Doe", email="john.doe@example.com")
 
@@ -57,13 +57,13 @@ async def test_save_customer(repository: CustomerRepository) -> None:
     assert await repository.get(customer.id) == customer
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_customer_not_found(repository: CustomerRepository) -> None:
     with pytest.raises(CustomerNotFoundError, match="123456"):
         await repository.get("123456")
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_customer_id_should_be_unique(repository: CustomerRepository) -> None:
     customer_id = str(uuid.uuid4())
     customer_1 = Customer(id=customer_id, name="John Doe", email="john.doe@example.com")
@@ -74,7 +74,7 @@ async def test_customer_id_should_be_unique(repository: CustomerRepository) -> N
         await repository.save(customer_2)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_customer_email_should_be_unique(repository: CustomerRepository) -> None:
     customer_1 = Customer.create(name="John Doe", email="john.doe@example.com")
     customer_2 = Customer.create(name="John Doe", email="john.doe@example.com")

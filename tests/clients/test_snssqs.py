@@ -21,7 +21,7 @@ def snssqs_test_client(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -
     return SNSSQSTestClient(moto_sns_client, moto_sqs_client)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_no_messages_received(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
 
@@ -30,13 +30,13 @@ async def test_no_messages_received(snssqs_test_client: SNSSQSTestClient) -> Non
     assert messages == []
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_publish_fails_if_topic_does_not_exist(snssqs_test_client: SNSSQSTestClient) -> None:
     with pytest.raises(TopicDoesNotExistError, match="topic"):
         await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_publish_and_receive_messages(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
 
@@ -50,7 +50,7 @@ async def test_publish_and_receive_messages(snssqs_test_client: SNSSQSTestClient
     ]
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_publish_and_receive_with_message_attributes(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(
         topic="topic",
@@ -80,7 +80,7 @@ async def test_publish_and_receive_with_message_attributes(snssqs_test_client: S
     ]
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_publish_and_receive_with_fifo(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic.fifo", queue="queue.fifo")
 
@@ -95,13 +95,13 @@ async def test_publish_and_receive_with_fifo(snssqs_test_client: SNSSQSTestClien
     assert messages == [SQSMessage({"message": "1"})]
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_send_fails_if_queue_does_not_exist(snssqs_test_client: SNSSQSTestClient) -> None:
     with pytest.raises(QueueDoesNotExistError, match="queue"):
         await snssqs_test_client.send("queue", {"message": "1"}, JsonBase)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_send_and_receive_message(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.create_queue("queue")
 
@@ -112,7 +112,7 @@ async def test_send_and_receive_message(snssqs_test_client: SNSSQSTestClient) ->
     assert messages == [SQSMessage({"message": "1"}), SQSMessage({"message": "2"})]
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_send_and_receive_message_with_fifo(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.create_queue("queue.fifo")
 
@@ -127,7 +127,7 @@ async def test_send_and_receive_message_with_fifo(snssqs_test_client: SNSSQSTest
     assert messages == [SQSMessage({"message": "1"})]
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_send_and_receive_messages_with_attributes(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.create_queue("queue")
 
@@ -147,7 +147,7 @@ async def test_send_and_receive_messages_with_attributes(snssqs_test_client: SNS
     ]
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_received_messages_are_deleted_from_queue(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
     await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
@@ -160,7 +160,7 @@ async def test_received_messages_are_deleted_from_queue(snssqs_test_client: SNSS
     assert queue_attributes["ApproximateNumberOfMessagesNotVisible"] == "0"
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_receive_max_receive_messages(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
     await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
@@ -173,7 +173,7 @@ async def test_receive_max_receive_messages(snssqs_test_client: SNSSQSTestClient
     assert messages == [SQSMessage({"message": "2"})]
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_publish_and_receive_protobuf_message(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
     await snssqs_test_client.publish("topic", Person(id="123456", name="John Doe"), ProtobufBase)
@@ -183,7 +183,7 @@ async def test_publish_and_receive_protobuf_message(snssqs_test_client: SNSSQSTe
     assert messages == [SQSMessage(Person(id="123456", name="John Doe"))]
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_purge_queue(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
     await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
@@ -194,7 +194,7 @@ async def test_purge_queue(snssqs_test_client: SNSSQSTestClient) -> None:
     assert messages == []
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_subscribe_to_creates_fifo_queue_and_topic(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic.fifo", queue="queue.fifo")
 
@@ -205,7 +205,7 @@ async def test_subscribe_to_creates_fifo_queue_and_topic(snssqs_test_client: SNS
     assert topic_attributes["FifoTopic"] == "true"
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_queue_attribute_getters(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
 
@@ -218,7 +218,7 @@ async def test_queue_attribute_getters(snssqs_test_client: SNSSQSTestClient) -> 
     assert queue_attributes["QueueArn"] == queue_arn
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_queue_attribute_getters__raise_when_queue_does_not_exist(snssqs_test_client: SNSSQSTestClient) -> None:
     with pytest.raises(QueueDoesNotExistError, match="queue"):
         await snssqs_test_client.get_queue_arn("queue")
@@ -230,7 +230,7 @@ async def test_queue_attribute_getters__raise_when_queue_does_not_exist(snssqs_t
         await snssqs_test_client.get_queue_attributes("queue", attributes=[])
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_topic_attribute_getters(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
 
@@ -241,7 +241,7 @@ async def test_topic_attribute_getters(snssqs_test_client: SNSSQSTestClient) -> 
     assert topic_attributes["TopicArn"] == topic_arn
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_topic_attribute_getters__raise_when_topic_does_not_exist(snssqs_test_client: SNSSQSTestClient) -> None:
     with pytest.raises(TopicDoesNotExistError, match="topic"):
         await snssqs_test_client.get_topic_arn("topic")

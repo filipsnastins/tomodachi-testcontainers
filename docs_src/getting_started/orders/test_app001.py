@@ -6,7 +6,7 @@ import pytest
 import wiremock.client as wm
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_order_created_when_credit_check_passed(http_client: httpx.AsyncClient) -> None:
     mapping = wm.Mapping(
         request=wm.MappingRequest(
@@ -38,7 +38,7 @@ async def test_order_created_when_credit_check_passed(http_client: httpx.AsyncCl
 
 
 # --8<-- [start:test_order_not_created_when_credit_check_failed]
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_order_not_created_when_credit_check_failed(http_client: httpx.AsyncClient) -> None:
     mapping = wm.Mapping(
         request=wm.MappingRequest(
@@ -66,7 +66,7 @@ async def test_order_not_created_when_credit_check_failed(http_client: httpx.Asy
 
 
 # --8<-- [start:test_order_not_created_when_credit_check_service_unavailable]
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_order_not_created_when_credit_check_service_unavailable(http_client: httpx.AsyncClient) -> None:
     mapping = wm.Mapping(
         request=wm.MappingRequest(method=wm.HttpMethods.POST, url="/credit-check"),

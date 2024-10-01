@@ -14,7 +14,7 @@ from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module", loop_scope="session")
 async def _create_topics_and_queues(localstack_snssqs_tc: SNSSQSTestClient) -> None:
     await localstack_snssqs_tc.subscribe_to(topic="order--created", queue="customer--order-created")
 
@@ -37,13 +37,13 @@ def tomodachi_container(
         yield container
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module", loop_scope="session")
 async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
     async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
     customer_id = uuid.uuid4()
     response = await http_client.get(f"/customer/{customer_id}")
@@ -52,7 +52,7 @@ async def test_customer_not_found(http_client: httpx.AsyncClient) -> None:
     assert response.json() == {"error": "CUSTOMER_NOT_FOUND"}
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_customer(http_client: httpx.AsyncClient) -> None:
     response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()
@@ -80,7 +80,7 @@ async def test_create_customer(http_client: httpx.AsyncClient) -> None:
     }
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_register_created_order(http_client: httpx.AsyncClient, localstack_snssqs_tc: SNSSQSTestClient) -> None:
     response = await http_client.post("/customer", json={"name": "John Doe"})
     body = response.json()

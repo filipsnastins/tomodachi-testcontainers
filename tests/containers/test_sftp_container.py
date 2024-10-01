@@ -5,7 +5,7 @@ import asyncssh
 import pytest
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_sftp_container__authenticate_with_password(userpass_sftp_client: asyncssh.SFTPClient) -> None:
     filename = f"{uuid.uuid4()}.txt"
 
@@ -18,7 +18,7 @@ async def test_sftp_container__authenticate_with_password(userpass_sftp_client: 
     assert set(listdir) == {".", "..", filename}
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_sftp_container__authenticate_with_ssh_keys(userssh_sftp_client: asyncssh.SFTPClient) -> None:
     filename = f"{uuid.uuid4()}.txt"
 

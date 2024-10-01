@@ -3,7 +3,7 @@ import pytest_asyncio
 from types_aiobotocore_s3 import S3Client
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def _create_s3_buckets(localstack_s3_client: S3Client) -> None:
     await localstack_s3_client.create_bucket(Bucket="autotest-my-bucket")
 
@@ -42,7 +42,7 @@ import httpx
 import pytest
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_save_and_get_file(http_client: httpx.AsyncClient) -> None:
     response = await http_client.post("/file/", json={"filename": "test.txt", "content": "Hello, world!"})
     assert response.status_code == 200
@@ -57,7 +57,7 @@ async def test_save_and_get_file(http_client: httpx.AsyncClient) -> None:
 
 
 # --8<-- [start:test_file_not_found]
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/file/not-exists.txt")
 

@@ -2,7 +2,7 @@ import httpx
 import pytest
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_hello_testcontainers(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/hello", params={"name": "Testcontainers"})
 
@@ -10,7 +10,7 @@ async def test_hello_testcontainers(http_client: httpx.AsyncClient) -> None:
     assert response.json() == {"message": "Hello, Testcontainers!"}
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_hello_world(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/hello")
 

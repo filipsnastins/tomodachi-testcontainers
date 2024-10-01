@@ -14,7 +14,7 @@ from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module", loop_scope="session")
 async def _create_topics_and_queues(moto_snssqs_tc: SNSSQSTestClient) -> None:
     await moto_snssqs_tc.subscribe_to(topic="order--created", queue="order--created")
 
@@ -37,13 +37,13 @@ def tomodachi_container(
         yield container
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module", loop_scope="session")
 async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
     async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
     order_id = str(uuid.uuid4())
     response = await http_client.get(f"/order/{order_id}")
@@ -52,7 +52,7 @@ async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
     assert response.json() == {"error": "ORDER_NOT_FOUND"}
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSSQSTestClient) -> None:
     customer_id = str(uuid.uuid4())
     products: List[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]

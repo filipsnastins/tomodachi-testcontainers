@@ -8,13 +8,13 @@ from tomodachi_testcontainers import DockerContainer, LocalStackContainer, Tomod
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def _create_topics_and_queues(localstack_snssqs_tc: SNSSQSTestClient) -> None:
     await localstack_snssqs_tc.subscribe_to(topic="customer--created", queue="customer--created")
     await localstack_snssqs_tc.subscribe_to(topic="order--created", queue="customer--order-created")
 
 
-@pytest_asyncio.fixture(autouse=True)
+@pytest_asyncio.fixture(loop_scope="session", autouse=True)
 async def _purge_queues_on_teardown(localstack_snssqs_tc: SNSSQSTestClient) -> AsyncGenerator[None, None]:
     yield
     await localstack_snssqs_tc.purge_queue("customer--created")
@@ -43,7 +43,7 @@ def tomodachi_container(
         yield container
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module", loop_scope="session")
 async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
     async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client

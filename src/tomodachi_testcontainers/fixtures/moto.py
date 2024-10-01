@@ -32,43 +32,43 @@ def reset_moto_container_on_teardown(moto_container: MotoContainer) -> Generator
     moto_container.reset_moto()
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def moto_dynamodb_client(moto_container: MotoContainer) -> AsyncGenerator[DynamoDBClient, None]:
     async with get_session().create_client("dynamodb", **moto_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def moto_iam_client(moto_container: MotoContainer) -> AsyncGenerator[IAMClient, None]:
     async with get_session().create_client("iam", **moto_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def moto_lambda_client(moto_container: MotoContainer) -> AsyncGenerator[LambdaClient, None]:
     async with get_session().create_client("lambda", **moto_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def moto_s3_client(moto_container: MotoContainer) -> AsyncGenerator[S3Client, None]:
     async with get_session().create_client("s3", **moto_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def moto_sns_client(moto_container: MotoContainer) -> AsyncGenerator[SNSClient, None]:
     async with get_session().create_client("sns", **moto_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def moto_sqs_client(moto_container: MotoContainer) -> AsyncGenerator[SQSClient, None]:
     async with get_session().create_client("sqs", **moto_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def moto_ssm_client(moto_container: MotoContainer) -> AsyncGenerator[SSMClient, None]:
     async with get_session().create_client("ssm", **moto_container.get_aws_client_config()) as c:
         yield c

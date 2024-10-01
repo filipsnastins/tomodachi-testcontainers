@@ -7,7 +7,7 @@ from types_aiobotocore_s3 import S3Client
 from tomodachi_testcontainers import MinioContainer
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_minio_container_starts(minio_container: MinioContainer) -> None:
     async with httpx.AsyncClient(base_url=minio_container.get_external_url()) as client:
         response = await client.get("/minio/health/live")
@@ -15,7 +15,7 @@ async def test_minio_container_starts(minio_container: MinioContainer) -> None:
         assert response.status_code == 200
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_minio_s3_client(minio_s3_client: S3Client) -> None:
     bucket = f"bucket-{uuid.uuid4()}"
     filename = f"{uuid.uuid4()}.txt"
@@ -28,7 +28,7 @@ async def test_minio_s3_client(minio_s3_client: S3Client) -> None:
     assert body == b"Hello, World!"
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_reset_minio(minio_container: MinioContainer, minio_s3_client: S3Client) -> None:
     bucket = f"bucket-{uuid.uuid4()}"
     await minio_s3_client.create_bucket(Bucket=bucket)

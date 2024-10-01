@@ -34,43 +34,43 @@ def restart_localstack_container_on_teardown(  # noqa: PT004
     localstack_container.restart()
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def localstack_dynamodb_client(localstack_container: LocalStackContainer) -> AsyncGenerator[DynamoDBClient, None]:
     async with get_session().create_client("dynamodb", **localstack_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def localstack_iam_client(localstack_container: LocalStackContainer) -> AsyncGenerator[IAMClient, None]:
     async with get_session().create_client("iam", **localstack_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def localstack_lambda_client(localstack_container: LocalStackContainer) -> AsyncGenerator[LambdaClient, None]:
     async with get_session().create_client("lambda", **localstack_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def localstack_s3_client(localstack_container: LocalStackContainer) -> AsyncGenerator[S3Client, None]:
     async with get_session().create_client("s3", **localstack_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def localstack_sns_client(localstack_container: LocalStackContainer) -> AsyncGenerator[SNSClient, None]:
     async with get_session().create_client("sns", **localstack_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def localstack_sqs_client(localstack_container: LocalStackContainer) -> AsyncGenerator[SQSClient, None]:
     async with get_session().create_client("sqs", **localstack_container.get_aws_client_config()) as c:
         yield c
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def localstack_ssm_client(localstack_container: LocalStackContainer) -> AsyncGenerator[SSMClient, None]:
     async with get_session().create_client("ssm", **localstack_container.get_aws_client_config()) as c:
         yield c

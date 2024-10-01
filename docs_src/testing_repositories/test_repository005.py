@@ -9,7 +9,7 @@ from .create_customers_table import create_customers_table
 from .repository005 import CustomerNotFoundError, DynamoDBCustomerRepository
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(loop_scope="session")
 async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[DynamoDBCustomerRepository, None]:
     table_name = f"autotest-{uuid.uuid4()}-customers"
     await create_customers_table(moto_dynamodb_client, table_name)
@@ -18,7 +18,7 @@ async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[Dyn
 
 
 # --8<-- [start:tests]
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_customer_not_found(repository: DynamoDBCustomerRepository) -> None:
     with pytest.raises(CustomerNotFoundError):
         await repository.get("123456")

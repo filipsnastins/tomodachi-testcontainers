@@ -10,7 +10,7 @@ from .domain001 import Customer
 from .repository001 import DynamoDBCustomerRepository
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(loop_scope="session")
 async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[DynamoDBCustomerRepository, None]:
     table_name = f"autotest-{uuid.uuid4()}-customers"
     await create_customers_table(moto_dynamodb_client, table_name)
@@ -18,7 +18,7 @@ async def repository(moto_dynamodb_client: DynamoDBClient) -> AsyncGenerator[Dyn
     await moto_dynamodb_client.delete_table(TableName=table_name)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_save_customer(repository: DynamoDBCustomerRepository) -> None:
     # Arrange
     customer = Customer.create(name="John Doe", email="john.doe@example.com")

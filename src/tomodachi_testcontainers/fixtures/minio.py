@@ -18,7 +18,7 @@ def minio_container() -> Generator[DockerContainer, None, None]:
         yield container
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def minio_s3_client(minio_container: MinioContainer) -> AsyncGenerator[S3Client, None]:
     async with get_session().create_client("s3", **minio_container.get_aws_client_config()) as c:
         yield c

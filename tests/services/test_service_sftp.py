@@ -26,13 +26,13 @@ def tomodachi_container(
         yield container
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module", loop_scope="session")
 async def http_client(tomodachi_container: TomodachiContainer) -> AsyncGenerator[httpx.AsyncClient, None]:
     async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         yield client
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
     response = await http_client.get("/file/not-exists.txt")
 
@@ -40,7 +40,7 @@ async def test_file_not_found(http_client: httpx.AsyncClient) -> None:
     assert response.json() == {"error": "FILE_NOT_FOUND"}
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_upload_and_read_file(http_client: httpx.AsyncClient, userssh_sftp_client: asyncssh.SFTPClient) -> None:
     filename = f"{uuid.uuid4()}.txt"
     with tempfile.NamedTemporaryFile() as f:

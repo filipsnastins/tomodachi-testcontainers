@@ -7,7 +7,7 @@ from tomodachi.envelope.json_base import JsonBase
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_customer_created_event_emitted(
     http_client: httpx.AsyncClient,
     localstack_snssqs_tc: SNSSQSTestClient,

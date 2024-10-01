@@ -8,7 +8,7 @@ from . import credit_check_mocks
 pytestmark = pytest.mark.usefixtures("reset_wiremock_container_on_teardown")
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_order_created_when_credit_check_passed(http_client: httpx.AsyncClient) -> None:
     customer_id = "123456"
     credit_check_mocks.customer_credit_check_passes(customer_id)
@@ -26,7 +26,7 @@ async def test_order_created_when_credit_check_passed(http_client: httpx.AsyncCl
     }
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_order_not_created_when_credit_check_failed(http_client: httpx.AsyncClient) -> None:
     customer_id = "123456"
     credit_check_mocks.customer_credit_check_fails(customer_id)
@@ -40,7 +40,7 @@ async def test_order_not_created_when_credit_check_failed(http_client: httpx.Asy
     assert response.json() == {"error": "CREDIT_CHECK_FAILED"}
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_order_not_created_when_credit_check_service_unavailable(http_client: httpx.AsyncClient) -> None:
     credit_check_mocks.customer_credit_check_returns_internal_server_error()
 

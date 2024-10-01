@@ -5,7 +5,7 @@ import pytest
 from tomodachi_testcontainers import TomodachiContainer
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_hello_testcontainers(tomodachi_container: TomodachiContainer) -> None:
     async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         response = await client.get("/hello", params={"name": "Testcontainers"})
@@ -18,7 +18,7 @@ async def test_hello_testcontainers(tomodachi_container: TomodachiContainer) -> 
 
 
 # --8<-- [start:test_hello_world]
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_hello_world(tomodachi_container: TomodachiContainer) -> None:
     async with httpx.AsyncClient(base_url=tomodachi_container.get_external_url()) as client:
         response = await client.get("/hello")
