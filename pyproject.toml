@@ -73,6 +73,7 @@ pylint = { version = "^3.0.2", extras = ["spelling"] }
 pytest-cov = ">=4.1,<6.0"
 pytest-env = "^1.0.1"
 pytest-testdox = "^3.1.0"
+pytest-timeout = "^2.3.1"
 pytest-xdist = "^3.5.0"
 ruff = ">=0.1.5,<0.6.0"
 structlog = ">=23.3,<25.0"
@@ -209,8 +210,13 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 log_level = "INFO"
 testpaths = ["tests"]
+
 asyncio_default_fixture_loop_scope = "session"
 asyncio_mode = "strict"
+
+timeout = 300
+session_timeout = 900
+
 env = [
     # Set dummy AWS credentials so that we don't accidentally mutate real infrastructure
     "AWS_REGION=us-east-1",
