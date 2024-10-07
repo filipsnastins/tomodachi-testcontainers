@@ -66,7 +66,7 @@ flake8-simplify = "^0.21.0"
 httpx = ">=0.25,<0.28"
 isort = "^5.12.0"
 mypy = "^1.4.1"
-pre-commit = "^3.3.3"
+pre-commit = ">=3.3.3,<5.0.0"
 pydantic = "^2.0.2"
 pydocstringformatter = "^0.7.3"
 pylint = { version = "^3.0.2", extras = ["spelling"] }
