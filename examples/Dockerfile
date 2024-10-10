@@ -1,4 +1,4 @@
-FROM python:3.12.7-slim-bullseye AS python-base
+FROM python:3.13.0-slim-bullseye AS python-base
 WORKDIR /app
 ARG VIRTUAL_ENV=/opt/venv
 RUN addgroup --gid 1001 app && adduser --uid 1000 --gid 1001 app
