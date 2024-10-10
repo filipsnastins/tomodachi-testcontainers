@@ -18,7 +18,7 @@ types-aiobotocore = { extras = [
     "sns",
     "sqs",
 ], version = "^2.5.2" }
-uvicorn = "^0.31.0"
+uvicorn = "^0.31.1"
 uvloop = "^0.20.0"
 
 [tool.poetry.group.dev.dependencies]
