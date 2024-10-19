@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.3 (2024-10-19)
+
+### Maintenance
+
+- Updates **[pytest-asyncio**](https://github.com/pytest-dev/pytest-asyncio) to [0.24.0](https://github.com/pytest-dev/pytest-asyncio/releases/tag/v0.24.0).
+  Using `'loop_scope="session"`.
+- Dependency updates.
+
 ## 1.2.2 (2024-07-16)
 
 ### Maintenance
