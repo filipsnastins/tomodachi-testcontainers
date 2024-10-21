@@ -19,7 +19,7 @@ types-aiobotocore = { extras = [
     "sqs",
 ], version = "^2.5.2" }
 uvicorn = "^0.31.0"
-uvloop = "^0.20.0"
+uvloop = "^0.21.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
