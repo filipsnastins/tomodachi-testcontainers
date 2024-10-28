@@ -182,13 +182,13 @@ extras = ["asahi-extras (>=0.1.0)"]
 
 [[package]]
 name = "asyncssh"
-version = "2.17.0"
+version = "2.18.0"
 description = "AsyncSSH: Asynchronous SSHv2 client and server library"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "asyncssh-2.17.0-py3-none-any.whl", hash = "sha256:70bfe4081793255b0115f7a72efd92d5bad8562639302531223bb00188db9747"},
-    {file = "asyncssh-2.17.0.tar.gz", hash = "sha256:3b159c105aa388c1e2245c4faf483f540ada8cad99402281119100166e5edb3c"},
+    {file = "asyncssh-2.18.0-py3-none-any.whl", hash = "sha256:ee09081200753eca137c893995ce3b95f8e157945aa8bda455ea810b30762d96"},
+    {file = "asyncssh-2.18.0.tar.gz", hash = "sha256:1a322161c01f60b9719dc8f39f80db71e61f3f5e04abbc3420ce503126d87123"},
 ]
 
 [package.dependencies]
@@ -1861,4 +1861,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "a5df9e00029c45bb561bbd6cbde32bbec27d2f6ec8860633b0719c7f89276f75"
+content-hash = "e3da89e0678e4a8ec1c7b4836d25475613f88074fa726c31a312585b928ace97"
