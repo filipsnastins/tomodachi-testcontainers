@@ -1,4 +1,4 @@
-FROM python:3.13.0-slim-bullseye AS python-base
+FROM python:3.13.0-bookworm AS python-base
 WORKDIR /app
 ARG VIRTUAL_ENV=/opt/venv
 RUN addgroup --gid 1001 app && adduser --uid 1000 --gid 1001 app
@@ -6,7 +6,7 @@ ENV VIRTUAL_ENV=$VIRTUAL_ENV \
   PATH=$VIRTUAL_ENV/bin:$PATH \
   PYTHONDONTWRITEBYTECODE=1 \
   PYTHONBUFFERED=1 \
-  PYTHONPATH=/app/src:$PYTHONPATH
+  PYTHONPATH=/app/src
 
 FROM python-base AS dependencies-base
 ARG PIP_VERSION=24.0
