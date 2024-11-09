@@ -48,7 +48,7 @@ def copy_files_from_container(container: Container, container_path: Path, host_p
     """Copies a folder or a file from the container to the host."""
     tar_stream, _ = container.get_archive(container_path)
     with tarfile.open(fileobj=io.BytesIO(b"".join(tar_stream))) as tar:
-        tar.extractall(path=host_path)  # nosec: B202
+        tar.extractall(path=host_path, filter="data")  # nosec: B202
 
 
 def get_available_port() -> int:
