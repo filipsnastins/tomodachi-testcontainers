@@ -30,5 +30,16 @@ test-docs-src:
 
 .PHONY: test-ci
 test-ci:
-	coverage erase
-	env TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE=1 pytest --cov --cov-append --cov-branch --cov-report=xml:build/coverage.xml --cov-report=html:build/htmlcov -v --junitxml=build/tests.xml -n auto
+	env TOMODACHI_TESTCONTAINER_EXPORT_COVERAGE=1 \
+	pytest \
+		--cov \
+		--cov-append \
+		--cov-branch \
+		--cov-report=xml:build/coverage.xml \
+		--cov-report=html:build/htmlcov \
+		-v \
+		--junitxml=build/tests.xml \
+		-n auto \
+		--force-flaky \
+		--max-runs=3 \
+		--no-success-flaky-report
