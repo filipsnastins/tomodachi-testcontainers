@@ -41,7 +41,7 @@ def copy_files_to_container(container: Container, host_path: Path, container_pat
         else:
             tar.add(host_path, arcname=host_path.name)
     tar_stream.seek(0)
-    container.put_archive(path=container_path, data=tar_stream)
+    container.put_archive(path=container_path.name, data=tar_stream)
 
 
 def copy_files_from_container(container: Container, container_path: Path, host_path: Path) -> None:
