@@ -30,7 +30,7 @@ optional = true
 
 [tool.poetry.group.test.dependencies]
 debugpy = "^1.8.6"
-pytest-cov = "^5.0.0"
+pytest-cov = "^6.0.0"
 
 [tool.black]
 line-length = 120
