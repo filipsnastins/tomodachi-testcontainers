@@ -24,7 +24,7 @@ uvloop = "^0.21.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
-pytest-asyncio = "^0.24.0"
+pytest-asyncio = "^0.25.3"
 requests = "^2.32.3"
 types-requests = "^2.32.0"
 
