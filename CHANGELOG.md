@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.4 (2025-02-16)
+
+### Maintenance
+
+- Updates testcontainers to [`4.9.1`](https://github.com/testcontainers/testcontainers-python/releases/tag/testcontainers-v4.9.1).
+- Removes custom implementation of `DockerContainer.get_container_host_ip`
+  in favour of fixed implementation in `testcontainers.core.container.DockerContainer` base class.
+- Dependency updates.
+
+### Maintenance
+
 ## 1.2.3 (2024-10-19)
 
 ### Maintenance
