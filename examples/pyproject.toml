@@ -24,7 +24,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
-isort = "^5.12.0"
+isort = "^6.0.0"
 
 [tool.poetry.group.test]
 optional = true
