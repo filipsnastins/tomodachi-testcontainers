@@ -1,0 +1,13 @@
+@startuml
+!include ./container/containers.puml
+
+skinparam dpi 120
+
+title Container Diagram - Application with DynamoDB Database
+
+appContainer()
+dynamoDbContainer()
+
+Rel_R(app, dynamoDb, "Reads from and writes to", "aiobotocore")
+
+@enduml
