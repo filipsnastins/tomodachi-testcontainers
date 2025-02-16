@@ -12,6 +12,7 @@ jobs:
     env:
       TESTCONTAINER_DOCKER_NETWORK: tomodachi-testcontainers
       DOCKER_BUILDKIT: 1
+      POETRY_VERSION: 2.1.0
     strategy:
       max-parallel: 5
       matrix:
