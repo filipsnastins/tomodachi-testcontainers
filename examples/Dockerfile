@@ -1,7 +1,7 @@
 FROM python:3.13.2-bookworm AS python-base
 WORKDIR /app
 ARG VIRTUAL_ENV=/opt/venv
-RUN addgroup --gid 1001 app && adduser --uid 1000 --gid 1001 app
+RUN addgroup --system --gid 1001 app && adduser --system --uid 1001 --gid 1001 app
 ENV VIRTUAL_ENV=$VIRTUAL_ENV \
   PATH=$VIRTUAL_ENV/bin:$PATH \
   PYTHONDONTWRITEBYTECODE=1 \
@@ -34,6 +34,6 @@ RUN poetry install --with test
 USER app
 
 FROM python-base AS release
-COPY --link --from=dependencies-release --chown=app:app /opt/venv /opt/venv
-COPY --link --from=dependencies-release --chown=app:app /app .
+COPY --link --from=dependencies-release --chown=1001:1001 /opt/venv /opt/venv
+COPY --link --from=dependencies-release --chown=1001:1001 /app .
 USER app
