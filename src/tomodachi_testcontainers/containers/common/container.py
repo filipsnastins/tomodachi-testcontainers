@@ -9,7 +9,6 @@ import docker.errors
 import shortuuid
 import testcontainers.core.container
 from docker.models.containers import Container
-from testcontainers.core.utils import inside_container
 
 from ...utils import setup_logger
 
@@ -54,15 +53,6 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     @abc.abstractmethod
     def log_message_on_container_start(self) -> str:
         """Returns a message that will be logged when the container starts."""
-
-    def get_container_host_ip(self) -> str:
-        if not (host := self.get_docker_client().host()):
-            return "localhost"
-        if inside_container() and not os.getenv("DOCKER_HOST"):
-            if (gateway_ip := self.get_container_gateway_ip()) == host:
-                return self.get_container_internal_ip()
-            return gateway_ip
-        return host
 
     def get_container_internal_ip(self) -> str:
         return self.docker_inspect()["NetworkSettings"]["Networks"][self.network]["IPAddress"]

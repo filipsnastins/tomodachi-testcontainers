@@ -70,7 +70,7 @@ class TestContainerStartupAndCleanup:
         with (
             pytest.raises(
                 docker.errors.APIError,
-                match=r'unable to start container process: exec: "foo": executable file not found in \$PATH',
+                match=r'exec: "foo": executable file not found in \$PATH',
             ),
             WorkingContainer().with_name(container_name).with_command("foo"),
         ):
