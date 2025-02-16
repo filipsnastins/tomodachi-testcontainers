@@ -1,4 +1,4 @@
-FROM python:3.13.0-bookworm AS python-base
+FROM python:3.13.2-bookworm AS python-base
 WORKDIR /app
 ARG VIRTUAL_ENV=/opt/venv
 RUN addgroup --gid 1001 app && adduser --uid 1000 --gid 1001 app
@@ -9,8 +9,8 @@ ENV VIRTUAL_ENV=$VIRTUAL_ENV \
   PYTHONPATH=/app/src
 
 FROM python-base AS dependencies-base
-ARG PIP_VERSION=24.0
-ARG POETRY_VERSION=1.8.2
+ARG PIP_VERSION=25.0
+ARG POETRY_VERSION=2.1.0
 RUN python -m pip install --no-cache-dir -U \
   "pip==$PIP_VERSION" \
   "poetry==$POETRY_VERSION" && \
