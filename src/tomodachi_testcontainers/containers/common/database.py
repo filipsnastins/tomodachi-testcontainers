@@ -1,14 +1,15 @@
 """Abstract relational database container."""
 
 import abc
-from typing import Any, NamedTuple, Optional
+from typing import Any, NamedTuple
 
 import sqlalchemy
 from tenacity import Retrying
 from tenacity.stop import stop_after_delay
 from tenacity.wait import wait_fixed
 
-from ...utils import get_available_port
+from tomodachi_testcontainers.utils import get_available_port
+
 from .container import DockerContainer
 
 
@@ -42,7 +43,7 @@ class DatabaseContainer(DockerContainer, abc.ABC):
         self,
         image: str,
         internal_port: int,
-        edge_port: Optional[int] = None,
+        edge_port: int | None = None,
         disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:

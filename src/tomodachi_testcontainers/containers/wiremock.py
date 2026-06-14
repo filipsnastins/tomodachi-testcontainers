@@ -6,11 +6,12 @@ See WireMock usage examples in https://github.com/wiremock/python-wiremock/tree/
 
 import os
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from ..utils import copy_files_to_container
+from tomodachi_testcontainers.utils import copy_files_to_container
+
 from .common import WebContainer
 
 
@@ -22,9 +23,9 @@ class WireMockContainer(WebContainer):
         self,
         image: str = "wiremock/wiremock:latest",
         internal_port: int = 8080,
-        edge_port: Optional[int] = None,
-        mapping_stubs: Optional[Path] = None,
-        mapping_files: Optional[Path] = None,
+        edge_port: int | None = None,
+        mapping_stubs: Path | None = None,
+        mapping_files: Path | None = None,
         *,
         verbose: bool = False,
         disable_logging: bool = False,

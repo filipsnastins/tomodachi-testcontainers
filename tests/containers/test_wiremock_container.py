@@ -54,7 +54,7 @@ async def test_custom_wiremock_container_configured_from_mapping_files(monkeypat
     mapping_files = Path(__file__).parent / "test-wiremock-container" / "files"
 
     with WireMockContainer(mapping_stubs=mapping_stubs, mapping_files=mapping_files) as container:
-        container = cast(WireMockContainer, container)
+        container = cast("WireMockContainer", container)
 
         async with httpx.AsyncClient(base_url=container.get_external_url()) as client:
             response = await client.get("/test-mapping-files")

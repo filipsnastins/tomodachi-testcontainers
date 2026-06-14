@@ -41,9 +41,6 @@ with suppress(ImportError):  # 'sftp' extra dependency
 
 
 __all__ = [
-    "reset_moto_container_on_teardown",
-    "reset_wiremock_container_on_teardown",
-    "restart_localstack_container_on_teardown",
     "localstack_container",
     "localstack_dynamodb_client",
     "localstack_iam_client",
@@ -66,6 +63,9 @@ __all__ = [
     "moto_ssm_client",
     "mysql_container",
     "postgres_container",
+    "reset_moto_container_on_teardown",
+    "reset_wiremock_container_on_teardown",
+    "restart_localstack_container_on_teardown",
     "sftp_container",
     "testcontainer_image",
     "userpass_sftp_client",

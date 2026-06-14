@@ -36,7 +36,9 @@ class TestProbeUntil:
             return True
 
         result = await probe_until(
-            lambda: _f(), probe_interval=0.1, stop_after=0.3  # pylint: disable=unnecessary-lambda
+            _f,
+            probe_interval=0.1,
+            stop_after=0.3,  # pylint: disable=unnecessary-lambda
         )
 
         assert result is True
@@ -93,7 +95,9 @@ class TestProbeDuringInterval:
             return True
 
         result = await probe_during_interval(
-            lambda: _f(), probe_interval=0.1, stop_after=0.3  # pylint: disable=unnecessary-lambda
+            _f,
+            probe_interval=0.1,
+            stop_after=0.3,  # pylint: disable=unnecessary-lambda
         )
 
         assert result is True

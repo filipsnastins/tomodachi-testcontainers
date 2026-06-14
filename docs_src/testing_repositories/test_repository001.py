@@ -1,5 +1,5 @@
 import uuid
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
 import pytest
 import pytest_asyncio
@@ -27,4 +27,3 @@ async def test_save_customer(repository: DynamoDBCustomerRepository) -> None:
     await repository.save(customer)
 
     # Assert
-    ...

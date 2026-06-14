@@ -1,11 +1,9 @@
 import os
-from typing import Generator
+from collections.abc import Generator
 
 import pytest
 
-from tomodachi_testcontainers import DockerContainer
-
-from .. import PostgreSQLContainer
+from tomodachi_testcontainers import DockerContainer, PostgreSQLContainer
 
 
 @pytest.fixture(scope="session")

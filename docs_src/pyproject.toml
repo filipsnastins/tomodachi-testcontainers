@@ -27,10 +27,6 @@ dev = [
 [tool.uv]
 package = false
 
-[tool.black]
-line-length = 120
-target-version = ['py313']
-
 [tool.mypy]
 python_version = "3.13"
 ignore_missing_imports = true

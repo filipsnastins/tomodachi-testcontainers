@@ -4,8 +4,9 @@ Inspired by [Awaitility](https://github.com/awaitility/awaitility) and [busypie]
 """
 
 import asyncio
+from collections.abc import Awaitable, Callable
 from contextlib import suppress
-from typing import Any, Awaitable, Callable, TypeVar, Union, cast, overload
+from typing import Any, TypeVar, cast, overload
 
 from tenacity import AsyncRetrying, RetryError, retry_unless_exception_type
 from tenacity.stop import stop_after_delay
@@ -31,7 +32,7 @@ async def probe_until(
 
 
 async def probe_until(
-    probe: Union[Callable[[], Awaitable[T]], Callable[[], T]],
+    probe: Callable[[], Awaitable[T]] | Callable[[], T],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
@@ -49,7 +50,7 @@ async def probe_until(
             result = probe()
             if asyncio.iscoroutine(result):
                 result = await result
-    return cast(T, result)
+    return cast("T", result)
 
 
 @overload
@@ -69,7 +70,7 @@ async def probe_during_interval(
 
 
 async def probe_during_interval(
-    probe: Callable[[], Union[Awaitable[T], T]],
+    probe: Callable[[], Awaitable[T] | T],
     probe_interval: float = 0.1,
     stop_after: float = 3.0,
 ) -> T:
@@ -89,4 +90,4 @@ async def probe_during_interval(
                 result = probe()
                 if asyncio.iscoroutine(result):
                     result = await result
-    return cast(T, result)
+    return cast("T", result)

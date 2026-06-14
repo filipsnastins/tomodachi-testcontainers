@@ -1,12 +1,12 @@
 import os
-from typing import AsyncGenerator, Generator
+from collections.abc import AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
 from aiobotocore.session import get_session
 from types_aiobotocore_s3 import S3Client
 
-from .. import DockerContainer, MinioContainer
+from tomodachi_testcontainers import DockerContainer, MinioContainer
 
 
 @pytest.fixture(scope="session")

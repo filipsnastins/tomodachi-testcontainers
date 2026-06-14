@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import structlog
 import tomodachi
@@ -75,7 +75,7 @@ class Service(tomodachi.Service):
             customer_id=str(uuid.uuid4()),
             name=data["name"],
             orders=[],
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
         )
 
         await self._dynamodb_client.put_item(

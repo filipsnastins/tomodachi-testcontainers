@@ -1,7 +1,8 @@
 import os
-from typing import Any, Optional
+from typing import Any
 
-from ..utils import AWSClientConfig, get_available_port
+from tomodachi_testcontainers.utils import AWSClientConfig, get_available_port
+
 from .common import WebContainer
 
 
@@ -19,10 +20,10 @@ class MinioContainer(WebContainer):
         self,
         image: str = "minio/minio:latest",
         s3_api_internal_port: int = 9000,
-        s3_api_edge_port: Optional[int] = None,
+        s3_api_edge_port: int | None = None,
         console_internal_port: int = 9001,
-        console_edge_port: Optional[int] = None,
-        region_name: Optional[str] = None,
+        console_edge_port: int | None = None,
+        region_name: str | None = None,
         disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:
@@ -55,7 +56,7 @@ class MinioContainer(WebContainer):
     def log_message_on_container_start(self) -> str:
         return (
             "Minio started: "
-            f"S3-API: http://localhost:{self.s3_api_edge_port}/; "  # noqa: E702
+            f"S3-API: http://localhost:{self.s3_api_edge_port}/; "
             f"console: http://localhost:{self.console_edge_port}/"
         )
 

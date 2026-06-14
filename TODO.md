@@ -41,8 +41,9 @@
 
 - [x] Migrate to uv.
 - [x] Pin all versions in GitHub Actions.
-- [ ] Fully migrate to ruff.
 - [x] Drop support for EOL Python versions.
+- [x] Fully migrate to ruff.
+- [ ] Migrate to ProperDocs.
 - [ ] Bump all dependencies.
 - [ ] Bump testcontainers core to latest version.
-- [ ] Migrate to ProperDocs.
+- [ ] Release `2.0.0`.

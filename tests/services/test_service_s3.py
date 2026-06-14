@@ -1,6 +1,7 @@
 import uuid
+from collections.abc import AsyncGenerator, Generator
 from datetime import datetime
-from typing import Any, AsyncGenerator, Dict, Generator
+from typing import Any
 from unittest import mock
 
 import httpx
@@ -65,8 +66,8 @@ async def test_upload_and_read_file(
     assert response.status_code == 200
     assert response.json() == {"content": "Hello, World!"}
 
-    async def _file_uploaded_event_emitted() -> Dict[str, Any]:
-        [event] = await localstack_snssqs_tc.receive("s3--file-uploaded", JsonBase, Dict[str, Any])
+    async def _file_uploaded_event_emitted() -> dict[str, Any]:
+        [event] = await localstack_snssqs_tc.receive("s3--file-uploaded", JsonBase, dict[str, Any])
         return event.payload
 
     event = await probe_until(_file_uploaded_event_emitted)

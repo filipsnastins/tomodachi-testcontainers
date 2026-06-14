@@ -1,5 +1,5 @@
 import os
-from typing import AsyncGenerator, Generator
+from collections.abc import AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
@@ -12,8 +12,8 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
-from .. import DockerContainer, LocalStackContainer
-from ..clients.snssqs import SNSSQSTestClient
+from tomodachi_testcontainers import DockerContainer, LocalStackContainer
+from tomodachi_testcontainers.clients.snssqs import SNSSQSTestClient
 
 
 @pytest.fixture(scope="session")
@@ -26,7 +26,7 @@ def localstack_container() -> Generator[DockerContainer, None, None]:
 
 
 @pytest.fixture
-def restart_localstack_container_on_teardown(  # noqa: PT004
+def restart_localstack_container_on_teardown(
     localstack_container: LocalStackContainer,
 ) -> Generator[None, None, None]:
     """Restarts the LocalStack container after each test."""

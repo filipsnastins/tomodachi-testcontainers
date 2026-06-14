@@ -1,10 +1,10 @@
 import os
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
 
 import pytest
 
-from .. import EphemeralDockerImage
+from tomodachi_testcontainers import EphemeralDockerImage
 
 
 @pytest.fixture(scope="session")

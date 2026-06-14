@@ -1,9 +1,10 @@
 import os
-from typing import Any, Optional
+from typing import Any
 
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from ..utils import AWSClientConfig
+from tomodachi_testcontainers.utils import AWSClientConfig
+
 from .common import WebContainer
 
 
@@ -21,8 +22,8 @@ class LocalStackContainer(WebContainer):
         self,
         image: str = "localstack/localstack:3",
         internal_port: int = 4566,
-        edge_port: Optional[int] = None,
-        region_name: Optional[str] = None,
+        edge_port: int | None = None,
+        region_name: str | None = None,
         disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:

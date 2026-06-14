@@ -1,6 +1,5 @@
 import json
 import re
-from typing import Dict
 
 import pytest
 from tomodachi.envelope.json_base import JsonBase
@@ -25,7 +24,7 @@ def snssqs_test_client(moto_sns_client: SNSClient, moto_sqs_client: SQSClient) -
 async def test_no_messages_received(snssqs_test_client: SNSSQSTestClient) -> None:
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
 
-    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
+    messages = await snssqs_test_client.receive("queue", JsonBase, dict[str, str])
 
     assert messages == []
 
@@ -43,7 +42,7 @@ async def test_publish_and_receive_messages(snssqs_test_client: SNSSQSTestClient
     await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
     await snssqs_test_client.publish("topic", {"message": "2"}, JsonBase)
 
-    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
+    messages = await snssqs_test_client.receive("queue", JsonBase, dict[str, str])
     assert messages == [
         SQSMessage({"message": "1"}),
         SQSMessage({"message": "2"}),
@@ -71,7 +70,7 @@ async def test_publish_and_receive_with_message_attributes(snssqs_test_client: S
         message_attributes={"MyMessageAttribute": {"DataType": "String", "StringValue": "not-included"}},
     )
 
-    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
+    messages = await snssqs_test_client.receive("queue", JsonBase, dict[str, str])
     assert messages == [
         SQSMessage(
             payload={"message": "1"},
@@ -91,7 +90,7 @@ async def test_publish_and_receive_with_fifo(snssqs_test_client: SNSSQSTestClien
         "topic.fifo", {"message": "1"}, JsonBase, message_deduplication_id="123456", message_group_id="123456"
     )
 
-    messages = await snssqs_test_client.receive("queue.fifo", JsonBase, Dict[str, str])
+    messages = await snssqs_test_client.receive("queue.fifo", JsonBase, dict[str, str])
     assert messages == [SQSMessage({"message": "1"})]
 
 
@@ -108,7 +107,7 @@ async def test_send_and_receive_message(snssqs_test_client: SNSSQSTestClient) ->
     await snssqs_test_client.send("queue", {"message": "1"}, JsonBase)
     await snssqs_test_client.send("queue", {"message": "2"}, JsonBase)
 
-    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
+    messages = await snssqs_test_client.receive("queue", JsonBase, dict[str, str])
     assert messages == [SQSMessage({"message": "1"}), SQSMessage({"message": "2"})]
 
 
@@ -123,7 +122,7 @@ async def test_send_and_receive_message_with_fifo(snssqs_test_client: SNSSQSTest
         "queue.fifo", {"message": "2"}, JsonBase, message_deduplication_id="123456", message_group_id="123456"
     )
 
-    messages = await snssqs_test_client.receive("queue.fifo", JsonBase, Dict[str, str])
+    messages = await snssqs_test_client.receive("queue.fifo", JsonBase, dict[str, str])
     assert messages == [SQSMessage({"message": "1"})]
 
 
@@ -138,7 +137,7 @@ async def test_send_and_receive_messages_with_attributes(snssqs_test_client: SNS
         message_attributes={"MyMessageAttribute": {"DataType": "String", "StringValue": "test-value"}},
     )
 
-    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
+    messages = await snssqs_test_client.receive("queue", JsonBase, dict[str, str])
     assert messages == [
         SQSMessage(
             payload={"message": "1"},
@@ -152,7 +151,7 @@ async def test_received_messages_are_deleted_from_queue(snssqs_test_client: SNSS
     await snssqs_test_client.subscribe_to(topic="topic", queue="queue")
     await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
 
-    await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
+    await snssqs_test_client.receive("queue", JsonBase, dict[str, str])
 
     queue_attributes = await snssqs_test_client.get_queue_attributes(
         "queue", attributes=["ApproximateNumberOfMessagesNotVisible"]
@@ -166,10 +165,10 @@ async def test_receive_max_receive_messages(snssqs_test_client: SNSSQSTestClient
     await snssqs_test_client.publish("topic", {"message": "1"}, JsonBase)
     await snssqs_test_client.publish("topic", {"message": "2"}, JsonBase)
 
-    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str], max_messages=1)
+    messages = await snssqs_test_client.receive("queue", JsonBase, dict[str, str], max_messages=1)
     assert messages == [SQSMessage({"message": "1"})]
 
-    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str], max_messages=1)
+    messages = await snssqs_test_client.receive("queue", JsonBase, dict[str, str], max_messages=1)
     assert messages == [SQSMessage({"message": "2"})]
 
 
@@ -190,7 +189,7 @@ async def test_purge_queue(snssqs_test_client: SNSSQSTestClient) -> None:
 
     await snssqs_test_client.purge_queue("queue")
 
-    messages = await snssqs_test_client.receive("queue", JsonBase, Dict[str, str])
+    messages = await snssqs_test_client.receive("queue", JsonBase, dict[str, str])
     assert messages == []
 
 

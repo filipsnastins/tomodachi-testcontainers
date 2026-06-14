@@ -4,7 +4,7 @@ Adaptation of https://github.com/testcontainers/testcontainers-python/tree/main/
 """
 
 import os
-from typing import Any, Optional
+from typing import Any
 
 from .common import DatabaseContainer
 
@@ -24,11 +24,11 @@ class PostgreSQLContainer(DatabaseContainer):
         self,
         image: str = "postgres:16",
         internal_port: int = 5432,
-        edge_port: Optional[int] = None,
-        drivername: Optional[str] = None,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        database: Optional[str] = None,
+        edge_port: int | None = None,
+        drivername: str | None = None,
+        username: str | None = None,
+        password: str | None = None,
+        database: str | None = None,
         disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:

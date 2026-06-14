@@ -2,14 +2,15 @@
 
 import abc
 import urllib.parse
-from typing import Any, Optional
+from typing import Any
 
 import requests
 from tenacity import Retrying
 from tenacity.stop import stop_after_delay
 from tenacity.wait import wait_fixed
 
-from ...utils import get_available_port
+from tomodachi_testcontainers.utils import get_available_port
+
 from .container import DockerContainer
 
 
@@ -23,8 +24,8 @@ class WebContainer(DockerContainer, abc.ABC):
         self,
         image: str,
         internal_port: int,
-        edge_port: Optional[int] = None,
-        http_healthcheck_path: Optional[str] = None,
+        edge_port: int | None = None,
+        http_healthcheck_path: str | None = None,
         disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:

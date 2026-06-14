@@ -4,7 +4,7 @@ import os
 import socket
 import tarfile
 from pathlib import Path
-from typing import Dict, Optional, TypedDict, cast
+from typing import TypedDict, cast
 
 from docker.errors import ImageNotFound
 from docker.models.containers import Container
@@ -19,13 +19,13 @@ class AWSClientConfig(TypedDict):
     endpoint_url: str
 
 
-def get_docker_image(image_id: str, docker_client_kwargs: Optional[Dict] = None) -> Image:
+def get_docker_image(image_id: str, docker_client_kwargs: dict | None = None) -> Image:
     """Returns a Docker image, pulling it if not exists on host."""
     client = DockerClient(**(docker_client_kwargs or {}))
     try:
-        return cast(Image, client.client.images.get(image_id))
+        return cast("Image", client.client.images.get(image_id))
     except ImageNotFound:
-        return cast(Image, client.client.images.pull(image_id))
+        return cast("Image", client.client.images.pull(image_id))
 
 
 def copy_files_to_container(container: Container, host_path: Path, container_path: Path) -> None:

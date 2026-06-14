@@ -3,14 +3,14 @@ import logging
 import os
 from contextlib import suppress
 from types import TracebackType
-from typing import Any, Dict, Optional, Type, cast
+from typing import Any, Self, cast
 
 import docker.errors
 import shortuuid
 import testcontainers.core.container
 from docker.models.containers import Container
 
-from ...utils import setup_logger
+from tomodachi_testcontainers.utils import setup_logger
 
 
 class ContainerWithSameNameAlreadyExistsError(Exception):
@@ -20,7 +20,7 @@ class ContainerWithSameNameAlreadyExistsError(Exception):
 class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     """Abstract class for generic Docker containers."""
 
-    _container: Optional[Container]
+    _container: Container | None
     _name: str
     _logger: logging.Logger
 
@@ -33,7 +33,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
 
         self._disable_logging = disable_logging
 
-    def __enter__(self) -> "DockerContainer":
+    def __enter__(self) -> Self:
         try:
             return self.start()
         except ContainerWithSameNameAlreadyExistsError:
@@ -44,7 +44,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
             raise
 
     def __exit__(
-        self, exc_type: Optional[Type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[TracebackType]
+        self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: TracebackType | None
     ) -> None:
         if not self._disable_logging:
             self._forward_container_logs_to_logger()
@@ -60,7 +60,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
     def get_container_gateway_ip(self) -> str:
         return self.docker_inspect()["NetworkSettings"]["Networks"][self.network]["Gateway"]
 
-    def docker_inspect(self) -> Dict[str, Any]:
+    def docker_inspect(self) -> dict[str, Any]:
         return self.get_docker_client().get_container(self.get_wrapped_container().id)
 
     def start(self) -> "DockerContainer":
@@ -71,7 +71,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
 
     def stop(self) -> None:
         with suppress(Exception):
-            container = self._container or cast(Container, self.get_docker_client().client.containers.get(self._name))
+            container = self._container or cast("Container", self.get_docker_client().client.containers.get(self._name))
             container.remove(force=True, v=True)
         self._container = None
 

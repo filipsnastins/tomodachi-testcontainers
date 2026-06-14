@@ -34,37 +34,18 @@ tomodachi_testcontainers = "tomodachi_testcontainers.fixtures"
 
 [dependency-groups]
 dev = [
-    "autoflake>=2.1.1,<3",
-    "bandit>=1.7.5,<2",
-    "black>=24.1.1,<25",
     "colorama>=0.4.6,<0.5",
-    "flake8>=7.0.0,<8",
-    "flake8-annotations>=2.9.1,<4.0.0",
-    "flake8-black>=0.3.6,<0.4",
-    "flake8-bugbear>=23.3.12,<25.0.0",
-    "flake8-executable>=2.1.3,<3",
-    "flake8-isort>=6.1.0,<7",
-    "flake8-junit-report>=2.1.0,<3",
-    "flake8-literal>=1.3.0,<2",
-    "flake8-no-pep420>=2.7.0,<3",
-    "flake8-pyproject>=1.2.3,<2",
-    "flake8-pytest-style>=2.0.0,<3",
-    "flake8-return>=1.2.0,<2",
-    "flake8-simplify>=0.21.0,<0.22",
     "flaky>=3.8.1,<4",
     "httpx>=0.25,<0.28",
-    "isort>=5.12.0,<6",
     "mypy>=1.4.1,<2",
     "pre-commit>=3.3.3,<5.0.0",
     "pydantic>=2.0.2,<3",
-    "pydocstringformatter>=0.7.3,<0.8",
-    "pylint[spelling]>=3.0.2,<4",
     "pytest-cov>=4.1,<6.0",
     "pytest-env>=1.0.1,<2",
     "pytest-testdox>=3.1.0,<4",
     "pytest-timeout>=2.3.1,<3",
     "pytest-xdist>=3.5.0,<4",
-    "ruff>=0.1.5,<0.7.0",
+    "ruff>=0.15.0",
     "structlog>=23.3,<25.0",
     "tomodachi>=0.27.0,<0.28",
     "types-protobuf>=4.23.0.2,<6.0.0.0",
@@ -83,73 +64,10 @@ docs = [
 default-groups = ["dev", "docs"]
 required-version = ">=0.11"
 
-[tool.black]
-line-length = 120
-target-version = ['py311', 'py312', 'py313']
-include = '\.pyi?$'
-exclude = '\.git/|\.mypy_cache/|\.venv/|\.pytest_cache/|\.vscode/|__pycache__/|build/|dist/'
-
-[tool.isort]
-profile = "black"
-line_length = 120
-skip = [
-    ".git",
-    ".ruff_cache",
-    ".mypy_cache",
-    ".venv",
-    ".pytest_cache",
-    ".vscode",
-    "__pycache__",
-    "build",
-    "dist",
-]
-
-[tool.bandit]
-exclude_dirs = [
-    ".git",
-    ".ruff_cache",
-    ".mypy_cache",
-    ".venv",
-    ".pytest_cache",
-    ".vscode",
-    "__pycache__",
-    "build",
-    "dist",
-]
-
-[tool.flake8]
-ignore = [
-    "ANN101",
-    "ANN401",
-    "BLK100",
-    "E231",
-    "E501",
-    "E704",
-    "LIT101",
-    "PL123",
-]
-literal-inline-quotes = "double"
-literal-multiline-quotes = "double"
-exclude = [
-    ".git",
-    ".ruff_cache",
-    ".mypy_cache",
-    ".venv",
-    ".pytest_cache",
-    ".vscode",
-    "__pycache__",
-    "build",
-    "dist",
-]
-extend-exclude = ["tests/clients/proto"]
-per-file-ignores = [
-    "docs_src/**/*.py:E402",
-    "tests/services/test_service_healthcheck.py:E402",
-]
-
 [tool.ruff]
 target-version = "py311"
 line-length = 120
+src = ["src"]
 exclude = [
     ".bzr",
     ".direnv",
@@ -175,26 +93,93 @@ exclude = [
 ]
 extend-exclude = ["tests/clients/proto"]
 
-[tool.ruff.lint.extend-per-file-ignores]
-"docs_src/**/*.py" = ["E402"]
+[tool.ruff.format]
+preview = true
+
+[tool.ruff.lint]
+preview = true
+select = ["ALL"]
+ignore = [
+    "A002",
+    "A003",
+    "A004",
+    "ANN401",
+    "ARG001",
+    "ARG002",
+    "ARG003",
+    "ARG004",
+    "ARG005",
+    "B904",
+    "BLE001",
+    "C901",
+    "COM812",
+    "CPY001",
+    "D",
+    "DOC201",
+    "DOC402",
+    "DOC501",
+    "DTZ005",
+    "E501",
+    "EM101",
+    "EM102",
+    "ERA001",
+    "FBT001",
+    "FBT002",
+    "FBT003",
+    "FIX002",
+    "G004",
+    "ISC001",
+    "N818",
+    "PGH003",
+    "PGH004",
+    "PLC0415",
+    "PLR0911",
+    "PLR0912",
+    "PLR0913",
+    "PLR0915",
+    "PLR0917",
+    "PLR2004",
+    "PLR6301",
+    "PLW1508",
+    "PLW2901",
+    "RUF012",
+    "RUF029",
+    "RUF043",
+    "RUF067",
+    "RUF076",
+    "S101",
+    "S104",
+    "S105",
+    "S106",
+    "S108",
+    "S202",
+    "S311",
+    "S404",
+    "S603",
+    "SIM117",
+    "SLF001",
+    "TC001",
+    "TC002",
+    "TC003",
+    "TD002",
+    "TD003",
+    "TRY003",
+    "TRY004",
+    "TRY300",
+    "TRY301",
+    "TRY400",
+    "UP007",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"docs_src/**/*.py" = ["E402", "INP001", "T201"]
+"examples/**/*.py" = ["INP001"]
+"tests/**/*.py" = ["ANN001", "ANN201", "ANN202", "S105", "S106"]
 "tests/services/test_service_healthcheck.py" = ["E402"]
 
-[tool.pydocstringformatter]
-write = true
-strip-whitespaces = true
-split-summary-body = false
-numpydoc-section-hyphen-length = false
-exclude = [
-    "**/.git/**",
-    "**/.ruff_cache/**",
-    "**/.mypy_cache/**",
-    "**/.venv/**",
-    "**/.pytest_cache/**",
-    "**/.vscode/**",
-    "**/__pycache__/**",
-    "**/build/**",
-    "**/dist/**",
-]
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+mark-parentheses = false
 
 [tool.mypy]
 python_version = "3.11"

@@ -1,5 +1,5 @@
 # --8<-- [start:tomodachi_container]
-from typing import Generator
+from collections.abc import Generator
 
 import pytest
 
@@ -16,7 +16,7 @@ def tomodachi_container(testcontainer_image: str) -> Generator[DockerContainer, 
 
 # --8<-- [end:tomodachi_container]
 
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
 import httpx
 import pytest_asyncio

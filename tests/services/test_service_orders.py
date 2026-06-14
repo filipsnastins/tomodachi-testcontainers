@@ -1,6 +1,7 @@
 import uuid
+from collections.abc import AsyncGenerator, Generator
 from datetime import datetime
-from typing import Any, AsyncGenerator, Dict, Generator, List
+from typing import Any
 from unittest import mock
 
 import httpx
@@ -55,7 +56,7 @@ async def test_order_not_found(http_client: httpx.AsyncClient) -> None:
 @pytest.mark.asyncio(loop_scope="session")
 async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSSQSTestClient) -> None:
     customer_id = str(uuid.uuid4())
-    products: List[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]
+    products: list[str] = ["MINIMALIST-SPOON", "RETRO-LAMPSHADE"]
 
     response = await http_client.post("/order", json={"customer_id": customer_id, "products": products})
     body = response.json()
@@ -77,8 +78,8 @@ async def test_create_order(http_client: httpx.AsyncClient, moto_snssqs_tc: SNSS
         "created_at": mock.ANY,
     }
 
-    async def _order_created_event_emitted() -> Dict[str, Any]:
-        [event] = await moto_snssqs_tc.receive("order--created", JsonBase, Dict[str, Any])
+    async def _order_created_event_emitted() -> dict[str, Any]:
+        [event] = await moto_snssqs_tc.receive("order--created", JsonBase, dict[str, Any])
         return event.payload
 
     event = await probe_until(_order_created_event_emitted)

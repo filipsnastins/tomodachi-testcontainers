@@ -1,6 +1,6 @@
 import json
 import urllib.parse
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import structlog
 import tomodachi
@@ -60,7 +60,7 @@ class Service(tomodachi.Service):
         object_key = urllib.parse.unquote_plus(record["s3"]["object"]["key"])
         etag = record["s3"]["object"]["eTag"]
         request_id = record["responseElements"]["x-amz-id-2"]
-        event_time = datetime.strptime(record["eventTime"], "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+        event_time = datetime.strptime(record["eventTime"], "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=UTC)
 
         notification = {
             "uri": f"s3://{bucket_name}/{object_key}",

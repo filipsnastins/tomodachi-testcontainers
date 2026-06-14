@@ -1,12 +1,13 @@
 import os
 from contextlib import suppress
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import shortuuid
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from ..utils import copy_files_from_container
+from tomodachi_testcontainers.utils import copy_files_from_container
+
 from .common import WebContainer
 
 
@@ -22,8 +23,8 @@ class TomodachiContainer(WebContainer):
         self,
         image: str,
         internal_port: int = 9700,
-        edge_port: Optional[int] = None,
-        http_healthcheck_path: Optional[str] = None,
+        edge_port: int | None = None,
+        http_healthcheck_path: str | None = None,
         *,
         export_coverage: bool = False,
         disable_logging: bool = False,
@@ -70,4 +71,4 @@ class TomodachiContainer(WebContainer):
     def _stop_container_and_copy_coverage_report(self) -> None:
         container = self.get_wrapped_container()
         container.stop()
-        copy_files_from_container(container, container_path=Path(self._coverage_file_path), host_path=Path(os.getcwd()))
+        copy_files_from_container(container, container_path=Path(self._coverage_file_path), host_path=Path(Path.cwd()))

@@ -1,12 +1,16 @@
-from typing import Any, NamedTuple, Optional
+from typing import Any, NamedTuple
 
 import asyncssh
 from testcontainers.core.waiting_utils import wait_for_logs
 
-from ..utils import get_available_port
+from tomodachi_testcontainers.utils import get_available_port
+
 from .common import DockerContainer
 
-ConnectionDetails = NamedTuple("ConnectionDetails", [("host", str), ("port", int)])
+
+class ConnectionDetails(NamedTuple):
+    host: str
+    port: int
 
 
 class SFTPContainer(DockerContainer):
@@ -14,7 +18,7 @@ class SFTPContainer(DockerContainer):
         self,
         image: str = "atmoz/sftp:latest",
         internal_port: int = 22,
-        edge_port: Optional[int] = None,
+        edge_port: int | None = None,
         disable_logging: bool = False,
         **kwargs: Any,
     ) -> None:

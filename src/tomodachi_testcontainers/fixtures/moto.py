@@ -1,5 +1,5 @@
 import os
-from typing import AsyncGenerator, Generator
+from collections.abc import AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
@@ -12,8 +12,8 @@ from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 from types_aiobotocore_ssm import SSMClient
 
-from .. import DockerContainer, MotoContainer
-from ..clients.snssqs import SNSSQSTestClient
+from tomodachi_testcontainers import DockerContainer, MotoContainer
+from tomodachi_testcontainers.clients.snssqs import SNSSQSTestClient
 
 
 @pytest.fixture(scope="session")
@@ -26,7 +26,7 @@ def moto_container() -> Generator[DockerContainer, None, None]:
 
 
 @pytest.fixture
-def reset_moto_container_on_teardown(moto_container: MotoContainer) -> Generator[None, None, None]:  # noqa: PT004
+def reset_moto_container_on_teardown(moto_container: MotoContainer) -> Generator[None, None, None]:
     """Removes all mocked resources from Moto after each test without restarting the container."""
     yield
     moto_container.reset_moto()

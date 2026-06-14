@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from unittest.mock import Mock
 
 import pytest
@@ -13,7 +13,7 @@ from tomodachi_testcontainers.assertions import (
 
 
 def test_assert_datetime_within_range() -> None:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     assert_datetime_within_range(now - timedelta(seconds=9))
     assert_datetime_within_range(now + timedelta(seconds=10))

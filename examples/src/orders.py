@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import structlog
 import tomodachi
@@ -73,7 +73,7 @@ class Service(tomodachi.Service):
             order_id=str(uuid.uuid4()),
             customer_id=customer_id,
             products=products,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
         )
         event = OrderCreatedEvent(
             event_id=str(uuid.uuid4()),

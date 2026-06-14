@@ -11,7 +11,7 @@ async def _create_s3_buckets(localstack_s3_client: S3Client) -> None:
 # --8<-- [end:create_s3_buckets]
 
 
-from typing import Generator
+from collections.abc import Generator
 
 import pytest
 

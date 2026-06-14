@@ -1,6 +1,6 @@
 import uuid
-from datetime import datetime, timezone
-from typing import AsyncGenerator, Generator
+from collections.abc import AsyncGenerator, Generator
+from datetime import UTC, datetime
 from unittest import mock
 
 import httpx
@@ -97,7 +97,7 @@ async def test_register_created_order(http_client: httpx.AsyncClient, localstack
                 "order_id": order_id,
                 "customer_id": customer_id,
                 "products": ["foo", "bar"],
-                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
             },
             envelope=JsonBase,
         )
