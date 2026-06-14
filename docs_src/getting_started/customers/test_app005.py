@@ -1,10 +1,11 @@
 import uuid
 
 import pytest
-from tomodachi.envelope.json_base import JsonBase
 
 from tomodachi_testcontainers.async_probes import probe_until
 from tomodachi_testcontainers.clients import SNSSQSTestClient
+
+from .envelopes import JsonBase
 
 
 @pytest.mark.usefixtures("tomodachi_container")

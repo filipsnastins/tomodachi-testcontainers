@@ -1,8 +1,9 @@
 import httpx
 import pytest
-from tomodachi.envelope.json_base import JsonBase
 
 from tomodachi_testcontainers.clients import SNSSQSTestClient
+
+from .envelopes import JsonBase
 
 
 @pytest.mark.xfail(reason="CustomerCreatedEvent is emitted asynchronously")
