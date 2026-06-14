@@ -6,10 +6,10 @@ Install with [pip](https://pip.pypa.io/en/stable/getting-started/):
 pip install tomodachi-testcontainers
 ```
 
-Install with [Poetry](https://python-poetry.org/):
+Install with [uv](https://docs.astral.sh/uv/):
 
 ```sh
-poetry add --group dev tomodachi-testcontainers
+uv add --dev tomodachi-testcontainers
 ```
 
 Extra packages:

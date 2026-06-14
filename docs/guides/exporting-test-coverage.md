@@ -21,11 +21,8 @@ tests/services/test_service_healthcheck.py:tomodachi_container
 Configure the `coverage` tool in the `pyproject.toml` file:
 
 ```toml
-[tool.poetry.group.test]
-optional = true
-
-[tool.poetry.group.test.dependencies]
-pytest-cov = "^4.1.0"
+[dependency-groups]
+test = ["pytest-cov>=4.1.0,<5"]
 
 [tool.coverage.run]
 branch = true

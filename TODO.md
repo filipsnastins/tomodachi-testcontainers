@@ -36,3 +36,13 @@
 ## Testing
 
 - [ ] Docker-from-Docker test.
+
+## Maintenance
+
+- [x] Migrate to uv.
+- [ ] Pin all versions in GitHub Actions.
+- [ ] Fully migrate to ruff.
+- [x] Drop support for EOL Python versions.
+- [ ] Bump all dependencies.
+- [ ] Bump testcontainers core to latest version.
+- [ ] Migrate to ProperDocs.

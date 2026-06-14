@@ -9,18 +9,16 @@ ENV VIRTUAL_ENV=$VIRTUAL_ENV \
   PYTHONPATH=/app/src
 
 FROM python-base AS dependencies-base
-ARG PIP_VERSION=25.0
-ARG POETRY_VERSION=2.1.0
-RUN python -m pip install --no-cache-dir -U \
-  "pip==$PIP_VERSION" \
-  "poetry==$POETRY_VERSION" && \
-  virtualenv "$VIRTUAL_ENV"
-COPY --link pyproject.toml poetry.lock ./
-RUN poetry install
+COPY --from=ghcr.io/astral-sh/uv:0.11.21 /uv /uvx /bin/
+ENV UV_COMPILE_BYTECODE=1 \
+  UV_LINK_MODE=copy \
+  UV_PROJECT_ENVIRONMENT=$VIRTUAL_ENV
+COPY --link pyproject.toml uv.lock ./
+RUN uv sync --frozen
 
 FROM dependencies-base AS dependencies-release
 COPY --link . .
-RUN poetry install
+RUN uv sync --frozen
 
 FROM python-base AS release
 COPY --link --from=dependencies-release --chown=1001:1001 /opt/venv /opt/venv

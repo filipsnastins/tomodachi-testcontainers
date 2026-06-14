@@ -12,57 +12,52 @@ jobs:
     env:
       TESTCONTAINER_DOCKER_NETWORK: tomodachi-testcontainers
       DOCKER_BUILDKIT: 1
-      POETRY_VERSION: 2.1.0
     strategy:
       max-parallel: 5
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.11', '3.12', '3.13', '3.14']
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | POETRY_HOME="$HOME/.poetry" python - --yes
-          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
+          version: '0.11.21'
           python-version: ${{ matrix.python-version }}
-          cache: 'poetry'
+          enable-cache: true
 
       - name: Install dependencies - production
         run: |
-          poetry install --no-interaction
-          poetry show --tree
+          uv sync --no-default-groups
+          uv pip list
 
       - name: Test package imports
         run: |
-          poetry run python -c "import tomodachi_testcontainers"
-          poetry run python -c "import tomodachi_testcontainers.clients"
-          poetry run python -c "import tomodachi_testcontainers.containers"
-          poetry run python -c "import tomodachi_testcontainers.fixtures"
-          poetry run python -c "import tomodachi_testcontainers.assertions"
-          poetry run python -c "import tomodachi_testcontainers.async_probes"
-          poetry run python -c "import tomodachi_testcontainers.utils"
+          uv run python -c "import tomodachi_testcontainers"
+          uv run python -c "import tomodachi_testcontainers.clients"
+          uv run python -c "import tomodachi_testcontainers.containers"
+          uv run python -c "import tomodachi_testcontainers.fixtures"
+          uv run python -c "import tomodachi_testcontainers.assertions"
+          uv run python -c "import tomodachi_testcontainers.async_probes"
+          uv run python -c "import tomodachi_testcontainers.utils"
 
       - name: Install dependencies - dev and extas
         run: |
-          poetry install --no-interaction --all-extras --with dev
-          poetry show --tree
+          uv sync --all-extras
+          uv pip list
 
-      - name: Test Poetry build step
-        run: poetry build
+      - name: Test build step
+        run: uv build
 
       - name: Run commit hooks
-        run: SKIP=test poetry run make hooks
+        run: SKIP=test uv run make hooks
 
       - name: Create Docker network for running Testcontianers
         run: docker network create ${{ env.TESTCONTAINER_DOCKER_NETWORK }}
 
       - name: Run tests
-        run: poetry run make test-ci
+        run: uv run make test-ci
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4

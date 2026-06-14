@@ -1,11 +1,10 @@
 # Development
 
-- Install dev dependencies with [Poetry](https://python-poetry.org/).
+- Install dev dependencies with [uv](https://docs.astral.sh/uv/).
 
 ```sh
-poetry install --all-extras --with dev,docs
-poetry shell
-pre-commit install
+uv sync --all-extras
+uv run pre-commit install
 ```
 
 - Run tests.
@@ -34,13 +33,13 @@ make hooks
 - Build package release.
 
 ```sh
-poetry build
+uv build
 ```
 
 - Develop documentation with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/).
 
 ```sh
-mkdocs serve
+uv run mkdocs serve
 ```
 
 - Generate C4 diagrams with PlantUML (get plantuml.jar at <https://plantuml.com/starting>).

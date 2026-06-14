@@ -1,32 +1,31 @@
-[tool.poetry]
+[project]
 name = "src"
 version = "0.0.0"
 description = ""
-authors = ["Filips Nastins <nastinsfilips@gmail.com>"]
-package-mode = false
+authors = [{ name = "Filips Nastins", email = "nastinsfilips@gmail.com" }]
+requires-python = ">=3.13,<4"
+dependencies = [
+    "django>=5.1.1,<6",
+    "fastapi>=0.115.0,<0.116",
+    "flask>=3.0.1,<4",
+    "httpx>=0.27.2,<0.28",
+    "structlog>=24.4.0,<25",
+    "tomodachi>=0.27.2,<0.28",
+    "types-aiobotocore[dynamodb,s3,sns,sqs]>=2.5.2,<3",
+    "uvicorn>=0.31.0,<0.32",
+    "uvloop>=0.21.0,<0.22",
+]
 
-[tool.poetry.dependencies]
-python = "^3.13"
-django = "^5.1.1"
-fastapi = "^0.115.0"
-flask = "^3.0.1"
-httpx = "^0.27.2"
-structlog = "^24.4.0"
-tomodachi = "^0.27.2"
-types-aiobotocore = { extras = [
-    "dynamodb",
-    "s3",
-    "sns",
-    "sqs",
-], version = "^2.5.2" }
-uvicorn = "^0.31.0"
-uvloop = "^0.21.0"
+[dependency-groups]
+dev = [
+    "pytest>=8.3.3,<9",
+    "pytest-asyncio>=0.24.0,<2.0.0",
+    "requests>=2.32.3,<3",
+    "types-requests>=2.32.0,<3",
+]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.3"
-pytest-asyncio = "^0.24.0"
-requests = "^2.32.3"
-types-requests = "^2.32.0"
+[tool.uv]
+package = false
 
 [tool.black]
 line-length = 120
@@ -56,7 +55,3 @@ env = [
     # WireMock Testcontainer configuration
     "WIREMOCK_TESTCONTAINER_VERBOSE=1",
 ]
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
