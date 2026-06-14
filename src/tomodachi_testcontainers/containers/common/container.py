@@ -98,6 +98,7 @@ class DockerContainer(testcontainers.core.container.DockerContainer, abc.ABC):
                 ports=self.ports,
                 name=self._name,
                 volumes=self.volumes,
+                network=self.network,
                 **self._kwargs,
             )
         except Exception as e:

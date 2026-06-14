@@ -46,5 +46,5 @@
 - [x] Bump all dependencies.
 - [x] Migrate to ProperDocs.
 - [x] Bump testcontainers core to latest version.
-- [ ] Fix failing tests.
+- [x] Fix failing tests.
 - [ ] Release `2.0.0`.
