@@ -54,7 +54,7 @@ def copy_files_from_container(container: Container, container_path: Path, host_p
 def get_available_port() -> int:
     """Returns a random available port on the host."""
     with socket.socket() as sock:
-        sock.bind(("", 0))
+        sock.bind(("127.0.0.1", 0))
         return int(sock.getsockname()[1])
 
 
