@@ -40,7 +40,7 @@
 ## Maintenance
 
 - [x] Migrate to uv.
-- [ ] Pin all versions in GitHub Actions.
+- [x] Pin all versions in GitHub Actions.
 - [ ] Fully migrate to ruff.
 - [x] Drop support for EOL Python versions.
 - [ ] Bump all dependencies.
