@@ -8,7 +8,7 @@ readme = "README.md"
 requires-python = ">=3.11,<4"
 dependencies = [
     "aiobotocore>=2.4.2,<3",
-    "protobuf>=4,<6",
+    "protobuf>=4,<8",
     "pytest>=7.1.2,<10.0.0",
     "pytest-asyncio>=0.24.0,<2.0.0",
     "requests>=2.31.0,<3",
@@ -24,7 +24,7 @@ Repository = "https://github.com/filipsnastins/tomodachi-testcontainers"
 
 [project.optional-dependencies]
 db = ["sqlalchemy>=1.3,<3"]
-mysql = ["sqlalchemy>=1.3,<3", "pymysql>=1.1.0,<2", "cryptography>=41,<44"]
+mysql = ["sqlalchemy>=1.3,<3", "pymysql>=1.1.0,<2", "cryptography>=41,<50"]
 postgres = ["sqlalchemy>=1.3,<3", "psycopg>=3.1.18,<4"]
 sftp = ["asyncssh>=2.13.2,<3"]
 wiremock = ["wiremock>=2.6.1,<3"]
@@ -36,28 +36,28 @@ tomodachi_testcontainers = "tomodachi_testcontainers.fixtures"
 dev = [
     "colorama>=0.4.6,<0.5",
     "flaky>=3.8.1,<4",
-    "httpx>=0.25,<0.28",
-    "mypy>=1.4.1,<2",
+    "httpx>=0.25,<0.29",
+    "mypy>=1.4.1,<3",
     "pre-commit>=3.3.3,<5.0.0",
     "pydantic>=2.0.2,<3",
-    "pytest-cov>=4.1,<6.0",
+    "pytest-cov>=4.1,<8.0",
     "pytest-env>=1.0.1,<2",
     "pytest-testdox>=3.1.0,<4",
     "pytest-timeout>=2.3.1,<3",
     "pytest-xdist>=3.5.0,<4",
     "ruff>=0.15.0",
     "structlog>=23.3,<25.0",
-    "tomodachi>=0.27.0,<0.28",
-    "types-protobuf>=4.23.0.2,<6.0.0.0",
+    "tomodachi>=0.27.0,<0.29",
+    "types-protobuf>=4.23.0.2,<8.0.0.0",
     "types-requests>=2.31.0.2,<3",
 ]
 docs = [
-    "griffe>=1.5.1,<2",
-    "griffe-typingdoc>=0.2.7,<0.3",
-    "mkdocs-glightbox>=0.4.0,<0.5",
+    "griffe>=1.5.1,<3",
+    "griffe-typingdoc>=0.2.7,<0.4",
+    "mkdocs-glightbox>=0.4.0,<0.6",
     "mkdocs-material>=9.5.41,<10",
-    "mkdocstrings[python]>=0.26.2,<0.27",
-    "mkdocstrings-python>=1.12.1,<2",
+    "mkdocstrings[python]>=0.26.2,<2",
+    "mkdocstrings-python>=1.12.1,<3",
 ]
 
 [tool.uv]
