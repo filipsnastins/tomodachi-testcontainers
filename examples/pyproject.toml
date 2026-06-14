@@ -9,7 +9,7 @@ dependencies = [
     "pydantic>=2.9.2,<3",
     "structlog>=24.4.0,<25",
     "tomodachi>=0.27.2,<0.29",
-    "types-aiobotocore[dynamodb,s3,sns,sqs]>=2.5.2,<3",
+    "types-aiobotocore[dynamodb,s3,sns,sqs]>=3.7.0,<4",
     "uvloop>=0.21.0,<0.23",
 ]
 
