@@ -7,9 +7,9 @@ from unittest import mock
 import httpx
 import pytest
 import pytest_asyncio
-from tomodachi.envelope.json_base import JsonBase
 from types_aiobotocore_s3 import S3Client
 
+from tests.envelopes import JsonBase
 from tomodachi_testcontainers import DockerContainer, LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.assertions import assert_datetime_within_range
 from tomodachi_testcontainers.async_probes import probe_until

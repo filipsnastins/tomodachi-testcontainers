@@ -1,8 +1,8 @@
 from collections.abc import Generator
 
 import pytest
-from tomodachi.envelope.json_base import JsonBase
 
+from tests.envelopes import JsonBase
 from tomodachi_testcontainers import DockerContainer, LocalStackContainer, TomodachiContainer
 from tomodachi_testcontainers.assertions import assert_logs_contain
 from tomodachi_testcontainers.async_probes import probe_until

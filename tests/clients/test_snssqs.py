@@ -2,11 +2,10 @@ import json
 import re
 
 import pytest
-from tomodachi.envelope.json_base import JsonBase
-from tomodachi.envelope.protobuf_base import ProtobufBase
 from types_aiobotocore_sns import SNSClient
 from types_aiobotocore_sqs import SQSClient
 
+from tests.envelopes import JsonBase, ProtobufBase
 from tomodachi_testcontainers.clients import SNSSQSTestClient
 from tomodachi_testcontainers.clients.snssqs import QueueDoesNotExistError, SQSMessage, TopicDoesNotExistError
 

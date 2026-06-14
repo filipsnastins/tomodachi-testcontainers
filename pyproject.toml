@@ -47,7 +47,6 @@ dev = [
     "pytest-xdist>=3.5.0,<4",
     "ruff>=0.15.0",
     "structlog>=23.3,<25.0",
-    "tomodachi>=0.27.0,<0.29",
     "types-protobuf>=4.23.0.2,<8.0.0.0",
     "types-requests>=2.31.0.2,<3",
 ]

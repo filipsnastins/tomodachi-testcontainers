@@ -7,18 +7,6 @@ resolution-markers = [
 ]
 
 [[package]]
-name = "aioamqp"
-version = "0.15.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pamqp" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/9c/d2/c9b86649c8a9cf309b06665c4c54563c154400e36eee545607e92892acce/aioamqp-0.15.0.tar.gz", hash = "sha256:fcad924d7658e65ef074522a7e9527e0b0adad09b10774340ea9f3fd277452d8", size = 35187, upload-time = "2022-04-05T22:38:31.426Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9c/9e/a9e069af4d82cf99f63a67ce5e1ad908af9700bc822020dd16c8a2e02309/aioamqp-0.15.0-py37.py38.py39.py310-none-any.whl", hash = "sha256:0f38cc4db8db6fd062504b7c4b6703c800d2130d14d5492cf47d727de1929740", size = 19851, upload-time = "2022-04-05T22:38:29.702Z" },
-]
-
-[[package]]
 name = "aiobotocore"
 version = "2.26.0"
 source = { registry = "https://pypi.org/simple" }
@@ -148,15 +136,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/19/14/2c5dd9f512b66549ae92767a9c7b330ae88e1932ca57876909410251fe13/anyio-4.13.0.tar.gz", hash = "sha256:334b70e641fd2221c1505b3890c69882fe4a2df910cba14d97019b90b24439dc", size = 231622, upload-time = "2026-03-24T12:59:09.671Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/da/42/e921fccf5015463e32a3cf6ee7f980a6ed0f395ceeaa45060b61d86486c2/anyio-4.13.0-py3-none-any.whl", hash = "sha256:08b310f9e24a9594186fd75b4f73f4a4152069e3853f1ed8bfbf58369f4ad708", size = 114353, upload-time = "2026-03-24T12:59:08.246Z" },
-]
-
-[[package]]
-name = "asahi"
-version = "0.2.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/cb/a9/20544d2f9afbc86d31d12d734410b65463c9e0372eaac1df0446c741d5f4/asahi-0.2.0.tar.gz", hash = "sha256:f6ea2396400bee4390c1afa5233cc6a4ecde1f91ce8d6aaaf1502d069ff62bf9", size = 3798, upload-time = "2022-03-14T10:22:37.832Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/f4/36/fea5cc4025b1adc9e80e788ee2150691cc997cd8826b082e5eec461756cd/asahi-0.2.0-py3-none-any.whl", hash = "sha256:6825fb1bbbd4afef07cf166c059a52e002b85e598db0f203a2ce026a77b3f62e", size = 3624, upload-time = "2022-03-14T10:22:36.377Z" },
 ]
 
 [[package]]
@@ -1500,15 +1479,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pamqp"
-version = "4.0.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d8/92/3db569ab046955553d6041ea5ad1fa78aaa01fc70bc4e6e7e15c072f050e/pamqp-4.0.0.tar.gz", hash = "sha256:0acc96ae642a534c61f12942ee23167ed52624209baa92c9848d0970f4604682", size = 130078, upload-time = "2026-03-31T23:15:14.803Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/8a/23/64f267632476a5c512df38e6f0d6eb215ebc4ff59edd17d152b7e3bee1ee/pamqp-4.0.0-py3-none-any.whl", hash = "sha256:ec5757355b4a54f4cf9c172e8dde89ed14f420970bc64a0c9019920c4945c71b", size = 32443, upload-time = "2026-03-31T23:15:13.36Z" },
-]
-
-[[package]]
 name = "pathspec"
 version = "1.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1998,15 +1968,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pytz"
-version = "2026.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ff/46/dd499ec9038423421951e4fad73051febaa13d2df82b4064f87af8b8c0c3/pytz-2026.2.tar.gz", hash = "sha256:0e60b47b29f21574376f218fe21abc009894a2321ea16c6754f3cad6eb7cdd6a", size = 320861, upload-time = "2026-05-04T01:35:29.667Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ec/dd/96da98f892250475bdf2328112d7468abdd4acc7b902b6af23f4ed958ea0/pytz-2026.2-py2.py3-none-any.whl", hash = "sha256:04156e608bee23d3792fd45c94ae47fae1036688e75032eea2e3bf0323d1f126", size = 510141, upload-time = "2026-05-04T01:35:27.408Z" },
-]
-
-[[package]]
 name = "pywin32"
 version = "312"
 source = { registry = "https://pypi.org/simple" }
@@ -2343,27 +2304,6 @@ wheels = [
 ]
 
 [[package]]
-name = "tomodachi"
-version = "0.28.4"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "aioamqp" },
-    { name = "aiobotocore" },
-    { name = "aiohttp" },
-    { name = "asahi" },
-    { name = "botocore" },
-    { name = "colorama" },
-    { name = "pytz" },
-    { name = "structlog" },
-    { name = "tzlocal" },
-    { name = "yarl" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/22/76/b5f3a08b9407f609e2b09cb4019d005979b800bdf8b221fb185e1d914575/tomodachi-0.28.4.tar.gz", hash = "sha256:aee56d4e0236654a11591f0904fa4d503f769436f19f6751ce1087fa110b11bb", size = 188882, upload-time = "2026-03-25T13:52:30.609Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ea/78/b2c17bf08166c7ebe24027129de0423566568c2ef54abacf6e271adbe695/tomodachi-0.28.4-py3-none-any.whl", hash = "sha256:299e834935cad3b2e912002d3076ed0ac03c5e989c0c2351f5dd13d4bfef7209", size = 176608, upload-time = "2026-03-25T13:52:29.323Z" },
-]
-
-[[package]]
 name = "tomodachi-testcontainers"
 version = "1.2.4"
 source = { editable = "." }
@@ -2414,7 +2354,6 @@ dev = [
     { name = "pytest-xdist" },
     { name = "ruff" },
     { name = "structlog" },
-    { name = "tomodachi" },
     { name = "types-protobuf" },
     { name = "types-requests" },
 ]
@@ -2465,7 +2404,6 @@ dev = [
     { name = "pytest-xdist", specifier = ">=3.5.0,<4" },
     { name = "ruff", specifier = ">=0.15.0" },
     { name = "structlog", specifier = ">=23.3,<25.0" },
-    { name = "tomodachi", specifier = ">=0.27.0,<0.29" },
     { name = "types-protobuf", specifier = ">=4.23.0.2,<8.0.0.0" },
     { name = "types-requests", specifier = ">=2.31.0.2,<3" },
 ]
@@ -2657,18 +2595,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/ba/19/1b9b0e29f30c6d35cb345486df41110984ea67ae69dddbc0e8a100999493/tzdata-2026.2.tar.gz", hash = "sha256:9173fde7d80d9018e02a662e168e5a2d04f87c41ea174b139fbef642eda62d10", size = 198254, upload-time = "2026-04-24T15:22:08.651Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ce/e4/dccd7f47c4b64213ac01ef921a1337ee6e30e8c6466046018326977efd95/tzdata-2026.2-py2.py3-none-any.whl", hash = "sha256:bbe9af844f658da81a5f95019480da3a89415801f6cc966806612cc7169bffe7", size = 349321, upload-time = "2026-04-24T15:22:05.876Z" },
-]
-
-[[package]]
-name = "tzlocal"
-version = "5.3.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "tzdata", marker = "sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/8b/2e/c14812d3d4d9cd1773c6be938f89e5735a1f11a9f184ac3639b93cef35d5/tzlocal-5.3.1.tar.gz", hash = "sha256:cceffc7edecefea1f595541dbd6e990cb1ea3d19bf01b2809f362a03dd7921fd", size = 30761, upload-time = "2025-03-05T21:17:41.549Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/c2/14/e2a54fabd4f08cd7af1c07030603c3356b74da07f7cc056e600436edfa17/tzlocal-5.3.1-py3-none-any.whl", hash = "sha256:eb1a66c3ef5847adf7a834f1be0800581b683b5608e74f86ecbcef8ab91bb85d", size = 18026, upload-time = "2025-03-05T21:17:39.857Z" },
 ]
 
 [[package]]
