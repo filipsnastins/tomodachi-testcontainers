@@ -32,4 +32,4 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
       - name: Deploy Documentation to GitHub Pages
-        run: uv run mkdocs gh-deploy --force
+        run: uv run properdocs gh-deploy --force

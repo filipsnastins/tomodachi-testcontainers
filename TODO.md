@@ -44,6 +44,6 @@
 - [x] Drop support for EOL Python versions.
 - [x] Fully migrate to ruff.
 - [x] Bump all dependencies.
-- [ ] Migrate to ProperDocs.
+- [x] Migrate to ProperDocs.
 - [ ] Bump testcontainers core to latest version.
 - [ ] Release `2.0.0`.

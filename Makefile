@@ -3,6 +3,12 @@ setup:
 	uv sync --all-extras --dev
 	uv run pre-commit install
 
+.PHONY: clean
+clean:
+	rm -rf build site
+	rm -rf .venv .ruff_cache .mypy_cache .pytest_cache .coverage
+	find . -type d -name __pycache__ -not -path './.venv/*' -exec rm -rf {} +
+
 .PHONY: hooks
 hooks:
 	uv run pre-commit run --all-files

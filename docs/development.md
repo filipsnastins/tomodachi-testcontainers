@@ -39,7 +39,7 @@ uv build
 - Develop documentation with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/).
 
 ```sh
-uv run mkdocs serve
+uv run properdocs serve
 ```
 
 - Generate C4 diagrams with PlantUML (get plantuml.jar at <https://plantuml.com/starting>).
