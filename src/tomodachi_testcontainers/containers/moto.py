@@ -1,7 +1,7 @@
 import os
 from typing import Any
 
-from testcontainers.core.waiting_utils import wait_for_logs
+from testcontainers.core.wait_strategies import LogMessageWaitStrategy
 
 from tomodachi_testcontainers.utils import AWSClientConfig
 
@@ -64,7 +64,7 @@ class MotoContainer(WebContainer):
 
     def start(self) -> "MotoContainer":
         super().start()
-        wait_for_logs(self, "Running on all addresses", timeout=10.0)
+        LogMessageWaitStrategy("Running on all addresses").with_startup_timeout(10).wait_until_ready(self)
         return self
 
     def reset_moto(self) -> None:

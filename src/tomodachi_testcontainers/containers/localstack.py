@@ -1,7 +1,7 @@
 import os
 from typing import Any
 
-from testcontainers.core.waiting_utils import wait_for_logs
+from testcontainers.core.wait_strategies import LogMessageWaitStrategy
 
 from tomodachi_testcontainers.utils import AWSClientConfig
 
@@ -62,5 +62,5 @@ class LocalStackContainer(WebContainer):
 
     def start(self) -> "LocalStackContainer":
         super().start()
-        wait_for_logs(self, r"Ready\.\n", timeout=10.0)
+        LogMessageWaitStrategy(r"Ready\.\n").with_startup_timeout(10).wait_until_ready(self)
         return self

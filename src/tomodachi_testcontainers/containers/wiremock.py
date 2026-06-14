@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-from testcontainers.core.waiting_utils import wait_for_logs
+from testcontainers.core.wait_strategies import LogMessageWaitStrategy
 
 from tomodachi_testcontainers.utils import copy_files_to_container
 
@@ -53,7 +53,7 @@ class WireMockContainer(WebContainer):
 
     def start(self) -> "WireMockContainer":
         super().start()
-        wait_for_logs(self, "port:", timeout=10.0)
+        LogMessageWaitStrategy("port:").with_startup_timeout(10).wait_until_ready(self)
         self.load_mappings_from_files()
         return self
 

@@ -1,7 +1,7 @@
 from typing import Any, NamedTuple
 
 import asyncssh
-from testcontainers.core.waiting_utils import wait_for_logs
+from testcontainers.core.wait_strategies import LogMessageWaitStrategy
 
 from tomodachi_testcontainers.utils import get_available_port
 
@@ -73,7 +73,7 @@ class SFTPContainer(DockerContainer):
 
     def start(self, timeout: float = 10.0) -> "SFTPContainer":
         super().start()
-        wait_for_logs(self, r"Server listening on", timeout=timeout)
+        LogMessageWaitStrategy(r"Server listening on").with_startup_timeout(int(timeout)).wait_until_ready(self)
 
         self.exec("bash -c 'mkdir /home/userpass/upload && chown -R 1001:1001 /home/userpass/upload'")
         self.exec("bash -c 'mkdir /home/userpass/download && chown -R 1001:1001 /home/userpass/download'")

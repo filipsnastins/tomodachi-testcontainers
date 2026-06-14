@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 import shortuuid
-from testcontainers.core.waiting_utils import wait_for_logs
+from testcontainers.core.wait_strategies import LogMessageWaitStrategy
 
 from tomodachi_testcontainers.utils import copy_files_from_container
 
@@ -55,7 +55,7 @@ class TomodachiContainer(WebContainer):
         # tomodachi < 0.26.0 - "Started service"
         # tomodachi >= 0.26.0 - "started service successfully"
         # using (?i) to ignore case to support both versions
-        wait_for_logs(self, "(?i)started service", timeout=10.0)
+        LogMessageWaitStrategy("(?i)started service").with_startup_timeout(10).wait_until_ready(self)
         return self
 
     def stop(self) -> None:
