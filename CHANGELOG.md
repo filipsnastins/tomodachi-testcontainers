@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.0.0 (2026-06-14)
+
+### Breaking changes
+
+- Drops Python 3.9 and 3.10 support. The minimum supported version is now Python 3.11 (`requires-python = ">=3.11,<4"`).
+- Bumps [aiobotocore](https://github.com/aio-libs/aiobotocore) to `>=3,<4` and
+  [testcontainers](https://github.com/testcontainers/testcontainers-python) to `>=4.14.2,<5`.
+- Migrates `wait_for_logs` usage to `testcontainers`' `LogMessageWaitStrategy`.
+- Removes the direct `tomodachi` dependency; message envelopes used in tests are now inlined.
+
+### Maintenance
+
+- Migrates project management from Poetry to [uv](https://github.com/astral-sh/uv).
+- Fully migrates linting and formatting to [ruff](https://github.com/astral-sh/ruff),
+  dropping `black`, `isort`, `bandit`, and `pylint`.
+- Migrates documentation to ProperDocs.
+- Passes the Docker network explicitly when starting containers.
+- Pins GitHub Actions to commit SHAs.
+- Binds `get_available_port` to the loopback interface to resolve a CodeQL alert.
+- Dependency updates.
+
 ## 1.2.4 (2025-02-16)
 
 ### Maintenance
