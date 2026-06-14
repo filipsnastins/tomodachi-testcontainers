@@ -45,6 +45,6 @@
 - [x] Fully migrate to ruff.
 - [x] Bump all dependencies.
 - [x] Migrate to ProperDocs.
-- [ ] Bump testcontainers core to latest version.
+- [x] Bump testcontainers core to latest version.
 - [ ] Fix failing tests.
 - [ ] Release `2.0.0`.
