@@ -1,0 +1,45 @@
+@startuml
+!include <C4/C4_Component>
+!include ../level_2_container/container/containers.puml
+
+skinparam dpi 110
+
+title Container Diagram - Application with DynamoDB Database
+
+dynamoDbContainer()
+
+Boundary(appContainerBoundary, "Application", "Container") {
+    Boundary(serviceLayer, "Service", "Layer") {
+        Component(useCases, "Use cases", "Python", "Application use cases (services).")
+    }
+
+    Boundary(domainLayer, "Domain", "Layer") {
+        Component(domain, "Domain", "Python", "Application domain objects.")
+
+        Component(ports, "Ports", "Python, typing.Protocol", "Ports protocol.")
+    }
+
+    Boundary(infrastructureLayer, "Adapters", "Layer") {
+        Component(Repository, "In-memory repository", "Python", "Fake in-memory repository for testing and demo purposes.")
+
+        Component(dynamoDbRepository, "DynamoDB repository", "Python, aiobotocore", "Adapter for DynamoDB database.")
+    }
+}
+
+Component(testcontainers, "Testcontainers", "Python, pytest", "Testcontainers library.")
+
+Lay_R(domain, ports)
+
+Lay_R(Repository, dynamoDbRepository)
+
+Rel_D(useCases, ports, "Uses")
+Rel_D(useCases, domain, "Uses")
+
+Rel_U(Repository, ports, "Implements")
+Rel_U(dynamoDbRepository, ports, "Implements")
+
+Rel_D(dynamoDbRepository, dynamoDb, "Reads from and writes to", "aiobotocore")
+
+Rel_U(testcontainers, dynamoDb, "Creates LocalStack Testcontainer")
+
+@enduml

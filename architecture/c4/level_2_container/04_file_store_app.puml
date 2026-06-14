@@ -1,0 +1,16 @@
+@startuml
+!include ./container/containers.puml
+
+skinparam dpi 120
+
+title Container Diagram - File Store Application
+
+Person(user, "User")
+
+fileStoreAppContainer()
+s3BucketContainer()
+
+Rel_R(user, fileStoreApp, "Reads and uploads files", "HTTP, JSON")
+Rel_R(fileStoreApp, s3Bucket, "Reads and writes data to", "aiobotocore")
+
+@enduml
