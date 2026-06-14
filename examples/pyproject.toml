@@ -15,7 +15,7 @@ dependencies = [
 
 [dependency-groups]
 dev = []
-test = ["debugpy>=1.8.6,<2", "pytest-cov>=5.0.0,<8"]
+test = ["debugpy>=1.8.21,<2", "pytest-cov>=5.0.0,<8"]
 
 [tool.uv]
 package = false
