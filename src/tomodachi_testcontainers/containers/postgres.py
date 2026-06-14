@@ -22,7 +22,7 @@ class PostgreSQLContainer(DatabaseContainer):
 
     def __init__(
         self,
-        image: str = "postgres:16",
+        image: str = "postgres:18",
         internal_port: int = 5432,
         edge_port: int | None = None,
         drivername: str | None = None,

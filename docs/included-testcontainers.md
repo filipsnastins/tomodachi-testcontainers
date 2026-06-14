@@ -8,13 +8,13 @@ see [Creating new Testcontainers](./guides/creating-new-testcontainers.md)
 | :-------------------------------------------------------------------------- | :-------------------------------- | :------------------------------------------------------------------------------- |
 | [`TomodachiContainer`][tomodachi_testcontainers.TomodachiContainer]         | n/a                               | n/a                                                                              |
 | [`MotoContainer`][tomodachi_testcontainers.MotoContainer]                   | `motoserver/moto:latest`          | [`moto_container`][tomodachi_testcontainers.fixtures.moto_container]             |
-| [`LocalStackContainer`][tomodachi_testcontainers.LocalStackContainer]       | `localstack/localstack:3`         | [`localstack_container`][tomodachi_testcontainers.fixtures.localstack_container] |
+| [`LocalStackContainer`][tomodachi_testcontainers.LocalStackContainer]       | `localstack/localstack:4`         | [`localstack_container`][tomodachi_testcontainers.fixtures.localstack_container] |
 | [`MinioContainer`][tomodachi_testcontainers.MinioContainer]                 | `minio/minio:latest`              | [`minio_container`][tomodachi_testcontainers.fixtures.minio_container]           |
 | [`DynamoDBAdminContainer`][tomodachi_testcontainers.DynamoDBAdminContainer] | `aaronshaf/dynamodb-admin:latest` | n/a                                                                              |
 | [`SFTPContainer`][tomodachi_testcontainers.SFTPContainer]                   | `atmoz/sftp:latest`               | [`sftp_container`][tomodachi_testcontainers.fixtures.sftp_container]             |
 | [`WireMockContainer`][tomodachi_testcontainers.WireMockContainer]           | `wiremock/wiremock:latest`        | [`wiremock_container`][tomodachi_testcontainers.fixtures.wiremock_container]     |
-| [`MySQLContainer`][tomodachi_testcontainers.MySQLContainer]                 | `mysql:8`                         | [`mysql_container`][tomodachi_testcontainers.fixtures.mysql_container]           |
-| [`PostgreSQLContainer`][tomodachi_testcontainers.PostgreSQLContainer]       | `postgres:16`                     | [`postgres_container`][tomodachi_testcontainers.fixtures.postgres_container]     |
+| [`MySQLContainer`][tomodachi_testcontainers.MySQLContainer]                 | `mysql:9`                         | [`mysql_container`][tomodachi_testcontainers.fixtures.mysql_container]           |
+| [`PostgreSQLContainer`][tomodachi_testcontainers.PostgreSQLContainer]       | `postgres:18`                     | [`postgres_container`][tomodachi_testcontainers.fixtures.postgres_container]     |
 
 !!! note
 

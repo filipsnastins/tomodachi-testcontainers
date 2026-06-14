@@ -83,13 +83,13 @@ Most databases have a similar configuration option that disables the flush to th
 To disable the flush to the disk in PostgreSQL, set the `fsync` parameter to `off`:
 
 ```sh
-docker run --rm -p 5432:5432 postgres:16 -c fsync=off
+docker run --rm -p 5432:5432 postgres:18 -c fsync=off
 ```
 
 In MySQL set `innodb_flush_method=O_DIRECT_NO_FSYNC`:
 
 ```sh
-docker run --rm -p 3306:3306 mysql:8 --innodb_flush_method=O_DIRECT_NO_FSYNC
+docker run --rm -p 3306:3306 mysql:9 --innodb_flush_method=O_DIRECT_NO_FSYNC
 ```
 
 !!! tip

@@ -8,7 +8,7 @@ from tomodachi_testcontainers import DockerContainer, MySQLContainer
 
 @pytest.fixture(scope="session")
 def mysql_container() -> Generator[DockerContainer, None, None]:
-    image = os.getenv("MYSQL_TESTCONTAINER_IMAGE_ID", "mysql:8")
+    image = os.getenv("MYSQL_TESTCONTAINER_IMAGE_ID", "mysql:9")
     disable_logging = bool(os.getenv("MYSQL_TESTCONTAINER_DISABLE_LOGGING")) or False
 
     with MySQLContainer(image, disable_logging=disable_logging) as container:

@@ -23,7 +23,7 @@ class MySQLContainer(DatabaseContainer):
 
     def __init__(
         self,
-        image: str = "mysql:8",
+        image: str = "mysql:9",
         internal_port: int = 3306,
         edge_port: int | None = None,
         drivername: str | None = None,

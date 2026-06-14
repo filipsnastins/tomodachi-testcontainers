@@ -20,7 +20,7 @@ class LocalStackContainer(WebContainer):
 
     def __init__(
         self,
-        image: str = "localstack/localstack:3",
+        image: str = "localstack/localstack:4",
         internal_port: int = 4566,
         edge_port: int | None = None,
         region_name: str | None = None,
