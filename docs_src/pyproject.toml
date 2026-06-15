@@ -20,7 +20,7 @@ dependencies = [
 dev = [
     "pytest>=8.3.5,<10",
     "pytest-asyncio>=0.26.0,<2.0.0",
-    "requests>=2.32.3,<3",
+    "requests>=2.34.2,<3",
     "types-requests>=2.32.0,<3",
 ]
 
