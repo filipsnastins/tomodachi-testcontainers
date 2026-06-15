@@ -19,7 +19,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pytest>=8.3.5,<10",
-    "pytest-asyncio>=0.26.0,<2.0.0",
+    "pytest-asyncio>=1.4.0,<2.0.0",
     "requests>=2.32.3,<3",
     "types-requests>=2.32.0,<3",
 ]
