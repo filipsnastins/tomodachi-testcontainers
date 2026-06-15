@@ -13,7 +13,7 @@ dependencies = [
     "tomodachi>=0.28.4,<0.29",
     "types-aiobotocore[dynamodb,s3,sns,sqs]>=3,<4",
     "uvicorn>=0.31.0,<0.50",
-    "uvloop>=0.21.0,<0.23",
+    "uvloop>=0.22.1,<0.23",
 ]
 
 [dependency-groups]
