@@ -1,4 +1,4 @@
-FROM python:3.14.6-bookworm AS python-base
+FROM python:3.15.0rc1-bookworm AS python-base
 WORKDIR /app
 ARG VIRTUAL_ENV=/opt/venv
 RUN addgroup --system --gid 1001 app && adduser --system --uid 1001 --gid 1001 app
